@@ -11,15 +11,16 @@ namespace ECSEngine.Render
 {
     public class Mesh
     {
-        public List<Vector3> vertices = new List<Vector3>();
-        public List<Vector2> texCoords = new List<Vector2>();
-        public List<Vector3> normals = new List<Vector3>();
+        List<Vector3> vertices = new List<Vector3>();
+        List<Vector2> texCoords = new List<Vector2>();
+        List<Vector3> normals = new List<Vector3>();
 
-        public List<uint> vertexIndices = new List<uint>();
-        public List<uint> normalIndices = new List<uint>();
-        public List<uint> textureIndices = new List<uint>();
+        List<uint> vertexIndices = new List<uint>();
+        List<uint> normalIndices = new List<uint>();
+        List<uint> textureIndices = new List<uint>();
 
-        public uint VAO, VBO, EBO;
+        uint VAO, VBO, EBO;
+
         /// <summary>
         /// Creates a new <see cref="Mesh"/> instance, loading the mesh using <paramref name="path"/>.
         /// </summary>

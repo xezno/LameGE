@@ -18,10 +18,7 @@ namespace ECSEngine
 
         public static void BroadcastEvent(Event eventType, IEventArgs eventArgs)
         {
-            foreach (IEntity entity in worldSystem.entities)
-            {
-                entity.HandleEvent(eventType, eventArgs);
-            }
+            worldSystem.BroadcastEvent(eventType, eventArgs);
         }
     }
 }

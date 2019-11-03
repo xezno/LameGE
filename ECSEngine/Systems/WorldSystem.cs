@@ -1,13 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using ECSEngine.Events;
 
 namespace ECSEngine.Systems
 {
     public class WorldSystem : ISystem
     {
-        public List<IEntity> entities;
-        public WorldSystem()
+        private List<IEntity> entities;
+
+        public WorldSystem(List<IEntity> entities)
         {
-            entities = new List<IEntity>();
+            this.entities = entities;
+        }
+
+        public void BroadcastEvent(Event eventType, IEventArgs eventArgs)
+        {
+            foreach (IEntity entity in entities)
+            {
+                entity.HandleEvent(eventType, eventArgs);
+            }
         }
     }
 }
