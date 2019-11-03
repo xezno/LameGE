@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ECSEngine
+﻿namespace ECSEngine
 {
     internal class Program
     {
@@ -15,7 +9,7 @@ namespace ECSEngine
             {
                 // Do nothing (handled all within game)
             }
-            // Game shutdown.  Thanks for playing!
+            // Game shutdown. Thanks for playing!
         }
     }
 }

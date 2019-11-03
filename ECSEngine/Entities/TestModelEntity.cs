@@ -1,16 +1,14 @@
-﻿using ECSEngine.Components;
-using ECSEngine.Events;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+using ECSEngine.Components;
+using ECSEngine.Events;
 
 namespace ECSEngine.Entities
 {
     public class TestModelEntity : IEntity
     {
-
         public List<IComponent> components { get; set; }
 
         public TestModelEntity()

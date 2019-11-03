@@ -1,11 +1,10 @@
-﻿using ECSEngine.Math;
-using OpenGL;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+using ECSEngine.Math;
+
+using OpenGL;
 
 namespace ECSEngine.Render
 {
@@ -223,5 +222,5 @@ namespace ECSEngine.Render
                 }
             }
         }
-}
+    }
 }
