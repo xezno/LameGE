@@ -11,7 +11,6 @@ namespace ECSEngine.Render
 {
     public class Mesh
     {
-        byte[] data;
         public List<Vector3> vertices = new List<Vector3>();
         public List<Vector2> texCoords = new List<Vector2>();
         public List<Vector3> normals = new List<Vector3>();
