@@ -1,4 +1,10 @@
-﻿using OpenGL;
+﻿using System.Collections.Generic;
+
+using ECSEngine.Entities;
+using ECSEngine.Events;
+using ECSEngine.Systems;
+
+using OpenGL;
 using OpenGL.CoreUI;
 
 namespace ECSEngine
@@ -6,6 +12,8 @@ namespace ECSEngine
     public class Game
     {
         public bool isRunning { get => true; }
+
+        private WorldSystem worldSystem;
         public Game()
         {
             using (NativeWindow nativeWindow = NativeWindow.Create())
@@ -21,6 +29,19 @@ namespace ECSEngine
             }
         }
 
+        private void SetUpSystems()
+        {
+            worldSystem = new WorldSystem()
+            {
+                entities = new List<IEntity>()
+                {
+                    new TestModelEntity()
+                }
+            };
+
+            EventManager.RegisterWorldSystem(worldSystem);
+        }
+
         private void ContextCreated(object sender, NativeWindowEventArgs e)
         {
             NativeWindow nativeWindow = sender as NativeWindow;
@@ -30,6 +51,11 @@ namespace ECSEngine
             Gl.Enable(EnableCap.Blend | EnableCap.DepthTest);
             Gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             Gl.LineWidth(2.5f);
+
+            SetUpSystems();
+
+            // All done - broadcast the game started event
+            EventManager.BroadcastEvent(Event.GameStartEvent, new GenericEventArgs(this));
         }
 
         private void Render(object sender, NativeWindowEventArgs e)

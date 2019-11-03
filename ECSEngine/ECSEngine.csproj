@@ -52,7 +52,9 @@
     <Compile Include="Components\MeshComponent.cs" />
     <Compile Include="Debug.cs" />
     <Compile Include="Entities\TestModelEntity.cs" />
+    <Compile Include="EventManager.cs" />
     <Compile Include="Events\Event.cs" />
+    <Compile Include="Events\GenericEventArgs.cs" />
     <Compile Include="Events\IEventArgs.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Components\IComponent.cs" />

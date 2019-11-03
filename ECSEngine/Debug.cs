@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
+using System.Reflection;
 
 namespace ECSEngine
 {
@@ -10,7 +8,10 @@ namespace ECSEngine
     {
         public static void Log(string str)
         {
-            Console.WriteLine($"[{DateTime.Now.ToString()}] - {str}");
+            StackTrace stackTrace = new StackTrace();
+            StackFrame[] stackFrames = stackTrace.GetFrames();
+            MethodBase method = stackFrames[1].GetMethod();
+            Console.WriteLine($"[{DateTime.Now.ToString()}] {method.ReflectedType.Name}, {method.Name}: {str}");
         }
     }
 }
