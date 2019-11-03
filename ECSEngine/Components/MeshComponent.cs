@@ -7,7 +7,7 @@ namespace ECSEngine.Components
     /// Contains the component-based code used in order to render
     /// a mesh on-screen.
     /// </summary>
-    public class MeshComponent : Component<MeshComponent>
+    public class MeshComponent : IComponent
     {
         Mesh mesh;
         public MeshComponent(string path)
@@ -15,17 +15,17 @@ namespace ECSEngine.Components
             mesh = new Mesh(path);
         }
 
-        public override void Draw()
+        public void Draw()
         {
             // TODO: Draw mesh
         }
 
-        public override void HandleEvent(Event eventType, IEventArgs eventArgs)
+        public void HandleEvent(Event eventType, IEventArgs eventArgs)
         {
             // TODO: Handle event based on event type and arguments
         }
 
-        public override void Update()
+        public void Update()
         {
             // TODO: Handle game update (no logic here?)
         }

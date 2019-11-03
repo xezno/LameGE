@@ -2,7 +2,7 @@
 
 namespace ECSEngine.Systems
 {
-    public class WorldSystem : System<WorldSystem>
+    public class WorldSystem : ISystem
     {
         public List<IEntity> entities;
         public WorldSystem()

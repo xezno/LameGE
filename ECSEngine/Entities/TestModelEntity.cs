@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ECSEngine.Entities
 {
-    public class TestModelEntity : Entity<TestModelEntity>
+    public class TestModelEntity : IEntity
     {
         public TestModelEntity() { }
     }

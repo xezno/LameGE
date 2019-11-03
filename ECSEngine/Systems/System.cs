@@ -1,6 +1,6 @@
 ﻿namespace ECSEngine.Systems
 {
-    public class System<T> : ISystem
+    public class ISystem
     {
     }
 }

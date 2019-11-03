@@ -49,10 +49,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Components\Component.cs" />
     <Compile Include="Components\MeshComponent.cs" />
     <Compile Include="Debug.cs" />
-    <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\TestModelEntity.cs" />
     <Compile Include="Events\Event.cs" />
     <Compile Include="Events\IEventArgs.cs" />
@@ -69,7 +67,6 @@
       <DependentUpon>RenderSettings.settings</DependentUpon>
     </Compile>
     <Compile Include="Render\Mesh.cs" />
-    <Compile Include="Systems\ISystem.cs" />
     <Compile Include="Systems\System.cs" />
     <Compile Include="Systems\WorldSystem.cs" />
   </ItemGroup>
