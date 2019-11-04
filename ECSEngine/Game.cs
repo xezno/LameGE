@@ -68,10 +68,7 @@ namespace ECSEngine
             EventManager.BroadcastEvent(Event.GameStart, new GenericEventArgs(this));
         }
 
-        void LoadContent()
-        {
-
-        }
+        void LoadContent() { }
 
         void Render(object sender, NativeWindowEventArgs e)
         {

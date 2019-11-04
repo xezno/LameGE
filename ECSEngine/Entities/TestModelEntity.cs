@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using ECSEngine.Components;
+﻿using ECSEngine.Components;
 using ECSEngine.Events;
 using ECSEngine.Render;
 

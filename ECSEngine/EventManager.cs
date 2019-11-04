@@ -6,6 +6,7 @@ namespace ECSEngine
     public static class EventManager
     {
         static WorldSystem worldSystem;
+
         public static void RegisterWorldSystem(WorldSystem worldSystem_) // TODO: find a better way of doing this (i.e. singletons)
         {
             worldSystem = worldSystem_;

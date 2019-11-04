@@ -10,16 +10,16 @@ namespace ECSEngine.Render
 {
     public class Mesh
     {
-        List<Vector3> vertices = new List<Vector3>();
-        List<Vector2> texCoords = new List<Vector2>();
-        List<Vector3> normals = new List<Vector3>();
-
-        List<uint> vertexIndices = new List<uint>();
-        List<uint> normalIndices = new List<uint>();
-        List<uint> textureIndices = new List<uint>();
 
         public uint VAO, VBO, EBO; // TODO: Make this more abstract so that we can use other APIs / pipelines in the future
         public int indexCount => vertexIndices.Count;
+
+        List<Vector3> vertices = new List<Vector3>();
+        List<Vector2> texCoords = new List<Vector2>();
+        List<Vector3> normals = new List<Vector3>();
+        List<uint> vertexIndices = new List<uint>();
+        List<uint> normalIndices = new List<uint>();
+        List<uint> textureIndices = new List<uint>();
 
         /// <summary>
         /// Creates a new <see cref="Mesh"/> instance, loading the mesh using <paramref name="path"/>.
