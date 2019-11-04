@@ -11,6 +11,6 @@ out vec3 outNormal;
 void main() {
     outVertexPos = inVertexPos;
     outTexCoord = inTexCoord;
-    outnormal = inNormal;
+    outNormal = inNormal;
     gl_Position = vec4(inVertexPos, 1.0);
 }

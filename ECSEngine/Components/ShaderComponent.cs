@@ -26,6 +26,14 @@ namespace ECSEngine.Components
                 Gl.ShaderSource(glShader, shaderSource.ToArray());
                 Gl.CompileShader(glShader);
                 Gl.AttachShader(glShader, shaderProgram);
+
+                var glErrors = Gl.GetError();
+                if (glErrors != ErrorCode.NoError)
+                {
+                    var glErrorStr = new System.Text.StringBuilder(512);
+                    Gl.GetShaderInfoLog(glShader, 512, out int length, glErrorStr);
+                    Debug.Log($"Problem compiling shader {shader.fileName}: {glErrors} / {glErrorStr.ToString()}");
+                }
                 Debug.Log($"Compiled shader {shader.fileName}");
             }
         }
