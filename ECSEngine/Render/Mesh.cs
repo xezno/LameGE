@@ -8,6 +8,7 @@ using OpenGL;
 
 namespace ECSEngine.Render
 {
+    // TODO: Refactor this so that it's a lot more straightforward and maintainable.
     public class Mesh
     {
 
@@ -82,6 +83,7 @@ namespace ECSEngine.Render
             return i;
         }
 
+        // TODO: Rewrite this
         public void LoadDataAsset(string path)
         {
             using (var sr = new StreamReader(path))
