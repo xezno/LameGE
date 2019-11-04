@@ -2,7 +2,10 @@
 {
     public enum Event
     {
-        GameStartEvent,
-        GameEndEvent
+        GameStart,
+        GameEnd,
+
+        KeyUp,
+        KeyDown
     }
 }

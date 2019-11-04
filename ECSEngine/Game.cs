@@ -21,6 +21,8 @@ namespace ECSEngine
             {
                 nativeWindow.ContextCreated += ContextCreated;
                 nativeWindow.Render += Render;
+                nativeWindow.KeyDown += KeyDown;
+                nativeWindow.KeyUp += KeyUp;
                 nativeWindow.Animation = true;
 
                 nativeWindow.Create(0, 0, RenderSettings.Default.GameResolutionX, RenderSettings.Default.GameResolutionY, NativeWindowStyle.Border);
@@ -28,6 +30,16 @@ namespace ECSEngine
                 nativeWindow.Show();
                 nativeWindow.Run();
             }
+        }
+
+        private void KeyUp(object sender, NativeWindowKeyEventArgs e)
+        {
+            EventManager.BroadcastEvent(Event.KeyUp, new GenericEventArgs(this));
+        }
+
+        private void KeyDown(object sender, NativeWindowKeyEventArgs e)
+        {
+            EventManager.BroadcastEvent(Event.KeyDown, new GenericEventArgs(this));
         }
 
         void SetUpSystems()
@@ -53,7 +65,7 @@ namespace ECSEngine
             LoadContent();
 
             // Setup complete - broadcast the game started event
-            EventManager.BroadcastEvent(Event.GameStartEvent, new GenericEventArgs(this));
+            EventManager.BroadcastEvent(Event.GameStart, new GenericEventArgs(this));
         }
 
         void LoadContent()
