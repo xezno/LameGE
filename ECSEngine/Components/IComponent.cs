@@ -9,7 +9,7 @@ namespace ECSEngine
     {
         void HandleEvent(Event eventType, IEventArgs eventArgs);
 
-        void Draw();
+        void Render();
 
         void Update();
     }

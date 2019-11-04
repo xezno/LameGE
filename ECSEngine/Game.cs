@@ -77,6 +77,8 @@ namespace ECSEngine
         {
             Gl.Viewport(0, 0, (int)RenderSettings.Default.GameResolutionX, (int)RenderSettings.Default.GameResolutionY);
             Gl.Clear(ClearBufferMask.ColorBufferBit);
+
+            worldSystem.Render();
         }
     }
 }

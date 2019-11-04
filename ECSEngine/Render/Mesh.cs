@@ -19,6 +19,7 @@ namespace ECSEngine.Render
         List<uint> textureIndices = new List<uint>();
 
         public uint VAO, VBO, EBO; // TODO: Make this more abstract so that we can use other APIs / pipelines in the future
+        public int indexCount => vertexIndices.Count;
 
         /// <summary>
         /// Creates a new <see cref="Mesh"/> instance, loading the mesh using <paramref name="path"/>.

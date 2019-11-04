@@ -1,5 +1,8 @@
-﻿using ECSEngine.Events;
+﻿using ECSEngine.Attributes;
+using ECSEngine.Events;
 using ECSEngine.Render;
+
+using OpenGL;
 
 namespace ECSEngine.Components
 {
@@ -7,7 +10,8 @@ namespace ECSEngine.Components
     /// Contains the component-based code used in order to render
     /// a mesh on-screen.
     /// </summary>
-    public class MeshComponent : IComponent
+    [Requires(typeof(ShaderComponent))]
+    public class MeshComponent : Component<MeshComponent>
     {
         Mesh mesh;
         public MeshComponent(string path)
@@ -15,17 +19,22 @@ namespace ECSEngine.Components
             mesh = new Mesh(path);
         }
 
-        public void Draw()
+        public override void Render()
         {
             // TODO: Draw mesh
+            Gl.BindVertexArray(mesh.VAO);
+            Gl.BindBuffer(BufferTarget.ArrayBuffer, mesh.VBO);
+            Gl.BindBuffer(BufferTarget.ElementArrayBuffer, mesh.EBO);
+
+            Gl.DrawArrays(PrimitiveType.Triangles, 0, mesh.indexCount);
         }
 
-        public void HandleEvent(Event eventType, IEventArgs eventArgs)
+        public override void HandleEvent(Event eventType, IEventArgs eventArgs)
         {
             // TODO: Handle event based on event type and arguments
         }
 
-        public void Update()
+        public override void Update()
         {
             // TODO: Handle game update (no logic here?)
         }
