@@ -66,6 +66,7 @@
     <Compile Include="Game.cs" />
     <Compile Include="Components\IComponent.cs" />
     <Compile Include="Entities\IEntity.cs" />
+    <Compile Include="IBase.cs" />
     <Compile Include="Math\Quaternion.cs" />
     <Compile Include="Math\Vector2.cs" />
     <Compile Include="Math\Vector3.cs" />

@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-
-using ECSEngine.Events;
+﻿using ECSEngine.Events;
+using System.Collections.Generic;
 
 namespace ECSEngine.Systems
 {
     public class System<T> : ISystem
     {
+        public virtual IBase parent { get; set; }
         public List<IEntity> entities { get; set; }
 
         public virtual void BroadcastEvent(Event eventType, IEventArgs eventArgs)
@@ -14,6 +14,12 @@ namespace ECSEngine.Systems
             {
                 entity.HandleEvent(eventType, eventArgs);
             }
+        }
+
+        public virtual void AddEntity(IEntity entity)
+        {
+            entity.parent = this;
+            entities.Add(entity);
         }
     }
 }

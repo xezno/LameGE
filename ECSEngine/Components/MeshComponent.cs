@@ -21,12 +21,17 @@ namespace ECSEngine.Components
 
         public override void Render()
         {
-            // TODO: Draw mesh
+            ((IEntity)parent).GetComponent<ShaderComponent>().UseShader(); // TODO: Attach GetComponent function to IComponent
+
             Gl.BindVertexArray(mesh.VAO);
             Gl.BindBuffer(BufferTarget.ArrayBuffer, mesh.VBO);
             Gl.BindBuffer(BufferTarget.ElementArrayBuffer, mesh.EBO);
 
             Gl.DrawArrays(PrimitiveType.Triangles, 0, mesh.indexCount);
+
+            Gl.BindVertexArray(0);
+            Gl.BindBuffer(BufferTarget.ArrayBuffer, 0);
+            Gl.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
         }
 
         public override void HandleEvent(Event eventType, IEventArgs eventArgs)

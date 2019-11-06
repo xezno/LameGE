@@ -7,6 +7,8 @@ namespace ECSEngine.Components
     /// </summary>
     public class Component<T> : IComponent
     {
+        public virtual IBase parent { get; set; }
+
         public virtual void Render() { }
 
         public virtual void HandleEvent(Event eventType, IEventArgs eventArgs) { }

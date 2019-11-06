@@ -9,7 +9,7 @@ namespace ECSEngine.Components
 {
     public class ShaderComponent : Component<ShaderComponent>
     {
-        public uint shaderProgram;
+        uint shaderProgram;
 
         public ShaderComponent(params Shader[] shaders)
         {
@@ -36,6 +36,11 @@ namespace ECSEngine.Components
                 }
                 Debug.Log($"Compiled shader {shader.fileName}");
             }
+        }
+
+        public void UseShader()
+        {
+            Gl.UseProgram(shaderProgram);
         }
     }
 }

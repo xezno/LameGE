@@ -2,7 +2,7 @@
 
 namespace ECSEngine
 {
-    public interface IEntity
+    public interface IEntity : IBase
     {
         void HandleEvent(Event eventType, IEventArgs eventArgs);
 
@@ -10,6 +10,6 @@ namespace ECSEngine
 
         void Update();
 
-        IComponent GetComponent<T>();
+        T GetComponent<T>();
     }
 }

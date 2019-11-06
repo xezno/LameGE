@@ -11,6 +11,7 @@ namespace ECSEngine.Entities
     public class Entity<T> : IEntity
     {
         List<IComponent> components { get; set; }
+        public virtual IBase parent { get; set; }
 
         public Entity()
         {
@@ -47,15 +48,16 @@ namespace ECSEngine.Entities
             }
         }
 
-        public virtual void AddComponent(IComponent component)
+        public virtual void AddComponent(IComponent component) // TODO: Consider just using a property instead of this cos its 10x cooler
         {
+            component.parent = this;
             components.Add(component);
 
             // Component added - let's check for any missing component dependencies
             CheckComponentDependencies();
         }
 
-        public virtual IComponent GetComponent<T1>() => components.FindAll((t) => { return t.GetType() == typeof(T1); }).First();
+        public virtual T1 GetComponent<T1>() => (T1)(components.FindAll((t) => { return t.GetType() == typeof(T1); }).First());
 
         public virtual void HandleEvent(Event eventType, IEventArgs eventArgs) { }
 
