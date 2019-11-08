@@ -11,16 +11,23 @@ namespace ECSEngine.Render
     // TODO: Refactor this so that it's a lot more straightforward and maintainable.
     public class Mesh
     {
-
         public uint VAO, VBO, EBO; // TODO: Make this more abstract so that we can use other APIs / pipelines in the future
-        public int indexCount => vertexIndices.Count;
+
+        // why
+        public int indexCount => vertIndices.Count;
+        public int vertexCount => vertices.Count;
+        public int normalCount => normals.Count;
 
         List<Vector3> vertices = new List<Vector3>();
-        List<Vector2> texCoords = new List<Vector2>();
         List<Vector3> normals = new List<Vector3>();
-        List<uint> vertexIndices = new List<uint>();
+        List<Vector2> uvCoords = new List<Vector2>();
+
+        float[] glVertices;
+        uint[] glIndices;
+
+        List<uint> vertIndices = new List<uint>();
         List<uint> normalIndices = new List<uint>();
-        List<uint> textureIndices = new List<uint>();
+        List<uint> uvIndices = new List<uint>();
 
         /// <summary>
         /// Creates a new <see cref="Mesh"/> instance, loading the mesh using <paramref name="path"/>.
@@ -28,50 +35,44 @@ namespace ECSEngine.Render
         /// <param name="path">The path to the desired mesh.</param>
         public Mesh(string path)
         {
+            // "LoadDataAsset" makes no sense as a function name here
             LoadDataAsset(path);
+
+            // generatebuffers should probably be called by the above function
             GenerateBuffers();
         }
 
         public void GenerateBuffers()
         {
-            // Generate VAO, VBO
-            Gl.GenVertexArrays(new[] { VAO });
-            Gl.GenBuffers(new[] { VBO });
-            //GL.GenBuffers(1, out EBO);
+            // Gen objects
+            VAO = Gl.GenVertexArray();
+            VBO = Gl.GenBuffer();
+            EBO = Gl.GenBuffer();
 
-            // Buffer data
-            uint[] vertexIndices_ = vertexIndices.ToArray();
-            float[] vertices_ = new float[vertexIndices_.Length * 8];
-            for (int i = 0; i < vertexIndices.Count; ++i)
+            // Unpack data so that OpenGL can read it
+            glIndices = vertIndices.ToArray();
+            glVertices = new float[vertices.Count * 3];
+            for (int i = 0; i < vertices.Count; ++i)
             {
-                vertices_[i * 8 + 7] = normals[(int)normalIndices[i]].x;
-                vertices_[i * 8 + 6] = normals[(int)normalIndices[i]].y;
-                vertices_[i * 8 + 5] = normals[(int)normalIndices[i]].z;
-
-                vertices_[i * 8 + 4] = texCoords[(int)textureIndices[i]].y;
-                vertices_[i * 8 + 3] = texCoords[(int)textureIndices[i]].x;
-
-                vertices_[i * 8 + 2] = vertices[(int)vertexIndices[i]].x;
-                vertices_[i * 8 + 1] = vertices[(int)vertexIndices[i]].y;
-                vertices_[i * 8] = vertices[(int)vertexIndices[i]].z;
+                glVertices[i * 3] = vertices[i].x;
+                glVertices[i * 3 + 1] = vertices[i].y;
+                glVertices[i * 3 + 2] = vertices[i].z;
             }
 
             Gl.BindVertexArray(VAO);
             Gl.BindBuffer(BufferTarget.ArrayBuffer, VBO);
-            Gl.BufferData(BufferTarget.ArrayBuffer, (uint)(vertices_.Length * sizeof(float)), vertices_, BufferUsage.StaticDraw);
-            //GL.BindBuffer(BufferTarget.ElementArrayBuffer, EBO);
-            //GL.BufferData(BufferTarget.ElementArrayBuffer, vertexIndices_.Length * sizeof(uint), vertexIndices_, BufferUsageHint.StaticDraw);
+            Gl.BufferData(BufferTarget.ArrayBuffer, (uint)glVertices.Length * sizeof(float), glVertices, BufferUsage.StaticDraw);
 
-            Gl.VertexAttribPointer(0, 3, VertexAttribType.Float, false, 8 * sizeof(float), 0 * sizeof(float));
+            Gl.BindBuffer(BufferTarget.ElementArrayBuffer, EBO);
+            Gl.BufferData(BufferTarget.ElementArrayBuffer, (uint)glIndices.Length * sizeof(uint), glIndices, BufferUsage.StaticDraw);
+
+            Gl.VertexAttribPointer(0, 3, VertexAttribType.Float, false, 0, IntPtr.Zero);
             Gl.EnableVertexAttribArray(0);
-            Gl.VertexAttribPointer(1, 2, VertexAttribType.Float, false, 8 * sizeof(float), 3 * sizeof(float));
-            Gl.EnableVertexAttribArray(1);
-            Gl.VertexAttribPointer(2, 3, VertexAttribType.Float, false, 8 * sizeof(float), 5 * sizeof(float));
-            Gl.EnableVertexAttribArray(2);
         }
 
         private static int CountInstancesOfCharInString(string s, char c)
         {
+            // this is absolutely the most useless function ever
             var i = 0;
             foreach (char c_ in s)
             {
@@ -114,11 +115,11 @@ namespace ECSEngine.Render
                             else if (parameterCount == 4)
                             {
                                 // xyzw
-                                throw new Exception("Optional parameter not implemented yet.");
+                                Debug.Log("Optional vertex parameter not implemented yet.", Debug.DebugSeverity.Medium);
                             }
                             else
                             {
-                                throw new Exception("obj file is not valid.");
+                                Debug.Log("obj file is not valid.", Debug.DebugSeverity.Medium);
                             }
                             break;
                         case "vt": // Texture coordinate (uv[w])
@@ -128,7 +129,7 @@ namespace ECSEngine.Render
                                 var baseLine = line.Remove(0, line.IndexOf(' ') + 1);
                                 var u = baseLine.Remove(baseLine.IndexOf(' '));
                                 var v = baseLine.Remove(0, baseLine.LastIndexOf(' ') + 1);
-                                texCoords.Add(new Vector2(float.Parse(u), float.Parse(v)));
+                                uvCoords.Add(new Vector2(float.Parse(u), float.Parse(v)));
                             }
                             else if (parameterCount == 3)
                             {
@@ -140,11 +141,11 @@ namespace ECSEngine.Render
                                 v = v.Remove(v.LastIndexOf(' ') - 1);
                                 var w = baseLine.Remove(0, baseLine.LastIndexOf(' ') + 1);
                                 //normals.Add(new Vector3(float.Parse(u), float.Parse(v), float.Parse(w)));
-                                texCoords.Add(new Vector2(float.Parse(u), float.Parse(v)));
+                                uvCoords.Add(new Vector2(float.Parse(u), float.Parse(v)));
                             }
                             else
                             {
-                                throw new Exception("obj file is not valid.");
+                                Debug.Log("obj file is not valid.", Debug.DebugSeverity.Medium);
                             }
                             break;
                         case "vn": // Vertex normal (xyz)
@@ -161,11 +162,11 @@ namespace ECSEngine.Render
                             }
                             else
                             {
-                                throw new Exception("obj file is not valid.");
+                                Debug.Log("obj file is not valid.", Debug.DebugSeverity.Medium);
                             }
                             break;
                         case "vp": // Parameter space vertex (u[vw])
-                            Debug.Log("Parameter space vertices are not supported by this mesh loader.");
+                            Debug.Log("Parameter space vertices are not supported by this mesh loader.", Debug.DebugSeverity.Medium);
                             break;
                         case "f": // Face
                             // Indices
@@ -184,41 +185,40 @@ namespace ECSEngine.Render
                                         if (string.IsNullOrEmpty(s))
                                         {
                                             nVal[i] = true;
-                                            Debug.Log("Parameter had no value (" + path + ")");
+                                            Debug.Log("Parameter had no value (" + path + ")", Debug.DebugSeverity.Medium);
                                         }
                                         i++;
                                     }
                                 }
-                                vertexIndices.Add((nVal[0] ? 0 : uint.Parse(parameters[0]) - 1)); // v1
-                                textureIndices.Add((nVal[1] ? 0 : uint.Parse(parameters[1]) - 1)); // vt1
+
+                                // i literally hate looking at these lines of code.  what is "nval"?? what does it relate to??
+                                // TODO: rename these
+                                vertIndices.Add((nVal[0] ? 0 : uint.Parse(parameters[0]) - 1)); // v1
+                                uvIndices.Add((nVal[1] ? 0 : uint.Parse(parameters[1]) - 1)); // vt1
                                 normalIndices.Add((nVal[2] ? 0 : uint.Parse(parameters[2]) - 1)); // vn1
 
-                                vertexIndices.Add((nVal[3] ? 0 : uint.Parse(parameters[3]) - 1)); // v2
-                                textureIndices.Add((nVal[4] ? 0 : uint.Parse(parameters[4]) - 1)); // vt2
+                                vertIndices.Add((nVal[3] ? 0 : uint.Parse(parameters[3]) - 1)); // v2
+                                uvIndices.Add((nVal[4] ? 0 : uint.Parse(parameters[4]) - 1)); // vt2
                                 normalIndices.Add((nVal[5] ? 0 : uint.Parse(parameters[5]) - 1)); // vn2
 
-                                vertexIndices.Add((nVal[6] ? 0 : uint.Parse(parameters[6]) - 1)); // v3
-                                textureIndices.Add((nVal[7] ? 0 : uint.Parse(parameters[7]) - 1)); // vt3
+                                vertIndices.Add((nVal[6] ? 0 : uint.Parse(parameters[6]) - 1)); // v3
+                                uvIndices.Add((nVal[7] ? 0 : uint.Parse(parameters[7]) - 1)); // vt3
                                 normalIndices.Add((nVal[8] ? 0 : uint.Parse(parameters[8]) - 1)); // vn3
                             }
                             else
                             {
-                                Debug.Log("Faces must be triangulated."); // Enable the fucking export option!
+                                /* TODO: Face triangulation can't be *that* hard, right?  Since this entire thing needs rewriting,
+                                 * might as well give it a shot. */
+                                Debug.Log("Faces must be triangulated.", Debug.DebugSeverity.Medium); // Export as triangulated faces
                             }
                             break;
-                        // TODO below this line
+                        // TODO: everything below this line
                         case "l": // Line
-                            break;
                         case "mtllib": // Define material
-                            break;
                         case "usemtl": // Use material
-                            break;
                         case "o": // Object
-                            break;
                         case "g": // Polygon group
-                            break;
                         case "s": // Smooth shading
-                            break;
                         default:
                             break;
                     }

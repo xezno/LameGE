@@ -6,7 +6,7 @@ namespace ECSEngine.Systems
     public class System<T> : ISystem
     {
         public virtual IBase parent { get; set; }
-        public List<IEntity> entities { get; set; }
+        protected List<IEntity> entities { get; set; }
 
         public virtual void BroadcastEvent(Event eventType, IEventArgs eventArgs)
         {

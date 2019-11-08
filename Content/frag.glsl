@@ -1,11 +1,11 @@
-#version 450
+#version 330
 
-in vec3 outVertexPos;
-in vec2 outTexCoord;
-in vec3 outNormal;
+in vec4 outVertexPos;
+in vec2 outUvCoord;
+in vec3 outNormalPos;
 
 out vec4 frag_color;
 
 void main() {
-    frag_color = vec4(outVertexPos, 1.0);
+    frag_color = vec4(outVertexPos.xyz, 1.0);
 }

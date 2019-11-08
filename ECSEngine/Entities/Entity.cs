@@ -41,7 +41,7 @@ namespace ECSEngine.Entities
                                 break;
                             }
                         }
-                        if (!containsType) throw new Exception($"Dependancy requirements for {component.GetType().Name} are not fully met.");
+                        if (!containsType) throw new Exception($"Dependency requirements for {component.GetType().Name} are not fully met.");
                         break;
                     }
                 }

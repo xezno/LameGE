@@ -1,14 +1,18 @@
 ﻿using System.Collections.Generic;
-
+using ECSEngine.Entities;
 using ECSEngine.Events;
 
 namespace ECSEngine.Systems
 {
     public class WorldSystem : System<WorldSystem>
     {
-        public WorldSystem(List<IEntity> entities)
+        public CameraEntity mainCamera;
+
+        public WorldSystem()
         {
-            this.entities = entities;
+            this.entities = new List<IEntity>();
+            mainCamera = new CameraEntity();
+            AddEntity(mainCamera);
         }
 
         public void Render()
