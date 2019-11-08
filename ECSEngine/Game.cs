@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
+
 using ECSEngine.Entities;
 using ECSEngine.Events;
 using ECSEngine.Systems;
@@ -15,7 +15,7 @@ namespace ECSEngine
         WorldSystem worldSystem;
         Gl.DebugProc debugCallback; // Stored to prevent GC from collecting debug callback before it can be called
 
-        public bool isRunning { get => true; } // TODO: work out a "game is no longer running" condition
+        public bool isRunning = true;
 
         public Game()
         {
@@ -26,6 +26,7 @@ namespace ECSEngine
                 nativeWindow.Render += Render;
                 nativeWindow.KeyDown += KeyDown;
                 nativeWindow.KeyUp += KeyUp;
+                nativeWindow.ContextDestroying += ContextDestroyed;
                 nativeWindow.Animation = true;
                 nativeWindow.DepthBits = 24;
 
@@ -36,17 +37,22 @@ namespace ECSEngine
             }
         }
 
-        private void DebugCallback(DebugSource source, DebugType type, uint id, DebugSeverity severity, int length, IntPtr message, IntPtr userParam)
+        void ContextDestroyed(object sender, NativeWindowEventArgs e)
+        {
+            isRunning = false;
+        }
+
+        void DebugCallback(DebugSource source, DebugType type, uint id, DebugSeverity severity, int length, IntPtr message, IntPtr userParam)
         {
             Debug.Log($"OpenGL Error {id}: {Marshal.PtrToStringAnsi(message, length)}", Debug.DebugSeverity.Fatal);
         }
 
-        private void KeyUp(object sender, NativeWindowKeyEventArgs e)
+        void KeyUp(object sender, NativeWindowKeyEventArgs e)
         {
             EventManager.BroadcastEvent(Event.KeyUp, new GenericEventArgs(this));
         }
 
-        private void KeyDown(object sender, NativeWindowKeyEventArgs e)
+        void KeyDown(object sender, NativeWindowKeyEventArgs e)
         {
             EventManager.BroadcastEvent(Event.KeyDown, new GenericEventArgs(this));
         }

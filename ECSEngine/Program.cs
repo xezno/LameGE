@@ -7,9 +7,9 @@
             Game game = new Game();
             while (game.isRunning)
             {
-                // Do nothing (handled all within game)
+                // Do nothing (handled all within Game)
             }
-            // Game shutdown. Thanks for playing!
+            // Game shutdown.  Thanks for playing!
         }
     }
 }

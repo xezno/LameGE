@@ -18,7 +18,10 @@ namespace ECSEngine.Entities
             components = new List<IComponent>();
         }
 
-        private void CheckComponentDependencies()
+        /// <summary>
+        /// Check for any components with mismatched or missing dependencies.
+        /// </summary>
+        void CheckComponentDependencies()
         {
             /* Some components have "require" attributes to ensure that a specific set of components are met (components
              * that depend on other components, e.g. MeshComponent and ShaderComponent).  We should check these for
@@ -48,6 +51,10 @@ namespace ECSEngine.Entities
             }
         }
 
+        /// <summary>
+        /// Add a component to an entity. This will also check for component dependencies.
+        /// </summary>
+        /// <param name="component">An instance of the desired component to add.</param>
         public virtual void AddComponent(IComponent component) // TODO: Consider just using a property instead of this cos its 10x cooler
         {
             component.parent = this;
@@ -57,6 +64,11 @@ namespace ECSEngine.Entities
             CheckComponentDependencies();
         }
 
+        /// <summary>
+        /// Retrieve a component of type <typeparamref name="T1"/> from an entity.
+        /// </summary>
+        /// <typeparam name="T1">The desired type of component.</typeparam>
+        /// <returns>The first component of type <typeparamref name="T1"/> from the entity's component list.</returns>
         public virtual T1 GetComponent<T1>() => (T1)(components.FindAll((t) => { return t.GetType() == typeof(T1); }).First());
 
         public virtual void HandleEvent(Event eventType, IEventArgs eventArgs) { }

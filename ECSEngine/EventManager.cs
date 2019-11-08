@@ -12,7 +12,7 @@ namespace ECSEngine
             worldSystem = worldSystem_;
         }
 
-        public static void BroadcastEvent(Event eventType, IEventArgs eventArgs)
+        public static void BroadcastEvent(Event eventType, IEventArgs eventArgs) // TODO: move to proper event system
         {
             worldSystem.BroadcastEvent(eventType, eventArgs);
         }

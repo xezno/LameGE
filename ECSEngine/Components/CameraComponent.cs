@@ -1,9 +1,4 @@
 ﻿using OpenGL;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECSEngine.Components
 {
@@ -16,7 +11,11 @@ namespace ECSEngine.Components
             viewMatrix = Matrix4x4f.LookAt(new Vertex3f(0f, 0f, 1f),
                 new Vertex3f(0f, 0f, 0f),
                 new Vertex3f(0f, 1f, 0f));
-            projMatrix = Matrix4x4f.Perspective(90f, 1280f / 720f, 0.1f, 10f);
+
+            projMatrix = Matrix4x4f.Perspective(90f, 
+                (float)RenderSettings.Default.GameResolutionX / (float)RenderSettings.Default.GameResolutionY, 
+                0.1f, 
+                10f);
         }
 
         public override void Update()
