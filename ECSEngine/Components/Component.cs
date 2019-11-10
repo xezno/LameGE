@@ -14,5 +14,10 @@ namespace ECSEngine.Components
         public virtual void HandleEvent(Event eventType, IEventArgs eventArgs) { }
 
         public virtual void Update() { }
+
+        protected virtual A GetComponent<A>()
+        {
+            return ((IEntity)parent).GetComponent<A>();
+        }
     }
 }

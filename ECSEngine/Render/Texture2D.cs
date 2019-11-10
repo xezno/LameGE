@@ -9,6 +9,7 @@ namespace ECSEngine.Render
     public class Texture2D
     {
         uint glTexture;
+        int repeatType = Gl.REPEAT;
         public Texture2D(string path)
         {
             this.glTexture = Gl.GenTexture();
@@ -51,8 +52,8 @@ namespace ECSEngine.Render
         public void BindTexture()
         {
             Gl.ActiveTexture(TextureUnit.Texture0);
-            Gl.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureWrapS, Gl.CLAMP_TO_EDGE);
-            Gl.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureWrapT, Gl.CLAMP_TO_EDGE);
+            Gl.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureWrapS, repeatType);
+            Gl.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureWrapT, repeatType);
             Gl.BindTexture(TextureTarget.Texture2d, glTexture);
         }
     }

@@ -1,5 +1,6 @@
 ﻿namespace ECSEngine.Math
 {
+    // TODO: Consider removing because OpenGL.Net.Math has built-in Vertex2f classes
     public struct Vector2
     {
         public float x;

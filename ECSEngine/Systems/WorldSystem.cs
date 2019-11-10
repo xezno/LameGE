@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ECSEngine.Entities;
 using ECSEngine.Events;
 
@@ -20,6 +21,14 @@ namespace ECSEngine.Systems
             foreach (IEntity entity in entities)
             {
                 entity.Render();
+            }
+        }
+
+        public void Update()
+        {
+            foreach (IEntity entity in entities)
+            {
+                entity.Update();
             }
         }
     }

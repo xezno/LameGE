@@ -15,6 +15,8 @@
             this.w = w;
         }
 
+        public static Quaternion Identity = new Quaternion(0, 0, 0, 1);
+
         // TODO: Add mathematical operators
     }
 }

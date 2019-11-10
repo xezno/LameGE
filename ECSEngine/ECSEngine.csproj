@@ -69,8 +69,10 @@
     <Compile Include="Attributes\RequiresAttribute.cs" />
     <Compile Include="Components\CameraComponent.cs" />
     <Compile Include="Components\Component.cs" />
+    <Compile Include="Components\MaterialComponent.cs" />
     <Compile Include="Components\MeshComponent.cs" />
     <Compile Include="Components\ShaderComponent.cs" />
+    <Compile Include="Components\TransformComponent.cs" />
     <Compile Include="Debug.cs" />
     <Compile Include="Entities\CameraEntity.cs" />
     <Compile Include="Entities\Entity.cs" />
@@ -93,6 +95,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>RenderSettings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Render\Material.cs" />
     <Compile Include="Render\Mesh.cs" />
     <Compile Include="Render\Shader.cs" />
     <Compile Include="Render\Texture2D.cs" />
