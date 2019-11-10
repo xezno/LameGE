@@ -40,5 +40,9 @@
         public static Vector3 operator +(Vector3 a, float b) => new Vector3(a.x + b,
                                                                             a.y + b,
                                                                             a.z + b);
+        public override string ToString()
+        {
+            return $"{x}, {y}, {z}";
+        }
     }
 }

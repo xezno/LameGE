@@ -17,15 +17,17 @@ namespace ECSEngine.Components
     {
         Matrix4x4f modelMatrix;
         Mesh mesh;
-        public MeshComponent(string path)
+        Texture2D albedoTexture;
+        public MeshComponent(string path, Texture2D albedoTexture)
         {
-            mesh = new Mesh(path);
-            modelMatrix = Matrix4x4f.Identity;
-            modelMatrix.Scale(
-                0.5f,
-                0.5f,
-                0.5f);
-            modelMatrix.RotateX(90f);
+            this.albedoTexture = albedoTexture;
+            this.mesh = new Mesh(path);
+            this.modelMatrix = Matrix4x4f.Identity;
+            /* this.modelMatrix.Scale(
+                1f,
+                1f,
+                1f); */
+            // this.modelMatrix.RotateX(90f);
         }
         
         public override void Render()
@@ -37,13 +39,16 @@ namespace ECSEngine.Components
             Gl.BindBuffer(BufferTarget.ArrayBuffer, mesh.VBO);
             Gl.BindBuffer(BufferTarget.ElementArrayBuffer, mesh.EBO);
 
+            albedoTexture?.BindTexture();
+
             CameraEntity camera = ((WorldSystem)parent.parent).mainCamera;
             shaderComponent.SetVariable("projMatrix", camera.projMatrix);
             shaderComponent.SetVariable("viewMatrix", camera.viewMatrix);
             shaderComponent.SetVariable("modelMatrix", modelMatrix);
+            shaderComponent.SetVariable("albedoTexture", 0);
 
-            Gl.DrawElements(PrimitiveType.Triangles, mesh.indexCount * sizeof(uint), DrawElementsType.UnsignedInt, IntPtr.Zero);
-            // Gl.DrawArrays(PrimitiveType.Triangles, 0, mesh.vertexCount * sizeof(float));
+            // Gl.DrawElements(PrimitiveType.Triangles, mesh.indexCount * sizeof(uint), DrawElementsType.UnsignedInt, IntPtr.Zero);
+            Gl.DrawArrays(PrimitiveType.Triangles, 0, mesh.indexCount * sizeof(float));
 
             Gl.BindVertexArray(0);
             Gl.BindBuffer(BufferTarget.ArrayBuffer, 0);

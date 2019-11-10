@@ -1,11 +1,16 @@
-#version 330
+#version 450
 
-in vec4 outVertexPos;
+in vec3 outVertexPos;
 in vec2 outUvCoord;
-in vec3 outNormalPos;
+
+uniform sampler2D albedoTexture;
+uniform mat4 projMatrix;
+uniform mat4 viewMatrix;
+uniform mat4 modelMatrix;
 
 out vec4 frag_color;
 
 void main() {
-    frag_color = vec4(outVertexPos.xyz, 1.0);
+    frag_color = texture(albedoTexture, outUvCoord);
+    // frag_color = vec4(outVertexPos.xy - outUvCoord.xy, 0.0, 1.0);
 }

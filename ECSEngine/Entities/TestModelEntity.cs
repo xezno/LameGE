@@ -10,7 +10,7 @@ namespace ECSEngine.Entities
         {
             // Add mesh component
             AddComponent(new ShaderComponent(new Shader("Content/frag.glsl", OpenGL.ShaderType.FragmentShader), new Shader("Content/vert.glsl", OpenGL.ShaderType.VertexShader)));
-            AddComponent(new MeshComponent("Content/TestMesh.obj"));
+            AddComponent(new MeshComponent("Content/monke.obj", new Texture2D("Content/texture.jpg")));
         }
 
         public override void HandleEvent(Event eventType, IEventArgs eventArgs)

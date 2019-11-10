@@ -71,7 +71,7 @@ namespace ECSEngine
 
             Debug.Log($"OpenGL {Gl.GetString(StringName.Version)}");
             Gl.ReadBuffer(ReadBufferMode.Back);
-            Gl.ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+            Gl.ClearColor(1f, 1f, 1f, 1f);
             Gl.Enable(EnableCap.Blend);
             Gl.Enable(EnableCap.DepthTest);
             Gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);

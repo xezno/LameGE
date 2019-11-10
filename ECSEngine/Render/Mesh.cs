@@ -22,7 +22,7 @@ namespace ECSEngine.Render
         List<Vector3> normals = new List<Vector3>();
         List<Vector2> uvCoords = new List<Vector2>();
 
-        float[] glVertices;
+        float[] glData;
         uint[] glIndices;
 
         List<uint> vertIndices = new List<uint>();
@@ -50,24 +50,31 @@ namespace ECSEngine.Render
             EBO = Gl.GenBuffer();
 
             // Unpack data so that OpenGL can read it
+            int vertexAttribSize = 5;
             glIndices = vertIndices.ToArray();
-            glVertices = new float[vertices.Count * 3];
-            for (int i = 0; i < vertices.Count; ++i)
+            glData = new float[vertIndices.Count * vertexAttribSize];
+
+            for (int i = 0; i < vertIndices.Count; ++i)
             {
-                glVertices[i * 3] = vertices[i].x;
-                glVertices[i * 3 + 1] = vertices[i].y;
-                glVertices[i * 3 + 2] = vertices[i].z;
+                // TODO: make this simpler
+                glData[i * vertexAttribSize + 0] = vertices[(int)vertIndices[i]].x;
+                glData[i * vertexAttribSize + 1] = vertices[(int)vertIndices[i]].y;
+                glData[i * vertexAttribSize + 2] = vertices[(int)vertIndices[i]].z;
+                glData[i * vertexAttribSize + 3] = uvCoords[(int)uvIndices[i]].x;
+                glData[i * vertexAttribSize + 4] = uvCoords[(int)uvIndices[i]].y;
             }
 
             Gl.BindVertexArray(VAO);
             Gl.BindBuffer(BufferTarget.ArrayBuffer, VBO);
-            Gl.BufferData(BufferTarget.ArrayBuffer, (uint)glVertices.Length * sizeof(float), glVertices, BufferUsage.StaticDraw);
+            Gl.BufferData(BufferTarget.ArrayBuffer, (uint)glData.Length * sizeof(float), glData, BufferUsage.StaticDraw);
 
-            Gl.BindBuffer(BufferTarget.ElementArrayBuffer, EBO);
-            Gl.BufferData(BufferTarget.ElementArrayBuffer, (uint)glIndices.Length * sizeof(uint), glIndices, BufferUsage.StaticDraw);
+            // Gl.BindBuffer(BufferTarget.ElementArrayBuffer, EBO);
+            // Gl.BufferData(BufferTarget.ElementArrayBuffer, (uint)glIndices.Length * sizeof(uint), glIndices, BufferUsage.StaticDraw);
 
-            Gl.VertexAttribPointer(0, 3, VertexAttribType.Float, false, 0, IntPtr.Zero);
             Gl.EnableVertexAttribArray(0);
+            Gl.EnableVertexAttribArray(1);
+            Gl.VertexAttribPointer(0, 3, VertexAttribType.Float, false, vertexAttribSize * sizeof(float), (IntPtr)0);
+            Gl.VertexAttribPointer(1, 2, VertexAttribType.Float, false, vertexAttribSize * sizeof(float), (IntPtr)(3 * sizeof(float)));
         }
 
         private static int CountInstancesOfCharInString(string s, char c)
