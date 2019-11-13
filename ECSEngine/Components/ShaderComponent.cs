@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+
 using ECSEngine.Render;
 
 using OpenGL;
@@ -8,10 +10,12 @@ namespace ECSEngine.Components
     public class ShaderComponent : Component<ShaderComponent>
     {
         private uint shaderProgram;
+        private List<string> errorLog; // Prevent console error spam
 
         public ShaderComponent(params Shader[] shaders)
         {
             shaderProgram = Gl.CreateProgram();
+            errorLog = new List<string>();
             foreach (var shader in shaders)
             {
                 Gl.AttachShader(shaderProgram, shader.glShader);
@@ -27,8 +31,9 @@ namespace ECSEngine.Components
         public void SetVariable(string variableName, object variableValue)
         {
             var variableLocation = Gl.GetUniformLocation(shaderProgram, variableName);
-            if (variableLocation < 0)
+            if (variableLocation < 0 && !errorLog.Contains(variableName))
             {
+                errorLog.Add(variableName);
                 Debug.Log($"The variable {variableName} does not exist on this shader.", Debug.DebugSeverity.High);
                 return;
             }
@@ -59,8 +64,9 @@ namespace ECSEngine.Components
                 // textureUnit - (first texture unit #)
                 Gl.ProgramUniform1(shaderProgram, Gl.GetUniformLocation(shaderProgram, variableName), texture.textureUnit - TextureUnit.Texture0);
             }
-            else
+            else if (!errorLog.Contains(variableName))
             {
+                errorLog.Add(variableName);
                 Debug.Log($"I don't know how to handle {variableValue.GetType().Name} yet :(", Debug.DebugSeverity.Medium);
             }
         }

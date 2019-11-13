@@ -9,8 +9,12 @@ namespace ECSEngine.Render
     public class Texture2D
     {
         uint glTexture;
-        int repeatType = Gl.REPEAT; // TODO: Get from material
         public TextureUnit textureUnit = TextureUnit.Texture0;
+        // TODO: Get all below from material
+        public int repeatType = Gl.REPEAT;
+        public TextureMagFilter magFilter = TextureMagFilter.Nearest;
+        public TextureMinFilter minFilter = TextureMinFilter.Nearest;
+
         public Texture2D(string path, TextureUnit textureUnit = TextureUnit.Texture0)
         {
             this.textureUnit = textureUnit;
@@ -56,7 +60,8 @@ namespace ECSEngine.Render
             Gl.ActiveTexture(textureUnit);
             Gl.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureWrapS, repeatType);
             Gl.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureWrapT, repeatType);
-            // TODO: Texture filtering
+            Gl.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureMagFilter, magFilter);
+            Gl.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureMinFilter, minFilter);
             Gl.BindTexture(TextureTarget.Texture2d, glTexture);
         }
     }
