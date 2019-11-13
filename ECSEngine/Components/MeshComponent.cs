@@ -23,11 +23,6 @@ namespace ECSEngine.Components
             this.albedoTexture = albedoTexture;
             this.mesh = new Mesh(path);
             this.modelMatrix = Matrix4x4f.Identity;
-            /* this.modelMatrix.Scale(
-                1f,
-                1f,
-                1f); */
-            // this.modelMatrix.RotateX(90f);
         }
         
         public override void Render()

@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
-
+using ECSEngine.Attributes;
 using ECSEngine.Render;
 
 namespace ECSEngine.Components
 {
+    [Requires(typeof(ShaderComponent))]
     public class MaterialComponent : Component<MaterialComponent>
     {
         List<Material> materials = new List<Material>();

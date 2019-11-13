@@ -9,48 +9,77 @@ namespace ECSEngine.Render
     public class Material
     {
         // Base MTL parameters
+        [MTLOpcode("newmtl")]
         public string materialName;
 
+        [MTLOpcode("Ka")]
         public ColorRGB24 ambientColor;
+        [MTLOpcode("map_Ka")]
         public Texture2D ambientTexture;
-        
+
+        [MTLOpcode("Kd")]
         public ColorRGB24 diffuseColor;
+        [MTLOpcode("map_Kd")]
         public Texture2D diffuseTexture;
-        
+
+        [MTLOpcode("Ks")]
         public ColorRGB24 specularColor;
+        [MTLOpcode("map_Ks")]
         public Texture2D specularTexture;
-        
+
+        [MTLOpcode("Ns")]
         public float specularExponent;
+        [MTLOpcode("map_Ns")]
         public Texture2D specularExponentTexture;
-        
+
+        [MTLOpcode("d")]
         public float transparency;
+        [MTLOpcode("map_d")]
         public Texture2D transparencyTexture;
-        
+
+        [MTLOpcode("illum")]
         public int illuminationModel;
-        
+
+        [MTLOpcode("map_bump")]
+        [MTLOpcode("bump")]
+        [MTLOpcode("norm")]
         public Texture2D bumpTexture;
 
+        [MTLOpcode("disp")]
         public Texture2D displacementTexture;
 
+        [MTLOpcode("decal")]
         public Texture2D stencilTexture;
-        
+
         // Clara.io PBR extensions
+        [MTLOpcode("Pr")]
         public float roughness;
+        [MTLOpcode("map_Pr")]
         public Texture2D roughnessTexture;
 
+        [MTLOpcode("Pm")]
         public float metallic;
+        [MTLOpcode("map_Pm")]
         public Texture2D metallicTexture;
 
+        [MTLOpcode("Ps")]
         public float sheen;
+        [MTLOpcode("map_Ps")]
         public Texture2D sheenTexture;
-        
+
+        [MTLOpcode("Pc")]
         public float clearcoatThickness;
+        [MTLOpcode("Pcr")]
         public float clearcoatRoughness;
-        
+
+        [MTLOpcode("Ke")]
         public ColorRGB24 emissiveColor;
+        [MTLOpcode("map_Ke")]
         public Texture2D emissiveTexture;
 
+        [MTLOpcode("aniso")]
         public float anisotropy;
+        [MTLOpcode("anisor")]
         public float anisotropyRot;
 
         public Material(string materialName)
@@ -69,128 +98,46 @@ namespace ECSEngine.Render
                 {
                     var lineSplit = line.Split(' ');
                     var opcode = lineSplit[0];
-                    if (line.StartsWith("newmtl"))
+                    foreach (var field in typeof(Material).GetFields())
                     {
-                        if (currentMaterial != null)
-                            materials.Add(currentMaterial);
-                        currentMaterial = new Material(line.Substring("newmtl".Length));
-                    }
-
-                    /* TODO: Should probably go about this another way:
-                     * Each 'opcode' has a particular prefix depending on
-                     * what it expects, for the most part.
-                     * 
-                     * - K* -> R, G, B
-                     * - map_* -> Texture name / path
-                     * - P* -> value
-                     * 
-                     * Others are pretty easy to work out and follow similar(-ish)
-                     * patterns to those existing.
-                     */
-                    if (opcode.StartsWith("K"))
-                    {
-                        // R, G, B
-                        ColorRGB24 value = new ColorRGB24(
-                            (byte)(float.Parse(lineSplit[1]) * 255),
-                            (byte)(float.Parse(lineSplit[2]) * 255),
-                            (byte)(float.Parse(lineSplit[3]) * 255)
-                            );
-                        switch (opcode)
+                        foreach (var attribute in field.GetCustomAttributes(typeof(MTLOpcodeAttribute), false))
                         {
-                            case "Ka": // Ambient color
-                                currentMaterial.ambientColor = value;
-                                break;
-                            case "Kd": // Diffuse color
-                                currentMaterial.diffuseColor = value;
-                                break;
-                            case "Ks": // Specular color
-                                currentMaterial.specularColor = value;
-                                break;
-                            case "Ke": // Emissive
-                                currentMaterial.emissiveColor = value;
-                                break;
-                        }
-
-                    }
-                    else if (opcode.StartsWith("map_") || opcode == "bump" || opcode == "norm" || opcode == "norm" || opcode == "disp" || opcode == "decal") // todo: regex this
-                    {
-                        // Texture name / path
-                        Texture2D texture2D = new Texture2D(Path.GetDirectoryName(path) + "/" + lineSplit[1]);
-                        switch (opcode)
-                        {
-                            case "map_Ka": // Ambient texture
-                                currentMaterial.ambientTexture = texture2D;
-                                break;
-                            case "map_Kd": // Diffuse texture
-                                currentMaterial.diffuseTexture = texture2D;
-                                break;
-                            case "map_Ks": // Specular texture
-                                currentMaterial.specularTexture = texture2D;
-                                break;
-                            case "map_Ns": // Specular exponent texture
-                                currentMaterial.specularExponentTexture = texture2D;
-                                break;
-                            case "map_d": // Alpha texture
-                                currentMaterial.transparencyTexture = texture2D;
-                                break;
-                            case "map_bump": // Bump texture
-                            case "bump": // Ditto
-                            case "norm": // Normal map ("bump" / "map_bump")
-                                currentMaterial.bumpTexture = texture2D;
-                                break;
-                            case "disp": // Displacement map
-                                currentMaterial.displacementTexture = texture2D;
-                                break;
-                            case "decal": // Stencil texture
-                                currentMaterial.stencilTexture = texture2D;
-                                break;
-                        }
-
-                    }
-                    else if (opcode.StartsWith("P") || opcode.StartsWith("N") || opcode == "d" || opcode == "Td" || opcode == "aniso" || opcode == "anisor") // todo: regex this
-                    {
-                        // Float value
-                        float value = float.Parse(lineSplit[1]);
-                        switch (opcode)
-                        {
-                            case "Pr": // Roughness
-                                currentMaterial.roughness = value;
-                                break;
-                            case "Pm": // Metallic
-                                currentMaterial.metallic = value;
-                                break;
-                            case "Ps": // Sheen
-                                currentMaterial.sheen = value;
-                                break;
-                            case "Pc": // Clearcoat thickness
-                                currentMaterial.clearcoatThickness = value;
-                                break;
-                            case "Pcr": // Clearcoat roughness
-                                currentMaterial.clearcoatRoughness = value;
-                                break;
-                            case "Ns": // Specular exponent
-                                currentMaterial.specularExponent = value;
-                                break;
-                            case "d": // Transparency
-                                currentMaterial.transparency = value;
-                                break;
-                            case "Tr": // Transparency (inverted; equal to 1-d)
-                                currentMaterial.transparency = 1 - value;
-                                break;
-                            case "aniso": // Anisotropy
-                                currentMaterial.anisotropy = value;
-                                break;
-                            case "anisor": // Anisotropy rotation
-                                currentMaterial.anisotropyRot = value;
-                                break;
+                            if (((MTLOpcodeAttribute)attribute).opcode == opcode)
+                            {
+                                if (field.FieldType == typeof(Texture2D))
+                                {
+                                    Texture2D texture = new Texture2D("Content/" + lineSplit[1]);
+                                    field.SetValue(currentMaterial, texture);
+                                }
+                                else if (field.FieldType == typeof(ColorRGB24))
+                                {
+                                    float.TryParse(lineSplit[1], out float r);
+                                    float.TryParse(lineSplit[2], out float g);
+                                    float.TryParse(lineSplit[3], out float b);
+                                    ColorRGB24 color = new ColorRGB24((byte)(r * 255), (byte)(g * 255), (byte)(b * 255));
+                                    field.SetValue(currentMaterial, color);
+                                }
+                                else if (field.FieldType == typeof(float))
+                                {
+                                    float.TryParse(lineSplit[1], out float value);
+                                    field.SetValue(currentMaterial, value);
+                                }
+                                else if (field.FieldType == typeof(int))
+                                {
+                                    int.TryParse(lineSplit[1], out int value);
+                                    field.SetValue(currentMaterial, value);
+                                }
+                                else if (field.FieldType == typeof(string) && opcode == "newmtl")
+                                {
+                                    currentMaterial = new Material(lineSplit[1]);
+                                }
+                                else
+                                {
+                                    Debug.Log($"Unknown MTL attribute type {field.FieldType.Name} on opcode {((MTLOpcodeAttribute)attribute).opcode}.", Debug.DebugSeverity.High);
+                                }
+                            }
                         }
                     }
-                    else if (opcode == "illum")
-                    {
-                        // Illumination model (see https://en.wikipedia.org/wiki/Wavefront_.obj_file)
-                        currentMaterial.illuminationModel = int.Parse(lineSplit[1]);
-                    }
-
                     line = streamReader.ReadLine();
                 }
                 materials.Add(currentMaterial);
