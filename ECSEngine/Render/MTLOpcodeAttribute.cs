@@ -5,11 +5,11 @@ namespace ECSEngine.Render
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = true, Inherited = false)]
     internal class MTLOpcodeAttribute : Attribute
     {
-        public string opcode;
+        public string[] opcodes;
 
-        public MTLOpcodeAttribute(string opcode)
+        public MTLOpcodeAttribute(params string[] opcodes)
         {
-            this.opcode = opcode;
+            this.opcodes = opcodes;
         }
     }
 }

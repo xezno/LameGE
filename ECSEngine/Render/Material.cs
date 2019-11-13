@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 using OpenGL;
 
@@ -40,9 +41,7 @@ namespace ECSEngine.Render
         [MTLOpcode("illum")]
         public int illuminationModel;
 
-        [MTLOpcode("map_bump")]
-        [MTLOpcode("bump")]
-        [MTLOpcode("norm")]
+        [MTLOpcode("map_bump", "bump", "norm")]
         public Texture2D bumpTexture;
 
         [MTLOpcode("disp")]
@@ -103,7 +102,7 @@ namespace ECSEngine.Render
                     {
                         foreach (var attribute in field.GetCustomAttributes(typeof(MTLOpcodeAttribute), false))
                         {
-                            if (((MTLOpcodeAttribute)attribute).opcode == opcode)
+                            if (((MTLOpcodeAttribute)attribute).opcodes.Contains(opcode))
                             {
                                 if (field.FieldType == typeof(Texture2D))
                                 {
@@ -134,7 +133,7 @@ namespace ECSEngine.Render
                                 }
                                 else
                                 {
-                                    Debug.Log($"Unknown MTL attribute type {field.FieldType.Name} on opcode {((MTLOpcodeAttribute)attribute).opcode}.", Debug.DebugSeverity.High);
+                                    Debug.Log($"Unknown MTL attribute type {field.FieldType.Name} on opcode {((MTLOpcodeAttribute)attribute).opcodes}.", Debug.DebugSeverity.High);
                                 }
                             }
                         }

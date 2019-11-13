@@ -1,5 +1,6 @@
-﻿using ECSEngine.Events;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+
+using ECSEngine.Events;
 
 namespace ECSEngine.Systems
 {

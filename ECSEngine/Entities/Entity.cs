@@ -10,8 +10,8 @@ namespace ECSEngine.Entities
 {
     public class Entity<T> : IEntity
     {
-        List<IComponent> components { get; set; }
         public virtual IBase parent { get; set; }
+        private List<IComponent> components { get; set; }
 
         public Entity()
         {
@@ -21,7 +21,7 @@ namespace ECSEngine.Entities
         /// <summary>
         /// Check for any components with mismatched or missing dependencies.
         /// </summary>
-        void CheckComponentDependencies()
+        private void CheckComponentDependencies()
         {
             /* Some components have "require" attributes to ensure that a specific set of components are met (components
              * that depend on other components, e.g. MeshComponent and ShaderComponent).  We should check these for

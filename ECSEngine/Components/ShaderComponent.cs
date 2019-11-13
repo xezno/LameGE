@@ -7,7 +7,7 @@ namespace ECSEngine.Components
 {
     public class ShaderComponent : Component<ShaderComponent>
     {
-        uint shaderProgram;
+        private uint shaderProgram;
 
         public ShaderComponent(params Shader[] shaders)
         {
@@ -40,7 +40,7 @@ namespace ECSEngine.Components
             }
             else if (variableValue is float)
             {
-                Gl.ProgramUniform1f(shaderProgram, variableLocation, 1, Convert.ToSingle(variableValue));
+                Gl.ProgramUniform1(shaderProgram, variableLocation, Convert.ToSingle(variableValue));
             }
             else if (variableValue is Matrix4x4f)
             {
@@ -50,7 +50,7 @@ namespace ECSEngine.Components
             else if (variableValue is ColorRGB24)
             {
                 var color = (ColorRGB24)variableValue;
-                Gl.ProgramUniform4(shaderProgram, Gl.GetUniformLocation(shaderProgram, variableName), color.r / 255f, color.g / 255f, color.b / 255f, 1.0f);
+                Gl.ProgramUniform4(shaderProgram, Gl.GetUniformLocation(shaderProgram, variableName), color.r / 255f, color.g / 255f, color.b / 255f, 1f);
             }
             else if (variableValue is Texture2D)
             {

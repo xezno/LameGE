@@ -3,8 +3,8 @@ using ECSEngine.Entities;
 using ECSEngine.Events;
 using ECSEngine.Render;
 using ECSEngine.Systems;
+
 using OpenGL;
-using System;
 
 namespace ECSEngine.Components
 {
@@ -16,12 +16,13 @@ namespace ECSEngine.Components
     [Requires(typeof(ShaderComponent))]
     public class MeshComponent : Component<MeshComponent>
     {
-        Matrix4x4f modelMatrix;
-        Mesh mesh;
+        private Matrix4x4f modelMatrix;
+        private Mesh mesh;
+
         public MeshComponent(string path, Texture2D albedoTexture)
         {
-            this.mesh = new Mesh(path);
-            this.modelMatrix = Matrix4x4f.Identity;
+            mesh = new Mesh(path);
+            modelMatrix = Matrix4x4f.Identity;
         }
         
         public override void Render()

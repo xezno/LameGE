@@ -1,5 +1,6 @@
-﻿using OpenGL;
-using System.IO;
+﻿using System.IO;
+
+using OpenGL;
 
 namespace ECSEngine.Render
 {
@@ -15,29 +16,39 @@ namespace ECSEngine.Render
         public Shader(string path, ShaderType shaderType)
         {
             this.shaderType = shaderType;
-            this.fileName = path;
-            this.glShader = Gl.CreateShader(shaderType);
-            CompileShader();
+
+            fileName = path;
+            glShader = Gl.CreateShader(shaderType);
+
+            Compile();
+
+            CheckForErrors();
         }
 
-        void CompileShader()
+        private void Compile()
         {
             string[] shaderSource = new string[1];
             using (StreamReader streamReader = new StreamReader(fileName))
-            {
                 shaderSource[0] = streamReader.ReadToEnd();
-            }
+
             Gl.ShaderSource(glShader, shaderSource);
             Gl.CompileShader(glShader);
+        }
 
+        private void CheckForErrors()
+        {
             var glErrors = Gl.GetError();
             if (glErrors != ErrorCode.NoError)
             {
-                var glErrorStr = new System.Text.StringBuilder(512);
-                Gl.GetShaderInfoLog(glShader, 512, out int length, glErrorStr);
+                int maxLength = 1024;
+                var glErrorStr = new System.Text.StringBuilder(maxLength);
+                Gl.GetShaderInfoLog(glShader, maxLength, out int length, glErrorStr);
                 Debug.Log($"Problem compiling shader {fileName}: ({length}) {glErrors} - {glErrorStr.ToString()}", Debug.DebugSeverity.High);
             }
-            Debug.Log($"Compiled shader {fileName}");
+            else
+            {
+                Debug.Log($"Compiled shader {fileName} successfully");
+            }
         }
     }
 }
