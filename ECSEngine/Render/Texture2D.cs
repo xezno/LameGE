@@ -10,8 +10,10 @@ namespace ECSEngine.Render
     {
         uint glTexture;
         int repeatType = Gl.REPEAT;
-        public Texture2D(string path)
+        public TextureUnit textureUnit = TextureUnit.Texture0;
+        public Texture2D(string path, TextureUnit textureUnit = TextureUnit.Texture0)
         {
+            this.textureUnit = textureUnit;
             this.glTexture = Gl.GenTexture();
             Gl.BindTexture(TextureTarget.Texture2d, glTexture);
             using (MemoryStream textureStream = new MemoryStream())
@@ -51,7 +53,7 @@ namespace ECSEngine.Render
 
         public void BindTexture()
         {
-            Gl.ActiveTexture(TextureUnit.Texture0);
+            Gl.ActiveTexture(textureUnit);
             Gl.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureWrapS, repeatType);
             Gl.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureWrapT, repeatType);
             Gl.BindTexture(TextureTarget.Texture2d, glTexture);

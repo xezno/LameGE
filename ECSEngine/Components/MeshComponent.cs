@@ -12,15 +12,14 @@ namespace ECSEngine.Components
     /// Contains the component-based code used in order to render
     /// a mesh on-screen.
     /// </summary>
+    [Requires(typeof(MaterialComponent))]
     [Requires(typeof(ShaderComponent))]
     public class MeshComponent : Component<MeshComponent>
     {
         Matrix4x4f modelMatrix;
         Mesh mesh;
-        Texture2D albedoTexture;
         public MeshComponent(string path, Texture2D albedoTexture)
         {
-            this.albedoTexture = albedoTexture;
             this.mesh = new Mesh(path);
             this.modelMatrix = Matrix4x4f.Identity;
         }
@@ -34,7 +33,7 @@ namespace ECSEngine.Components
             Gl.BindBuffer(BufferTarget.ArrayBuffer, mesh.VBO);
             Gl.BindBuffer(BufferTarget.ElementArrayBuffer, mesh.EBO);
 
-            albedoTexture?.BindTexture();
+            GetComponent<MaterialComponent>().BindAll(shaderComponent);
 
             CameraEntity camera = ((WorldSystem)parent.parent).mainCamera;
             shaderComponent.SetVariable("projMatrix", camera.projMatrix);

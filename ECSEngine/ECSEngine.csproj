@@ -98,6 +98,7 @@
     <Compile Include="Render\Material.cs" />
     <Compile Include="Render\Mesh.cs" />
     <Compile Include="Render\MTLOpcodeAttribute.cs" />
+    <Compile Include="Render\OBJOpcodeAttribute.cs" />
     <Compile Include="Render\Shader.cs" />
     <Compile Include="Render\Texture2D.cs" />
     <Compile Include="Systems\ISystem.cs" />

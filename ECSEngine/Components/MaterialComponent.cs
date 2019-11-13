@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ECSEngine.Attributes;
 using ECSEngine.Render;
 
@@ -24,6 +25,16 @@ namespace ECSEngine.Components
             foreach (Material newMaterial in newMaterials)
             {
                 AddMaterial(newMaterial);
+            }
+        }
+
+        public void BindAll(ShaderComponent shaderComponent)
+        {
+            // TODO: Bind all material variables
+            materials[0].diffuseTexture.BindTexture();
+            foreach (var field in typeof(Material).GetFields())
+            {
+                shaderComponent.SetVariable(field.Name, field.GetValue(materials[0]));
             }
         }
     }

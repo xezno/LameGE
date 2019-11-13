@@ -96,6 +96,7 @@ namespace ECSEngine.Render
                 Material currentMaterial = null;
                 while (line != null)
                 {
+                    int textureID = 0;
                     var lineSplit = line.Split(' ');
                     var opcode = lineSplit[0];
                     foreach (var field in typeof(Material).GetFields())
@@ -106,7 +107,7 @@ namespace ECSEngine.Render
                             {
                                 if (field.FieldType == typeof(Texture2D))
                                 {
-                                    Texture2D texture = new Texture2D("Content/" + lineSplit[1]);
+                                    Texture2D texture = new Texture2D("Content/" + lineSplit[1], TextureUnit.Texture0 + textureID++);
                                     field.SetValue(currentMaterial, texture);
                                 }
                                 else if (field.FieldType == typeof(ColorRGB24))
