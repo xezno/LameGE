@@ -7,5 +7,7 @@ namespace ECSEngine.Systems
     public interface ISystem : IBase
     {
         void BroadcastEvent(Event eventType, IEventArgs eventArgs);
+        void Render();
+        void Update();
     }
 }

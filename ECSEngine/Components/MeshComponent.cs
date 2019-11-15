@@ -19,7 +19,7 @@ namespace ECSEngine.Components
         private Matrix4x4f modelMatrix;
         private Mesh mesh;
 
-        public MeshComponent(string path, Texture2D albedoTexture)
+        public MeshComponent(string path)
         {
             mesh = new Mesh(path);
             modelMatrix = Matrix4x4f.Identity;
@@ -32,7 +32,6 @@ namespace ECSEngine.Components
 
             Gl.BindVertexArray(mesh.VAO);
             Gl.BindBuffer(BufferTarget.ArrayBuffer, mesh.VBO);
-            Gl.BindBuffer(BufferTarget.ElementArrayBuffer, mesh.EBO);
 
             GetComponent<MaterialComponent>().BindAll(shaderComponent);
 
@@ -43,11 +42,10 @@ namespace ECSEngine.Components
             shaderComponent.SetVariable("albedoTexture", 0);
 
             // Gl.DrawElements(PrimitiveType.Triangles, mesh.indexCount * sizeof(uint), DrawElementsType.UnsignedInt, IntPtr.Zero);
-            Gl.DrawArrays(PrimitiveType.Triangles, 0, mesh.indexCount * sizeof(float));
+            Gl.DrawArrays(PrimitiveType.Triangles, 0, mesh.elementCount * sizeof(float));
 
             Gl.BindVertexArray(0);
             Gl.BindBuffer(BufferTarget.ArrayBuffer, 0);
-            Gl.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
         }
 
         public override void HandleEvent(Event eventType, IEventArgs eventArgs)

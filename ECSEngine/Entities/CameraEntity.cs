@@ -12,7 +12,7 @@ namespace ECSEngine.Entities
 
         public CameraEntity()
         {
-            AddComponent(new TransformComponent(new Vector3(0, 2f, 0f), ECSEngine.Math.Quaternion.Identity));
+            AddComponent(new TransformComponent(new Vector3(0, 2f, 0f), ECSEngine.Math.Quaternion.identity));
             AddComponent(new CameraComponent());
         }
 

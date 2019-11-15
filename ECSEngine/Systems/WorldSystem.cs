@@ -8,14 +8,16 @@ namespace ECSEngine.Systems
     {
         public CameraEntity mainCamera;
 
-        public WorldSystem()
+        public WorldSystem(params IEntity[] entities)
         {
-            this.entities = new List<IEntity>();
             mainCamera = new CameraEntity();
             AddEntity(mainCamera);
+
+            foreach (IEntity entity in entities)
+                AddEntity(entity);
         }
 
-        public void Render()
+        public override void Render()
         {
             foreach (IEntity entity in entities)
             {
@@ -23,7 +25,7 @@ namespace ECSEngine.Systems
             }
         }
 
-        public void Update()
+        public override void Update()
         {
             foreach (IEntity entity in entities)
             {

@@ -1,13 +1,13 @@
 ﻿using System;
 
-namespace ECSEngine.Render
+namespace ECSEngine.Attributes
 {
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = true, Inherited = false)]
-    internal class MTLOpcodeAttribute : Attribute
+    internal class TextAssetOpcodeAttribute : Attribute
     {
         public string[] opcodes;
 
-        public MTLOpcodeAttribute(params string[] opcodes)
+        public TextAssetOpcodeAttribute(params string[] opcodes)
         {
             this.opcodes = opcodes;
         }

@@ -14,14 +14,18 @@
 
         // TODO: Add more mathematical operators for both other Vector2s and floats too
 
-        public static Vector2 operator *(Vector2 a, Vector2 b) => new Vector2(a.x * b.x,
-                                                                                a.y * b.y);
-        public static Vector2 operator -(Vector2 a, Vector2 b) => new Vector2(a.x - b.x,
-                                                                                a.y - b.y);
-        public static Vector2 operator /(Vector2 a, Vector2 b) => new Vector2(a.x / b.x,
-                                                                                a.y / b.y);
-        public static Vector2 operator +(Vector2 a, Vector2 b) => new Vector2(a.x + b.x,
-                                                                              a.y + b.y);
+        public static Vector2 Multiply(Vector2 a, Vector2 b) => new Vector2(a.x * b.x,
+                                                                            a.y * b.y);
+        public static Vector2 Subtract(Vector2 a, Vector2 b) => new Vector2(a.x - b.x,
+                                                                            a.y - b.y);
+        public static Vector2 Divide(Vector2 a, Vector2 b) => new Vector2(a.x / b.x,
+                                                                            a.y / b.y);
+        public static Vector2 Add(Vector2 a, Vector2 b) => new Vector2(a.x + b.x,
+                                                                            a.y + b.y);
+        public static Vector2 operator *(Vector2 a, Vector2 b) => Multiply(a, b);
+        public static Vector2 operator -(Vector2 a, Vector2 b) => Subtract(a, b);
+        public static Vector2 operator /(Vector2 a, Vector2 b) => Divide(a, b);
+        public static Vector2 operator +(Vector2 a, Vector2 b) => Add(a, b);
 
         public static Vector2 operator *(Vector2 a, float b) => new Vector2(a.x * b,
                                                                             a.y * b);

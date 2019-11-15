@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 using ECSEngine.Entities;
@@ -12,7 +13,7 @@ namespace ECSEngine
 {
     public class Game
     {
-        WorldSystem worldSystem;
+        List<ISystem> systems = new List<ISystem>();
         Gl.DebugProc debugCallback; // Stored to prevent GC from collecting debug callback before it can be called
 
         public bool isRunning = true;
@@ -59,10 +60,12 @@ namespace ECSEngine
 
         void SetUpSystems()
         {
-            worldSystem = new WorldSystem();
-            worldSystem.AddEntity(new TestModelEntity());
-
+            WorldSystem worldSystem = new WorldSystem(new TestModelEntity());
             EventManager.RegisterWorldSystem(worldSystem);
+            systems = new List<ISystem>(){
+                worldSystem,
+                new ImGuiSystem()
+            };
         }
 
         void ContextCreated(object sender, NativeWindowEventArgs e)
@@ -71,7 +74,7 @@ namespace ECSEngine
 
             Debug.Log($"OpenGL {Gl.GetString(StringName.Version)}");
             Gl.ReadBuffer(ReadBufferMode.Back);
-            Gl.ClearColor(1f, 1f, 1f, 1f);
+            Gl.ClearColor(100 / 255f, 149 / 255f, 237 / 255f, 1); // Cornflower blue (https://en.wikipedia.org/wiki/Web_colors#X11_color_names)
             Gl.Enable(EnableCap.Blend);
             Gl.Enable(EnableCap.DepthTest);
             Gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
@@ -93,8 +96,11 @@ namespace ECSEngine
             Gl.Viewport(0, 0, (int)RenderSettings.Default.GameResolutionX, (int)RenderSettings.Default.GameResolutionY);
             Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            worldSystem.Update();
-            worldSystem.Render();
+            foreach (ISystem system in systems)
+            {
+                system.Update();
+                system.Render();
+            }
         }
     }
 }

@@ -47,19 +47,16 @@ namespace ECSEngine.Components
             {
                 Gl.ProgramUniform1(shaderProgram, variableLocation, Convert.ToSingle(variableValue));
             }
-            else if (variableValue is Matrix4x4f)
+            else if (variableValue is Matrix4x4f matrix)
             {
-                var matrix = (Matrix4x4f)variableValue;
                 Gl.ProgramUniformMatrix4f(shaderProgram, Gl.GetUniformLocation(shaderProgram, variableName), 1, false, matrix);
             }
-            else if (variableValue is ColorRGB24)
+            else if (variableValue is ColorRGB24 color)
             {
-                var color = (ColorRGB24)variableValue;
                 Gl.ProgramUniform4(shaderProgram, Gl.GetUniformLocation(shaderProgram, variableName), color.r / 255f, color.g / 255f, color.b / 255f, 1f);
             }
-            else if (variableValue is Texture2D)
+            else if (variableValue is Texture2D texture)
             {
-                var texture = (Texture2D)variableValue;
                 // Determining texture unit # by the enum is just
                 // textureUnit - (first texture unit #)
                 Gl.ProgramUniform1(shaderProgram, Gl.GetUniformLocation(shaderProgram, variableName), texture.textureUnit - TextureUnit.Texture0);

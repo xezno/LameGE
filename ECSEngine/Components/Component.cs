@@ -15,9 +15,9 @@ namespace ECSEngine.Components
 
         public virtual void Update() { }
 
-        protected virtual A GetComponent<A>()
+        protected virtual T1 GetComponent<T1>()
         {
-            return ((IEntity)parent).GetComponent<A>();
+            return ((IEntity)parent).GetComponent<T1>();
         }
     }
 }

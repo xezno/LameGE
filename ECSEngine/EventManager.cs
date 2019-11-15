@@ -7,9 +7,9 @@ namespace ECSEngine
     {
         static WorldSystem worldSystem;
 
-        public static void RegisterWorldSystem(WorldSystem worldSystem_) // TODO: find a better way of doing this (i.e. singletons)
+        public static void RegisterWorldSystem(WorldSystem newWorldSystem) // TODO: find a better way of doing this (i.e. singletons)
         {
-            worldSystem = worldSystem_;
+            worldSystem = newWorldSystem;
         }
 
         public static void BroadcastEvent(Event eventType, IEventArgs eventArgs) // TODO: move to proper event implementation

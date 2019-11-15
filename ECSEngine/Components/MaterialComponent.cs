@@ -8,24 +8,11 @@ namespace ECSEngine.Components
     [Requires(typeof(ShaderComponent))]
     public class MaterialComponent : Component<MaterialComponent>
     {
-        private List<Material> materials = new List<Material>();
+        private Material[] materials;
 
-        public MaterialComponent(List<Material> materials)
+        public MaterialComponent(params Material[] materials)
         {
             this.materials = materials;
-        }
-
-        public void AddMaterial(Material newMaterial)
-        {
-            materials.Add(newMaterial);
-        }
-
-        public void AddMaterials(List<Material> newMaterials)
-        {
-            foreach (Material newMaterial in newMaterials)
-            {
-                AddMaterial(newMaterial);
-            }
         }
 
         public void BindAll(ShaderComponent shaderComponent)
