@@ -1,20 +1,24 @@
-﻿using ECSEngine.Events;
+﻿using System.Collections.Generic;
+using ECSEngine.Events;
 using ECSEngine.Systems;
 
 namespace ECSEngine
 {
     public static class EventManager
     {
-        static WorldSystem worldSystem;
+        private static List<ISystem> systems = new List<ISystem>();
 
-        public static void RegisterWorldSystem(WorldSystem newWorldSystem) // TODO: find a better way of doing this (i.e. singletons)
+        public static void AddSystem(ISystem system)
         {
-            worldSystem = newWorldSystem;
+            systems.Add(system);
         }
 
         public static void BroadcastEvent(Event eventType, IEventArgs eventArgs) // TODO: move to proper event implementation
         {
-            worldSystem.BroadcastEvent(eventType, eventArgs);
+            foreach (ISystem system in systems)
+            {
+                system.HandleEvent(eventType, eventArgs);
+            }
         }
     }
 }

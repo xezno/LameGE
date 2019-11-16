@@ -9,7 +9,7 @@ namespace ECSEngine.Systems
         public virtual IBase parent { get; set; }
         protected List<IEntity> entities { get; private set; } = new List<IEntity>();
 
-        public virtual void BroadcastEvent(Event eventType, IEventArgs eventArgs)
+        public virtual void HandleEvent(Event eventType, IEventArgs eventArgs)
         {
             foreach (IEntity entity in entities)
             {

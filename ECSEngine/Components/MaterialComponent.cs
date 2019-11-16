@@ -19,7 +19,7 @@ namespace ECSEngine.Components
         {
             // TODO: Bind all material variables
             // TODO: Select material based on mesh used (+ require meshcomponent)
-            materials[0].diffuseTexture.BindTexture();
+            materials[0].diffuseTexture.Bind();
             foreach (var field in typeof(Material).GetFields())
             {
                 shaderComponent.SetVariable(field.Name, field.GetValue(materials[0]));

@@ -14,9 +14,6 @@ namespace ECSEngine.Entities
             AddComponent(new MeshComponent("Content/level01.obj")); // TODO: Merge mesh loading & material loading
         }
 
-        public override void HandleEvent(Event eventType, IEventArgs eventArgs)
-        {
-            Debug.Log($"Received event {eventType.ToString()}");
-        }
+        public override void HandleEvent(Event eventType, IEventArgs eventArgs) { }
     }
 }

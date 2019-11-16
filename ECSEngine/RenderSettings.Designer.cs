@@ -25,7 +25,7 @@ namespace ECSEngine {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1280")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1600")]
         public uint GameResolutionX {
             get {
                 return ((uint)(this["GameResolutionX"]));
@@ -37,7 +37,7 @@ namespace ECSEngine {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("720")]
+        [global::System.Configuration.DefaultSettingValueAttribute("900")]
         public uint GameResolutionY {
             get {
                 return ((uint)(this["GameResolutionY"]));

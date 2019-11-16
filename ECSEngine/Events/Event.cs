@@ -6,6 +6,13 @@
         GameEnd,
 
         KeyUp,
-        KeyDown
+        KeyDown,
+
+        MouseMove,
+        MouseButtonUp,
+        MouseButtonDown,
+        MouseScroll,
+
+        WindowResized
     }
 }

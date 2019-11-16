@@ -56,29 +56,16 @@ namespace ECSEngine.Render
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <param name="bpp"></param>
-        public Texture2D(IntPtr pixels, int width, int height, int bpp)
+        public Texture2D(IntPtr pixels, int width, int height, int bpp, TextureUnit textureUnit = TextureUnit.Texture0)
         {
-            byte[] data = new byte[width * height * (bpp / 8)];
-            Marshal.Copy(pixels, data, 0, data.Length);
+            this.textureUnit = textureUnit;
             this.glTexture = Gl.GenTexture();
             Gl.BindTexture(TextureTarget.Texture2d, glTexture);
-            using (MemoryStream textureStream = new MemoryStream(data))
-            {
-                byte[] textureData;
-                textureData = new byte[textureStream.Length];
-                textureStream.Read(textureData, 0, (int)textureStream.Length);
-
-                IntPtr textureDataPtr = Marshal.AllocHGlobal(textureData.Length);
-                Marshal.Copy(textureData, 0, textureDataPtr, textureData.Length);
-
-                Gl.TexImage2D(TextureTarget.Texture2d, 0, InternalFormat.Rgba, width, height, 0, OpenGL.PixelFormat.Rgba, PixelType.UnsignedByte, textureDataPtr);
-                Gl.GenerateMipmap(TextureTarget.Texture2d);
-
-                Marshal.FreeHGlobal(textureDataPtr);
-            }
+            Gl.TexImage2D(TextureTarget.Texture2d, 0, InternalFormat.Rgba, width, height, 0, OpenGL.PixelFormat.Rgba, PixelType.UnsignedByte, pixels);
+            Gl.GenerateMipmap(TextureTarget.Texture2d);
         }
 
-        public void BindTexture()
+        public void Bind()
         {
             Gl.ActiveTexture(textureUnit);
             Gl.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureWrapS, repeatType);

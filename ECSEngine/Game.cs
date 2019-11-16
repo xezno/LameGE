@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 
 using ECSEngine.Entities;
 using ECSEngine.Events;
+using ECSEngine.Math;
 using ECSEngine.Systems;
 
 using OpenGL;
@@ -13,29 +14,77 @@ namespace ECSEngine
 {
     public class Game
     {
-        List<ISystem> systems = new List<ISystem>();
-        Gl.DebugProc debugCallback; // Stored to prevent GC from collecting debug callback before it can be called
+        private List<ISystem> systems = new List<ISystem>();
+        private readonly Gl.DebugProc debugCallback; // Stored to prevent GC from collecting debug callback before it can be called
 
         public bool isRunning = true;
 
         public Game()
         {
             debugCallback = DebugCallback;
-            using (NativeWindow nativeWindow = NativeWindow.Create())
-            {
-                nativeWindow.ContextCreated += ContextCreated;
-                nativeWindow.Render += Render;
-                nativeWindow.KeyDown += KeyDown;
-                nativeWindow.KeyUp += KeyUp;
-                nativeWindow.ContextDestroying += ContextDestroyed;
-                nativeWindow.Animation = true;
-                nativeWindow.DepthBits = 24;
+            using NativeWindow nativeWindow = NativeWindow.Create();
 
-                nativeWindow.Create(0, 0, RenderSettings.Default.GameResolutionX, RenderSettings.Default.GameResolutionY, NativeWindowStyle.Overlapped);
+            nativeWindow.ContextCreated += ContextCreated;
+            nativeWindow.ContextDestroying += ContextDestroyed;
+            nativeWindow.Render += Render;
+            nativeWindow.KeyDown += KeyDown;
+            nativeWindow.KeyUp += KeyUp;
+            nativeWindow.MouseDown += MouseDown;
+            nativeWindow.MouseUp += MouseUp;
+            nativeWindow.MouseMove += MouseMove;
+            nativeWindow.MouseWheel += MouseWheel;
 
-                nativeWindow.Show();
-                nativeWindow.Run();
-            }
+            nativeWindow.CursorVisible = true; // Hide mouse cursor
+            nativeWindow.Animation = false; // Changing this to true makes input poll like once every 500ms.  so don't change it
+            nativeWindow.DepthBits = 24;
+            nativeWindow.SwapInterval = 0;
+
+            nativeWindow.Resize += Resize;
+
+            nativeWindow.Create(0, 0, RenderSettings.Default.GameResolutionX, RenderSettings.Default.GameResolutionY, NativeWindowStyle.Overlapped);
+
+            nativeWindow.Show();
+            nativeWindow.Run();
+        }
+
+        private void Resize(object sender, EventArgs e)
+        {
+            var nativeWindow = (NativeWindow)sender;
+            var windowSize = new Vector2(nativeWindow.ClientSize.Width, nativeWindow.ClientSize.Height);
+
+            Gl.Viewport(0, 0, nativeWindow.ClientSize.Width, nativeWindow.ClientSize.Height);
+
+            EventManager.BroadcastEvent(Event.WindowResized, new WindowResizeEventArgs(windowSize, this));
+        }
+
+        private void MouseWheel(object sender, NativeWindowMouseEventArgs e)
+        {
+            EventManager.BroadcastEvent(Event.MouseScroll, new MouseWheelEventArgs(e.WheelTicks, this));
+        }
+
+        private void MouseMove(object sender, NativeWindowMouseEventArgs e)
+        {
+            EventManager.BroadcastEvent(Event.MouseMove, new MouseMoveEventArgs(new Vector2(e.Location.X, RenderSettings.Default.GameResolutionY - e.Location.Y), this));
+        }
+
+        private void MouseUp(object sender, NativeWindowMouseEventArgs e)
+        {
+            EventManager.BroadcastEvent(Event.MouseButtonUp, new MouseButtonEventArgs(0, this));
+        }
+
+        private void MouseDown(object sender, NativeWindowMouseEventArgs e)
+        {
+            EventManager.BroadcastEvent(Event.MouseButtonDown, new MouseButtonEventArgs(0, this));
+        }
+
+        void KeyUp(object sender, NativeWindowKeyEventArgs e)
+        {
+            EventManager.BroadcastEvent(Event.KeyUp, new KeyboardEventArgs((int)e.Key, this));
+        }
+
+        void KeyDown(object sender, NativeWindowKeyEventArgs e)
+        {
+            EventManager.BroadcastEvent(Event.KeyDown, new KeyboardEventArgs((int)e.Key, this));
         }
 
         void ContextDestroyed(object sender, NativeWindowEventArgs e)
@@ -45,27 +94,21 @@ namespace ECSEngine
 
         void DebugCallback(DebugSource source, DebugType type, uint id, DebugSeverity severity, int length, IntPtr message, IntPtr userParam)
         {
-            Debug.Log($"OpenGL Error {id}: {Marshal.PtrToStringAnsi(message, length)}", Debug.DebugSeverity.Fatal);
-        }
-
-        void KeyUp(object sender, NativeWindowKeyEventArgs e)
-        {
-            EventManager.BroadcastEvent(Event.KeyUp, new GenericEventArgs(this));
-        }
-
-        void KeyDown(object sender, NativeWindowKeyEventArgs e)
-        {
-            EventManager.BroadcastEvent(Event.KeyDown, new GenericEventArgs(this));
+            if (severity >= DebugSeverity.DebugSeverityMedium)
+                Debug.Log($"OpenGL Error {id}: {Marshal.PtrToStringAnsi(message, length)}", Debug.DebugSeverity.Fatal);
         }
 
         void SetUpSystems()
         {
+            // TODO: Cleanup
             WorldSystem worldSystem = new WorldSystem(new TestModelEntity());
-            EventManager.RegisterWorldSystem(worldSystem);
+            ImGuiSystem imGuiSystem = new ImGuiSystem();
             systems = new List<ISystem>(){
                 worldSystem,
-                new ImGuiSystem()
+                imGuiSystem
             };
+            EventManager.AddSystem(worldSystem);
+            EventManager.AddSystem(imGuiSystem);
         }
 
         void ContextCreated(object sender, NativeWindowEventArgs e)
@@ -93,7 +136,6 @@ namespace ECSEngine
 
         void Render(object sender, NativeWindowEventArgs e)
         {
-            Gl.Viewport(0, 0, (int)RenderSettings.Default.GameResolutionX, (int)RenderSettings.Default.GameResolutionY);
             Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             foreach (ISystem system in systems)

@@ -124,9 +124,9 @@ namespace ECSEngine.Assets
                                     if (field.GetValue(this) == null)
                                         field.SetValue(this, new List<MeshFaceElement>());
 
-                                    for (int i = 0; i < 3; ++i)
+                                    for (int index = 0; index < 3; ++index)
                                     {
-                                        var elementSplit = lineSplit[i + 1].Split('/');
+                                        var elementSplit = lineSplit[index + 1].Split('/');
                                         uint v = ParseUint(elementSplit[0]) - 1;
                                         uint vt = ParseUint(elementSplit[1]) - 1;
                                         uint vn = ParseUint(elementSplit[2]) - 1;
