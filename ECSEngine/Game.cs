@@ -69,12 +69,22 @@ namespace ECSEngine
 
         private void MouseUp(object sender, NativeWindowMouseEventArgs e)
         {
-            EventManager.BroadcastEvent(Event.MouseButtonUp, new MouseButtonEventArgs(0, this));
+            int button = 0;
+            if ((e.Buttons & MouseButton.Left) != 0)        button = 0;
+            else if ((e.Buttons & MouseButton.Middle) != 0) button = 1;
+            else if ((e.Buttons & MouseButton.Right) != 0)  button = 2;
+
+            EventManager.BroadcastEvent(Event.MouseButtonUp, new MouseButtonEventArgs(button, this));
         }
 
         private void MouseDown(object sender, NativeWindowMouseEventArgs e)
         {
-            EventManager.BroadcastEvent(Event.MouseButtonDown, new MouseButtonEventArgs(0, this));
+            int button = 0;
+            if ((e.Buttons & MouseButton.Left) != 0)        button = 0;
+            else if ((e.Buttons & MouseButton.Middle) != 0) button = 1;
+            else if ((e.Buttons & MouseButton.Right) != 0)  button = 2;
+
+            EventManager.BroadcastEvent(Event.MouseButtonDown, new MouseButtonEventArgs(button, this));
         }
 
         void KeyUp(object sender, NativeWindowKeyEventArgs e)
