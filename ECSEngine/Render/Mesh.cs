@@ -9,9 +9,16 @@ using OpenGL;
 
 namespace ECSEngine.Render
 {
+    /// <summary>
+    /// A mesh that can be drawn on-screen in 3D space.
+    /// </summary>
     public class Mesh : PlaintextAsset<Mesh>
     {
         public uint VAO, VBO;
+
+        /// <summary>
+        /// The number of OpenGL elements to draw.
+        /// </summary>
         public int elementCount => faceElements.Count;
 
         [TextAssetOpcode("v")]
@@ -26,9 +33,6 @@ namespace ECSEngine.Render
         [TextAssetOpcode("f")]
         public List<MeshFaceElement> faceElements = new List<MeshFaceElement>();
 
-
-        float[] glData;
-
         /// <summary>
         /// Creates a new <see cref="Mesh"/> instance, loading the mesh using <paramref name="path"/>.
         /// </summary>
@@ -38,8 +42,12 @@ namespace ECSEngine.Render
             GenerateBuffers();
         }
 
+        /// <summary>
+        /// Generate the relevant OpenGL array and buffer objects, preparing them for on-screen drawing.
+        /// </summary>
         public void GenerateBuffers()
         {
+            float[] glData;
             // Gen objects
             VAO = Gl.GenVertexArray();
             VBO = Gl.GenBuffer();

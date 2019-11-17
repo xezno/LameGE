@@ -4,11 +4,18 @@ using OpenGL;
 
 namespace ECSEngine.Components
 {
+    /// <summary>
+    /// Set up basic camera matrices, and perform relevant operations on them.
+    /// </summary>
     [Requires(typeof(TransformComponent))]
     public class CameraComponent : Component<CameraComponent>
     {
         public Matrix4x4f viewMatrix, projMatrix;
         public float rotationAngle, fieldOfView = 90.0f, rotationSpeed = 4, nearPlane = 0.1f, farPlane = 50f;
+
+        /// <summary>
+        /// Construct an instance of CameraComponent, setting up the projection matrix in the process.
+        /// </summary>
         public CameraComponent()
         {
             projMatrix = Matrix4x4f.Perspective(fieldOfView,
@@ -17,6 +24,9 @@ namespace ECSEngine.Components
                 farPlane);
         }
 
+        /// <summary>
+        /// Update the CameraComponent's matrices where required.
+        /// </summary>
         public override void Update()
         {
             rotationAngle += 0.16f * rotationSpeed;
@@ -24,10 +34,6 @@ namespace ECSEngine.Components
                 new Vertex3f(0f, 0f, -1f),
                 new Vertex3f(0f, 1f, 0f));
             viewMatrix.RotateY(rotationAngle);
-        }
-
-        public override void Render()
-        {
         }
     }
 }

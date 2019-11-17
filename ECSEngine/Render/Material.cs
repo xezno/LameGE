@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-
-using ECSEngine.Assets;
+﻿using ECSEngine.Assets;
 using ECSEngine.Attributes;
 
 using OpenGL;

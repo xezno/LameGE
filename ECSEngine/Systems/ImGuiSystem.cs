@@ -6,13 +6,14 @@ using ECSEngine.Events;
 using ECSEngine.Render;
 
 using OpenGL;
+using OpenGL.CoreUI;
 
 using ImGuiNET;
-using OpenGL.CoreUI;
 using Vector4 = ECSEngine.Math.Vector4;
 
 namespace ECSEngine.Systems
 {
+    // TODO: Is this viable as a system?
     public class ImGuiSystem : System<ImGuiSystem>
     {
         private Texture2D defaultFontTexture;

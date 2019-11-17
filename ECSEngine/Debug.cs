@@ -6,6 +6,9 @@ namespace ECSEngine
 {
     public static class Debug
     {
+        /// <summary>
+        /// The available severity levels for a debug message.
+        /// </summary>
         public enum DebugSeverity
         {
             Low,
@@ -14,6 +17,11 @@ namespace ECSEngine
             Fatal
         };
 
+        /// <summary>
+        /// Display a message to the console.
+        /// </summary>
+        /// <param name="str">The message to output.</param>
+        /// <param name="severity">The severity of the message, determining its color.</param>
         public static void Log(string str, DebugSeverity severity = DebugSeverity.Low)
         {
             // Prepare method name & method class name

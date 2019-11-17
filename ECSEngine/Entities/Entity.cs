@@ -4,15 +4,26 @@ using System.Linq;
 using System.Reflection;
 
 using ECSEngine.Attributes;
+using ECSEngine.Components;
 using ECSEngine.Events;
 
 namespace ECSEngine.Entities
 {
     public class Entity<T> : IEntity
     {
+        /// <summary>
+        /// The entity's parent; usually a system.
+        /// </summary>
         public virtual IBase parent { get; set; }
-        private List<IComponent> components { get; set; }
 
+        /// <summary>
+        /// A list of components that the entity contains.
+        /// </summary>
+        private List<IComponent> components { get; }
+
+        /// <summary>
+        /// Construct an <see cref="Entity{T}"/>.
+        /// </summary>
         public Entity()
         {
             components = new List<IComponent>();
@@ -36,9 +47,9 @@ namespace ECSEngine.Entities
                         // Okay - now let's check the RequiresAttribute for any required components:
                         RequiresAttribute requiresAttribute = (RequiresAttribute)attribute;
                         bool containsType = false;
-                        foreach (var component_ in components)
+                        foreach (var otherComponent in components)
                         {
-                            if (component_.GetType() == requiresAttribute.requiredType)
+                            if (otherComponent.GetType() == requiresAttribute.requiredType)
                             {
                                 containsType = true;
                                 break;

@@ -1,6 +1,5 @@
 ﻿using ECSEngine.Attributes;
 using ECSEngine.Entities;
-using ECSEngine.Events;
 using ECSEngine.Render;
 using ECSEngine.Systems;
 
@@ -16,15 +15,29 @@ namespace ECSEngine.Components
     [Requires(typeof(ShaderComponent))]
     public class MeshComponent : Component<MeshComponent>
     {
-        private Matrix4x4f modelMatrix;
-        private Mesh mesh;
+        /// <summary>
+        /// The matrix to apply to the <see cref="mesh"/> upon drawing it.
+        /// </summary>
+        private readonly Matrix4x4f modelMatrix;
 
+        /// <summary>
+        /// The <see cref="Mesh"/> to draw.
+        /// </summary>
+        private readonly Mesh mesh;
+
+        /// <summary>
+        /// Construct an instance of MeshComponent, loading the mesh from the path specified.
+        /// </summary>
+        /// <param name="path">The path to load the <see cref="Mesh"/> from.</param>
         public MeshComponent(string path)
         {
             mesh = new Mesh(path);
             modelMatrix = Matrix4x4f.Identity;
         }
-        
+
+        /// <summary>
+        /// Draw the <see cref="Mesh"/> on-screen using the attached <see cref="ShaderComponent"/> and <see cref="MaterialComponent"/>.
+        /// </summary>
         public override void Render()
         {
             ShaderComponent shaderComponent = ((IEntity)parent).GetComponent<ShaderComponent>();
@@ -46,16 +59,6 @@ namespace ECSEngine.Components
 
             Gl.BindVertexArray(0);
             Gl.BindBuffer(BufferTarget.ArrayBuffer, 0);
-        }
-
-        public override void HandleEvent(Event eventType, IEventArgs eventArgs)
-        {
-            // TODO: Handle event based on event type and arguments
-        }
-
-        public override void Update()
-        {
-            // TODO: Handle game update (no logic here?)
         }
     }
 }

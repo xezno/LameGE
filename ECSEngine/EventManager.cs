@@ -4,6 +4,7 @@ using ECSEngine.Systems;
 
 namespace ECSEngine
 {
+    // TODO: Is this needed?
     public static class EventManager
     {
         private static List<ISystem> systems = new List<ISystem>();

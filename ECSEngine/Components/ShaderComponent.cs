@@ -9,9 +9,20 @@ namespace ECSEngine.Components
 {
     public class ShaderComponent : Component<ShaderComponent>
     {
-        private uint shaderProgram;
-        private List<string> errorLog; // Prevent console error spam
+        /// <summary>
+        /// The OpenGL shader program.
+        /// </summary>
+        private readonly uint shaderProgram;
 
+        /// <summary>
+        /// A list of variables that have already thrown errors; used to prevent the console from becoming too densely populated with shader errors.
+        /// </summary>
+        private readonly List<string> errorLog;
+
+        /// <summary>
+        /// Construct a new ShaderComponent, attaching any of the shaders given.
+        /// </summary>
+        /// <param name="shaders">Shaders to attach to the shader program.</param>
         public ShaderComponent(params Shader[] shaders)
         {
             shaderProgram = Gl.CreateProgram();
@@ -23,11 +34,19 @@ namespace ECSEngine.Components
             Gl.LinkProgram(shaderProgram);
         }
 
+        /// <summary>
+        /// Use the shader program with the current OpenGL context.
+        /// </summary>
         public void UseShader()
         {
             Gl.UseProgram(shaderProgram);
         }
 
+        /// <summary>
+        /// Set a variable within the shader program.
+        /// </summary>
+        /// <param name="variableName">The name of the variable to set.</param>
+        /// <param name="variableValue">The value to give to the variable.</param>
         public void SetVariable(string variableName, object variableValue)
         {
             var variableLocation = Gl.GetUniformLocation(shaderProgram, variableName);

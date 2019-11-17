@@ -1,6 +1,6 @@
 ﻿namespace ECSEngine
 {
-    // TODO: wow
+    // TODO: wow... is this even necessary? Seems to just add more inheritance complexity.
     public interface IBase
     {
         IBase parent { get; set; }

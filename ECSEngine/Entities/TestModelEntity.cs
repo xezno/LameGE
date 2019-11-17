@@ -4,14 +4,19 @@ using ECSEngine.Render;
 
 namespace ECSEngine.Entities
 {
-    public class TestModelEntity : Entity<TestModelEntity>
+    public sealed class TestModelEntity : Entity<TestModelEntity>
     {
         public TestModelEntity() : base()
         {
             // Add mesh component
             AddComponent(new ShaderComponent(new Shader("Content/frag.glsl", OpenGL.ShaderType.FragmentShader), new Shader("Content/vert.glsl", OpenGL.ShaderType.VertexShader)));
-            AddComponent(new MaterialComponent(new Material("Content/level01.mtl")));
-            AddComponent(new MeshComponent("Content/level01.obj")); // TODO: Merge mesh loading & material loading
+            AddMeshAndMaterialComponents("Content/level01");
+        }
+
+        private void AddMeshAndMaterialComponents(string path)
+        {
+            AddComponent(new MaterialComponent(new Material($"{path}.mtl")));
+            AddComponent(new MeshComponent($"{path}.obj"));
         }
 
         public override void HandleEvent(Event eventType, IEventArgs eventArgs) { }
