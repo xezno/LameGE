@@ -34,7 +34,7 @@ namespace ECSEngine.Components
             materials[0].diffuseTexture.Bind();
             foreach (var field in typeof(Material).GetFields())
             {
-                shaderComponent.SetVariable(field.Name, field.GetValue(materials[0]));
+                shaderComponent.SetVariable($"material.{field.Name}", field.GetValue(materials[0]));
             }
         }
     }

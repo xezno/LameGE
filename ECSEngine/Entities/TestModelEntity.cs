@@ -6,7 +6,7 @@ namespace ECSEngine.Entities
 {
     public sealed class TestModelEntity : Entity<TestModelEntity>
     {
-        public TestModelEntity() : base()
+        public TestModelEntity()
         {
             // Add mesh component
             AddComponent(new ShaderComponent(new Shader("Content/main.frag", OpenGL.ShaderType.FragmentShader), new Shader("Content/main.vert", OpenGL.ShaderType.VertexShader)));

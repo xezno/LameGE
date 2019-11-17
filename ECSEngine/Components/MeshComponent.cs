@@ -46,15 +46,14 @@ namespace ECSEngine.Components
             Gl.BindVertexArray(mesh.VAO);
             Gl.BindBuffer(BufferTarget.ArrayBuffer, mesh.VBO);
 
-            GetComponent<MaterialComponent>().BindAll(shaderComponent);
 
             CameraEntity camera = ((WorldSystem)parent.parent).mainCamera;
             shaderComponent.SetVariable("projMatrix", camera.projMatrix);
             shaderComponent.SetVariable("viewMatrix", camera.viewMatrix);
             shaderComponent.SetVariable("modelMatrix", modelMatrix);
-            shaderComponent.SetVariable("albedoTexture", 0);
 
-            // Gl.DrawElements(PrimitiveType.Triangles, mesh.indexCount * sizeof(uint), DrawElementsType.UnsignedInt, IntPtr.Zero);
+            GetComponent<MaterialComponent>().BindAll(shaderComponent);
+
             Gl.DrawArrays(PrimitiveType.Triangles, 0, mesh.elementCount * sizeof(float));
 
             Gl.BindVertexArray(0);

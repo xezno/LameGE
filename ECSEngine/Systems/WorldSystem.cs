@@ -1,4 +1,5 @@
-﻿using ECSEngine.Entities;
+﻿using System.Collections.Generic;
+using ECSEngine.Entities;
 
 namespace ECSEngine.Systems
 {
@@ -9,6 +10,8 @@ namespace ECSEngine.Systems
         /// </summary>
         public CameraEntity mainCamera;
 
+        public List<LightEntity> lights;
+
         /// <summary>
         /// Construct a world system containing any entities required.
         /// </summary>
@@ -16,10 +19,14 @@ namespace ECSEngine.Systems
         public WorldSystem(params IEntity[] entities)
         {
             mainCamera = new CameraEntity();
+            lights = new List<LightEntity>();
+
             AddEntity(mainCamera);
 
             foreach (IEntity entity in entities)
+            {
                 AddEntity(entity);
+            }
         }
 
         /// <summary>
