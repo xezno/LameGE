@@ -9,7 +9,7 @@ namespace ECSEngine.Entities
         public TestModelEntity() : base()
         {
             // Add mesh component
-            AddComponent(new ShaderComponent(new Shader("Content/frag.glsl", OpenGL.ShaderType.FragmentShader), new Shader("Content/vert.glsl", OpenGL.ShaderType.VertexShader)));
+            AddComponent(new ShaderComponent(new Shader("Content/main.frag", OpenGL.ShaderType.FragmentShader), new Shader("Content/main.vert", OpenGL.ShaderType.VertexShader)));
             AddMeshAndMaterialComponents("Content/level01");
         }
 

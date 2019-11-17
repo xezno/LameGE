@@ -60,8 +60,8 @@ namespace ECSEngine.Systems
 
             ImGui.StyleColorsLight();
 
-            shaderComponent = new ShaderComponent(new Shader("Content/ImGUI/frag.glsl", ShaderType.FragmentShader), 
-                new Shader("Content/ImGUI/vert.glsl", ShaderType.VertexShader));
+            shaderComponent = new ShaderComponent(new Shader("Content/ImGUI/imgui.frag", ShaderType.FragmentShader), 
+                new Shader("Content/ImGUI/imgui.vert", ShaderType.VertexShader));
 
             vao = Gl.GenVertexArray();
             vbo = Gl.GenBuffer();
