@@ -1,5 +1,6 @@
 ﻿using ECSEngine.Attributes;
 using ECSEngine.Entities;
+using ECSEngine.Events;
 using ECSEngine.Render;
 using ECSEngine.Systems;
 
@@ -13,17 +14,16 @@ namespace ECSEngine.Components
     /// </summary>
     [Requires(typeof(MaterialComponent))]
     [Requires(typeof(ShaderComponent))]
+    [Requires(typeof(TransformComponent))]
     public class MeshComponent : Component<MeshComponent>
     {
-        /// <summary>
-        /// The matrix to apply to the <see cref="mesh"/> upon drawing it.
-        /// </summary>
-        private readonly Matrix4x4f modelMatrix;
-
         /// <summary>
         /// The <see cref="Mesh"/> to draw.
         /// </summary>
         private readonly Mesh mesh;
+
+        private ShaderComponent shaderComponent;
+        private TransformComponent transformComponent;
 
         /// <summary>
         /// Construct an instance of MeshComponent, loading the mesh from the path specified.
@@ -32,7 +32,6 @@ namespace ECSEngine.Components
         public MeshComponent(string path)
         {
             mesh = new Mesh(path);
-            modelMatrix = Matrix4x4f.Identity;
         }
 
         /// <summary>
@@ -40,17 +39,18 @@ namespace ECSEngine.Components
         /// </summary>
         public override void Render()
         {
-            ShaderComponent shaderComponent = ((IEntity)parent).GetComponent<ShaderComponent>();
+            shaderComponent = ((IEntity)parent).GetComponent<ShaderComponent>();
+            transformComponent = ((IEntity)parent).GetComponent<TransformComponent>();
+
             shaderComponent.UseShader(); // TODO: Attach GetComponent function to IComponent
 
             Gl.BindVertexArray(mesh.VAO);
             Gl.BindBuffer(BufferTarget.ArrayBuffer, mesh.VBO);
 
-
             CameraEntity camera = ((WorldSystem)parent.parent).mainCamera;
             shaderComponent.SetVariable("projMatrix", camera.projMatrix);
             shaderComponent.SetVariable("viewMatrix", camera.viewMatrix);
-            shaderComponent.SetVariable("modelMatrix", modelMatrix);
+            shaderComponent.SetVariable("modelMatrix", transformComponent.matrix);
 
             GetComponent<MaterialComponent>().BindAll(shaderComponent);
 

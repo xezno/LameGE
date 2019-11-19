@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Numerics;
-using System.Runtime.InteropServices;
-using System.Security;
+
 using ECSEngine.Components;
 using ECSEngine.Events;
 using ECSEngine.Render;
@@ -112,9 +110,16 @@ namespace ECSEngine.Systems
                     ImGui.ColorEdit3($"{field.Name}", ref value);
                     reference.value = new ColorRGB24((byte)(value.X*255f), (byte)(value.Y*255f), (byte)(value.Z*255f));
                 }
+                else if (field.FieldType == typeof(Math.Vector3))
+                {
+                    var reference = new Ref<Math.Vector3>(field, obj);
+                    Vector3 value = reference.value.ConvertToNumerics();
+                    ImGui.InputFloat3(field.Name, ref value);
+                    reference.value = Math.Vector3.ConvertFromNumerics(value);
+                }
                 else
                 {
-                    // ImGui.LabelText($"{field.GetValue(obj)?.ToString()}", $"{field.Name}");
+                    ImGui.LabelText($"{field.GetValue(obj)?.ToString()}", $"{field.Name}");
                 }
             }
             ImGui.End();

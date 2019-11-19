@@ -1,4 +1,6 @@
-﻿using OpenGL;
+﻿using System.Numerics;
+using System.Runtime.InteropServices;
+using OpenGL;
 
 namespace ECSEngine.Math
 {
@@ -73,6 +75,16 @@ namespace ECSEngine.Math
         public override string ToString()
         {
             return $"{x}, {y}, {z}";
+        }
+
+        public static Vector3 ConvertFromNumerics(System.Numerics.Vector3 numericsVector3)
+        {
+            return new Vector3(numericsVector3.X, numericsVector3.Y, numericsVector3.Z);
+        }
+
+        public System.Numerics.Vector3 ConvertToNumerics()
+        {
+            return new System.Numerics.Vector3(this.x, this.y, this.z);
         }
     }
 }

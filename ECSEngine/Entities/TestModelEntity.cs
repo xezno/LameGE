@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using ECSEngine.Components;
 using ECSEngine.Events;
+using ECSEngine.Math;
 using ECSEngine.Render;
 using ECSEngine.Systems;
 
@@ -9,11 +10,14 @@ namespace ECSEngine.Entities
     public sealed class TestModelEntity : Entity<TestModelEntity>
     {
         private Material mainMaterial;
+        private TransformComponent transformComponent;
         public TestModelEntity()
         {
             // Add mesh component
+            transformComponent = new TransformComponent(new Vector3(0, 0, 5f), Quaternion.identity, new Vector3(1, 1, 1));
+            AddComponent(transformComponent); 
             AddComponent(new ShaderComponent(new Shader("Content/main.frag", OpenGL.ShaderType.FragmentShader), new Shader("Content/main.vert", OpenGL.ShaderType.VertexShader)));
-            AddMeshAndMaterialComponents("Content/PBRTest/MetalBall");
+            AddMeshAndMaterialComponents("Content/level01");
         }
 
         private void AddMeshAndMaterialComponents(string path)
@@ -29,6 +33,7 @@ namespace ECSEngine.Entities
             {
                 case Event.GameStart:
                     Program.game.GetSystem<ImGuiSystem>().AddSerializableObject(mainMaterial); // this is terrible
+                    Program.game.GetSystem<ImGuiSystem>().AddSerializableObject(transformComponent); // this is also terrible
                     break;
             }
         }
