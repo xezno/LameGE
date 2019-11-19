@@ -14,6 +14,11 @@ namespace ECSEngine.Render
         private readonly uint glTexture;
 
         /// <summary>
+        /// The path to the texture file ("data" if using a data-based constructor).
+        /// </summary>
+        private string path;
+
+        /// <summary>
         /// The texture's texture unit.
         /// </summary>
         public TextureUnit textureUnit;
@@ -30,6 +35,7 @@ namespace ECSEngine.Render
         /// <param name="textureUnit">The texture unit to use.</param>
         public Texture2D(string path, TextureUnit textureUnit = TextureUnit.Texture0)
         {
+            this.path = path;
             this.textureUnit = textureUnit;
             this.glTexture = Gl.GenTexture();
             Gl.BindTexture(TextureTarget.Texture2d, glTexture);
@@ -68,6 +74,7 @@ namespace ECSEngine.Render
         /// <param name="textureUnit">The texture unit to use.</param>
         public Texture2D(IntPtr pixels, int width, int height, int bpp, TextureUnit textureUnit = TextureUnit.Texture0)
         {
+            this.path = "data";
             this.textureUnit = textureUnit;
             this.glTexture = Gl.GenTexture();
             Gl.BindTexture(TextureTarget.Texture2d, glTexture);
@@ -86,6 +93,11 @@ namespace ECSEngine.Render
             Gl.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureMagFilter, magFilter);
             Gl.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureMinFilter, minFilter);
             Gl.BindTexture(TextureTarget.Texture2d, glTexture);
+        }
+
+        public override string ToString()
+        {
+            return path;
         }
     }
 }

@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Numerics;
+using System.Runtime.InteropServices;
+using System.Security;
 using ECSEngine.Components;
 using ECSEngine.Events;
 using ECSEngine.Render;
+using Vector4 = ECSEngine.Math.Vector4;
 
 using OpenGL;
 using OpenGL.CoreUI;
 
 using ImGuiNET;
-using Vector4 = ECSEngine.Math.Vector4;
 
 namespace ECSEngine.Systems
 {
@@ -20,11 +23,16 @@ namespace ECSEngine.Systems
         private ShaderComponent shaderComponent;
         private uint vbo, vao, ebo;
         private Vector2 windowSize;
+
+        public List<object> serializableObjects;
         public ImGuiSystem()
         {
             var imGuiContext = ImGui.CreateContext();
-            ImGui.SetCurrentContext(imGuiContext);
+            if (ImGui.GetCurrentContext() == IntPtr.Zero)
+                ImGui.SetCurrentContext(imGuiContext);
             var io = ImGui.GetIO();
+
+            serializableObjects = new List<object>();
 
             // Font setup
             io.Fonts.AddFontFromFileTTF("Content/Fonts/Roboto/Roboto-Medium.ttf", 14);
@@ -71,14 +79,46 @@ namespace ECSEngine.Systems
         public override void Render()
         {
             ImGui.NewFrame();
-            ImGui.ShowDemoWindow();
-            ImGui.Begin("Test");
-            ImGui.End();
+            foreach (object obj in serializableObjects)
+            {
+                RenderAsWindow(obj);
+            }
             ImGui.Render();
             RenderImGui(ImGui.GetDrawData());
         }
 
-        public override void Update() { }
+        public void AddSerializableObject(object obj)
+        {
+            serializableObjects.Add(obj);
+        }
+
+        private void RenderAsWindow<T>(T obj)
+        {
+            ImGui.Begin(obj.GetType().Name + "##hidelabel");
+            foreach (var field in obj.GetType().GetFields())
+            {
+                // this works but is, like, the worst solution ever
+                if (field.FieldType == typeof(float))
+                {
+                    var reference = new Ref<float>(field, obj);
+                    float value = reference.value;
+                    ImGui.SliderFloat($"{field.Name}", ref value, 0, 1);
+                    reference.value = value;
+                }
+                else if (field.FieldType == typeof(ColorRGB24))
+                {
+                    var reference = new Ref<ColorRGB24>(field, obj);
+                    Vector3 value = new Vector3(reference.value.r / 255f, reference.value.g / 255f, reference.value.b / 255f);
+                    ImGui.ColorEdit3($"{field.Name}", ref value);
+                    reference.value = new ColorRGB24((byte)(value.X*255f), (byte)(value.Y*255f), (byte)(value.Z*255f));
+                }
+                else
+                {
+                    // ImGui.LabelText($"{field.GetValue(obj)?.ToString()}", $"{field.Name}");
+                }
+            }
+            ImGui.End();
+        }
 
         public void RenderImGui(ImDrawDataPtr drawData)
         {

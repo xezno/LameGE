@@ -19,7 +19,7 @@ namespace ECSEngine.Events
         /// <summary>
         /// The window's new size.
         /// </summary>
-        public Vector2 windowSize { get; set; }
+        public Vector2 windowSize { get; }
 
         /// <summary>
         /// Construct a new instance of <see cref="WindowResizeEventArgs"/>; the <see cref="timeSent"/> will be automatically set.

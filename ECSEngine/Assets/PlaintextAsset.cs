@@ -116,7 +116,8 @@ namespace ECSEngine.Assets
                         {
                             if (field.FieldType == typeof(Texture2D))
                             {
-                                Texture2D texture = new Texture2D("Content/" + lineSplit[1], TextureUnit.Texture0 + textureID++);
+                                var opcodeLength = opcode.Length + 1; // Opcode length + space
+                                Texture2D texture = new Texture2D(Path.GetDirectoryName(path) + "/" + line.Remove(0, opcodeLength).Replace('\\', '/'), TextureUnit.Texture0 + textureID++);
                                 field.SetValue(this, texture);
                             }
                             else if (field.FieldType == typeof(ColorRGB24))

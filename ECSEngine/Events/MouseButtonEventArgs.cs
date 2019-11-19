@@ -17,7 +17,7 @@ namespace ECSEngine.Events
         /// <summary>
         /// The mouse button relevant to the event.
         /// </summary>
-        public int mouseButton { get; set; }
+        public int mouseButton { get; }
 
         /// <summary>
         /// Construct a new instance of <see cref="MouseButtonEventArgs"/>; the <see cref="timeSent"/> will be automatically set.

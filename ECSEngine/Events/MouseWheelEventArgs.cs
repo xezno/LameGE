@@ -19,7 +19,7 @@ namespace ECSEngine.Events
         /// <summary>
         /// The amount by which the mouse scroll wheel has been turned.
         /// </summary>
-        public int mouseScroll { get; set; }
+        public int mouseScroll { get; }
 
         /// <summary>
         /// Construct a new instance of <see cref="MouseWheelEventArgs"/>; the <see cref="timeSent"/> will be automatically set.

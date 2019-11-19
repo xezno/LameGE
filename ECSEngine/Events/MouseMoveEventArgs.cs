@@ -19,7 +19,7 @@ namespace ECSEngine.Events
         /// <summary>
         /// The mouse cursor's new position relative to the window.
         /// </summary>
-        public Vector2 mousePosition { get; set; }
+        public Vector2 mousePosition { get; }
 
         /// <summary>
         /// Construct a new instance of <see cref="MouseMoveEventArgs"/>; the <see cref="timeSent"/> will be automatically set.

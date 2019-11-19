@@ -23,6 +23,8 @@ namespace ECSEngine.Systems
 
             AddEntity(mainCamera);
 
+            lights.Add(new LightEntity());
+
             foreach (IEntity entity in entities)
             {
                 AddEntity(entity);

@@ -17,7 +17,7 @@ namespace ECSEngine.Events
         /// <summary>
         /// The keyboard key relevant to the event.
         /// </summary>
-        public int keyboardKey { get; set; }
+        public int keyboardKey { get; }
 
         /// <summary>
         /// Construct a new instance of <see cref="MouseWheelEventArgs"/>; the <see cref="timeSent"/> will be automatically set.

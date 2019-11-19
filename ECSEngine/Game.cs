@@ -12,8 +12,10 @@ using OpenGL.CoreUI;
 
 namespace ECSEngine
 {
-    public class Game
+    public class Game : IBase
     {
+        public IBase parent { get; set; }
+
         private List<ISystem> systems = new List<ISystem>();
         private readonly Gl.DebugProc debugCallback; // Stored to prevent GC from collecting debug callback before it can be called
 
@@ -22,6 +24,10 @@ namespace ECSEngine
         public Game()
         {
             debugCallback = DebugCallback;
+        }
+
+        public void Run()
+        {
             using NativeWindow nativeWindow = NativeWindow.Create();
 
             nativeWindow.ContextCreated += ContextCreated;
@@ -119,6 +125,9 @@ namespace ECSEngine
             };
             EventManager.AddSystem(worldSystem);
             EventManager.AddSystem(imGuiSystem);
+
+            foreach (ISystem system in systems)
+                system.parent = this;
         }
 
         void ContextCreated(object sender, NativeWindowEventArgs e)
@@ -153,6 +162,11 @@ namespace ECSEngine
                 system.Update();
                 system.Render();
             }
+        }
+
+        public T GetSystem<T>() where T : ISystem
+        {
+            return (T)(systems.Find((system) => system.GetType() == typeof(T)));
         }
     }
 }
