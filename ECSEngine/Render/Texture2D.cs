@@ -11,7 +11,7 @@ namespace ECSEngine.Render
         /// <summary>
         /// OpenGL's reference to the texture.
         /// </summary>
-        private readonly uint glTexture;
+        public readonly uint glTexture;
 
         /// <summary>
         /// The path to the texture file ("data" if using a data-based constructor).
@@ -22,6 +22,9 @@ namespace ECSEngine.Render
         /// The texture's texture unit.
         /// </summary>
         public TextureUnit textureUnit;
+
+        public int width;
+        public int height;
 
         // TODO: Get all below from material
         public int repeatType = Gl.REPEAT;
@@ -59,6 +62,9 @@ namespace ECSEngine.Render
             Gl.TexImage2D(TextureTarget.Texture2d, 0, InternalFormat.Rgba, image.Width, image.Height, 0, imageFormat, PixelType.UnsignedByte, textureDataPtr);
             Gl.GenerateMipmap(TextureTarget.Texture2d);
 
+            this.width = image.Width;
+            this.height = image.Height;
+
             image.Dispose();
 
             Marshal.FreeHGlobal(textureDataPtr);
@@ -74,6 +80,8 @@ namespace ECSEngine.Render
         /// <param name="textureUnit">The texture unit to use.</param>
         public Texture2D(IntPtr pixels, int width, int height, int bpp, TextureUnit textureUnit = TextureUnit.Texture0)
         {
+            this.width = width;
+            this.height = height;
             this.path = "data";
             this.textureUnit = textureUnit;
             this.glTexture = Gl.GenTexture();

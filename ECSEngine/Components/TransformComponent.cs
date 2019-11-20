@@ -19,6 +19,12 @@ namespace ECSEngine.Components
         /// </summary>
         public Quaternion rotation;
 
+        public Vector3 rotationEuler
+        {
+            get => rotation.ToEulerAngles();
+            set => rotation = Quaternion.FromEulerAngles(value);
+        }
+
         /// <summary>
         /// The entity's scale.
         /// </summary>
@@ -33,8 +39,8 @@ namespace ECSEngine.Components
                 temp.RotateX(rotationEuler.x);
                 temp.RotateX(rotationEuler.y);
                 temp.RotateX(rotationEuler.z);
-                temp.Scale(scale.x, scale.y, scale.z);
                 temp.Translate(position.x, position.y, position.z);
+                temp.Scale(scale.x, scale.y, scale.z);
                 return temp;
             }
         }

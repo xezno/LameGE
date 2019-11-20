@@ -40,19 +40,21 @@ namespace ECSEngine
             nativeWindow.MouseMove += MouseMove;
             nativeWindow.MouseWheel += MouseWheel;
 
+
             nativeWindow.CursorVisible = true; // Hide mouse cursor
             nativeWindow.Animation = false; // Changing this to true makes input poll like once every 500ms.  so don't change it
             nativeWindow.DepthBits = 24;
             nativeWindow.SwapInterval = 0;
-
             nativeWindow.Resize += Resize;
 
+
             nativeWindow.Create(0, 0, RenderSettings.Default.GameResolutionX, RenderSettings.Default.GameResolutionY, NativeWindowStyle.Overlapped);
+            nativeWindow.Caption = "ECSEngine";
 
             nativeWindow.Show();
             nativeWindow.Run();
         }
-
+        
         private void Resize(object sender, EventArgs e)
         {
             var nativeWindow = (NativeWindow)sender;
@@ -65,6 +67,7 @@ namespace ECSEngine
 
         private void MouseWheel(object sender, NativeWindowMouseEventArgs e)
         {
+            // TODO: Fix mouse wheel
             EventManager.BroadcastEvent(Event.MouseScroll, new MouseWheelEventArgs(e.WheelTicks, this));
         }
 
@@ -117,17 +120,17 @@ namespace ECSEngine
         void SetUpSystems()
         {
             // TODO: Cleanup
-            WorldSystem worldSystem = new WorldSystem(new TestModelEntity());
-            ImGuiSystem imGuiSystem = new ImGuiSystem();
             systems = new List<ISystem>(){
-                worldSystem,
-                imGuiSystem
+                WorldSystem.instance,
+                ImGuiSystem.instance
             };
-            EventManager.AddSystem(worldSystem);
-            EventManager.AddSystem(imGuiSystem);
+            WorldSystem.instance.AddEntity(new TestModelEntity());
 
             foreach (ISystem system in systems)
+            {
+                EventManager.AddSystem(system);
                 system.parent = this;
+            }
         }
 
         void ContextCreated(object sender, NativeWindowEventArgs e)

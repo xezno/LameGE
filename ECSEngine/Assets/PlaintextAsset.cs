@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Configuration;
-using System.Net.Mime;
+
 using ECSEngine.Attributes;
 using ECSEngine.Math;
 using ECSEngine.Render;
@@ -57,7 +56,7 @@ namespace ECSEngine.Assets
         /// </summary>
         /// <param name="str">The string to parse.</param>
         /// <returns>Either: 0 if the string was unable to be parsed correctly, or the unsigned integer parsed from the string.</returns>
-        private uint ParseUint(string str)
+        private uint ParseUnsignedInt(string str)
         {
             if (uint.TryParse(str, out uint tmp))
                 return tmp;
@@ -69,6 +68,7 @@ namespace ECSEngine.Assets
         /// Parse a string as a Vector2, and output any issues to the console.
         /// </summary>
         /// <param name="str">The string to parse.</param>
+        /// <param name="startIndex">The number of words to ignore before parsing the string.</param>
         /// <returns>Either: 0 if the string was unable to be parsed correctly, or the Vector2 parsed from the string.</returns>
         private Vector2 ParseVector2(string str, int startIndex = 0)
         {
@@ -83,6 +83,7 @@ namespace ECSEngine.Assets
         /// Parse a string as a Vector3, and output any issues to the console.
         /// </summary>
         /// <param name="str">The string to parse.</param>
+        /// <param name="startIndex">The number of words to ignore before parsing the string.</param>
         /// <returns>Either: 0 if the string was unable to be parsed correctly, or the Vector3 parsed from the string.</returns>
         private Vector3 ParseVector3(string str, int startIndex = 0)
         {
@@ -97,7 +98,7 @@ namespace ECSEngine.Assets
         /// Load the asset.
         /// </summary>
         /// <param name="path">The path to the asset.</param>
-        protected virtual void LoadAsset(string path)
+        private void LoadAsset(string path)
         {
             // TODO: Reduce code repetitiveness
             // TODO: This does not support multiple meshes / materials per file - should probably implement that
@@ -138,7 +139,10 @@ namespace ECSEngine.Assets
                             }
                             else if (field.FieldType == typeof(float))
                             {
-                                field.SetValue(this, ParseFloat(lineSplit[1]));
+                                var value = ParseFloat(lineSplit[1]);
+                                if (((TextAssetOpcodeAttribute)attribute).invertValue) 
+                                    value = 1.0f - value;
+                                field.SetValue(this, value);
                             }
                             else if (field.FieldType == typeof(int))
                             {
@@ -166,9 +170,9 @@ namespace ECSEngine.Assets
                                 for (int index = 0; index < 3; ++index)
                                 {
                                     var elementSplit = lineSplit[index + 1].Split('/');
-                                    uint v = ParseUint(elementSplit[0]) - 1;
-                                    uint vt = ParseUint(elementSplit[1]) - 1;
-                                    uint vn = ParseUint(elementSplit[2]) - 1;
+                                    uint v = ParseUnsignedInt(elementSplit[0]) - 1;
+                                    uint vt = ParseUnsignedInt(elementSplit[1]) - 1;
+                                    uint vn = ParseUnsignedInt(elementSplit[2]) - 1;
                                     MeshFaceElement meshFaceElement = new MeshFaceElement(v, vt, vn);
                                     ((List<MeshFaceElement>)field.GetValue(this)).Add(meshFaceElement);
                                 }

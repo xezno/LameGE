@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using ECSEngine.Entities;
 using ECSEngine.Events;
@@ -16,6 +17,18 @@ namespace ECSEngine.Systems
         /// A list of entities that the system contains.
         /// </summary>
         protected List<IEntity> entities { get; } = new List<IEntity>();
+
+        // All systems should be singletons.
+        private static T _instance;
+
+        public static T instance
+        {
+            get
+            {
+                if (_instance == null) _instance = Activator.CreateInstance<T>();
+                return _instance;
+            }
+        }
 
         /// <summary>
         /// Called when an event is triggered.

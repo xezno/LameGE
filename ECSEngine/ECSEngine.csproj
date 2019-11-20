@@ -92,8 +92,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Documents\Projects\OpenGL.Net\OpenGL.Net.CoreUI\bin\net461\Release\OpenGL.Net.dll</HintPath>
     </Reference>
-    <Reference Include="OpenGL.Net.CoreUI, Version=0.8.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="OpenGL.Net.CoreUI">
       <HintPath>..\..\..\..\Documents\Projects\OpenGL.Net\OpenGL.Net.CoreUI\bin\net461\Release\OpenGL.Net.CoreUI.dll</HintPath>
     </Reference>
     <Reference Include="OpenGL.Net.Math, Version=0.8.4.0, Culture=neutral, processorArchitecture=MSIL">

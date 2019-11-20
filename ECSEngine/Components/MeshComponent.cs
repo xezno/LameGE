@@ -50,6 +50,7 @@ namespace ECSEngine.Components
             CameraEntity camera = ((WorldSystem)parent.parent).mainCamera;
             shaderComponent.SetVariable("projMatrix", camera.projMatrix);
             shaderComponent.SetVariable("viewMatrix", camera.viewMatrix);
+            shaderComponent.SetVariable("cameraPos", camera.position);
             shaderComponent.SetVariable("modelMatrix", transformComponent.matrix);
 
             GetComponent<MaterialComponent>().BindAll(shaderComponent);

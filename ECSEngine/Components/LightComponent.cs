@@ -5,15 +5,16 @@ namespace ECSEngine.Components
     [Requires(typeof(TransformComponent))]
     public sealed class LightComponent : Component<LightComponent>
     {
-        private float luminosity;
-        private float falloff;
         private float range;
+        private float constant = 1.0f;
+        private float distance;
+        private float quadratic;
 
-        public LightComponent(float luminosity, float falloff, float range)
+        public LightComponent(float range, float distance, float quadratic)
         {
-            this.luminosity = luminosity;
-            this.falloff = falloff;
             this.range = range;
+            this.distance = distance;
+            this.quadratic = quadratic;
         }
 
         public override void Update()

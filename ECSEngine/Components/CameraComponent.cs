@@ -29,7 +29,7 @@ namespace ECSEngine.Components
         /// </summary>
         public override void Update()
         {
-            rotationAngle += 0.16f * rotationSpeed;
+            // rotationAngle += 0.16f * rotationSpeed;
             viewMatrix = Matrix4x4f.LookAtDirection(GetComponent<TransformComponent>().position,
                 new Vertex3f(0f, 0f, -1f),
                 new Vertex3f(0f, 1f, 0f));

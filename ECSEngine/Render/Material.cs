@@ -32,7 +32,7 @@ namespace ECSEngine.Render
         [TextAssetOpcode("map_Ns")]
         public Texture2D specularExponentTexture;
 
-        [TextAssetOpcode("d")]
+        [TextAssetOpcode("d", invertValue = true)]
         public float transparency;
         [TextAssetOpcode("map_d")]
         public Texture2D transparencyTexture;
