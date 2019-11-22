@@ -69,27 +69,27 @@ vec3 halfwayVector;
 
 // Normal Distribution Function (in this case, Trowbridge-Reitz)
 float calcNDF() {
-    return pow(material.roughness, 2) / (PI * pow(pow(dot(outNormal, outNormal), 2) * (pow(material.roughness, 2) - 1) + 1, 2));
+    return pow(material.roughness, 2) / (PI * pow(pow(dot(outNormal, outNormal), 2) * (pow(material.roughness, 2) - 1.0) + 1.0, 2));
 }
 
 // Fresnel approximation (Schlick)
 float calcFresnel()
 {
     float f0 = 1.0;
-    return f0 + pow((1 - f0)*(1 - dot(cameraPos, halfwayVector)), 5);
+    return f0 + pow((1.0 - f0)*(1.0 - dot(cameraPos, halfwayVector)), 5);
 }
 
 // Geometric attenuation
 float calcGA()
 {
     // Schlick-GGX
-    return pow(material.roughness, 2) / 2;
+    return pow(material.roughness, 2) / 2.0;
 }
 
 float cookTorrance() {
     float spec;
     spec = (calcNDF() * calcFresnel() * calcGA()) / (PI * (dot(cameraPos, outNormal) * dot(outNormal, light.pos)));
-    return 0;
+    return clamp(spec, 1, 0);
 }
 
 void setHalfwayVector()
