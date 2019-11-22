@@ -5,15 +5,15 @@ namespace ECSEngine.Components
     [Requires(typeof(TransformComponent))]
     public sealed class LightComponent : Component<LightComponent>
     {
-        private float range;
-        private const float constant = 1.0f;
-        private float distance;
-        private float quadratic;
+        public float range;
+        public readonly float constant = 1.0f;
+        public float linear;
+        public float quadratic;
 
-        public LightComponent(float range, float distance, float quadratic)
+        public LightComponent(float range, float linear, float quadratic)
         {
             this.range = range;
-            this.distance = distance;
+            this.linear = linear;
             this.quadratic = quadratic;
         }
 

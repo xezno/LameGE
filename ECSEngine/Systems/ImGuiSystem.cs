@@ -23,7 +23,7 @@ namespace ECSEngine.Systems
         private uint vbo, vao, ebo;
         private Vector2 windowSize;
 
-        public List<object> serializableObjects;
+        public Dictionary<string, object> serializableObjects;
         public ImGuiSystem()
         {
             var imGuiContext = ImGui.CreateContext();
@@ -31,7 +31,7 @@ namespace ECSEngine.Systems
                 ImGui.SetCurrentContext(imGuiContext);
             var io = ImGui.GetIO();
 
-            serializableObjects = new List<object>();
+            serializableObjects = new Dictionary<string, object>();
 
             // Font setup
             io.Fonts.AddFontFromFileTTF("Content/Fonts/Roboto/Roboto-Medium.ttf", 14);
@@ -78,9 +78,9 @@ namespace ECSEngine.Systems
         public override void Render()
         {
             ImGui.NewFrame();
-            foreach (object obj in serializableObjects)
+            foreach (KeyValuePair<string, object> keyValuePair in serializableObjects)
             {
-                RenderAsWindow(obj);
+                RenderAsWindow(keyValuePair.Value, keyValuePair.Key);
             }
 
             ImGui.ShowDemoWindow();
@@ -99,14 +99,16 @@ namespace ECSEngine.Systems
             RenderImGui(ImGui.GetDrawData());
         }
 
-        public void AddSerializableObject(object obj)
+        public void AddSerializableObject(object obj, string optionalTitle = "")
         {
-            serializableObjects.Add(obj);
+            if (optionalTitle == "")
+                optionalTitle = obj.GetType().Name;
+            serializableObjects.Add(optionalTitle, obj);
         }
 
-        private void RenderAsWindow(object objectToRender)
+        private void RenderAsWindow(object objectToRender, string title)
         {
-            ImGui.Begin(objectToRender.GetType().Name + "##hidelabel");
+            ImGui.Begin($"{title}##hidelabel");
             foreach (var field in objectToRender.GetType().GetFields())
             {
                 // this works but is, like, the worst solution ever

@@ -39,16 +39,14 @@ namespace ECSEngine
             nativeWindow.MouseUp += MouseUp;
             nativeWindow.MouseMove += MouseMove;
             nativeWindow.MouseWheel += MouseWheel;
-
-
+            
             nativeWindow.CursorVisible = true; // Hide mouse cursor
             nativeWindow.Animation = false; // Changing this to true makes input poll like once every 500ms.  so don't change it
             nativeWindow.DepthBits = 24;
             nativeWindow.SwapInterval = 0;
             nativeWindow.Resize += Resize;
-
-
-            nativeWindow.Create(0, 0, RenderSettings.Default.GameResolutionX, RenderSettings.Default.GameResolutionY, NativeWindowStyle.Overlapped);
+            
+            nativeWindow.Create(0, 0, RenderSettings.Default.GameResolutionX, RenderSettings.Default.GameResolutionY, NativeWindowStyle.Caption);
             nativeWindow.Caption = "ECSEngine";
 
             nativeWindow.Show();

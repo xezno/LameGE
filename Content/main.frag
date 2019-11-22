@@ -46,13 +46,15 @@ struct Material {
 struct Light {
     vec3 pos;
     float range;
-    float dist;
+    float constant;
+    float linear;
     float quadratic;
 };
 
 in vec3 outVertexPos;
 in vec2 outUvCoord;
 in vec3 outNormal;
+in vec3 outFragPos;
 
 uniform Material material;
 uniform Light light;
@@ -63,46 +65,69 @@ uniform mat4 modelMatrix;
 
 uniform vec3 cameraPos;
 
-out vec4 frag_color;
+out vec4 fragColor;
 
-vec3 halfwayVector;
+vec3 modelPos;
+vec3 halfwayDirection;
+vec3 lightDirection;
+vec3 cameraDirection;
 
-// Normal Distribution Function (in this case, Trowbridge-Reitz)
-float calcNDF() {
-    return pow(material.roughness, 2) / (PI * pow(pow(dot(outNormal, outNormal), 2) * (pow(material.roughness, 2) - 1.0) + 1.0, 2));
-}
+vec3 normal;
 
-// Fresnel approximation (Schlick)
-float calcFresnel()
+float calcDiffuseFactor() 
 {
-    float f0 = 1.0;
-    return f0 + pow((1.0 - f0)*(1.0 - dot(cameraPos, halfwayVector)), 5);
+    return max(dot(lightDirection, normalize(normal)), 0.0);
 }
 
-// Geometric attenuation
-float calcGA()
+vec3 calcDiffuseMix()
 {
-    // Schlick-GGX
-    return pow(material.roughness, 2) / 2.0;
+    // TODO: energy conservation
+    return calcDiffuseFactor() * (texture(material.diffuseTexture, outUvCoord).xyz * material.diffuseColor.xyz);
 }
 
-float cookTorrance() {
-    float spec;
-    spec = (calcNDF() * calcFresnel() * calcGA()) / (PI * (dot(cameraPos, outNormal) * dot(outNormal, light.pos)));
-    return clamp(spec, 1, 0);
-}
-
-void setHalfwayVector()
+vec3 calcAmbientMix()
 {
-    halfwayVector = cameraPos + light.pos / length(cameraPos + light.pos);
+    return material.ambientColor.xyz * 0.05;
 }
 
-void main() {
-    setHalfwayVector();
+float calcSpecularFactor()
+{
+    // Energy conservation (for blinn-phong) = n+8 / 8*pi
+    float n = 8.0;
+    return ((n + 8)/(8 * PI)) * pow(max(dot(normalize(normal), halfwayDirection), 0.0), n);
+}
 
-    vec4 diffuseMix = texture(material.diffuseTexture, outUvCoord) * material.diffuseColor;
-    vec4 specularMix = cookTorrance() * material.specularColor;
+vec3 calcSpecularMix()
+{
+    return calcSpecularFactor() * material.specularColor.xyz;
+}
 
-    frag_color = diffuseMix + specularMix;
-    frag_color.w = 1.0 - material.transparency;
+float calcAttenuation()
+{
+    float distance = length(light.pos - cameraPos);
+    return 1.0 / (light.constant + light.linear * distance + light.quadratic * pow(distance, 2));
+}
+
+void calcAllDirectionVectors()
+{
+    lightDirection = normalize(light.pos - modelPos);
+    cameraDirection = normalize(cameraPos - modelPos);
+    halfwayDirection = normalize(lightDirection + cameraDirection);
+}
+
+vec3 calcFullMix()
+{
+    vec3 mix = calcAmbientMix() + calcDiffuseMix() + calcSpecularMix();
+    mix *= calcAttenuation();
+    return mix;
+}
+
+void main() 
+{
+    normal = normalize(mat3(transpose(inverse(modelMatrix))) * outNormal);
+    modelPos = vec3(modelMatrix * vec4(outFragPos, 1.0));
+
+    calcAllDirectionVectors();
+
+    fragColor = vec4(calcFullMix(), 1.0 - material.transparency);
 }

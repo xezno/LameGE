@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using ECSEngine.Math;
 using ECSEngine.Render;
 
 using OpenGL;
@@ -69,6 +69,10 @@ namespace ECSEngine.Components
             else if (variableValue is Matrix4x4f matrix)
             {
                 Gl.ProgramUniformMatrix4f(shaderProgram, Gl.GetUniformLocation(shaderProgram, variableName), 1, false, matrix);
+            }
+            else if (variableValue is Vector3 vector)
+            {
+                Gl.ProgramUniform3(shaderProgram, Gl.GetUniformLocation(shaderProgram, variableName), vector.x, vector.y, vector.z);
             }
             else if (variableValue is ColorRGB24 color)
             {

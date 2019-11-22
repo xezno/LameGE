@@ -21,7 +21,9 @@ namespace ECSEngine.Systems
             AddEntity(mainCamera);
 
             lights = new List<LightEntity>();
-            lights.Add(new LightEntity());
+            var mainLight = new LightEntity();
+            lights.Add(mainLight);
+            AddEntity(mainLight);
         }
 
         /// <summary>

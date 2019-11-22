@@ -11,6 +11,7 @@ uniform mat4 modelMatrix;
 out vec3 outVertexPos;
 out vec2 outUvCoord;
 out vec3 outNormal;
+out vec3 outFragPos;
 
 void main() {
     outVertexPos = inVertexPos;
@@ -18,4 +19,5 @@ void main() {
     outNormal = inNormal;
 
     gl_Position = projMatrix * viewMatrix * modelMatrix * vec4(inVertexPos, 1.0);
+    outFragPos = gl_Position.xyz;
 }
