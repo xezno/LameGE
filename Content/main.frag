@@ -1,5 +1,7 @@
 #version 450
 
+#define PI 3.14159265359
+
 struct Material {
     vec4 ambientColor;
     sampler2D ambientTexture;
@@ -63,16 +65,44 @@ uniform vec3 cameraPos;
 
 out vec4 frag_color;
 
-float blinnPhong() {
-    vec3 halfwayVector = cameraPos + light.pos / length(cameraPos + light.pos);
-    return length(outNormal) * length(halfwayVector);
+vec3 halfwayVector;
+
+// Normal Distribution Function (in this case, Trowbridge-Reitz)
+float calcNDF() {
+    return pow(material.roughness, 2) / (PI * pow(pow(dot(outNormal, outNormal), 2) * (pow(material.roughness, 2) - 1) + 1, 2));
+}
+
+// Fresnel approximation (Schlick)
+float calcFresnel()
+{
+    float f0 = 1.0;
+    return f0 + pow((1 - f0)*(1 - dot(cameraPos, halfwayVector)), 5);
+}
+
+// Geometric attenuation
+float calcGA()
+{
+    // Schlick-GGX
+    return pow(material.roughness, 2) / 2;
+}
+
+float cookTorrance() {
+    float spec;
+    spec = (calcNDF() * calcFresnel() * calcGA()) / (PI * (dot(cameraPos, outNormal) * dot(outNormal, light.pos)));
+    return 0;
+}
+
+void setHalfwayVector()
+{
+    halfwayVector = cameraPos + light.pos / length(cameraPos + light.pos);
 }
 
 void main() {
+    setHalfwayVector();
+
     vec4 diffuseMix = texture(material.diffuseTexture, outUvCoord) * material.diffuseColor;
-    vec4 specularMix = blinnPhong() * material.specularColor;
+    vec4 specularMix = cookTorrance() * material.specularColor;
+
     frag_color = diffuseMix + specularMix;
     frag_color.w = 1.0 - material.transparency;
-
-    frag_color = vec4(outNormal, 1.0);
 }

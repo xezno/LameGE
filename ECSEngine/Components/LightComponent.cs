@@ -6,7 +6,7 @@ namespace ECSEngine.Components
     public sealed class LightComponent : Component<LightComponent>
     {
         private float range;
-        private float constant = 1.0f;
+        private const float constant = 1.0f;
         private float distance;
         private float quadratic;
 
