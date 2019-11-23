@@ -57,6 +57,11 @@ namespace ECSEngine.Components
                 return;
             }
 
+            if (variableValue == null)
+            {
+                return; // TODO: We should probably display an error if this is the case?
+            }
+
             // TODO: There's probably a way nicer way of doing this, but I can't think of it right now
             if (variableValue is int)
             {

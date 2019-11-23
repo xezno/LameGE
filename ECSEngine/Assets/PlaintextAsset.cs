@@ -97,12 +97,12 @@ namespace ECSEngine.Assets
         /// <summary>
         /// Load the asset.
         /// </summary>
-        /// <param name="path">The path to the asset.</param>
-        private void LoadAsset(string path)
+        /// <param name="assetPath">The path to the asset.</param>
+        private void LoadAsset(string assetPath)
         {
             // TODO: Reduce code repetitiveness
             // TODO: This does not support multiple meshes / materials per file - should probably implement that
-            using var streamReader = new StreamReader(path);
+            using var streamReader = new StreamReader(assetPath);
             var line = streamReader.ReadLine();
             while (line != null)
             {
@@ -117,8 +117,12 @@ namespace ECSEngine.Assets
                         {
                             if (field.FieldType == typeof(Texture2D))
                             {
-                                var opcodeLength = opcode.Length + 1; // Opcode length + space
-                                Texture2D texture = new Texture2D(Path.GetDirectoryName(path) + "/" + line.Remove(0, opcodeLength).Replace('\\', '/'), TextureUnit.Texture0 + textureID++);
+                                var opcodeLength = opcode.Length + 1; // Opcode length + space character
+                                var texturePath = line.Remove(0, opcodeLength);
+                                if (!Path.IsPathRooted(texturePath))
+                                    texturePath = Path.GetDirectoryName(assetPath) + "/" +
+                                                texturePath.Replace('\\', '/');
+                                Texture2D texture = new Texture2D(texturePath, TextureUnit.Texture0 + textureID++);
                                 field.SetValue(this, texture);
                             }
                             else if (field.FieldType == typeof(ColorRGB24))

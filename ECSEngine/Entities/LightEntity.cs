@@ -1,7 +1,6 @@
 ﻿using ECSEngine.Components;
 using ECSEngine.Events;
 using ECSEngine.Math;
-using ECSEngine.Render;
 using ECSEngine.Systems;
 
 namespace ECSEngine.Entities
