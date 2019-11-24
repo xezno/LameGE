@@ -16,7 +16,7 @@ out vec3 outFragPos;
 void main() {
     outVertexPos = inVertexPos;
     outUvCoord = inUvCoord;
-    outNormal = inNormal;
+    outNormal = mat3(modelMatrix) * inNormal;
 
     gl_Position = projMatrix * viewMatrix * modelMatrix * vec4(inVertexPos, 1.0);
     outFragPos = gl_Position.xyz;
