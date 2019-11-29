@@ -3,7 +3,7 @@ using ECSEngine.Entities;
 
 namespace ECSEngine.Systems
 {
-    public sealed class WorldSystem : System<WorldSystem>
+    public sealed class SceneSystem : System<SceneSystem>
     {
         /// <summary>
         /// The main world camera used to render all entities.
@@ -15,7 +15,7 @@ namespace ECSEngine.Systems
         /// <summary>
         /// Construct a world system containing any entities required.
         /// </summary>
-        public WorldSystem()
+        public SceneSystem()
         {
             mainCamera = new CameraEntity();
             AddEntity(mainCamera);
@@ -40,11 +40,11 @@ namespace ECSEngine.Systems
         /// <summary>
         /// Update all the entities within the world system.
         /// </summary>
-        public override void Update()
+        public override void Update(float deltaTime)
         {
             foreach (IEntity entity in entities)
             {
-                entity.Update();
+                entity.Update(deltaTime);
             }
         }
     }

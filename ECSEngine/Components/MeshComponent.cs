@@ -47,7 +47,7 @@ namespace ECSEngine.Components
             Gl.BindVertexArray(mesh.VAO);
             Gl.BindBuffer(BufferTarget.ArrayBuffer, mesh.VBO);
 
-            CameraEntity camera = ((WorldSystem)parent.parent).mainCamera;
+            CameraEntity camera = ((SceneSystem)parent.parent).mainCamera;
             shaderComponent.SetVariable("projMatrix", camera.projMatrix);
             shaderComponent.SetVariable("viewMatrix", camera.viewMatrix);
             shaderComponent.SetVariable("cameraPos", camera.position);
@@ -55,7 +55,7 @@ namespace ECSEngine.Components
 
             GetComponent<MaterialComponent>().BindAll(shaderComponent);
 
-            WorldSystem.instance.lights[0].Bind(shaderComponent);
+            SceneSystem.instance.lights[0].Bind(shaderComponent);
 
             Gl.DrawArrays(PrimitiveType.Triangles, 0, mesh.elementCount * sizeof(float));
 

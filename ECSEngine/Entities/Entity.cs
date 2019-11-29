@@ -92,11 +92,11 @@ namespace ECSEngine.Entities
             }
         }
 
-        public virtual void Update() 
+        public virtual void Update(float deltaTime) 
         {
             foreach (IComponent component in components)
             {
-                component.Update();
+                component.Update(deltaTime);
             }
         }
     }

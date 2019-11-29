@@ -58,6 +58,6 @@ namespace ECSEngine.Systems
         /// <summary>
         /// Called whenever the engine wishes to update all systems/entities/components.
         /// </summary>
-        public virtual void Update() { }
+        public virtual void Update(float deltaTime) { }
     }
 }

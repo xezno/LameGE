@@ -16,11 +16,11 @@ namespace ECSEngine.Systems
         /// <summary>
         /// Called whenever the engine renders a single frame.
         /// </summary>
-        void Render();
+        new void Render();
 
         /// <summary>
         /// Called whenever the engine wishes to update all systems/entities/components.
         /// </summary>
-        void Update();
+        new void Update(float deltaTime);
     }
 }

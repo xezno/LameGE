@@ -10,7 +10,6 @@ namespace ECSEngine.Entities
     /// </summary>
     public sealed class CameraEntity : Entity<CameraEntity>
     {
-
         /// <summary>
         /// Gets the projection matrix from the camera component.
         /// </summary>
@@ -24,7 +23,11 @@ namespace ECSEngine.Entities
         /// <summary>
         /// Gets the camera's position from the transform component.
         /// </summary>
-        public Vector3 position => GetComponent<TransformComponent>().position;
+        public Vector3 position
+        {
+            get { return GetComponent<TransformComponent>().position; }
+            set { GetComponent<TransformComponent>().position = value; }
+        }
 
         /// <summary>
         /// Constructs the camera entity with a transform component and a camera component.

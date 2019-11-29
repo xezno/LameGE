@@ -14,12 +14,13 @@ namespace ECSEngine.Entities
         /// <summary>
         /// Called whenever the engine renders a single frame.
         /// </summary>
-        void Render();
+        new void Render();
 
         /// <summary>
         /// Called whenever the engine wishes to update all systems/entities/components.
         /// </summary>
-        void Update();
+        /// <param name="deltaTime"></param>
+        new void Update(float deltaTime);
 
         /// <summary>
         /// Get a component of type T from the Component's entity list.

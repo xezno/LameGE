@@ -4,5 +4,9 @@
     public interface IBase
     {
         IBase parent { get; set; }
+
+        void Render();
+
+        void Update(float deltaTime);
     }
 }

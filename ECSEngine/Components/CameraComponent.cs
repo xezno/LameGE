@@ -27,7 +27,7 @@ namespace ECSEngine.Components
         /// <summary>
         /// Update the CameraComponent's matrices where required.
         /// </summary>
-        public override void Update()
+        public override void Update(float deltaTime)
         {
             // rotationAngle += 0.16f * rotationSpeed;
             viewMatrix = Matrix4x4f.LookAtDirection(GetComponent<TransformComponent>().position,

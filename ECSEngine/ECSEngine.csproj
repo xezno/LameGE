@@ -88,6 +88,9 @@
     <Reference Include="ImGui.NET, Version=1.72.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ImGui.NET.1.72.0\lib\netstandard2.0\ImGui.NET.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="OpenGL.Net, Version=0.8.4.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Documents\Projects\OpenGL.Net\OpenGL.Net.CoreUI\bin\net461\Release\OpenGL.Net.dll</HintPath>
@@ -132,6 +135,7 @@
     <Compile Include="Entities\CameraEntity.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\LightEntity.cs" />
+    <Compile Include="Entities\ShipEntity.cs" />
     <Compile Include="Entities\TestModelEntity.cs" />
     <Compile Include="EventManager.cs" />
     <Compile Include="Events\Event.cs" />
@@ -146,6 +150,7 @@
     <Compile Include="Components\IComponent.cs" />
     <Compile Include="Entities\IEntity.cs" />
     <Compile Include="IBase.cs" />
+    <Compile Include="Math\Noise.cs" />
     <Compile Include="Math\Vector4.cs" />
     <Compile Include="Math\Quaternion.cs" />
     <Compile Include="Math\Vector2.cs" />
@@ -167,7 +172,7 @@
     <Compile Include="Systems\ImGuiSystem.cs" />
     <Compile Include="Systems\ISystem.cs" />
     <Compile Include="Systems\System.cs" />
-    <Compile Include="Systems\WorldSystem.cs" />
+    <Compile Include="Systems\SceneSystem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

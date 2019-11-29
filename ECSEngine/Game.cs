@@ -16,6 +16,8 @@ namespace ECSEngine
     {
         public IBase parent { get; set; }
 
+        private DateTime lastUpdate;
+
         private List<ISystem> systems = new List<ISystem>();
         private readonly Gl.DebugProc debugCallback; // Stored to prevent GC from collecting debug callback before it can be called
 
@@ -52,6 +54,10 @@ namespace ECSEngine
             nativeWindow.Show();
             nativeWindow.Run();
         }
+
+        public void Render() { }
+
+        public void Update(float deltaTime) { }
         
         private void Resize(object sender, EventArgs e)
         {
@@ -119,10 +125,13 @@ namespace ECSEngine
         {
             // TODO: Cleanup
             systems = new List<ISystem>(){
-                WorldSystem.instance,
+                SceneSystem.instance,
                 ImGuiSystem.instance
             };
-            WorldSystem.instance.AddEntity(new TestModelEntity());
+
+            SceneSystem.instance.AddEntity(new ShipEntity());
+
+            SceneSystem.instance.AddEntity(new TestModelEntity());
 
             foreach (ISystem system in systems)
             {
@@ -158,11 +167,15 @@ namespace ECSEngine
         {
             Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
+            float deltaTime = System.Math.Max((DateTime.Now - lastUpdate).Milliseconds, 1.0f) / 1000.0f;
+            Debug.Log($"Delta time: {deltaTime}");
             foreach (ISystem system in systems)
             {
-                system.Update();
+                system.Update(deltaTime);
+
                 system.Render();
             }
+            lastUpdate = DateTime.Now;
         }
 
         public T GetSystem<T>() where T : ISystem

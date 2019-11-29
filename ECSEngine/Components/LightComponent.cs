@@ -17,7 +17,7 @@ namespace ECSEngine.Components
             this.quadratic = quadratic;
         }
 
-        public override void Update()
+        public override void Update(float deltaTime)
         {
             
         }
