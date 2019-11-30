@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using ECSEngine.Math;
 using ECSEngine.Render;
 
@@ -50,19 +51,21 @@ namespace ECSEngine.Components
         public void SetVariable(string variableName, object variableValue)
         {
             var variableLocation = Gl.GetUniformLocation(shaderProgram, variableName);
-            if (variableLocation < 0 && !errorLog.Contains(variableName))
+
+            if (errorLog.Contains(variableName)) return; // Skip if there's been an issue previously
+
+            if (variableLocation < 0)
             {
                 errorLog.Add(variableName);
                 Debug.Log($"The variable {variableName} does not exist on this shader.", Debug.DebugSeverity.High);
-                return;
+                return; // We can't continue, because the variable doesn't exist
             }
-
             if (variableValue == null)
             {
-                return; // TODO: We should probably display an error if this is the case?
+                Debug.Log($"The variable {variableName} does not have a value.", Debug.DebugSeverity.High);
+                return; // We can't continue, because the variable has no value
             }
 
-            // TODO: There's probably a way nicer way of doing this, but I can't think of it right now
             if (variableValue is int)
             {
                 Gl.ProgramUniform1(shaderProgram, variableLocation, Convert.ToInt32(variableValue));
@@ -73,21 +76,21 @@ namespace ECSEngine.Components
             }
             else if (variableValue is Matrix4x4f matrix)
             {
-                Gl.ProgramUniformMatrix4f(shaderProgram, Gl.GetUniformLocation(shaderProgram, variableName), 1, false, matrix);
+                Gl.ProgramUniformMatrix4f(shaderProgram, variableLocation, 1, false, matrix);
             }
             else if (variableValue is Vector3 vector)
             {
-                Gl.ProgramUniform3(shaderProgram, Gl.GetUniformLocation(shaderProgram, variableName), vector.x, vector.y, vector.z);
+                Gl.ProgramUniform3(shaderProgram, variableLocation, vector.x, vector.y, vector.z);
             }
             else if (variableValue is ColorRGB24 color)
             {
-                Gl.ProgramUniform4(shaderProgram, Gl.GetUniformLocation(shaderProgram, variableName), color.r / 255f, color.g / 255f, color.b / 255f, 1f);
+                Gl.ProgramUniform4(shaderProgram, variableLocation, color.r / 255f, color.g / 255f, color.b / 255f, 1f);
             }
             else if (variableValue is Texture2D texture)
             {
                 // Determining texture unit # by the enum is just
                 // textureUnit - (first texture unit #)
-                Gl.ProgramUniform1(shaderProgram, Gl.GetUniformLocation(shaderProgram, variableName), texture.textureUnit - TextureUnit.Texture0);
+                Gl.ProgramUniform1(shaderProgram, variableLocation, texture.textureUnit - TextureUnit.Texture0);
             }
             else if (!errorLog.Contains(variableName))
             {

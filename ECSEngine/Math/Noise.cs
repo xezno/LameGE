@@ -1,8 +1,10 @@
-﻿namespace ECSEngine.Math
+﻿using System;
+
+namespace ECSEngine.Math
 {
     public static class Noise
     {
-        private static float[,,] gradientValues = new float[255,255,2];
+        private static Vector2[,] gradientValues = new Vector2[255,255];
 
         private static float Lerp(float a, float b, float t) => (1.0f - t) * a + (t * b);
 
@@ -11,19 +13,28 @@
             float dx = x - ix;
             float dy = y - iy;
 
-            return dx * gradientValues[ix, iy, 0] + dy * gradientValues[ix, iy, 1];
+            return dx * gradientValues[ix, iy].x + dy * gradientValues[ix, iy].y;
         }
 
-        private static void CalculateGradientValues()
+        private static void CalculateGradientValues(int seed)
         {
-            if (gradientValues[0, 0, 0].Equals(0.0f) && gradientValues[254, 254, 1].Equals(0.0f))
+            Random random = new Random(seed);
+            for (int x = 0; x < gradientValues.GetLength(0); x++)
             {
-
+                for (int y = 0; y < gradientValues.GetLength(1); y++)
+                {
+                    gradientValues[x, y] = new Vector2(
+                        ((float)random.NextDouble() * 2) - 1,
+                        ((float)random.NextDouble() * 2) - 1
+                        );
+                }
             }
         }
 
-        public static float PerlinNoise(float x, float y)
+        public static float PerlinNoise(int seed, float x, float y)
         {
+            CalculateGradientValues(seed);
+
             int x0 = (int)x;
             int x1 = x0 + 1;
 

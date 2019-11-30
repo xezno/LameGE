@@ -25,7 +25,7 @@ namespace ECSEngine.Entities
             switch (eventType)
             {
                 case Event.GameStart:
-                    Program.game.GetSystem<ImGuiSystem>().AddSerializableObject(transformComponent, "Light"); // this is also terrible
+                    ImGuiSystem.instance.AddSerializableObject(transformComponent, "Light");
                     break;
             }
         }

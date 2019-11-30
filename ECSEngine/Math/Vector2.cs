@@ -13,7 +13,6 @@
         /// </summary>
         public float y;
 
-
         /// <summary>
         /// Construct a <see cref="Vector2"/> with three initial values.
         /// </summary>

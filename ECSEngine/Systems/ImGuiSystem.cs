@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
-using System.Reflection;
+
 using ECSEngine.Components;
 using ECSEngine.Events;
 using ECSEngine.Render;
 using Vector4 = ECSEngine.Math.Vector4;
+using Quaternion = ECSEngine.Math.Quaternion;
 
 using OpenGL;
 using OpenGL.CoreUI;
 
 using ImGuiNET;
-using Quaternion = ECSEngine.Math.Quaternion;
 
 namespace ECSEngine.Systems
 {
-    // TODO: Is this viable as a system?
     public class ImGuiSystem : System<ImGuiSystem>
     {
         private Texture2D defaultFontTexture;
@@ -62,8 +61,6 @@ namespace ECSEngine.Systems
             io.KeyMap[(int)ImGuiKey.X] = (int)KeyCode.X;
             io.KeyMap[(int)ImGuiKey.Z] = (int)KeyCode.Z;
             io.KeyMap[(int)ImGuiKey.A] = (int)KeyCode.A;
-
-            // io.DisplaySize = new System.Numerics.Vector2(RenderSettings.Default.GameResolutionX, RenderSettings.Default.GameResolutionY);
 
             ImGui.StyleColorsLight();
 
@@ -155,7 +152,7 @@ namespace ECSEngine.Systems
             ImGui.End();
         }
 
-        public void RenderImGui(ImDrawDataPtr drawData)
+        private void RenderImGui(ImDrawDataPtr drawData)
         {
             Gl.BlendEquation(BlendEquationMode.FuncAdd);
             Gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
@@ -219,7 +216,7 @@ namespace ECSEngine.Systems
             Gl.Enable(EnableCap.CullFace);
         }
 
-        public char KeyCodeToChar(KeyCode keyCode)
+        private char KeyCodeToChar(KeyCode keyCode)
         {
             // TODO: correctly handle different locales and keyboard layouts
             // This is currently only written for ISO UK qwerty.

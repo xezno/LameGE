@@ -123,21 +123,28 @@ namespace ECSEngine
 
         void SetUpSystems()
         {
-            // TODO: Cleanup
             systems = new List<ISystem>(){
                 SceneSystem.instance,
                 ImGuiSystem.instance
             };
-
-            SceneSystem.instance.AddEntity(new ShipEntity());
-
-            SceneSystem.instance.AddEntity(new TestModelEntity());
 
             foreach (ISystem system in systems)
             {
                 EventManager.AddSystem(system);
                 system.parent = this;
             }
+        }
+
+        void SetUpScene()
+        {
+            var entities = new List<IEntity>()
+            {
+                new ShipEntity(),
+                new TestModelEntity()
+            };
+
+            foreach (IEntity entity in entities)
+                SceneSystem.instance.AddEntity(entity);
         }
 
         void ContextCreated(object sender, NativeWindowEventArgs e)
@@ -155,6 +162,7 @@ namespace ECSEngine
             Gl.DebugMessageCallback(debugCallback, IntPtr.Zero);
 
             SetUpSystems();
+            SetUpScene();
             LoadContent();
 
             // Setup complete - broadcast the game started event

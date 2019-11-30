@@ -6,6 +6,8 @@ using ECSEngine.Events;
 
 namespace ECSEngine.Systems
 {
+    // TODO: Systems need re-designing entirely.  As described by Adam Martin, "Each System runs continuously (as though each System had it’s own private thread)" and "Typical Systems in a game would be: Rendering System, Animation System, Input System, etc."
+    // See: http://t-machine.org/index.php/2007/11/11/entity-systems-are-the-future-of-mmog-development-part-2/
     public class System<T> : ISystem // TODO: Rename System to something else (prevent conflict with .net system)
     {
         /// <summary>

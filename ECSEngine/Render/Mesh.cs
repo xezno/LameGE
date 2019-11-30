@@ -60,15 +60,19 @@ namespace ECSEngine.Render
 
             for (int i = 0; i < faceElements.Count; ++i)
             {
-                // TODO: make this simpler
-                glData[i * vertexAttribSize + 0] = vertices[(int)faceElements[i].vertexIndex].x;
-                glData[i * vertexAttribSize + 1] = vertices[(int)faceElements[i].vertexIndex].y;
-                glData[i * vertexAttribSize + 2] = vertices[(int)faceElements[i].vertexIndex].z;
-                glData[i * vertexAttribSize + 3] = uvCoords[(int)faceElements[i].uvIndex].x;
-                glData[i * vertexAttribSize + 4] = uvCoords[(int)faceElements[i].uvIndex].y;
-                glData[i * vertexAttribSize + 5] = normals[(int)faceElements[i].normalIndex].x;
-                glData[i * vertexAttribSize + 6] = normals[(int)faceElements[i].normalIndex].y;
-                glData[i * vertexAttribSize + 7] = normals[(int)faceElements[i].normalIndex].z;
+                var dataToAdd = new float[]
+                {
+                    vertices[(int)faceElements[i].vertexIndex].x,
+                    vertices[(int)faceElements[i].vertexIndex].y,
+                    vertices[(int)faceElements[i].vertexIndex].z,
+                    uvCoords[(int)faceElements[i].uvIndex].x,
+                    uvCoords[(int)faceElements[i].uvIndex].y,
+                    normals[(int)faceElements[i].normalIndex].x,
+                    normals[(int)faceElements[i].normalIndex].y,
+                    normals[(int)faceElements[i].normalIndex].z,
+                };
+                for (int dataIndex = 0; dataIndex < dataToAdd.Length; ++dataIndex)
+                    glData[i * vertexAttribSize + dataIndex] = dataToAdd[dataIndex];
             }
 
             Gl.BindVertexArray(VAO);
@@ -78,6 +82,7 @@ namespace ECSEngine.Render
             Gl.EnableVertexAttribArray(0);
             Gl.EnableVertexAttribArray(1);
             Gl.EnableVertexAttribArray(2);
+
             Gl.VertexAttribPointer(0, 3, VertexAttribType.Float, false, vertexAttribSize * sizeof(float), (IntPtr)0);
             Gl.VertexAttribPointer(1, 2, VertexAttribType.Float, false, vertexAttribSize * sizeof(float), (IntPtr)(3 * sizeof(float)));
             Gl.VertexAttribPointer(2, 3, VertexAttribType.Float, false, vertexAttribSize * sizeof(float), (IntPtr)(5 * sizeof(float)));

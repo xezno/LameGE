@@ -1,6 +1,7 @@
 ﻿using ECSEngine.Math;
-using OpenGL;
 using Quaternion = ECSEngine.Math.Quaternion;
+
+using OpenGL;
 
 namespace ECSEngine.Components
 {
@@ -17,13 +18,9 @@ namespace ECSEngine.Components
         /// <summary>
         /// The entity's rotation.
         /// </summary>
-        public Quaternion rotation;
+        // public Quaternion rotation; // TODO
 
-        public Vector3 rotationEuler
-        {
-            get => rotation.ToEulerAngles();
-            set => rotation = Quaternion.FromEulerAngles(value);
-        }
+        public Vector3 rotationEuler;
 
         /// <summary>
         /// The entity's scale.
@@ -35,10 +32,10 @@ namespace ECSEngine.Components
             get
             {
                 Matrix4x4f temp = Matrix4x4f.Identity;
-                Vector3 euler = rotation.ToEulerAngles();
-                temp.RotateX(euler.x);
-                temp.RotateX(euler.y);
-                temp.RotateX(euler.z);
+                // Vector3 euler = rotation.ToEulerAngles();
+                temp.RotateX(rotationEuler.x);
+                temp.RotateX(rotationEuler.y);
+                temp.RotateX(rotationEuler.z);
                 temp.Translate(position.x, position.y, position.z);
                 temp.Scale(scale.x, scale.y, scale.z);
                 return temp;
@@ -54,7 +51,7 @@ namespace ECSEngine.Components
         public TransformComponent(Vector3 position, Quaternion rotation, Vector3 scale)
         {
             this.position = position;
-            this.rotation = rotation;
+            this.rotationEuler = rotation.ToEulerAngles(); // TODO
             this.scale = scale;
         }
     }

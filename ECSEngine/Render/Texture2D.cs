@@ -2,7 +2,9 @@
 using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
+
 using OpenGL;
+using PixelFormat = OpenGL.PixelFormat;
 
 namespace ECSEngine.Render
 {
@@ -16,12 +18,12 @@ namespace ECSEngine.Render
         /// <summary>
         /// The path to the texture file ("data" if using a data-based constructor).
         /// </summary>
-        private string path;
+        public readonly string path;
 
         /// <summary>
         /// The texture's texture unit.
         /// </summary>
-        public TextureUnit textureUnit;
+        public readonly TextureUnit textureUnit;
 
         public int width;
         public int height;
@@ -70,6 +72,22 @@ namespace ECSEngine.Render
             Marshal.FreeHGlobal(textureDataPtr);
         }
 
+        public Texture2D(byte[] textureData, int width, int height, TextureUnit textureUnit = TextureUnit.Texture0)
+        {
+            this.width = width;
+            this.height = height;
+            this.path = "data-byte";
+            this.textureUnit = textureUnit;
+
+            IntPtr textureDataPtr = Marshal.AllocHGlobal(textureData.Length);
+            Marshal.Copy(textureData, 0, textureDataPtr, textureData.Length);
+
+            Gl.TexImage2D(TextureTarget.Texture2d, 0, InternalFormat.Rgba, width, height, 0, PixelFormat.Rgb, PixelType.UnsignedByte, textureDataPtr);
+            Gl.GenerateMipmap(TextureTarget.Texture2d);
+
+            Marshal.FreeHGlobal(textureDataPtr);
+        }
+
         /// <summary>
         /// Construct a <see cref="Texture2D"/>, loading the texture from a location in memory.
         /// </summary>
@@ -82,11 +100,11 @@ namespace ECSEngine.Render
         {
             this.width = width;
             this.height = height;
-            this.path = "data";
+            this.path = "data-intptr";
             this.textureUnit = textureUnit;
             this.glTexture = Gl.GenTexture();
             Gl.BindTexture(TextureTarget.Texture2d, glTexture);
-            Gl.TexImage2D(TextureTarget.Texture2d, 0, InternalFormat.Rgba, width, height, 0, OpenGL.PixelFormat.Rgba, PixelType.UnsignedByte, pixels);
+            Gl.TexImage2D(TextureTarget.Texture2d, 0, InternalFormat.Rgba, width, height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, pixels);
             Gl.GenerateMipmap(TextureTarget.Texture2d);
         }
 

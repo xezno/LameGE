@@ -2,6 +2,8 @@
 {
     public struct Quaternion
     {
+        // TODO: This entire class needs like, a ton of work.
+
         public float x;
         public float y;
         public float z;
@@ -40,8 +42,5 @@
                 (float)System.Math.Atan2(2 * ((w * z) + (x * y)), 1 - 2 * ((y * y) + (z * z)))
             );
         }
-
-        // TODO: Add mathematical operators
-
     }
 }

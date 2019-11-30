@@ -1,5 +1,6 @@
 ﻿namespace ECSEngine.Math
 {
+    // TODO: this probably doesn't need to exist
     public struct Vector4
     {
         public float x;
@@ -14,7 +15,5 @@
             this.z = z;
             this.w = w;
         }
-
-        // TODO: Add mathematical operators
     }
 }

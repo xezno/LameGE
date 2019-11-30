@@ -1,6 +1,4 @@
-﻿using System.Numerics;
-using System.Runtime.InteropServices;
-using OpenGL;
+﻿using OpenGL;
 
 namespace ECSEngine.Math
 {
