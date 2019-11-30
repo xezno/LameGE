@@ -1,8 +1,8 @@
 ﻿using ECSEngine.Events;
 
-namespace ECSEngine.Systems
+namespace ECSEngine.Managers
 {
-    public interface ISystem : IBase
+    public interface IManager : IHasParent
     {
         /// <summary>
         /// Called when an event is triggered.
@@ -12,13 +12,8 @@ namespace ECSEngine.Systems
         void HandleEvent(Event eventType, IEventArgs eventArgs);
 
         /// <summary>
-        /// Called whenever the engine renders a single frame.
+        /// Called whenever the manager should run its typical process. (Usually called in game loop).
         /// </summary>
-        new void Render();
-
-        /// <summary>
-        /// Called whenever the engine wishes to update all systems/entities/components.
-        /// </summary>
-        new void Update(float deltaTime);
+        void Run();
     }
 }

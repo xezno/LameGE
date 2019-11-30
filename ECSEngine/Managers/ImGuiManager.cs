@@ -13,9 +13,9 @@ using OpenGL.CoreUI;
 
 using ImGuiNET;
 
-namespace ECSEngine.Systems
+namespace ECSEngine.Managers
 {
-    public class ImGuiSystem : System<ImGuiSystem>
+    public class ImGuiManager : Manager<ImGuiManager>
     {
         private Texture2D defaultFontTexture;
         private ShaderComponent shaderComponent;
@@ -23,7 +23,8 @@ namespace ECSEngine.Systems
         private Vector2 windowSize;
 
         public Dictionary<string, object> serializableObjects;
-        public ImGuiSystem()
+
+        public ImGuiManager()
         {
             var imGuiContext = ImGui.CreateContext();
             if (ImGui.GetCurrentContext() == IntPtr.Zero)
@@ -72,7 +73,7 @@ namespace ECSEngine.Systems
             ebo = Gl.GenBuffer();
         }
 
-        public override void Render()
+        public override void Run()
         {
             ImGui.NewFrame();
             foreach (KeyValuePair<string, object> keyValuePair in serializableObjects)
@@ -109,37 +110,34 @@ namespace ECSEngine.Systems
             foreach (var field in objectToRender.GetType().GetFields())
             {
                 // this works but is, like, the worst solution ever
+                var referenceType = typeof(Ref<>).MakeGenericType(new[] {field.FieldType});
+                var reference = (dynamic /* alarm bells right here */)(Activator.CreateInstance(referenceType, new[] {field, objectToRender}));
                 if (field.FieldType == typeof(float))
                 {
-                    var reference = new Ref<float>(field, objectToRender);
                     float value = reference.value;
                     ImGui.SliderFloat($"{field.Name}", ref value, 0, 1);
                     reference.value = value;
                 }
                 else if (field.FieldType == typeof(ColorRGB24))
                 {
-                    var reference = new Ref<ColorRGB24>(field, objectToRender);
                     Vector3 value = new Vector3(reference.value.r / 255f, reference.value.g / 255f, reference.value.b / 255f);
                     ImGui.ColorEdit3($"{field.Name}", ref value);
                     reference.value = new ColorRGB24((byte)(value.X*255f), (byte)(value.Y*255f), (byte)(value.Z*255f));
                 }
                 else if (field.FieldType == typeof(Math.Vector3))
                 {
-                    var reference = new Ref<Math.Vector3>(field, objectToRender);
                     Vector3 value = reference.value.ConvertToNumerics();
                     ImGui.DragFloat3(field.Name, ref value, 0.1f);
                     reference.value = Math.Vector3.ConvertFromNumerics(value);
                 }
                 else if (field.FieldType == typeof(Math.Quaternion))
                 {
-                    var reference = new Ref<Math.Quaternion>(field, objectToRender);
                     Vector3 value = reference.value.ToEulerAngles().ConvertToNumerics();
                     ImGui.DragFloat3(field.Name, ref value, 0.1f);
                     reference.value = Quaternion.FromEulerAngles(Math.Vector3.ConvertFromNumerics(value));
                 }
                 else if (field.FieldType == typeof(int))
                 {
-                    var reference = new Ref<int>(field, objectToRender);
                     int value = reference.value;
                     ImGui.DragInt($"{field.Name}", ref value);
                     reference.value = value;

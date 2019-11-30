@@ -2,7 +2,7 @@
 
 namespace ECSEngine.Entities
 {
-    public interface IEntity : IBase
+    public interface IEntity : IHasParent
     {
         /// <summary>
         /// Called when an event is triggered.
@@ -14,13 +14,13 @@ namespace ECSEngine.Entities
         /// <summary>
         /// Called whenever the engine renders a single frame.
         /// </summary>
-        new void Render();
+        void Render();
 
         /// <summary>
         /// Called whenever the engine wishes to update all systems/entities/components.
         /// </summary>
         /// <param name="deltaTime"></param>
-        new void Update(float deltaTime);
+        void Update(float deltaTime);
 
         /// <summary>
         /// Get a component of type T from the Component's entity list.

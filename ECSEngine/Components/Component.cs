@@ -11,7 +11,7 @@ namespace ECSEngine.Components
         /// <summary>
         /// The component's parent; usually an entity.
         /// </summary>
-        public virtual IBase parent { get; set; }
+        public virtual IHasParent parent { get; set; }
 
         /// <summary>
         /// Called whenever the engine renders a single frame.

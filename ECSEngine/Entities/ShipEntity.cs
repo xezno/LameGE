@@ -1,7 +1,7 @@
 ﻿using ECSEngine.Components;
 using ECSEngine.Events;
 using ECSEngine.Math;
-using ECSEngine.Systems;
+using ECSEngine.Managers;
 
 using OpenGL.CoreUI;
 
@@ -15,10 +15,6 @@ namespace ECSEngine.Entities
         public Vector3 currentRotation;
         public float acceleration = 0.5f;
 
-        private float topSpeedOnPlanet = 100f;
-        private float topSpeedOffPlanet = 150f;
-        private float topSpeedOffSystem = 1500f;
-
         private TransformComponent transformComponent;
 
         public ShipEntity()
@@ -29,14 +25,14 @@ namespace ECSEngine.Entities
 
             transformComponent = GetComponent<TransformComponent>();
 
-            ImGuiSystem.instance.AddSerializableObject(this, "Ship");
+            ImGuiManager.instance.AddSerializableObject(this, "Ship");
         }
 
         public override void Update(float deltaTime)
         {
             transformComponent.position += velocity * deltaTime;
             transformComponent.rotationEuler = currentRotation;
-            SceneSystem.instance.mainCamera.position = transformComponent.position;
+            SceneManager.instance.mainCamera.position = transformComponent.position;
             velocity += currentDirection * acceleration;
         }
 

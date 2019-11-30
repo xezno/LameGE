@@ -5,20 +5,20 @@ using System.Runtime.InteropServices;
 using ECSEngine.Entities;
 using ECSEngine.Events;
 using ECSEngine.Math;
-using ECSEngine.Systems;
+using ECSEngine.Managers;
 
 using OpenGL;
 using OpenGL.CoreUI;
 
 namespace ECSEngine
 {
-    public class Game : IBase
+    public class Game : IHasParent
     {
-        public IBase parent { get; set; }
+        public IHasParent parent { get; set; }
 
         private DateTime lastUpdate;
-
-        private List<ISystem> systems = new List<ISystem>();
+        private readonly int titlebarHeight = 20; // TODO: I have no idea whether this is actually correct or not, but it works on win10.  Will need changing based on platform later
+        private List<IManager> managers = new List<IManager>();
         private readonly Gl.DebugProc debugCallback; // Stored to prevent GC from collecting debug callback before it can be called
 
         public bool isRunning = true;
@@ -51,6 +51,8 @@ namespace ECSEngine
             nativeWindow.Create(0, 0, RenderSettings.Default.GameResolutionX, RenderSettings.Default.GameResolutionY, NativeWindowStyle.Caption);
             nativeWindow.Caption = "ECSEngine";
 
+            // TODO: choice of monitor to use.
+
             nativeWindow.Show();
             nativeWindow.Run();
         }
@@ -77,7 +79,13 @@ namespace ECSEngine
 
         private void MouseMove(object sender, NativeWindowMouseEventArgs e)
         {
-            EventManager.BroadcastEvent(Event.MouseMove, new MouseMoveEventArgs(new Vector2(e.Location.X, RenderSettings.Default.GameResolutionY - e.Location.Y), this));
+            // For some reason this offsets by the titlebar height, and it's inverted, so we have to do some quick maths to fix that
+            EventManager.BroadcastEvent(Event.MouseMove, 
+                new MouseMoveEventArgs(new Vector2(
+                    e.Location.X, RenderSettings.Default.GameResolutionY - e.Location.Y - titlebarHeight
+                                  ), 
+                    this)
+                );
         }
 
         private void MouseUp(object sender, NativeWindowMouseEventArgs e)
@@ -123,28 +131,30 @@ namespace ECSEngine
 
         void SetUpSystems()
         {
-            systems = new List<ISystem>(){
-                SceneSystem.instance,
-                ImGuiSystem.instance
+            managers = new List<IManager>(){
+                RenderManager.instance, // Ran first
+                UpdateManager.instance,
+                SceneManager.instance,
+                ImGuiManager.instance
             };
 
-            foreach (ISystem system in systems)
+            foreach (IManager manager in managers)
             {
-                EventManager.AddSystem(system);
-                system.parent = this;
+                EventManager.AddManager(manager);
+                manager.parent = this;
             }
         }
 
         void SetUpScene()
         {
-            var entities = new List<IEntity>()
+            var entities = new List<IEntity>
             {
                 new ShipEntity(),
                 new TestModelEntity()
             };
 
             foreach (IEntity entity in entities)
-                SceneSystem.instance.AddEntity(entity);
+                SceneManager.instance.AddEntity(entity);
         }
 
         void ContextCreated(object sender, NativeWindowEventArgs e)
@@ -177,18 +187,16 @@ namespace ECSEngine
 
             float deltaTime = System.Math.Max((DateTime.Now - lastUpdate).Milliseconds, 1.0f) / 1000.0f;
             Debug.Log($"Delta time: {deltaTime}");
-            foreach (ISystem system in systems)
+            foreach (IManager manager in managers)
             {
-                system.Update(deltaTime);
-
-                system.Render();
+                manager.Run();
             }
             lastUpdate = DateTime.Now;
         }
 
-        public T GetSystem<T>() where T : ISystem
+        public T GetSystem<T>() where T : IManager
         {
-            return (T)(systems.Find((system) => system.GetType() == typeof(T)));
+            return (T)(managers.Find((system) => system.GetType() == typeof(T)));
         }
     }
 }

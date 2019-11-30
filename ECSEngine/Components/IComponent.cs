@@ -5,7 +5,7 @@ namespace ECSEngine.Components
     /// <summary>
     /// The base interface for any component running in the engine.
     /// </summary>
-    public interface IComponent : IBase
+    public interface IComponent : IHasParent
     {
         /// <summary>
         /// Called when an event is triggered.
@@ -17,11 +17,11 @@ namespace ECSEngine.Components
         /// <summary>
         /// Called whenever the engine renders a single frame.
         /// </summary>
-        new void Render();
+        void Render();
 
         /// <summary>
         /// Called whenever the engine wishes to update all systems/entities/components.
         /// </summary>
-        new void Update(float deltaTime);
+        void Update(float deltaTime);
     }
 }

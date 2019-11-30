@@ -2,7 +2,7 @@
 using ECSEngine.Events;
 using ECSEngine.Math;
 using ECSEngine.Render;
-using ECSEngine.Systems;
+using ECSEngine.Managers;
 
 namespace ECSEngine.Entities
 {
@@ -54,8 +54,8 @@ namespace ECSEngine.Entities
             switch (eventType)
             {
                 case Event.GameStart:
-                    ImGuiSystem.instance.AddSerializableObject(mainMaterial); // this is terrible
-                    ImGuiSystem.instance.AddSerializableObject(transformComponent); // this is also terrible
+                    ImGuiManager.instance.AddSerializableObject(mainMaterial); // this is terrible
+                    ImGuiManager.instance.AddSerializableObject(transformComponent); // this is also terrible
                     break;
             }
         }

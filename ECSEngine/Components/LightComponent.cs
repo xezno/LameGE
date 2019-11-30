@@ -16,15 +16,5 @@ namespace ECSEngine.Components
             this.linear = linear;
             this.quadratic = quadratic;
         }
-
-        public override void Update(float deltaTime)
-        {
-            
-        }
-
-        public override void Render()
-        {
-            
-        }
     }
 }

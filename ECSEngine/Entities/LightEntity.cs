@@ -1,7 +1,7 @@
 ﻿using ECSEngine.Components;
 using ECSEngine.Events;
 using ECSEngine.Math;
-using ECSEngine.Systems;
+using ECSEngine.Managers;
 
 namespace ECSEngine.Entities
 {
@@ -25,7 +25,7 @@ namespace ECSEngine.Entities
             switch (eventType)
             {
                 case Event.GameStart:
-                    ImGuiSystem.instance.AddSerializableObject(transformComponent, "Light");
+                    ImGuiManager.instance.AddSerializableObject(transformComponent, "Light");
                     break;
             }
         }

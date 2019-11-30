@@ -12,9 +12,9 @@ namespace ECSEngine.Entities
     public class Entity<T> : IEntity
     {
         /// <summary>
-        /// The entity's parent; usually a system.
+        /// The entity's parent; usually a manager.
         /// </summary>
-        public virtual IBase parent { get; set; }
+        public virtual IHasParent parent { get; set; }
 
         /// <summary>
         /// A list of components that the entity contains.

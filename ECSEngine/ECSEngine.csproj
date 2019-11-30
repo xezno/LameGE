@@ -83,6 +83,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ImGui.NET, Version=1.72.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -149,7 +150,7 @@
     <Compile Include="Game.cs" />
     <Compile Include="Components\IComponent.cs" />
     <Compile Include="Entities\IEntity.cs" />
-    <Compile Include="IBase.cs" />
+    <Compile Include="IHasParent.cs" />
     <Compile Include="Math\Noise.cs" />
     <Compile Include="Math\Vector4.cs" />
     <Compile Include="Math\Quaternion.cs" />
@@ -169,10 +170,12 @@
     <Compile Include="Render\MeshFaceElement.cs" />
     <Compile Include="Render\Shader.cs" />
     <Compile Include="Render\Texture2D.cs" />
-    <Compile Include="Systems\ImGuiSystem.cs" />
-    <Compile Include="Systems\ISystem.cs" />
-    <Compile Include="Systems\System.cs" />
-    <Compile Include="Systems\SceneSystem.cs" />
+    <Compile Include="Managers\ImGuiManager.cs" />
+    <Compile Include="Managers\IManager.cs" />
+    <Compile Include="Managers\RenderManager.cs" />
+    <Compile Include="Managers\Manager.cs" />
+    <Compile Include="Managers\SceneManager.cs" />
+    <Compile Include="Managers\UpdateManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
