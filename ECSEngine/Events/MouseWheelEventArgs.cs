@@ -1,7 +1,5 @@
 ﻿using System;
 
-using ECSEngine.Math;
-
 namespace ECSEngine.Events
 {
     class MouseWheelEventArgs : IEventArgs

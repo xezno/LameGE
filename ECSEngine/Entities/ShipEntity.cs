@@ -19,7 +19,7 @@ namespace ECSEngine.Entities
 
         public ShipEntity()
         {
-            AddComponent(new TransformComponent(new Vector3(0, 2f, 0f), ECSEngine.Math.Quaternion.identity, new Vector3(1, 1, 1)));
+            AddComponent(new TransformComponent(new Vector3(0, 2f, 0f), Quaternion.identity, new Vector3(1, 1, 1)));
             //AddComponent(new MeshComponent(""));
             AddComponent(new CameraComponent());
 
@@ -36,13 +36,13 @@ namespace ECSEngine.Entities
             velocity += currentDirection * acceleration;
         }
 
-        public override void HandleEvent(Event eventType, IEventArgs baseEventArgs_)
+        public override void HandleEvent(Event eventType, IEventArgs baseEventArgs)
         {
             if (eventType == Event.KeyDown || eventType == Event.KeyUp)
             {
-                KeyboardEventArgs eventArgs = (KeyboardEventArgs)baseEventArgs_;
+                KeyboardEventArgs keyboardEventArgs = (KeyboardEventArgs)baseEventArgs;
 
-                switch ((KeyCode)eventArgs.keyboardKey)
+                switch ((KeyCode)keyboardEventArgs.keyboardKey)
                 {
                     case KeyCode.W:
                         if (eventType == Event.KeyDown)
@@ -72,7 +72,7 @@ namespace ECSEngine.Entities
             }
             else if (eventType == Event.MouseMove)
             {
-                MouseMoveEventArgs eventArgs = (MouseMoveEventArgs)baseEventArgs_;
+                MouseMoveEventArgs mouseEventArgs = (MouseMoveEventArgs)baseEventArgs;
                 // TODO: Replace with mouse delta
                 // currentRotation += new Vector3(eventArgs.mousePosition.x, 0, eventArgs.mousePosition.y);
             }

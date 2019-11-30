@@ -20,7 +20,7 @@ namespace ECSEngine.Entities
             AddComponent(lightComponent);
         }
 
-        public override void HandleEvent(Event eventType, IEventArgs eventArgs)
+        public override void HandleEvent(Event eventType, IEventArgs baseEventArgs)
         {
             switch (eventType)
             {

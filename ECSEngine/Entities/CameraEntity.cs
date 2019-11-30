@@ -34,7 +34,7 @@ namespace ECSEngine.Entities
         /// </summary>
         public CameraEntity()
         {
-            AddComponent(new TransformComponent(new Vector3(0, 2f, 0f), ECSEngine.Math.Quaternion.identity, new Vector3(1, 1, 1)));
+            AddComponent(new TransformComponent(new Vector3(0, 2f, 0f), Math.Quaternion.identity, new Vector3(1, 1, 1)));
             AddComponent(new CameraComponent());
         }
     }

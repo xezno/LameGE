@@ -1,6 +1,5 @@
 ﻿using ECSEngine.Attributes;
 using ECSEngine.Entities;
-using ECSEngine.Events;
 using ECSEngine.Render;
 using ECSEngine.Managers;
 
@@ -44,8 +43,8 @@ namespace ECSEngine.Components
 
             shaderComponent.UseShader(); // TODO: Attach GetComponent function to IComponent
 
-            Gl.BindVertexArray(mesh.VAO);
-            Gl.BindBuffer(BufferTarget.ArrayBuffer, mesh.VBO);
+            Gl.BindVertexArray(mesh.vao);
+            Gl.BindBuffer(BufferTarget.ArrayBuffer, mesh.vbo);
 
             CameraEntity camera = ((SceneManager)parent.parent).mainCamera;
             shaderComponent.SetVariable("projMatrix", camera.projMatrix);

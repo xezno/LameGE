@@ -106,7 +106,7 @@ namespace ECSEngine.Assets
             var line = streamReader.ReadLine();
             while (line != null)
             {
-                int textureID = 0;
+                int textureId = 0;
                 var lineSplit = line.Split(' ');
                 var opcode = lineSplit[0];
                 foreach (var field in typeof(T).GetFields())
@@ -122,7 +122,7 @@ namespace ECSEngine.Assets
                                 if (!Path.IsPathRooted(texturePath))
                                     texturePath = Path.GetDirectoryName(assetPath) + "/" +
                                                 texturePath.Replace('\\', '/');
-                                Texture2D texture = new Texture2D(texturePath, TextureUnit.Texture0 + textureID++);
+                                Texture2D texture = new Texture2D(texturePath, TextureUnit.Texture0 + textureId++);
                                 field.SetValue(this, texture);
                             }
                             else if (field.FieldType == typeof(ColorRGB24))

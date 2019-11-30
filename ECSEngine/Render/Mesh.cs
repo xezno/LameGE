@@ -16,7 +16,7 @@ namespace ECSEngine.Render
     /// </summary>
     public class Mesh : PlaintextAsset<Mesh>
     {
-        public uint VAO, VBO;
+        public uint vao, vbo;
 
         /// <summary>
         /// The number of OpenGL elements to draw.
@@ -51,8 +51,8 @@ namespace ECSEngine.Render
         {
             float[] glData;
             // Gen objects
-            VAO = Gl.GenVertexArray();
-            VBO = Gl.GenBuffer();
+            vao = Gl.GenVertexArray();
+            vbo = Gl.GenBuffer();
 
             // Unpack data so that OpenGL can read it
             int vertexAttribSize = 8;
@@ -60,7 +60,7 @@ namespace ECSEngine.Render
 
             for (int i = 0; i < faceElements.Count; ++i)
             {
-                var dataToAdd = new float[]
+                var dataToAdd = new[]
                 {
                     vertices[(int)faceElements[i].vertexIndex].x,
                     vertices[(int)faceElements[i].vertexIndex].y,
@@ -75,8 +75,8 @@ namespace ECSEngine.Render
                     glData[i * vertexAttribSize + dataIndex] = dataToAdd[dataIndex];
             }
 
-            Gl.BindVertexArray(VAO);
-            Gl.BindBuffer(BufferTarget.ArrayBuffer, VBO);
+            Gl.BindVertexArray(vao);
+            Gl.BindBuffer(BufferTarget.ArrayBuffer, vbo);
             Gl.BufferData(BufferTarget.ArrayBuffer, (uint)glData.Length * sizeof(float), glData, BufferUsage.StaticDraw);
 
             Gl.EnableVertexAttribArray(0);

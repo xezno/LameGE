@@ -49,7 +49,7 @@ namespace ECSEngine.Entities
             AddComponent(new MeshComponent($"{path}.obj"));
         }
 
-        public override void HandleEvent(Event eventType, IEventArgs eventArgs)
+        public override void HandleEvent(Event eventType, IEventArgs baseEventArgs)
         {
             switch (eventType)
             {

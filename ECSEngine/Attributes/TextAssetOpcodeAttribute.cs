@@ -17,7 +17,7 @@ namespace ECSEngine.Attributes
         /// Whether or not to invert the value (usually 1.0f - value).
         /// Only valid for <see cref="float"/> data.
         /// </summary>
-        public bool invertValue = false;
+        public bool invertValue;
 
         /// <summary>
         /// Construct an instance of the TextAssetOpcodeAttribute.

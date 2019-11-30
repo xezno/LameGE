@@ -19,7 +19,7 @@ namespace ECSEngine.Managers
         public List<IEntity> entities { get; } = new List<IEntity>();
 
         // All systems should be singletons.
-        private static T _instance;
+        private static T privateInstance;
 
         /// <summary>
         /// Get the single instance of the desired manager.
@@ -28,8 +28,8 @@ namespace ECSEngine.Managers
         {
             get
             {
-                if (_instance == null) _instance = Activator.CreateInstance<T>();
-                return _instance;
+                if (privateInstance == null) privateInstance = Activator.CreateInstance<T>();
+                return privateInstance;
             }
         }
 

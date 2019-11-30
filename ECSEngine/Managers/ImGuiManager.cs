@@ -130,7 +130,7 @@ namespace ECSEngine.Managers
                     ImGui.DragFloat3(field.Name, ref value, 0.1f);
                     reference.value = Math.Vector3.ConvertFromNumerics(value);
                 }
-                else if (field.FieldType == typeof(Math.Quaternion))
+                else if (field.FieldType == typeof(Quaternion))
                 {
                     Vector3 value = reference.value.ToEulerAngles().ConvertToNumerics();
                     ImGui.DragFloat3(field.Name, ref value, 0.1f);
@@ -144,7 +144,7 @@ namespace ECSEngine.Managers
                 }
                 else
                 {
-                    ImGui.LabelText(field.Name, $"{field.GetValue(objectToRender)?.ToString()}");
+                    ImGui.LabelText(field.Name, $"{field.GetValue(objectToRender)}");
                 }
             }
             ImGui.End();
@@ -166,6 +166,7 @@ namespace ECSEngine.Managers
             shaderComponent.SetVariable("albedoTexture", 0);
             shaderComponent.SetVariable("projection", projectionMatrix);
 
+            Gl.BindVertexArray(vao);
             Gl.BindBuffer(BufferTarget.ArrayBuffer, vbo);
             Gl.BindBuffer(BufferTarget.ElementArrayBuffer, ebo);
 
@@ -222,7 +223,7 @@ namespace ECSEngine.Managers
             char c = '\0';
             if ((keyCode >= KeyCode.A) && (keyCode <= KeyCode.Z))
             {
-                c = (char)((int)'a' + (int)(keyCode - KeyCode.A));
+                c = (char)('a' + keyCode - KeyCode.A);
 
                 if (io.KeyShift)
                 {
@@ -242,12 +243,12 @@ namespace ECSEngine.Managers
                 }
                 else
                 {
-                    c = (char)((int)'0' + (int)(keyCode - KeyCode.N0));
+                    c = (char)('0' + keyCode - KeyCode.N0);
                 }
             }
             else if ((keyCode >= KeyCode.Numpad0) && (keyCode <= KeyCode.Numpad9))
             {
-                c = (char)((int)'0' + (int)(keyCode - KeyCode.Numpad0));
+                c = (char)('0' + keyCode - KeyCode.Numpad0);
             }
             else
             {
@@ -343,7 +344,7 @@ namespace ECSEngine.Managers
                 case Event.WindowResized:
                 {
                     WindowResizeEventArgs windowResizeEventArgs = (WindowResizeEventArgs)eventArgs;
-                    windowSize = new System.Numerics.Vector2(windowResizeEventArgs.windowSize.x, windowResizeEventArgs.windowSize.y);
+                    windowSize = new Vector2(windowResizeEventArgs.windowSize.x, windowResizeEventArgs.windowSize.y);
                     break;
                 }
                 default:

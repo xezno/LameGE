@@ -48,10 +48,10 @@ namespace ECSEngine.Render
             System.Drawing.Image image = System.Drawing.Image.FromFile(path);
             Debug.Log($"Image format: {image.PixelFormat}");
 
-            OpenGL.PixelFormat imageFormat = OpenGL.PixelFormat.Bgra;
+            PixelFormat imageFormat = PixelFormat.Bgra;
             if (image.PixelFormat == System.Drawing.Imaging.PixelFormat.Format24bppRgb || 
                 image.PixelFormat == System.Drawing.Imaging.PixelFormat.Format32bppRgb)
-                imageFormat = OpenGL.PixelFormat.Bgr;
+                imageFormat = PixelFormat.Bgr;
 
             image.Save(textureStream, ImageFormat.Bmp);
 

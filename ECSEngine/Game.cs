@@ -159,8 +159,6 @@ namespace ECSEngine
 
         void ContextCreated(object sender, NativeWindowEventArgs e)
         {
-            NativeWindow nativeWindow = sender as NativeWindow;
-
             Debug.Log($"OpenGL {Gl.GetString(StringName.Version)}");
             Gl.ReadBuffer(ReadBufferMode.Back);
             Gl.ClearColor(100 / 255f, 149 / 255f, 237 / 255f, 1); // Cornflower blue (https://en.wikipedia.org/wiki/Web_colors#X11_color_names)

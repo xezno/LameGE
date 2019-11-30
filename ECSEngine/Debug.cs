@@ -27,7 +27,7 @@ namespace ECSEngine
             // Prepare method name & method class name
             StackTrace stackTrace = new StackTrace();
             StackFrame[] stackFrames = stackTrace.GetFrames();
-            MethodBase method = stackFrames[1].GetMethod();
+            MethodBase method = stackFrames?[1].GetMethod();
 
             /* BUG: Some functions (namely ogl's debug callback) run on a separate thread, so 
              * they mess with the console's foreground color before another thread has finished outputting.
@@ -48,7 +48,7 @@ namespace ECSEngine
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
                     break;
             }
-            Console.WriteLine($"[{DateTime.Now.ToString()}] {method.ReflectedType.Name}, {method.Name} ({severity}): {str}");
+            Console.WriteLine($"[{DateTime.Now.ToString("T")}] {method?.ReflectedType?.Name}, {method?.Name} ({severity}): {str}");
         }
     }
 }
