@@ -37,9 +37,6 @@ Since ECSEngine / SpaceGame are both personal projects that I am developing sole
 As previously mentioned, ECSEngine and SpaceGame are both free-time projects and I have no step-by-step roadmap.  That being said, there are a few large goals that I want to achieve within this project:
 
 - Procedurally-generated planets with some form of noise (OpenSimplex, Perlin, etc.)
-
 - Physically based rendering for all objects within a scene
-
 - Decent lighting
-
 - Some form of multiplayer with a text-based chat system
