@@ -7,17 +7,13 @@ This is a basic engine created for personal practice and use; it uses the [entit
 ### Required
 
 - .NET Framework 4.8
-
 - Visual Studio 2019
-
 - Windows
 
 ### Recommendations
 
 - ReSharper
-
 - Windows 10
-
 - A decent graphics card & processor
 
 ## Code Conventions
