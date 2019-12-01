@@ -1,8 +1,7 @@
 ﻿using ECSEngine.Attributes;
 using ECSEngine.Entities;
-using ECSEngine.Render;
 using ECSEngine.Managers;
-
+using ECSEngine.Render;
 using OpenGL;
 
 namespace ECSEngine.Components

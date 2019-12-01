@@ -1,7 +1,7 @@
 ﻿using ECSEngine.Entities;
 
-namespace ECSEngine.Managers 
-{ 
+namespace ECSEngine.Managers
+{
     public class UpdateManager : Manager<UpdateManager>
     {
         public override void Run()

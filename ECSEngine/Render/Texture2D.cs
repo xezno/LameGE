@@ -1,9 +1,8 @@
-﻿using System;
+﻿using OpenGL;
+using System;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
-
-using OpenGL;
 using PixelFormat = OpenGL.PixelFormat;
 
 namespace ECSEngine.Render
@@ -49,7 +48,7 @@ namespace ECSEngine.Render
             Debug.Log($"Image format: {image.PixelFormat}");
 
             PixelFormat imageFormat = PixelFormat.Bgra;
-            if (image.PixelFormat == System.Drawing.Imaging.PixelFormat.Format24bppRgb || 
+            if (image.PixelFormat == System.Drawing.Imaging.PixelFormat.Format24bppRgb ||
                 image.PixelFormat == System.Drawing.Imaging.PixelFormat.Format32bppRgb)
                 imageFormat = PixelFormat.Bgr;
 

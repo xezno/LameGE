@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Numerics;
-
-using ECSEngine.Components;
+﻿using ECSEngine.Components;
 using ECSEngine.Events;
 using ECSEngine.Render;
-using Vector4 = ECSEngine.Math.Vector4;
-using Quaternion = ECSEngine.Math.Quaternion;
-
+using ImGuiNET;
 using OpenGL;
 using OpenGL.CoreUI;
-
-using ImGuiNET;
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+using Quaternion = ECSEngine.Math.Quaternion;
+using Vector4 = ECSEngine.Math.Vector4;
 
 namespace ECSEngine.Managers
 {
@@ -65,7 +62,7 @@ namespace ECSEngine.Managers
 
             ImGui.StyleColorsLight();
 
-            shaderComponent = new ShaderComponent(new Shader("Content/ImGUI/imgui.frag", ShaderType.FragmentShader), 
+            shaderComponent = new ShaderComponent(new Shader("Content/ImGUI/imgui.frag", ShaderType.FragmentShader),
                 new Shader("Content/ImGUI/imgui.vert", ShaderType.VertexShader));
 
             vao = Gl.GenVertexArray();
@@ -110,8 +107,8 @@ namespace ECSEngine.Managers
             foreach (var field in objectToRender.GetType().GetFields())
             {
                 // this works but is, like, the worst solution ever
-                var referenceType = typeof(Ref<>).MakeGenericType(new[] {field.FieldType});
-                var reference = (dynamic /* alarm bells right here */)(Activator.CreateInstance(referenceType, new[] {field, objectToRender}));
+                var referenceType = typeof(Ref<>).MakeGenericType(new[] { field.FieldType });
+                var reference = (dynamic /* alarm bells right here */)(Activator.CreateInstance(referenceType, new[] { field, objectToRender }));
                 if (field.FieldType == typeof(float))
                 {
                     float value = reference.value;
@@ -122,7 +119,7 @@ namespace ECSEngine.Managers
                 {
                     Vector3 value = new Vector3(reference.value.r / 255f, reference.value.g / 255f, reference.value.b / 255f);
                     ImGui.ColorEdit3($"{field.Name}", ref value);
-                    reference.value = new ColorRGB24((byte)(value.X*255f), (byte)(value.Y*255f), (byte)(value.Z*255f));
+                    reference.value = new ColorRGB24((byte)(value.X * 255f), (byte)(value.Y * 255f), (byte)(value.Z * 255f));
                 }
                 else if (field.FieldType == typeof(Math.Vector3))
                 {
@@ -287,66 +284,66 @@ namespace ECSEngine.Managers
             switch (eventType)
             {
                 case Event.KeyDown:
-                {
-                    KeyboardEventArgs keyboardEventArgs = (KeyboardEventArgs)eventArgs; 
-                    io.KeysDown[keyboardEventArgs.keyboardKey] = true;
-                    KeyCode keyCode = (KeyCode)keyboardEventArgs.keyboardKey;
-                    io.AddInputCharacter(KeyCodeToChar(keyCode));
-                    if (keyCode == KeyCode.Shift)
                     {
-                        io.KeyShift = true;
+                        KeyboardEventArgs keyboardEventArgs = (KeyboardEventArgs)eventArgs;
+                        io.KeysDown[keyboardEventArgs.keyboardKey] = true;
+                        KeyCode keyCode = (KeyCode)keyboardEventArgs.keyboardKey;
+                        io.AddInputCharacter(KeyCodeToChar(keyCode));
+                        if (keyCode == KeyCode.Shift)
+                        {
+                            io.KeyShift = true;
+                        }
+                        else if (keyCode == KeyCode.Control)
+                        {
+                            io.KeyCtrl = true;
+                        }
+                        break;
                     }
-                    else if (keyCode == KeyCode.Control)
-                    {
-                        io.KeyCtrl = true;
-                    }
-                    break;
-                }
                 case Event.KeyUp:
-                {
-                    KeyboardEventArgs keyboardEventArgs = (KeyboardEventArgs)eventArgs;
-                    io.KeysDown[keyboardEventArgs.keyboardKey] = false;
-                    KeyCode keyCode = (KeyCode)keyboardEventArgs.keyboardKey;
-                    if (keyCode == KeyCode.Shift)
                     {
-                        io.KeyShift = false;
+                        KeyboardEventArgs keyboardEventArgs = (KeyboardEventArgs)eventArgs;
+                        io.KeysDown[keyboardEventArgs.keyboardKey] = false;
+                        KeyCode keyCode = (KeyCode)keyboardEventArgs.keyboardKey;
+                        if (keyCode == KeyCode.Shift)
+                        {
+                            io.KeyShift = false;
+                        }
+                        else if (keyCode == KeyCode.Control)
+                        {
+                            io.KeyCtrl = false;
+                        }
+                        break;
                     }
-                    else if (keyCode == KeyCode.Control)
-                    {
-                        io.KeyCtrl = false;
-                    }
-                    break;
-                }
                 case Event.MouseMove:
-                {
-                    MouseMoveEventArgs mouseMoveEventArgs = (MouseMoveEventArgs)eventArgs;
-                    io.MousePos = new Vector2(mouseMoveEventArgs.mousePosition.x, mouseMoveEventArgs.mousePosition.y);
-                    break;
-                }
+                    {
+                        MouseMoveEventArgs mouseMoveEventArgs = (MouseMoveEventArgs)eventArgs;
+                        io.MousePos = new Vector2(mouseMoveEventArgs.mousePosition.x, mouseMoveEventArgs.mousePosition.y);
+                        break;
+                    }
                 case Event.MouseButtonDown:
-                {
-                    MouseButtonEventArgs mouseButtonEventArgs = (MouseButtonEventArgs)eventArgs;
-                    io.MouseDown[mouseButtonEventArgs.mouseButton] = true;
-                    break;
-                }
+                    {
+                        MouseButtonEventArgs mouseButtonEventArgs = (MouseButtonEventArgs)eventArgs;
+                        io.MouseDown[mouseButtonEventArgs.mouseButton] = true;
+                        break;
+                    }
                 case Event.MouseButtonUp:
-                {
-                    MouseButtonEventArgs mouseButtonEventArgs = (MouseButtonEventArgs)eventArgs;
-                    io.MouseDown[mouseButtonEventArgs.mouseButton] = false;
-                    break;
-                }
+                    {
+                        MouseButtonEventArgs mouseButtonEventArgs = (MouseButtonEventArgs)eventArgs;
+                        io.MouseDown[mouseButtonEventArgs.mouseButton] = false;
+                        break;
+                    }
                 case Event.MouseScroll:
-                {
-                    MouseWheelEventArgs mouseWheelEventArgs = (MouseWheelEventArgs)eventArgs;
-                    io.MouseWheel += mouseWheelEventArgs.mouseScroll;
-                    break;
-                }
+                    {
+                        MouseWheelEventArgs mouseWheelEventArgs = (MouseWheelEventArgs)eventArgs;
+                        io.MouseWheel += mouseWheelEventArgs.mouseScroll;
+                        break;
+                    }
                 case Event.WindowResized:
-                {
-                    WindowResizeEventArgs windowResizeEventArgs = (WindowResizeEventArgs)eventArgs;
-                    windowSize = new Vector2(windowResizeEventArgs.windowSize.x, windowResizeEventArgs.windowSize.y);
-                    break;
-                }
+                    {
+                        WindowResizeEventArgs windowResizeEventArgs = (WindowResizeEventArgs)eventArgs;
+                        windowSize = new Vector2(windowResizeEventArgs.windowSize.x, windowResizeEventArgs.windowSize.y);
+                        break;
+                    }
                 default:
                     Debug.Log($"Unhandled event of type {eventType}");
                     break;

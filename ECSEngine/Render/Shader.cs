@@ -1,6 +1,5 @@
-﻿using System.IO;
-
-using OpenGL;
+﻿using OpenGL;
+using System.IO;
 
 namespace ECSEngine.Render
 {

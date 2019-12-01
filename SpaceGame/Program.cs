@@ -1,16 +1,16 @@
-﻿namespace ECSEngine
+﻿namespace SpaceGame
 {
-    internal class Program
+    class Program
     {
         // TODO: think of a better way to access game like this
-        public static Game game;
+        public static SpaceGame game;
         static void Main(string[] args)
         {
-            game = new Game();
+            game = new SpaceGame();
             game.Run();
             while (game.isRunning)
             {
-                // Do nothing (handled all within Game)
+                // Do nothing (handled all within SpaceGame)
             }
             // Game shutdown.  Thanks for playing!
         }

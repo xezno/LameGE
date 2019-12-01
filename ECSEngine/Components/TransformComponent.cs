@@ -1,7 +1,6 @@
 ﻿using ECSEngine.Math;
-using Quaternion = ECSEngine.Math.Quaternion;
-
 using OpenGL;
+using Quaternion = ECSEngine.Math.Quaternion;
 
 namespace ECSEngine.Components
 {

@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-
-using ECSEngine.Entities;
+﻿using ECSEngine.Entities;
+using System.Collections.Generic;
 
 namespace ECSEngine.Managers
 {

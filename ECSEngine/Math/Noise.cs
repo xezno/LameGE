@@ -4,7 +4,7 @@ namespace ECSEngine.Math
 {
     public static class Noise
     {
-        private static Vector2[,] gradientValues = new Vector2[255,255];
+        private static Vector2[,] gradientValues = new Vector2[255, 255];
 
         private static float Lerp(float a, float b, float t) => (1.0f - t) * a + (t * b);
 

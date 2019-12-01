@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-using ECSEngine.Math;
+﻿using ECSEngine.Math;
 using ECSEngine.Render;
-
 using OpenGL;
+using System;
+using System.Collections.Generic;
 
 namespace ECSEngine.Components
 {

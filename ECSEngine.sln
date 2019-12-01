@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.29324.140
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECSEngine", "ECSEngine\ECSEngine.csproj", "{7F629AE2-DD5D-4052-AF98-3FD15257C2AE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceGame", "SpaceGame\SpaceGame.csproj", "{C1EDBC7B-7C99-4B7E-AC37-CAB317A4C8DD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,18 @@ Global
 		{7F629AE2-DD5D-4052-AF98-3FD15257C2AE}.Release|x64.Build.0 = Release|x64
 		{7F629AE2-DD5D-4052-AF98-3FD15257C2AE}.Release|x86.ActiveCfg = Release|x86
 		{7F629AE2-DD5D-4052-AF98-3FD15257C2AE}.Release|x86.Build.0 = Release|x86
+		{C1EDBC7B-7C99-4B7E-AC37-CAB317A4C8DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1EDBC7B-7C99-4B7E-AC37-CAB317A4C8DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1EDBC7B-7C99-4B7E-AC37-CAB317A4C8DD}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C1EDBC7B-7C99-4B7E-AC37-CAB317A4C8DD}.Debug|x64.Build.0 = Debug|Any CPU
+		{C1EDBC7B-7C99-4B7E-AC37-CAB317A4C8DD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C1EDBC7B-7C99-4B7E-AC37-CAB317A4C8DD}.Debug|x86.Build.0 = Debug|Any CPU
+		{C1EDBC7B-7C99-4B7E-AC37-CAB317A4C8DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1EDBC7B-7C99-4B7E-AC37-CAB317A4C8DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1EDBC7B-7C99-4B7E-AC37-CAB317A4C8DD}.Release|x64.ActiveCfg = Release|Any CPU
+		{C1EDBC7B-7C99-4B7E-AC37-CAB317A4C8DD}.Release|x64.Build.0 = Release|Any CPU
+		{C1EDBC7B-7C99-4B7E-AC37-CAB317A4C8DD}.Release|x86.ActiveCfg = Release|Any CPU
+		{C1EDBC7B-7C99-4B7E-AC37-CAB317A4C8DD}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

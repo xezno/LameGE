@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-
-using ECSEngine.Entities;
+﻿using ECSEngine.Entities;
 using ECSEngine.Events;
-using ECSEngine.Math;
 using ECSEngine.Managers;
-
+using ECSEngine.Math;
 using OpenGL;
 using OpenGL.CoreUI;
+using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace ECSEngine
 {
@@ -21,6 +19,8 @@ namespace ECSEngine
         private List<IManager> managers = new List<IManager>();
         private readonly Gl.DebugProc debugCallback; // Stored to prevent GC from collecting debug callback before it can be called
 
+        protected NativeWindow nativeWindow;
+
         public bool isRunning = true;
 
         public Game()
@@ -30,7 +30,7 @@ namespace ECSEngine
 
         public void Run()
         {
-            using NativeWindow nativeWindow = NativeWindow.Create();
+            nativeWindow = NativeWindow.Create();
 
             nativeWindow.ContextCreated += ContextCreated;
             nativeWindow.ContextDestroying += ContextDestroyed;
@@ -41,13 +41,13 @@ namespace ECSEngine
             nativeWindow.MouseUp += MouseUp;
             nativeWindow.MouseMove += MouseMove;
             nativeWindow.MouseWheel += MouseWheel;
-            
+
             nativeWindow.CursorVisible = true; // Hide mouse cursor
             nativeWindow.Animation = false; // Changing this to true makes input poll like once every 500ms.  so don't change it
             nativeWindow.DepthBits = 24;
             nativeWindow.SwapInterval = 0;
             nativeWindow.Resize += Resize;
-            
+
             nativeWindow.Create(0, 0, RenderSettings.Default.GameResolutionX, RenderSettings.Default.GameResolutionY, NativeWindowStyle.Caption);
             nativeWindow.Caption = "ECSEngine";
 
@@ -55,12 +55,14 @@ namespace ECSEngine
 
             nativeWindow.Show();
             nativeWindow.Run();
+
+            nativeWindow.Destroy();
         }
 
         public void Render() { }
 
         public void Update(float deltaTime) { }
-        
+
         private void Resize(object sender, EventArgs e)
         {
             var nativeWindow = (NativeWindow)sender;
@@ -80,10 +82,10 @@ namespace ECSEngine
         private void MouseMove(object sender, NativeWindowMouseEventArgs e)
         {
             // For some reason this offsets by the titlebar height, and it's inverted, so we have to do some quick maths to fix that
-            EventManager.BroadcastEvent(Event.MouseMove, 
+            EventManager.BroadcastEvent(Event.MouseMove,
                 new MouseMoveEventArgs(new Vector2(
                     e.Location.X, RenderSettings.Default.GameResolutionY - e.Location.Y - titlebarHeight
-                                  ), 
+                                  ),
                     this)
                 );
         }
@@ -91,9 +93,9 @@ namespace ECSEngine
         private void MouseUp(object sender, NativeWindowMouseEventArgs e)
         {
             int button = 0;
-            if ((e.Buttons & MouseButton.Left) != 0)        button = 0;
+            if ((e.Buttons & MouseButton.Left) != 0) button = 0;
             else if ((e.Buttons & MouseButton.Middle) != 0) button = 1;
-            else if ((e.Buttons & MouseButton.Right) != 0)  button = 2;
+            else if ((e.Buttons & MouseButton.Right) != 0) button = 2;
 
             EventManager.BroadcastEvent(Event.MouseButtonUp, new MouseButtonEventArgs(button, this));
         }
@@ -101,35 +103,35 @@ namespace ECSEngine
         private void MouseDown(object sender, NativeWindowMouseEventArgs e)
         {
             int button = 0;
-            if ((e.Buttons & MouseButton.Left) != 0)        button = 0;
+            if ((e.Buttons & MouseButton.Left) != 0) button = 0;
             else if ((e.Buttons & MouseButton.Middle) != 0) button = 1;
-            else if ((e.Buttons & MouseButton.Right) != 0)  button = 2;
+            else if ((e.Buttons & MouseButton.Right) != 0) button = 2;
 
             EventManager.BroadcastEvent(Event.MouseButtonDown, new MouseButtonEventArgs(button, this));
         }
 
-        void KeyUp(object sender, NativeWindowKeyEventArgs e)
+        private void KeyUp(object sender, NativeWindowKeyEventArgs e)
         {
             EventManager.BroadcastEvent(Event.KeyUp, new KeyboardEventArgs((int)e.Key, this));
         }
 
-        void KeyDown(object sender, NativeWindowKeyEventArgs e)
+        private void KeyDown(object sender, NativeWindowKeyEventArgs e)
         {
             EventManager.BroadcastEvent(Event.KeyDown, new KeyboardEventArgs((int)e.Key, this));
         }
 
-        void ContextDestroyed(object sender, NativeWindowEventArgs e)
+        private void ContextDestroyed(object sender, NativeWindowEventArgs e)
         {
             isRunning = false;
         }
 
-        void DebugCallback(DebugSource source, DebugType type, uint id, DebugSeverity severity, int length, IntPtr message, IntPtr userParam)
+        private void DebugCallback(DebugSource source, DebugType type, uint id, DebugSeverity severity, int length, IntPtr message, IntPtr userParam)
         {
             if (severity >= DebugSeverity.DebugSeverityMedium)
                 Debug.Log($"OpenGL Error {id}: {Marshal.PtrToStringAnsi(message, length)}", Debug.DebugSeverity.Fatal);
         }
 
-        void SetUpSystems()
+        private void SetUpSystems()
         {
             managers = new List<IManager>(){
                 RenderManager.instance, // Ran first
@@ -145,7 +147,7 @@ namespace ECSEngine
             }
         }
 
-        void SetUpScene()
+        private void SetUpScene()
         {
             var entities = new List<IEntity>
             {
@@ -157,7 +159,7 @@ namespace ECSEngine
                 SceneManager.instance.AddEntity(entity);
         }
 
-        void ContextCreated(object sender, NativeWindowEventArgs e)
+        private void ContextCreated(object sender, NativeWindowEventArgs e)
         {
             Debug.Log($"OpenGL {Gl.GetString(StringName.Version)}");
             Gl.ReadBuffer(ReadBufferMode.Back);
@@ -177,9 +179,9 @@ namespace ECSEngine
             EventManager.BroadcastEvent(Event.GameStart, new GenericEventArgs(this));
         }
 
-        void LoadContent() { }
+        private void LoadContent() { }
 
-        void Render(object sender, NativeWindowEventArgs e)
+        private void Render(object sender, NativeWindowEventArgs e)
         {
             Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 

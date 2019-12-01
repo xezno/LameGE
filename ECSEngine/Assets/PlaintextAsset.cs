@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-
-using ECSEngine.Attributes;
+﻿using ECSEngine.Attributes;
 using ECSEngine.Math;
 using ECSEngine.Render;
-
 using OpenGL;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace ECSEngine.Assets
 {
@@ -144,7 +142,7 @@ namespace ECSEngine.Assets
                             else if (field.FieldType == typeof(float))
                             {
                                 var value = ParseFloat(lineSplit[1]);
-                                if (((TextAssetOpcodeAttribute)attribute).invertValue) 
+                                if (((TextAssetOpcodeAttribute)attribute).invertValue)
                                     value = 1.0f - value;
                                 field.SetValue(this, value);
                             }

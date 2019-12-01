@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-
-using ECSEngine.Assets;
+﻿using ECSEngine.Assets;
 using ECSEngine.Attributes;
 using ECSEngine.Math;
-
 using OpenGL;
+using System;
+using System.Collections.Generic;
 
 namespace ECSEngine.Render
 {

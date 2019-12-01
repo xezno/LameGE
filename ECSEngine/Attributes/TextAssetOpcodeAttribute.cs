@@ -30,7 +30,7 @@ namespace ECSEngine.Attributes
 
         public TextAssetOpcodeAttribute(string opcode, bool invertValue = false)
         {
-            this.opcodes = new[] {opcode};
+            this.opcodes = new[] { opcode };
             this.invertValue = invertValue;
         }
     }

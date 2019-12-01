@@ -1,11 +1,10 @@
-﻿using System;
+﻿using ECSEngine.Attributes;
+using ECSEngine.Components;
+using ECSEngine.Events;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-
-using ECSEngine.Attributes;
-using ECSEngine.Components;
-using ECSEngine.Events;
 
 namespace ECSEngine.Entities
 {
@@ -92,7 +91,7 @@ namespace ECSEngine.Entities
             }
         }
 
-        public virtual void Update(float deltaTime) 
+        public virtual void Update(float deltaTime)
         {
             foreach (IComponent component in components)
             {

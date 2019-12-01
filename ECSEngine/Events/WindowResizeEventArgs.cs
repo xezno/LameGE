@@ -1,6 +1,5 @@
-﻿using System;
-
-using ECSEngine.Math;
+﻿using ECSEngine.Math;
+using System;
 
 namespace ECSEngine.Events
 {
