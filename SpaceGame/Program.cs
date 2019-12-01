@@ -6,7 +6,7 @@
         public static SpaceGame game;
         static void Main(string[] args)
         {
-            game = new SpaceGame();
+            game = new SpaceGame("GameProperties.json");
             game.Run();
             while (game.isRunning)
             {

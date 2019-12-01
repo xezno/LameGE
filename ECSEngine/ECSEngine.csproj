@@ -92,8 +92,8 @@
     <Reference Include="ImGui.NET, Version=1.72.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ImGui.NET.1.72.0\lib\netstandard2.0\ImGui.NET.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="OpenGL.Net, Version=0.8.4.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -153,6 +153,7 @@
     <Compile Include="Game.cs" />
     <Compile Include="Components\IComponent.cs" />
     <Compile Include="Entities\IEntity.cs" />
+    <Compile Include="GameProperties.cs" />
     <Compile Include="IHasParent.cs" />
     <Compile Include="Math\Noise.cs" />
     <Compile Include="Math\Vector4.cs" />
