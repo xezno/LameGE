@@ -10,11 +10,8 @@ namespace ECSEngine
 
         public T value
         {
-            get { return (T)fieldInfo.GetValue(origin); }
-            set
-            {
-                fieldInfo.SetValue(origin, value);
-            }
+            get => (T)fieldInfo.GetValue(origin);
+            set => fieldInfo.SetValue(origin, value);
         }
 
         public Ref(FieldInfo fieldInfo, object origin)

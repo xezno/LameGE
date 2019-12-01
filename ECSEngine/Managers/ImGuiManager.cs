@@ -115,7 +115,7 @@ namespace ECSEngine.Managers
             };
 
             ImGui.PlotHistogram(
-                "Profiler",
+                "Legit lookin graph",
                 ref values[0],
                 values.Length
             );
@@ -142,8 +142,8 @@ namespace ECSEngine.Managers
             foreach (var field in objectToRender.GetType().GetFields())
             {
                 // this works but is, like, the worst solution ever
-                var referenceType = typeof(Ref<>).MakeGenericType(new[] { field.FieldType });
-                var reference = (dynamic /* alarm bells right here */)(Activator.CreateInstance(referenceType, new[] { field, objectToRender }));
+                var referenceType = typeof(Ref<>).MakeGenericType(field.FieldType);
+                var reference = (dynamic /* alarm bells right here */)Activator.CreateInstance(referenceType, field, objectToRender);
                 if (field.FieldType == typeof(float))
                 {
                     float value = reference.value;
@@ -183,7 +183,7 @@ namespace ECSEngine.Managers
                 }
                 else
                 {
-                    ImGui.LabelText($"{field.GetValue(objectToRender)}", $"{field.Name}");
+                    ImGui.LabelText($"{field.Name}", $"{field.GetValue(objectToRender)}");
                 }
             }
         }

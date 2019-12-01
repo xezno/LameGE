@@ -12,9 +12,9 @@ namespace ECSEngine.Entities
         public Vector3 velocity;
         public Vector3 currentDirection;
         public Vector3 currentRotation;
-        public float acceleration = 1.0f;
-        public float deceleration = 0.5f;
-        public float maxSpeed = 10f;
+        public float acceleration = 0.125f;
+        public float deceleration = 0.0625f;
+        public float maxSpeed = 1.0f;
 
         private TransformComponent transformComponent;
 
@@ -31,13 +31,13 @@ namespace ECSEngine.Entities
             transformComponent.position += velocity * deltaTime;
             transformComponent.rotationEuler = currentRotation;
             SceneManager.instance.mainCamera.position = transformComponent.position;
+
+            velocity += currentDirection * acceleration;
             velocity += new Vector3(
                 System.Math.Sign(velocity.x) * -deceleration,
                 System.Math.Sign(velocity.y) * -deceleration,
                 System.Math.Sign(velocity.z) * -deceleration
             );
-            Debug.Log($"Decelerating @ ~{(System.Math.Sign(velocity.magnitude)) * deceleration} (sign: {System.Math.Sign(velocity.magnitude)})");
-            velocity += currentDirection * acceleration;
 
             velocity = new Vector3(
                 System.Math.Max(System.Math.Min(velocity.x, maxSpeed), -maxSpeed),
