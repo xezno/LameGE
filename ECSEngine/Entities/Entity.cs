@@ -18,7 +18,7 @@ namespace ECSEngine.Entities
         /// <summary>
         /// A list of components that the entity contains.
         /// </summary>
-        private List<IComponent> components { get; }
+        public List<IComponent> components { get; private set; }
 
         /// <summary>
         /// Construct an <see cref="Entity{T}"/>.

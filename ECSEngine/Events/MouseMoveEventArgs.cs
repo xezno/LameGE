@@ -1,4 +1,4 @@
-﻿using ECSEngine.Math;
+﻿using ECSEngine.MathUtils;
 using System;
 
 namespace ECSEngine.Events

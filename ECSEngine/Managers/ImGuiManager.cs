@@ -7,8 +7,8 @@ using OpenGL.CoreUI;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
-using Quaternion = ECSEngine.Math.Quaternion;
-using Vector4 = ECSEngine.Math.Vector4;
+using Quaternion = ECSEngine.MathUtils.Quaternion;
+using Vector4 = ECSEngine.MathUtils.Vector4;
 
 namespace ECSEngine.Managers
 {
@@ -19,8 +19,6 @@ namespace ECSEngine.Managers
         private uint vbo, vao, ebo;
         private Vector2 windowSize;
 
-        public Dictionary<string, object> serializableObjects;
-
         public ImGuiManager()
         {
             var imGuiContext = ImGui.CreateContext();
@@ -28,10 +26,8 @@ namespace ECSEngine.Managers
                 ImGui.SetCurrentContext(imGuiContext);
             var io = ImGui.GetIO();
 
-            serializableObjects = new Dictionary<string, object>();
-
             // Font setup
-            io.Fonts.AddFontFromFileTTF("Content/Fonts/Roboto/Roboto-Medium.ttf", 14);
+            io.Fonts.AddFontFromFileTTF("Content/Fonts/OpenSans/OpenSans-SemiBold.ttf", 15);
             io.Fonts.GetTexDataAsRGBA32(out IntPtr pixels, out int width, out int height, out int bpp);
             io.Fonts.SetTexID((IntPtr)1);
             defaultFontTexture = new Texture2D(pixels, width, height, bpp);
@@ -59,8 +55,11 @@ namespace ECSEngine.Managers
             io.KeyMap[(int)ImGuiKey.X] = (int)KeyCode.X;
             io.KeyMap[(int)ImGuiKey.Z] = (int)KeyCode.Z;
             io.KeyMap[(int)ImGuiKey.A] = (int)KeyCode.A;
+            // Marshal.FreeHGlobal(textureDataPtr);
 
-            ImGui.StyleColorsLight();
+            // stylePtr = new ImGuiStylePtr()
+
+            ImGui.StyleColorsDark();
 
             shaderComponent = new ShaderComponent(new Shader("Content/ImGUI/imgui.frag", ShaderType.FragmentShader),
                 new Shader("Content/ImGUI/imgui.vert", ShaderType.VertexShader));
@@ -73,10 +72,6 @@ namespace ECSEngine.Managers
         public override void Run()
         {
             ImGui.NewFrame();
-            foreach (KeyValuePair<string, object> keyValuePair in serializableObjects)
-            {
-                RenderAsWindow(keyValuePair.Value, keyValuePair.Key);
-            }
 
             ImGui.ShowDemoWindow();
 
@@ -90,20 +85,60 @@ namespace ECSEngine.Managers
                 ImGui.EndMenu();
             }
             ImGui.EndMainMenuBar();
+
+            ImGui.Begin("Playground");
+            foreach (var sceneObject in SceneManager.instance.entities)
+            {
+                if (ImGui.TreeNode(sceneObject.GetType().Name))
+                {
+                    RenderObject(sceneObject);
+
+                    foreach (var objectComponent in sceneObject.components)
+                    {
+                        if (ImGui.TreeNode(objectComponent.GetType().Name))
+                        {
+                            RenderObject(objectComponent);
+                            ImGui.TreePop();
+                        }
+                    }
+
+                    ImGui.TreePop();
+                }
+            }
+
+            ImGui.End();
+
+            ImGui.Begin("Performance");
+            float[] values = new[]
+            {
+                0, 0.2f, 0.3f, 0, 0.5f, 0.1f, 0.1f, 0.6f
+            };
+
+            ImGui.PlotHistogram(
+                "Profiler",
+                ref values[0],
+                values.Length
+            );
+
+            ImGui.PlotLines(
+                "Average frame time",
+                ref values[0],
+                values.Length
+            );
+
+            ImGui.LabelText("60fps", "Current framerate");
+            ImGui.LabelText("16ms", "Current frametime");
+
+            ImGui.End();
+
             ImGui.Render();
             RenderImGui(ImGui.GetDrawData());
         }
 
-        public void AddSerializableObject(object obj, string optionalTitle = "")
+        private void RenderObject(object objectToRender, int depth = 0)
         {
-            if (optionalTitle == "")
-                optionalTitle = obj.GetType().Name;
-            serializableObjects.Add(optionalTitle, obj);
-        }
-
-        private void RenderAsWindow(object objectToRender, string title)
-        {
-            ImGui.Begin($"{title}##hidelabel");
+            // TODO: refactor this so it doesnt use dynamic
+            if (depth > 1) return; // Prevent any dumb stack overflow errors
             foreach (var field in objectToRender.GetType().GetFields())
             {
                 // this works but is, like, the worst solution ever
@@ -121,17 +156,17 @@ namespace ECSEngine.Managers
                     ImGui.ColorEdit3($"{field.Name}", ref value);
                     reference.value = new ColorRGB24((byte)(value.X * 255f), (byte)(value.Y * 255f), (byte)(value.Z * 255f));
                 }
-                else if (field.FieldType == typeof(Math.Vector3))
+                else if (field.FieldType == typeof(MathUtils.Vector3))
                 {
                     Vector3 value = reference.value.ConvertToNumerics();
                     ImGui.DragFloat3(field.Name, ref value, 0.1f);
-                    reference.value = Math.Vector3.ConvertFromNumerics(value);
+                    reference.value = MathUtils.Vector3.ConvertFromNumerics(value);
                 }
                 else if (field.FieldType == typeof(Quaternion))
                 {
                     Vector3 value = reference.value.ToEulerAngles().ConvertToNumerics();
                     ImGui.DragFloat3(field.Name, ref value, 0.1f);
-                    reference.value = Quaternion.FromEulerAngles(Math.Vector3.ConvertFromNumerics(value));
+                    reference.value = Quaternion.FromEulerAngles(MathUtils.Vector3.ConvertFromNumerics(value));
                 }
                 else if (field.FieldType == typeof(int))
                 {
@@ -139,12 +174,18 @@ namespace ECSEngine.Managers
                     ImGui.DragInt($"{field.Name}", ref value);
                     reference.value = value;
                 }
+                else if (field.FieldType == typeof(List<>) || field.FieldType.BaseType == typeof(Array))
+                {
+                    foreach (var element in (dynamic /* uh oh, we're at it again*/)field.GetValue(objectToRender))
+                    {
+                        RenderObject(element, depth + 1);
+                    }
+                }
                 else
                 {
-                    ImGui.LabelText(field.Name, $"{field.GetValue(objectToRender)}");
+                    ImGui.LabelText($"{field.GetValue(objectToRender)}", $"{field.Name}");
                 }
             }
-            ImGui.End();
         }
 
         private void RenderImGui(ImDrawDataPtr drawData)

@@ -1,5 +1,5 @@
 ﻿using ECSEngine.Components;
-using ECSEngine.Math;
+using ECSEngine.MathUtils;
 
 using OpenGL;
 
@@ -34,7 +34,7 @@ namespace ECSEngine.Entities
         /// </summary>
         public CameraEntity()
         {
-            AddComponent(new TransformComponent(new Vector3(0, 2f, 0f), Math.Quaternion.identity, new Vector3(1, 1, 1)));
+            AddComponent(new TransformComponent(new Vector3(0, 2f, 0f), MathUtils.Quaternion.identity, new Vector3(1, 1, 1)));
             AddComponent(new CameraComponent());
         }
     }

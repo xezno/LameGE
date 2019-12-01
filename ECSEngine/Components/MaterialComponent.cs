@@ -12,7 +12,7 @@ namespace ECSEngine.Components
         /// <summary>
         /// An array of materials that may be rendered.
         /// </summary>
-        private readonly Material[] materials;
+        public readonly Material[] materials;
 
         /// <summary>
         /// Construct the <see cref="MaterialComponent"/>, with any materials required.

@@ -155,11 +155,11 @@
     <Compile Include="Entities\IEntity.cs" />
     <Compile Include="GameProperties.cs" />
     <Compile Include="IHasParent.cs" />
-    <Compile Include="Math\Noise.cs" />
-    <Compile Include="Math\Vector4.cs" />
-    <Compile Include="Math\Quaternion.cs" />
-    <Compile Include="Math\Vector2.cs" />
-    <Compile Include="Math\Vector3.cs" />
+    <Compile Include="MathUtils\Noise.cs" />
+    <Compile Include="MathUtils\Vector4.cs" />
+    <Compile Include="MathUtils\Quaternion.cs" />
+    <Compile Include="MathUtils\Vector2.cs" />
+    <Compile Include="MathUtils\Vector3.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Ref.cs" />
     <Compile Include="RenderSettings.Designer.cs">

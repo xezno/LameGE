@@ -1,4 +1,4 @@
-﻿namespace ECSEngine.Math
+﻿namespace ECSEngine.MathUtils
 {
     public struct Quaternion
     {

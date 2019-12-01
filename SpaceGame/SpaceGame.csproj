@@ -63,6 +63,11 @@
       <Name>ECSEngine</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Components\" />
+    <Folder Include="Entities\" />
+    <Folder Include="Managers\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>xcopy $(SolutionDir)Content $(TargetDir)Content /E /H /K /I /Y /s</PreBuildEvent>

@@ -1,6 +1,6 @@
 ﻿using ECSEngine.Attributes;
-using ECSEngine.Math;
 using ECSEngine.Render;
+using ECSEngine.MathUtils;
 using OpenGL;
 using System.Collections.Generic;
 using System.IO;

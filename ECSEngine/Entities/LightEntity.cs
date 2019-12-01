@@ -1,7 +1,5 @@
 ﻿using ECSEngine.Components;
-using ECSEngine.Events;
-using ECSEngine.Managers;
-using ECSEngine.Math;
+using ECSEngine.MathUtils;
 
 namespace ECSEngine.Entities
 {
@@ -18,16 +16,6 @@ namespace ECSEngine.Entities
             // See values from http://wiki.ogre3d.org/-Point+Light+Attenuation
             lightComponent = new LightComponent(600, 0.007f, 0.0002f);
             AddComponent(lightComponent);
-        }
-
-        public override void HandleEvent(Event eventType, IEventArgs baseEventArgs)
-        {
-            switch (eventType)
-            {
-                case Event.GameStart:
-                    ImGuiManager.instance.AddSerializableObject(transformComponent, "Light");
-                    break;
-            }
         }
 
         public void Bind(ShaderComponent shaderComponent)

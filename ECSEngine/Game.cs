@@ -1,7 +1,7 @@
 ﻿using ECSEngine.Entities;
 using ECSEngine.Events;
 using ECSEngine.Managers;
-using ECSEngine.Math;
+using ECSEngine.MathUtils;
 using Newtonsoft.Json;
 using OpenGL;
 using OpenGL.CoreUI;
@@ -10,14 +10,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace ECSEngine
 {
     public class Game : IHasParent
     {
-        private DateTime lastUpdate;
         private readonly int titlebarHeight = 20; // TODO: I have no idea whether this is actually correct or not, but it works on win10.  Will need changing based on platform later
-        private List<IManager> managers = new List<IManager>();
+        private List<IManager> mainThreadManagers = new List<IManager>();
+        private List<Thread> threads = new List<Thread>();
         private readonly Gl.DebugProc debugCallback; // Stored to prevent GC from collecting debug callback before it can be called
         private string gamePropertyPath;
         private GameProperties gameProperties;
@@ -88,17 +89,35 @@ namespace ECSEngine
 
         private void InitSystems()
         {
-            managers = new List<IManager> {
-                RenderManager.instance, // Ran first
-                UpdateManager.instance,
-                SceneManager.instance,
+            mainThreadManagers = new List<IManager> {
+                RenderManager.instance,
                 ImGuiManager.instance
             };
 
-            foreach (IManager manager in managers)
+            foreach (var mainThreadManager in mainThreadManagers)
             {
-                EventManager.AddManager(manager);
-                manager.parent = this;
+                EventManager.AddManager(mainThreadManager);
+                mainThreadManager.parent = this;
+            }
+
+            List<IManager> multiThreadedManagers = new List<IManager>
+            {
+                UpdateManager.instance,
+                SceneManager.instance
+            };
+
+            foreach (var multiThreadedManager in multiThreadedManagers)
+            {
+                EventManager.AddManager(multiThreadedManager);
+                multiThreadedManager.parent = this;
+
+                threads.Add(new Thread(() =>
+                {
+                    while (isRunning)
+                    {
+                        multiThreadedManager.Run();
+                    }
+                }));
             }
         }
 
@@ -112,6 +131,14 @@ namespace ECSEngine
 
             foreach (IEntity entity in entities)
                 SceneManager.instance.AddEntity(entity);
+        }
+
+        private void StartThreads()
+        {
+            foreach (var thread in threads)
+            {
+                thread.Start();
+            }
         }
 
         private void LoadContent() { }
@@ -135,12 +162,12 @@ namespace ECSEngine
             LoadContent();
 
             // Setup complete - broadcast the game started event
+            StartThreads();
             EventManager.BroadcastEvent(Event.GameStart, new GenericEventArgs(this));
         }
 
         private void Resize(object sender, EventArgs e)
         {
-            var nativeWindow = (NativeWindow)sender;
             var windowSize = new Vector2(nativeWindow.ClientSize.Width, nativeWindow.ClientSize.Height);
 
             Gl.Viewport(0, 0, nativeWindow.ClientSize.Width, nativeWindow.ClientSize.Height);
@@ -199,14 +226,12 @@ namespace ECSEngine
         private void Render(object sender, NativeWindowEventArgs e)
         {
             Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            // Debug.Log($"Delta time: {deltaTime}");
 
-            float deltaTime = System.Math.Max((DateTime.Now - lastUpdate).Milliseconds, 1.0f) / 1000.0f;
-            Debug.Log($"Delta time: {deltaTime}");
-            foreach (IManager manager in managers)
+            foreach (IManager manager in mainThreadManagers)
             {
                 manager.Run();
             }
-            lastUpdate = DateTime.Now;
         }
     }
 }

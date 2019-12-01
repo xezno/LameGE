@@ -1,4 +1,4 @@
-﻿namespace ECSEngine.Math
+﻿namespace ECSEngine.MathUtils
 {
     // TODO: this probably doesn't need to exist
     public struct Vector4

@@ -1,6 +1,6 @@
 ﻿using OpenGL;
 
-namespace ECSEngine.Math
+namespace ECSEngine.MathUtils
 {
     public struct Vector3
     {
@@ -18,6 +18,8 @@ namespace ECSEngine.Math
         /// The point at which the vector resides on the Z axis
         /// </summary>
         public float z;
+
+        public float magnitude => (float)System.Math.Sqrt(x * x + y * y + z * z);
 
         /// <summary>
         /// Construct a <see cref="Vector3"/> with three initial values.

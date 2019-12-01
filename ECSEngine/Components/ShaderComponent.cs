@@ -1,5 +1,5 @@
-﻿using ECSEngine.Math;
-using ECSEngine.Render;
+﻿using ECSEngine.Render;
+using ECSEngine.MathUtils;
 using OpenGL;
 using System;
 using System.Collections.Generic;

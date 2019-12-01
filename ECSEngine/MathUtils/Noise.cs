@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ECSEngine.Math
+namespace ECSEngine.MathUtils
 {
     public static class Noise
     {

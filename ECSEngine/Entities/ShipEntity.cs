@@ -1,7 +1,7 @@
 ﻿using ECSEngine.Components;
 using ECSEngine.Events;
 using ECSEngine.Managers;
-using ECSEngine.Math;
+using ECSEngine.MathUtils;
 using OpenGL.CoreUI;
 
 namespace ECSEngine.Entities
@@ -12,19 +12,18 @@ namespace ECSEngine.Entities
         public Vector3 velocity;
         public Vector3 currentDirection;
         public Vector3 currentRotation;
-        public float acceleration = 0.5f;
+        public float acceleration = 1.0f;
+        public float deceleration = 0.5f;
+        public float maxSpeed = 10f;
 
         private TransformComponent transformComponent;
 
         public ShipEntity()
         {
             AddComponent(new TransformComponent(new Vector3(0, 2f, 0f), Quaternion.identity, new Vector3(1, 1, 1)));
-            //AddComponent(new MeshComponent(""));
             AddComponent(new CameraComponent());
 
             transformComponent = GetComponent<TransformComponent>();
-
-            ImGuiManager.instance.AddSerializableObject(this, "Ship");
         }
 
         public override void Update(float deltaTime)
@@ -32,7 +31,19 @@ namespace ECSEngine.Entities
             transformComponent.position += velocity * deltaTime;
             transformComponent.rotationEuler = currentRotation;
             SceneManager.instance.mainCamera.position = transformComponent.position;
+            velocity += new Vector3(
+                System.Math.Sign(velocity.x) * -deceleration,
+                System.Math.Sign(velocity.y) * -deceleration,
+                System.Math.Sign(velocity.z) * -deceleration
+            );
+            Debug.Log($"Decelerating @ ~{(System.Math.Sign(velocity.magnitude)) * deceleration} (sign: {System.Math.Sign(velocity.magnitude)})");
             velocity += currentDirection * acceleration;
+
+            velocity = new Vector3(
+                System.Math.Max(System.Math.Min(velocity.x, maxSpeed), -maxSpeed),
+                System.Math.Max(System.Math.Min(velocity.y, maxSpeed), -maxSpeed),
+                System.Math.Max(System.Math.Min(velocity.z, maxSpeed), -maxSpeed)
+            );
         }
 
         public override void HandleEvent(Event eventType, IEventArgs baseEventArgs)
@@ -66,6 +77,18 @@ namespace ECSEngine.Entities
                             currentDirection.x = 1;
                         else
                             currentDirection.x = 0;
+                        break;
+                    case KeyCode.Space:
+                        if (eventType == Event.KeyDown)
+                            currentDirection.y = 1;
+                        else
+                            currentDirection.y = 0;
+                        break;
+                    case KeyCode.Control:
+                        if (eventType == Event.KeyDown)
+                            currentDirection.y = -1;
+                        else
+                            currentDirection.y = 0;
                         break;
                 }
             }
