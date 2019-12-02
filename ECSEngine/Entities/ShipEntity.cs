@@ -12,8 +12,8 @@ namespace ECSEngine.Entities
         public Vector3 velocity;
         public Vector3 currentDirection;
         public Vector3 currentRotation;
-        public float acceleration = 0.125f;
-        public float deceleration = 0.0625f;
+        public float acceleration = 0.0125f;
+        public float deceleration = 0.00625f;
         public float maxSpeed = 1.0f;
 
         private TransformComponent transformComponent;

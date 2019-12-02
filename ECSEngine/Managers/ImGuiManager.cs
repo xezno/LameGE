@@ -18,25 +18,49 @@ namespace ECSEngine.Managers
         private ShaderComponent shaderComponent;
         private uint vbo, vao, ebo;
         private Vector2 windowSize;
+        private ImGuiIOPtr io;
 
         public ImGuiManager()
         {
             var imGuiContext = ImGui.CreateContext();
             if (ImGui.GetCurrentContext() == IntPtr.Zero)
                 ImGui.SetCurrentContext(imGuiContext);
-            var io = ImGui.GetIO();
+            io = ImGui.GetIO();
 
-            // Font setup
+            io.BackendFlags |= ImGuiBackendFlags.HasMouseCursors;
+            io.ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
+            io.MouseDrawCursor = true; // Use custom mouse cursor
+
+            ImGui.StyleColorsDark();
+
+            InitFonts();
+            InitKeymap();
+            InitGL();
+        }
+
+        #region "Initialization"
+
+        private void InitGL()
+        {
+            shaderComponent = new ShaderComponent(new Shader("Content/ImGUI/imgui.frag", ShaderType.FragmentShader),
+                new Shader("Content/ImGUI/imgui.vert", ShaderType.VertexShader));
+
+            vao = Gl.GenVertexArray();
+            vbo = Gl.GenBuffer();
+            ebo = Gl.GenBuffer();
+        }
+
+        private void InitFonts()
+        {
             io.Fonts.AddFontFromFileTTF("Content/Fonts/OpenSans/OpenSans-SemiBold.ttf", 15);
             io.Fonts.GetTexDataAsRGBA32(out IntPtr pixels, out int width, out int height, out int bpp);
             io.Fonts.SetTexID((IntPtr)1);
             defaultFontTexture = new Texture2D(pixels, width, height, bpp);
             io.Fonts.ClearTexData();
+        }
 
-            io.BackendFlags |= ImGuiBackendFlags.HasMouseCursors;
-            io.ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
-            io.MouseDrawCursor = true; // Use custom-drawn mouse cursor
-
+        private void InitKeymap()
+        {
             io.KeyMap[(int)ImGuiKey.Tab] = (int)KeyCode.Tab;
             io.KeyMap[(int)ImGuiKey.Enter] = (int)KeyCode.Return;
             io.KeyMap[(int)ImGuiKey.Backspace] = (int)KeyCode.Back;
@@ -55,26 +79,14 @@ namespace ECSEngine.Managers
             io.KeyMap[(int)ImGuiKey.X] = (int)KeyCode.X;
             io.KeyMap[(int)ImGuiKey.Z] = (int)KeyCode.Z;
             io.KeyMap[(int)ImGuiKey.A] = (int)KeyCode.A;
-            // Marshal.FreeHGlobal(textureDataPtr);
-
-            // stylePtr = new ImGuiStylePtr()
-
-            ImGui.StyleColorsDark();
-
-            shaderComponent = new ShaderComponent(new Shader("Content/ImGUI/imgui.frag", ShaderType.FragmentShader),
-                new Shader("Content/ImGUI/imgui.vert", ShaderType.VertexShader));
-
-            vao = Gl.GenVertexArray();
-            vbo = Gl.GenBuffer();
-            ebo = Gl.GenBuffer();
         }
 
-        public override void Run()
+        #endregion
+
+        #region "GUI Elements"
+
+        private void DrawMenuBar()
         {
-            ImGui.NewFrame();
-
-            ImGui.ShowDemoWindow();
-
             ImGui.BeginMainMenuBar();
             if (ImGui.BeginMenu("Test"))
             {
@@ -85,7 +97,10 @@ namespace ECSEngine.Managers
                 ImGui.EndMenu();
             }
             ImGui.EndMainMenuBar();
+        }
 
+        private void DrawPlayground()
+        {
             ImGui.Begin("Playground");
             foreach (var sceneObject in SceneManager.instance.entities)
             {
@@ -107,9 +122,28 @@ namespace ECSEngine.Managers
             }
 
             ImGui.End();
+        }
 
+        private void DrawSceneHierarchy()
+        {
+            int currentItem = 0;
+            ImGui.Begin("Scene Entities");
+            string[] entityNames = new string[SceneManager.instance.entities.Count];
+            for (int i = 0; i < SceneManager.instance.entities.Count; i++)
+            {
+                entityNames[i] = SceneManager.instance.entities[i].GetType().Name;
+            }
+
+            ImGui.ListBox("", ref currentItem, entityNames, entityNames.Length);
+
+            ImGui.End();
+        }
+
+        private void DrawPerformanceStats()
+        {
             ImGui.Begin("Performance");
-            float[] values = new[]
+
+            float[] values =
             {
                 0, 0.2f, 0.3f, 0, 0.5f, 0.1f, 0.1f, 0.6f
             };
@@ -130,6 +164,17 @@ namespace ECSEngine.Managers
             ImGui.LabelText("16ms", "Current frametime");
 
             ImGui.End();
+        }
+        #endregion
+
+        public override void Run()
+        {
+            ImGui.NewFrame();
+
+            DrawMenuBar();
+            DrawPlayground();
+            DrawSceneHierarchy();
+            DrawPerformanceStats();
 
             ImGui.Render();
             RenderImGui(ImGui.GetDrawData());
