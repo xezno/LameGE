@@ -127,6 +127,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\PlaintextAsset.cs" />
+    <Compile Include="Attributes\RangeAttribute.cs" />
     <Compile Include="Attributes\RequiresAttribute.cs" />
     <Compile Include="Components\CameraComponent.cs" />
     <Compile Include="Components\Component.cs" />

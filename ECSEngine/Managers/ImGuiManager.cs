@@ -1,4 +1,6 @@
-﻿using ECSEngine.Components;
+﻿using ECSEngine.Attributes;
+using ECSEngine.Components;
+using ECSEngine.Entities;
 using ECSEngine.Events;
 using ECSEngine.Render;
 using ImGuiNET;
@@ -6,6 +8,7 @@ using OpenGL;
 using OpenGL.CoreUI;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using Quaternion = ECSEngine.MathUtils.Quaternion;
 using Vector4 = ECSEngine.MathUtils.Vector4;
@@ -19,6 +22,11 @@ namespace ECSEngine.Managers
         private uint vbo, vao, ebo;
         private Vector2 windowSize;
         private ImGuiIOPtr io;
+
+        private int currentSceneHierarchyItem;
+        private IEntity selectedEntity;
+        private bool shouldRender;
+        private bool showImguiDemo;
 
         public ImGuiManager()
         {
@@ -90,9 +98,9 @@ namespace ECSEngine.Managers
             ImGui.BeginMainMenuBar();
             if (ImGui.BeginMenu("Test"))
             {
-                if (ImGui.MenuItem("Test"))
+                if (ImGui.MenuItem("Toggle ImGUI demo window"))
                 {
-                    Debug.Log("Test open");
+                    showImguiDemo = !showImguiDemo;
                 }
                 ImGui.EndMenu();
             }
@@ -102,21 +110,31 @@ namespace ECSEngine.Managers
         private void DrawPlayground()
         {
             ImGui.Begin("Playground");
-            foreach (var sceneObject in SceneManager.instance.entities)
+
+            // Loading test
+            int progress = (int)(ImGui.GetTime() / 0.025f) % 100;
+            int filesLoaded = (int)Math.Round(progress * 0.25);
+            ImGui.Text($"Loading, please wait... {@"|/-\"[(int)(ImGui.GetTime() / 0.25f) % 4]}");
+            ImGui.TextUnformatted($"Files loaded: {progress}% ({filesLoaded} / 25)"); // TextUnformatted displays '%' without needing to format it as '%%'.
+
+            ImGui.End();
+        }
+
+        private void DrawInspector()
+        {
+            ImGui.Begin("Inspector Gadget");
+            if (selectedEntity == null)
             {
-                if (ImGui.TreeNode(sceneObject.GetType().Name))
+                ImGui.End();
+                return;
+            }
+            RenderObject(selectedEntity);
+
+            foreach (var objectComponent in selectedEntity.components)
+            {
+                if (ImGui.TreeNode(objectComponent.GetType().Name))
                 {
-                    RenderObject(sceneObject);
-
-                    foreach (var objectComponent in sceneObject.components)
-                    {
-                        if (ImGui.TreeNode(objectComponent.GetType().Name))
-                        {
-                            RenderObject(objectComponent);
-                            ImGui.TreePop();
-                        }
-                    }
-
+                    RenderObject(objectComponent);
                     ImGui.TreePop();
                 }
             }
@@ -126,7 +144,6 @@ namespace ECSEngine.Managers
 
         private void DrawSceneHierarchy()
         {
-            int currentItem = 0;
             ImGui.Begin("Scene Entities");
             string[] entityNames = new string[SceneManager.instance.entities.Count];
             for (int i = 0; i < SceneManager.instance.entities.Count; i++)
@@ -134,7 +151,10 @@ namespace ECSEngine.Managers
                 entityNames[i] = SceneManager.instance.entities[i].GetType().Name;
             }
 
-            ImGui.ListBox("", ref currentItem, entityNames, entityNames.Length);
+            if (ImGui.ListBox("", ref currentSceneHierarchyItem, entityNames, entityNames.Length))
+            {
+                selectedEntity = SceneManager.instance.entities[currentSceneHierarchyItem];
+            }
 
             ImGui.End();
         }
@@ -143,25 +163,27 @@ namespace ECSEngine.Managers
         {
             ImGui.Begin("Performance");
 
-            float[] values =
-            {
-                0, 0.2f, 0.3f, 0, 0.5f, 0.1f, 0.1f, 0.6f
-            };
-
+            ImGui.LabelText($"{RenderManager.instance.lastFrameTime}ms", "Current frametime");
             ImGui.PlotHistogram(
-                "Legit lookin graph",
-                ref values[0],
-                values.Length
-            );
-
-            ImGui.PlotLines(
                 "Average frame time",
-                ref values[0],
-                values.Length
+                ref RenderManager.instance.frametimeHistory[0],
+                RenderManager.instance.frametimeHistory.Length,
+                0,
+                "",
+                0
             );
 
-            ImGui.LabelText("60fps", "Current framerate");
-            ImGui.LabelText("16ms", "Current frametime");
+            ImGui.LabelText($"{RenderManager.instance.calculatedFramerate}fps", "Current framerate");
+            ImGui.PlotLines(
+                "Average frame rate",
+                ref RenderManager.instance.framerateHistory[0],
+                RenderManager.instance.framerateHistory.Length,
+                0,
+                "",
+                0
+            );
+
+            ImGui.Checkbox($"Fake lag", ref RenderManager.instance.fakeLag);
 
             ImGui.End();
         }
@@ -175,6 +197,10 @@ namespace ECSEngine.Managers
             DrawPlayground();
             DrawSceneHierarchy();
             DrawPerformanceStats();
+            DrawInspector();
+
+            if (showImguiDemo)
+                ImGui.ShowDemoWindow(ref showImguiDemo);
 
             ImGui.Render();
             RenderImGui(ImGui.GetDrawData());
@@ -192,7 +218,22 @@ namespace ECSEngine.Managers
                 if (field.FieldType == typeof(float))
                 {
                     float value = reference.value;
-                    ImGui.SliderFloat($"{field.Name}", ref value, 0, 1);
+                    float min = float.MinValue;
+                    float max = float.MaxValue;
+                    bool useSlider = false;
+                    var fieldAttributes = field.GetCustomAttributes(false);
+                    foreach (var attrib in fieldAttributes.Where(o => o.GetType() == typeof(RangeAttribute)))
+                    {
+                        var rangeAttrib = (RangeAttribute)attrib;
+                        min = rangeAttrib.min;
+                        max = rangeAttrib.max;
+                        useSlider = true;
+                    }
+
+                    if (useSlider)
+                        ImGui.SliderFloat($"{field.Name}", ref value, min, max);
+                    else
+                        ImGui.InputFloat($"{field.Name}", ref value);
                     reference.value = value;
                 }
                 else if (field.FieldType == typeof(ColorRGB24))
@@ -235,6 +276,7 @@ namespace ECSEngine.Managers
 
         private void RenderImGui(ImDrawDataPtr drawData)
         {
+            if (!shouldRender) return;
             Gl.BlendEquation(BlendEquationMode.FuncAdd);
             Gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             Gl.Disable(EnableCap.CullFace);
@@ -343,6 +385,9 @@ namespace ECSEngine.Managers
                     case KeyCode.Tab:
                         c = '\t';
                         break;
+                    case KeyCode.Decimal:
+                        c = '.';
+                        break;
                     case KeyCode.Return:
                     case KeyCode.Right:
                     case KeyCode.Up:
@@ -382,6 +427,10 @@ namespace ECSEngine.Managers
                         else if (keyCode == KeyCode.Control)
                         {
                             io.KeyCtrl = true;
+                        }
+                        else if (keyCode == KeyCode.F1)
+                        {
+                            shouldRender = !shouldRender;
                         }
                         break;
                     }

@@ -78,10 +78,13 @@ namespace ECSEngine.Render
             this.path = "data-byte";
             this.textureUnit = textureUnit;
 
+            this.glTexture = Gl.GenTexture();
+            Gl.BindTexture(TextureTarget.Texture2d, glTexture);
+
             IntPtr textureDataPtr = Marshal.AllocHGlobal(textureData.Length);
             Marshal.Copy(textureData, 0, textureDataPtr, textureData.Length);
 
-            Gl.TexImage2D(TextureTarget.Texture2d, 0, InternalFormat.Rgba, width, height, 0, PixelFormat.Rgb, PixelType.UnsignedByte, textureDataPtr);
+            Gl.TexImage2D(TextureTarget.Texture2d, 0, InternalFormat.Rgba, width, height, 0, PixelFormat.Bgr, PixelType.UnsignedByte, textureDataPtr);
             Gl.GenerateMipmap(TextureTarget.Texture2d);
 
             Marshal.FreeHGlobal(textureDataPtr);

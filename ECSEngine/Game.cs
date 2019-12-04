@@ -151,6 +151,7 @@ namespace ECSEngine
             Gl.ReadBuffer(ReadBufferMode.Back);
             Gl.ClearColor(100 / 255f, 149 / 255f, 237 / 255f, 1); // Cornflower blue (https://en.wikipedia.org/wiki/Web_colors#X11_color_names)
             Gl.Enable(EnableCap.Blend);
+            Gl.Enable(EnableCap.CullFace);
             Gl.Enable(EnableCap.DepthTest);
             Gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             Gl.LineWidth(2.5f);

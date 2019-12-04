@@ -11,6 +11,7 @@ namespace ECSEngine.Components
     public class CameraComponent : Component<CameraComponent>
     {
         public Matrix4x4f viewMatrix, projMatrix;
+        [Range(0, 180)]
         public float fieldOfView = 90.0f,
             nearPlane = 0.1f,
             farPlane = 50f;
