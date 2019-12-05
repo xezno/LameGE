@@ -170,7 +170,7 @@ namespace ECSEngine
         private void Resize(object sender, EventArgs e)
         {
             var windowSize = new Vector2(nativeWindow.ClientSize.Width, nativeWindow.ClientSize.Height);
-
+            
             Gl.Viewport(0, 0, nativeWindow.ClientSize.Width, nativeWindow.ClientSize.Height);
 
             EventManager.BroadcastEvent(Event.WindowResized, new WindowResizeEventArgs(windowSize, this));

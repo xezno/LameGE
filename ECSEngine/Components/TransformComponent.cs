@@ -31,11 +31,10 @@ namespace ECSEngine.Components
             get
             {
                 Matrix4x4f temp = Matrix4x4f.Identity;
-                // Vector3 euler = rotation.ToEulerAngles();
-                temp.RotateX(rotationEuler.x);
-                temp.RotateX(rotationEuler.y);
-                temp.RotateX(rotationEuler.z);
                 temp.Translate(position.x, position.y, position.z);
+                temp.RotateX(rotationEuler.x);
+                temp.RotateY(rotationEuler.y);
+                temp.RotateZ(rotationEuler.z);
                 temp.Scale(scale.x, scale.y, scale.z);
                 return temp;
             }
