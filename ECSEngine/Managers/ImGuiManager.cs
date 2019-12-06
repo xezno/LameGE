@@ -19,14 +19,12 @@ namespace ECSEngine.Managers
     {
         private Texture2D defaultFontTexture;
         private ShaderComponent shaderComponent;
-        private uint vbo, vao, ebo;
         private Vector2 windowSize;
         private ImGuiIOPtr io;
-
-        private int currentSceneHierarchyItem;
         private IEntity selectedEntity;
-        private bool shouldRender;
-        private bool showImguiDemo;
+        private uint vbo, vao, ebo;
+        private int currentSceneHierarchyItem;
+        private bool shouldRender, showPlayground, showSceneHierarchy, showPerformanceStats, showInspector;
 
         public ImGuiManager()
         {
@@ -47,7 +45,6 @@ namespace ECSEngine.Managers
         }
 
         #region "Initialization"
-
         private void InitGL()
         {
             shaderComponent = new ShaderComponent(new Shader("Content/ImGUI/imgui.frag", ShaderType.FragmentShader),
@@ -60,7 +57,7 @@ namespace ECSEngine.Managers
 
         private void InitFonts()
         {
-            io.Fonts.AddFontFromFileTTF("Content/Fonts/OpenSans/OpenSans-SemiBold.ttf", 15);
+            io.Fonts.AddFontFromFileTTF("Content/Fonts/OpenSans/OpenSans-SemiBold.ttf", 16);
             io.Fonts.GetTexDataAsRGBA32(out IntPtr pixels, out int width, out int height, out int bpp);
             io.Fonts.SetTexID((IntPtr)1);
             defaultFontTexture = new Texture2D(pixels, width, height, bpp);
@@ -96,12 +93,32 @@ namespace ECSEngine.Managers
         private void DrawMenuBar()
         {
             ImGui.BeginMainMenuBar();
-            if (ImGui.BeginMenu("Test"))
+            if (ImGui.BeginMenu("Window"))
             {
-                if (ImGui.MenuItem("Toggle ImGUI demo window"))
+                if (ImGui.MenuItem("Toggle scene hierarchy"))
+                    showSceneHierarchy = !showSceneHierarchy;
+                if (ImGui.MenuItem("Toggle inspector"))
+                    showInspector = !showInspector;
+                if (ImGui.MenuItem("Toggle performance stats"))
+                    showPerformanceStats = !showPerformanceStats;
+                if (ImGui.MenuItem("Toggle playground"))
+                    showPlayground = !showPlayground;
+
+                if (ImGui.MenuItem("Show all"))
                 {
-                    showImguiDemo = !showImguiDemo;
+                    showSceneHierarchy = true;
+                    showInspector = true;
+                    showPerformanceStats = true;
+                    showPlayground = true;
                 }
+                if (ImGui.MenuItem("Hide all"))
+                {
+                    showSceneHierarchy = false;
+                    showInspector = false;
+                    showPerformanceStats = false;
+                    showPlayground = false;
+                }
+
                 ImGui.EndMenu();
             }
             ImGui.EndMainMenuBar();
@@ -109,7 +126,7 @@ namespace ECSEngine.Managers
 
         private void DrawPlayground()
         {
-            ImGui.Begin("Playground");
+            ImGui.Begin("Playground", ref showPlayground);
 
             // Loading test
             int progress = (int)(ImGui.GetTime() / 0.025f) % 100;
@@ -122,12 +139,14 @@ namespace ECSEngine.Managers
 
         private void DrawInspector()
         {
-            ImGui.Begin("Inspector Gadget");
+            ImGui.Begin("Inspector Gadget", ref showInspector);
+
             if (selectedEntity == null)
             {
                 ImGui.End();
                 return;
             }
+
             RenderObject(selectedEntity);
 
             foreach (var objectComponent in selectedEntity.components)
@@ -144,7 +163,7 @@ namespace ECSEngine.Managers
 
         private void DrawSceneHierarchy()
         {
-            ImGui.Begin("Scene Entities");
+            ImGui.Begin("Scene Hierarchy", ref showSceneHierarchy);
             string[] entityNames = new string[SceneManager.instance.entities.Count];
             for (int i = 0; i < SceneManager.instance.entities.Count; i++)
             {
@@ -161,7 +180,7 @@ namespace ECSEngine.Managers
 
         private void DrawPerformanceStats()
         {
-            ImGui.Begin("Performance");
+            ImGui.Begin("Performance", ref showPerformanceStats);
 
             ImGui.LabelText($"{RenderManager.instance.lastFrameTime}ms", "Current frametime");
             ImGui.PlotHistogram(
@@ -192,15 +211,32 @@ namespace ECSEngine.Managers
         public override void Run()
         {
             ImGui.NewFrame();
+            if (shouldRender)
+            {
+                DrawMenuBar();
 
-            DrawMenuBar();
-            DrawPlayground();
-            DrawSceneHierarchy();
-            DrawPerformanceStats();
-            DrawInspector();
+                if (showPlayground)
+                    DrawPlayground();
 
-            if (showImguiDemo)
-                ImGui.ShowDemoWindow(ref showImguiDemo);
+                if (showSceneHierarchy)
+                    DrawSceneHierarchy();
+
+                if (showPerformanceStats)
+                    DrawPerformanceStats();
+
+                if (showInspector)
+                    DrawInspector();
+            }
+            else
+            {
+                ImGui.GetBackgroundDrawList().AddText(
+                    new Vector2(0, 0), 0xFFFFFFFF, $"ECS Engine\n" +
+                                                   $"Press F1 to open the editor.\n" +
+                                                   $"{RenderManager.instance.lastFrameTime}ms\n" +
+                                                   $"{RenderManager.instance.calculatedFramerate}ms"
+                );
+            }
+            
 
             ImGui.Render();
             RenderImGui(ImGui.GetDrawData());
@@ -276,14 +312,11 @@ namespace ECSEngine.Managers
 
         private void RenderImGui(ImDrawDataPtr drawData)
         {
-            if (!shouldRender) return;
             Gl.BlendEquation(BlendEquationMode.FuncAdd);
             Gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             Gl.Disable(EnableCap.CullFace);
             Gl.Disable(EnableCap.DepthTest);
             Gl.Enable(EnableCap.ScissorTest);
-
-            ImGuiIOPtr io = ImGui.GetIO();
 
             Matrix4x4f projectionMatrix = Matrix4x4f.Ortho2D(0f, io.DisplaySize.X, io.DisplaySize.Y, 0.0f);
 
@@ -344,9 +377,8 @@ namespace ECSEngine.Managers
         {
             // TODO: correctly handle different locales and keyboard layouts
             // This is currently only written for ISO UK qwerty.
-            var io = ImGui.GetIO();
             char c = '\0';
-            if ((keyCode >= KeyCode.A) && (keyCode <= KeyCode.Z))
+            if (keyCode >= KeyCode.A && keyCode <= KeyCode.Z)
             {
                 c = (char)('a' + keyCode - KeyCode.A);
 
@@ -355,7 +387,7 @@ namespace ECSEngine.Managers
                     c = char.ToUpper(c);
                 }
             }
-            else if ((keyCode >= KeyCode.N0) && (keyCode <= KeyCode.N9))
+            else if (keyCode >= KeyCode.N0 && keyCode <= KeyCode.N9)
             {
                 if (io.KeyShift)
                 {
@@ -371,7 +403,7 @@ namespace ECSEngine.Managers
                     c = (char)('0' + keyCode - KeyCode.N0);
                 }
             }
-            else if ((keyCode >= KeyCode.Numpad0) && (keyCode <= KeyCode.Numpad9))
+            else if (keyCode >= KeyCode.Numpad0 && keyCode <= KeyCode.Numpad9)
             {
                 c = (char)('0' + keyCode - KeyCode.Numpad0);
             }
@@ -410,8 +442,6 @@ namespace ECSEngine.Managers
 
         public override void HandleEvent(Event eventType, IEventArgs eventArgs)
         {
-            var io = ImGui.GetIO();
-
             switch (eventType)
             {
                 case Event.KeyDown:

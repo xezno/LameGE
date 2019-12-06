@@ -51,16 +51,19 @@ namespace ECSEngine.Render
 
         // Clara.io PBR extensions
         [TextAssetOpcode("Pr")]
+        [Range(0.0f, 1.0f)]
         public float roughness;
         [TextAssetOpcode("map_Pr")]
         public Texture2D roughnessTexture;
 
         [TextAssetOpcode("Pm")]
+        [Range(0.0f, 1.0f)]
         public float metallic;
         [TextAssetOpcode("map_Pm")]
         public Texture2D metallicTexture;
 
         [TextAssetOpcode("Ps")]
+        [Range(0.0f, 1.0f)]
         public float sheen;
         [TextAssetOpcode("map_Ps")]
         public Texture2D sheenTexture;

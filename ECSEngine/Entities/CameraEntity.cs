@@ -21,12 +21,21 @@ namespace ECSEngine.Entities
         public Matrix4x4f viewMatrix => GetComponent<CameraComponent>().viewMatrix;
 
         /// <summary>
-        /// Gets the camera's position from the transform component.
+        /// Gets or sets the camera's position from the transform component.
         /// </summary>
         public Vector3 position
         {
             get { return GetComponent<TransformComponent>().position; }
             set { GetComponent<TransformComponent>().position = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the camera's rotation (as an euler angle) from the transform component.
+        /// </summary>
+        public Vector3 rotationEuler
+        {
+            get { return GetComponent<TransformComponent>().rotationEuler; }
+            set { GetComponent<TransformComponent>().rotationEuler = value; }
         }
 
         /// <summary>

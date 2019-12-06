@@ -1,15 +1,15 @@
 ﻿using System;
 using ECSEngine.Components;
+using ECSEngine.Entities;
 using ECSEngine.MathUtils;
 using ECSEngine.Render;
-using OpenGL.CoreUI;
 
-namespace ECSEngine.Entities
+namespace SpaceGame.Entities
 {
-    public sealed class TestModelEntity : Entity<TestModelEntity>
+    public sealed class LevelModelEntity : Entity<LevelModelEntity>
     {
         private Material mainMaterial;
-        public TestModelEntity()
+        public LevelModelEntity()
         {
             AddComponent(new TransformComponent(new Vector3(0, 2f, -2f), Quaternion.identity, new Vector3(1, 1, 1)));
             AddComponent(new ShaderComponent(new Shader("Content/main.frag", OpenGL.ShaderType.FragmentShader), new Shader("Content/main.vert", OpenGL.ShaderType.VertexShader)));
@@ -51,13 +51,13 @@ namespace ECSEngine.Entities
             }
 
             // Convert to RGB
-            byte[] noiseValuesRGB = new byte[width * height * 3];
+            byte[] noiseValuesRgb = new byte[width * height * 3];
             for (int i = 0; i < noiseValues.Length; i++)
             {
                 for (int rgb = 0; rgb < 3; rgb++)
-                    noiseValuesRGB[(i * 3) + rgb] = noiseValues[i];
+                    noiseValuesRgb[(i * 3) + rgb] = noiseValues[i];
             }
-            var texture = new Texture2D(noiseValuesRGB, width, height);
+            var texture = new Texture2D(noiseValuesRgb, width, height);
             return texture;
         }
 

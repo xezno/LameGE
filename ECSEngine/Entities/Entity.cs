@@ -81,7 +81,13 @@ namespace ECSEngine.Entities
         /// <returns>The first component of type <typeparamref name="T1"/> from the entity's component list.</returns>
         public virtual T1 GetComponent<T1>() => (T1)(components.FindAll((t) => { return t.GetType() == typeof(T1); }).First());
 
-        public virtual void HandleEvent(Event eventType, IEventArgs baseEventArgs) { }
+        public virtual void HandleEvent(Event eventType, IEventArgs baseEventArgs)
+        {
+            foreach (IComponent component in components)
+            {
+                component.HandleEvent(eventType, baseEventArgs);
+            }
+        }
 
         public virtual void Render()
         {

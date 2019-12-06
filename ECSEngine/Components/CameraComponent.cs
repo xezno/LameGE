@@ -32,9 +32,17 @@ namespace ECSEngine.Components
         /// </summary>
         public override void Update(float deltaTime)
         {
-            viewMatrix = Matrix4x4f.LookAtDirection(GetComponent<TransformComponent>().position,
+            var transformComponent = GetComponent<TransformComponent>();
+            viewMatrix = Matrix4x4f.Identity;
+            viewMatrix.RotateX(transformComponent.rotationEuler.x);
+            viewMatrix.RotateY(transformComponent.rotationEuler.y);
+            viewMatrix.RotateZ(transformComponent.rotationEuler.z);
+            viewMatrix *= (Matrix4x4f.LookAtDirection(transformComponent.position,
                 new Vertex3f(0f, 0f, -1f),
-                new Vertex3f(0f, 1f, 0f));
+                new Vertex3f(0f, 1f, 0f)));
+            //new Vertex3f(,
+            //    transformComponent.rotationEuler.y,
+            //    transformComponent.rotationEuler.z),
         }
     }
 }

@@ -18,7 +18,10 @@ namespace ECSEngine.MathUtils
 
         private static void CalculateGradientValues(int seed)
         {
+            // ReSharper disable CompareOfFloatsByEqualityOperator
             if (gradientValues[0, 0].x != 0f && gradientValues[0, 0].y != 0f) return;
+            // ReSharper restore CompareOfFloatsByEqualityOperator
+
             Random random = new Random(seed);
             for (int x = 0; x < gradientValues.GetLength(0); x++)
             {

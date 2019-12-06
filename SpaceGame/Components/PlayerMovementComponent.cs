@@ -1,12 +1,14 @@
-﻿using ECSEngine.Components;
+﻿using System;
+using ECSEngine;
+using ECSEngine.Components;
 using ECSEngine.Events;
 using ECSEngine.Managers;
 using ECSEngine.MathUtils;
 using OpenGL.CoreUI;
 
-namespace ECSEngine.Entities
+namespace SpaceGame.Components
 {
-    public sealed class ShipEntity : Entity<ShipEntity>
+    class PlayerMovementComponent : Component<PlayerMovementComponent>
     {
         // inb4 "why are these public" - it's for imgui
         public Vector3 velocity;
@@ -15,21 +17,14 @@ namespace ECSEngine.Entities
         public float acceleration = 0.125f;
         public float deceleration = 0.0625f;
         public float maxSpeed = 10.0f;
-
+        public float mouseSensitivityMultiplier = 0.1f;
         private TransformComponent transformComponent;
-
-        public ShipEntity()
-        {
-            AddComponent(new TransformComponent(new Vector3(0, 2f, 0f), Quaternion.identity, new Vector3(1, 1, 1)));
-            AddComponent(new CameraComponent());
-
-            transformComponent = GetComponent<TransformComponent>();
-        }
+        private Vector2 lastMousePos;
 
         public override void Update(float deltaTime)
         {
             transformComponent.position += velocity * deltaTime;
-            transformComponent.rotationEuler = currentRotation;
+            SceneManager.instance.mainCamera.rotationEuler = currentRotation;
             SceneManager.instance.mainCamera.position = transformComponent.position;
 
             velocity += currentDirection * acceleration;
@@ -96,7 +91,14 @@ namespace ECSEngine.Entities
             {
                 MouseMoveEventArgs mouseEventArgs = (MouseMoveEventArgs)baseEventArgs;
                 // TODO: Replace with mouse delta
-                // currentRotation += new Vector3(eventArgs.mousePosition.x, 0, eventArgs.mousePosition.y);
+                currentRotation += new Vector3(0, 
+                    (lastMousePos.x - mouseEventArgs.mousePosition.x) * mouseSensitivityMultiplier, 
+                    (lastMousePos.y - (mouseEventArgs.mousePosition.y - RenderSettings.Default.GameResolutionY / 2)) * -mouseSensitivityMultiplier);
+                lastMousePos = mouseEventArgs.mousePosition;
+            }
+            else if (eventType == Event.GameStart)
+            {
+                transformComponent = GetComponent<TransformComponent>();
             }
         }
     }

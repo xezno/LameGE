@@ -87,7 +87,7 @@ namespace ECSEngine
             gameProperties = JsonConvert.DeserializeObject<GameProperties>(streamReader.ReadToEnd());
         }
 
-        private void InitSystems()
+        protected virtual void InitSystems()
         {
             mainThreadManagers = new List<IManager> {
                 RenderManager.instance,
@@ -121,19 +121,19 @@ namespace ECSEngine
             }
         }
 
-        private void InitScene()
+        protected virtual void InitScene()
         {
-            var entities = new List<IEntity>
-            {
-                new ShipEntity(),
-                new TestModelEntity()
-            };
+            //var entities = new List<IEntity>
+            //{
+            //    new ShipEntity(),
+            //    new TestModelEntity()
+            //};
 
-            foreach (IEntity entity in entities)
-                SceneManager.instance.AddEntity(entity);
+            //foreach (IEntity entity in entities)
+            //    SceneManager.instance.AddEntity(entity);
         }
 
-        private void StartThreads()
+        protected virtual void StartThreads()
         {
             foreach (var thread in threads)
             {
@@ -163,14 +163,14 @@ namespace ECSEngine
             LoadContent();
 
             // Setup complete - broadcast the game started event
-            StartThreads();
             EventManager.BroadcastEvent(Event.GameStart, new GenericEventArgs(this));
+            StartThreads();
         }
 
         private void Resize(object sender, EventArgs e)
         {
             var windowSize = new Vector2(nativeWindow.ClientSize.Width, nativeWindow.ClientSize.Height);
-            
+
             Gl.Viewport(0, 0, nativeWindow.ClientSize.Width, nativeWindow.ClientSize.Height);
 
             EventManager.BroadcastEvent(Event.WindowResized, new WindowResizeEventArgs(windowSize, this));

@@ -3,7 +3,7 @@ using System;
 
 namespace ECSEngine.Events
 {
-    class MouseMoveEventArgs : IEventArgs
+    public class MouseMoveEventArgs : IEventArgs
     {
         /// <summary>
         /// The object triggering the event.

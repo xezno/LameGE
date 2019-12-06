@@ -140,8 +140,6 @@
     <Compile Include="Entities\CameraEntity.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\LightEntity.cs" />
-    <Compile Include="Entities\ShipEntity.cs" />
-    <Compile Include="Entities\TestModelEntity.cs" />
     <Compile Include="EventManager.cs" />
     <Compile Include="Events\Event.cs" />
     <Compile Include="Events\GenericEventArgs.cs" />
@@ -186,7 +184,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
     <None Include="RenderSettings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>RenderSettings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>

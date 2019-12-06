@@ -13,7 +13,7 @@ namespace ECSEngine {
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.3.0.0")]
-    internal sealed partial class RenderSettings : global::System.Configuration.ApplicationSettingsBase {
+    public sealed partial class RenderSettings : global::System.Configuration.ApplicationSettingsBase {
         
         private static RenderSettings defaultInstance = ((RenderSettings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new RenderSettings())));
         
