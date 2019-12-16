@@ -1,8 +1,8 @@
-﻿using System;
-using ECSEngine.Components;
+﻿using ECSEngine.Components;
 using ECSEngine.Entities;
 using ECSEngine.MathUtils;
 using ECSEngine.Render;
+using System;
 
 namespace SpaceGame.Entities
 {

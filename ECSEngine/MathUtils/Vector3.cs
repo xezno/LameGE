@@ -20,6 +20,7 @@ namespace ECSEngine.MathUtils
         public float z;
 
         public float magnitude => (float)System.Math.Sqrt(x * x + y * y + z * z);
+        public Vector3 normalized { get => this / magnitude; }
 
         /// <summary>
         /// Construct a <see cref="Vector3"/> with three initial values.

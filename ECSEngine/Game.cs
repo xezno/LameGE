@@ -1,5 +1,4 @@
-﻿using ECSEngine.Entities;
-using ECSEngine.Events;
+﻿using ECSEngine.Events;
 using ECSEngine.Managers;
 using ECSEngine.MathUtils;
 using Newtonsoft.Json;
@@ -121,17 +120,7 @@ namespace ECSEngine
             }
         }
 
-        protected virtual void InitScene()
-        {
-            //var entities = new List<IEntity>
-            //{
-            //    new ShipEntity(),
-            //    new TestModelEntity()
-            //};
-
-            //foreach (IEntity entity in entities)
-            //    SceneManager.instance.AddEntity(entity);
-        }
+        protected virtual void InitScene() { }
 
         protected virtual void StartThreads()
         {
@@ -154,7 +143,6 @@ namespace ECSEngine
             Gl.Enable(EnableCap.CullFace);
             Gl.Enable(EnableCap.DepthTest);
             Gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-            Gl.LineWidth(2.5f);
 
             Gl.DebugMessageCallback(debugCallback, IntPtr.Zero);
 
@@ -227,12 +215,13 @@ namespace ECSEngine
         private void Render(object sender, NativeWindowEventArgs e)
         {
             Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            // Debug.Log($"Delta time: {deltaTime}");
 
             foreach (IManager manager in mainThreadManagers)
             {
                 manager.Run();
             }
+
+            Gl.Finish();
         }
     }
 }

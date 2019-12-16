@@ -127,13 +127,13 @@ vec3 calcCookTorrance()
 vec3 calcFullMix()
 {
     vec3 diffuse = texture(material.diffuseTexture, outUvCoord).xyz * material.diffuseColor.xyz;
-    return diffuse + vec3(calcCookTorrance());
+    return diffuse * vec3(calcCookTorrance());
 }
 
 void main() 
 {
     // lightDirection = normalize(light.pos - modelPos);
-    modelPos = vec3(modelMatrix * vec4(outFragPos, 1.0));
+    modelPos = vec3(projMatrix * viewMatrix * modelMatrix * vec4(outFragPos, 1.0));
     lightDirection = normalize(modelPos - light.pos);
     cameraDirection = normalize(cameraPos - modelPos);
     halfwayDirection = normalize(lightDirection + cameraDirection);

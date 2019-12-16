@@ -40,9 +40,6 @@ namespace ECSEngine.Components
             viewMatrix *= (Matrix4x4f.LookAtDirection(transformComponent.position,
                 new Vertex3f(0f, 0f, -1f),
                 new Vertex3f(0f, 1f, 0f)));
-            //new Vertex3f(,
-            //    transformComponent.rotationEuler.y,
-            //    transformComponent.rotationEuler.z),
         }
     }
 }

@@ -232,11 +232,10 @@ namespace ECSEngine.Managers
                 ImGui.GetBackgroundDrawList().AddText(
                     new Vector2(0, 0), 0xFFFFFFFF, $"ECS Engine\n" +
                                                    $"Press F1 to open the editor.\n" +
-                                                   $"{RenderManager.instance.lastFrameTime}ms\n" +
-                                                   $"{RenderManager.instance.calculatedFramerate}ms"
+                                                   $"{RenderManager.instance.lastFrameTime}ms / {RenderManager.instance.calculatedFramerate}fps"
                 );
             }
-            
+
 
             ImGui.Render();
             RenderImGui(ImGui.GetDrawData());
