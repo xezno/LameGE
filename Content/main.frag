@@ -126,6 +126,7 @@ vec3 calcCookTorrance()
 
 vec3 calcFullMix()
 {
+    return texture(material.diffuseTexture, outUvCoord).xyz;
     vec3 diffuse = texture(material.diffuseTexture, outUvCoord).xyz * material.diffuseColor.xyz;
     return diffuse * vec3(calcCookTorrance());
 }

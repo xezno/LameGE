@@ -14,7 +14,7 @@ namespace ECSEngine.Components
         [Range(0, 180)]
         public float fieldOfView = 90.0f,
             nearPlane = 0.1f,
-            farPlane = 50f;
+            farPlane = 100f;
 
         /// <summary>
         /// Construct an instance of CameraComponent, setting up the projection matrix in the process.
