@@ -19,11 +19,17 @@ namespace ECSEngine.Components
         private readonly List<string> errorLog;
 
         /// <summary>
+        /// A list of the shaders attached to this ShaderComponent.
+        /// </summary>
+        public readonly Shader[] shaders;
+
+        /// <summary>
         /// Construct a new ShaderComponent, attaching any of the shaders given.
         /// </summary>
         /// <param name="shaders">Shaders to attach to the shader program.</param>
         public ShaderComponent(params Shader[] shaders)
         {
+            this.shaders = shaders;
             shaderProgram = Gl.CreateProgram();
             errorLog = new List<string>();
             foreach (var shader in shaders)

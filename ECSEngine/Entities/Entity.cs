@@ -79,7 +79,21 @@ namespace ECSEngine.Entities
         /// </summary>
         /// <typeparam name="T1">The desired type of component.</typeparam>
         /// <returns>The first component of type <typeparamref name="T1"/> from the entity's component list.</returns>
-        public virtual T1 GetComponent<T1>() => (T1)(components.FindAll((t) => { return t.GetType() == typeof(T1); }).First());
+        public virtual T1 GetComponent<T1>()
+        {
+            var results = components.FindAll(t => { return t.GetType() == typeof(T1); });
+            if (results.Count <= 0)
+                throw new Exception("Component doesn't exist on this entity.");
+
+            return (T1) results.First();
+        }
+
+        public bool HasComponent<T1>()
+        {
+            var results = components.FindAll(t => { return t.GetType() == typeof(T1); });
+            return !(results.Count <= 0);
+        }
+
 
         public virtual void HandleEvent(Event eventType, IEventArgs baseEventArgs)
         {

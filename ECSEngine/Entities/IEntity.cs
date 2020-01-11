@@ -32,5 +32,12 @@ namespace ECSEngine.Entities
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         T GetComponent<T>();
+
+        /// <summary>
+        /// Check whether the entity has a specific Component attached.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        bool HasComponent<T>();
     }
 }

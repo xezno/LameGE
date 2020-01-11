@@ -22,9 +22,11 @@ namespace ECSEngine.Managers
         private Vector2 windowSize;
         private ImGuiIOPtr io;
         private IEntity selectedEntity;
+
         private uint vbo, vao, ebo;
+        private int currentShaderItem;
         private int currentSceneHierarchyItem;
-        private bool shouldRender, showPlayground, showSceneHierarchy, showPerformanceStats, showInspector;
+        private bool shouldRender, showPlayground, showSceneHierarchy, showPerformanceStats, showInspector, showShaderEditor;
 
         public ImGuiManager()
         {
@@ -103,6 +105,8 @@ namespace ECSEngine.Managers
                     showPerformanceStats = !showPerformanceStats;
                 if (ImGui.MenuItem("Toggle playground"))
                     showPlayground = !showPlayground;
+                if (ImGui.MenuItem("Toggle shader editor"))
+                    showShaderEditor = !showShaderEditor;
 
                 if (ImGui.MenuItem("Show all"))
                 {
@@ -110,6 +114,7 @@ namespace ECSEngine.Managers
                     showInspector = true;
                     showPerformanceStats = true;
                     showPlayground = true;
+                    showShaderEditor = true;
                 }
                 if (ImGui.MenuItem("Hide all"))
                 {
@@ -117,6 +122,7 @@ namespace ECSEngine.Managers
                     showInspector = false;
                     showPerformanceStats = false;
                     showPlayground = false;
+                    showShaderEditor = false;
                 }
 
                 ImGui.EndMenu();
@@ -183,6 +189,7 @@ namespace ECSEngine.Managers
             ImGui.Begin("Performance", ref showPerformanceStats);
 
             ImGui.LabelText($"{RenderManager.instance.lastFrameTime}ms", "Current frametime");
+
             ImGui.PlotHistogram(
                 "Average frame time",
                 ref RenderManager.instance.frametimeHistory[0],
@@ -206,6 +213,37 @@ namespace ECSEngine.Managers
 
             ImGui.End();
         }
+
+        private void DrawShaderEditor()
+        {
+            ImGui.Begin("Shader editor", ref showShaderEditor);
+            
+            if (selectedEntity != null && selectedEntity.HasComponent<ShaderComponent>())
+            {
+                var selectedShaderComponent = selectedEntity.GetComponent<ShaderComponent>();
+                string[] shaderNames = new string[selectedShaderComponent.shaders.Length];
+                for (int i = 0; i < selectedShaderComponent.shaders.Length; ++i)
+                {
+                    shaderNames[i] = selectedShaderComponent.shaders[i].fileName;
+                }
+
+                if (ImGui.ListBox("", ref currentShaderItem, shaderNames, selectedShaderComponent.shaders.Length))
+                {
+                    selectedEntity = SceneManager.instance.entities[currentSceneHierarchyItem];
+                }
+
+                if (selectedShaderComponent.shaders.Length > 0)
+                {
+                    ImGui.InputTextMultiline("Shader contents", ref selectedShaderComponent.shaders[currentShaderItem].shaderSource[0], uint.MaxValue, new Vector2(512, 512));
+                }
+            }
+            else
+            {
+                ImGui.LabelText("Shader contents", "Select an entity with a shader component.");
+                currentShaderItem = 0;
+            }
+            ImGui.End();
+        }
         #endregion
 
         public override void Run()
@@ -226,16 +264,20 @@ namespace ECSEngine.Managers
 
                 if (showInspector)
                     DrawInspector();
+
+                if (showShaderEditor)
+                    DrawShaderEditor();
             }
             else
             {
+#if DEBUG
                 ImGui.GetBackgroundDrawList().AddText(
                     new Vector2(0, 0), 0xFFFFFFFF, $"ECS Engine\n" +
                                                    $"Press F1 to open the editor.\n" +
-                                                   $"{RenderManager.instance.lastFrameTime}ms / {RenderManager.instance.calculatedFramerate}fps"
+                                                   $"{RenderManager.instance.lastFrameTime}ms, {RenderManager.instance.calculatedFramerate}fps"
                 );
+#endif
             }
-
 
             ImGui.Render();
             RenderImGui(ImGui.GetDrawData());

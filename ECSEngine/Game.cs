@@ -15,7 +15,7 @@ namespace ECSEngine
 {
     public class Game : IHasParent
     {
-        private readonly int titlebarHeight = 20; // TODO: I have no idea whether this is actually correct or not, but it works on win10.  Will need changing based on platform later
+        private readonly int titlebarHeight = 20; // TODO: I have no idea whether this is actually correct or not, but it works on win10.  _Will need changing based on platform later_
         private List<IManager> mainThreadManagers = new List<IManager>();
         private List<Thread> threads = new List<Thread>();
         private readonly Gl.DebugProc debugCallback; // Stored to prevent GC from collecting debug callback before it can be called
