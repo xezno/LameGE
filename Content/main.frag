@@ -69,78 +69,43 @@ out vec4 fragColor;
 
 vec3 modelPos;
 
-// ========================================
-// Cook-Torrance: (DFG) / (4 * (Wo . n) * (Wi . n))
-
+vec3 normal;
 vec3 lightDirection;
 vec3 cameraDirection;
-vec3 halfwayDirection;
 
-vec3 normal;
-float cosTheta;
-
-// D = Trowbridge-Reitz GGX
-float calcDistribution()
+vec3 CalcAmbience()
 {
-    float roughnessSquared = pow(material.roughness, 2);
-    float nh = max(dot(normal, halfwayDirection), 0.0);
-    float nhSquared = pow(nh, 2);
-
-    return (roughnessSquared) / (PI * (pow(nhSquared * (roughnessSquared - 1.0) + 1.0, 2)));
+    return material.ambientColor.xyz * 0.3;
 }
 
-// F = Fresnel-Schlick
-vec3 calcFresnel(vec3 f0)
+vec3 CalcDiffuse()
 {
-    return f0 + (1.0 - f0) * pow(1.0 - cosTheta, 5.0);
+    float diff = max(dot(normal, lightDirection), 0.0);
+
+    return diff * material.diffuseColor.xyz;
 }
 
-float calcSchlickGGX(float val)
+vec3 CalcSpecular()
 {
-    float roughnessSquared = pow(material.roughness + 1.0, 2) / 8.0;
-    return (val) / (val * (1.0 - roughnessSquared) + roughnessSquared);
+    vec3 reflectionDirection = reflect(-lightDirection, normal);
+    float spec = pow(max(dot(cameraDirection, reflectionDirection), 0.0), 32);
+    return spec * material.specularColor.xyz * 16;
 }
 
-// G = Schlick-GGX Smith
-float calcGeometric()
+vec3 CalcFullMix()
 {
-    float nc = max(dot(normal, cameraDirection), 0.0);
-    float nl = max(dot(normal, lightDirection), 0.0);
-    float schlickGGX1 = calcSchlickGGX(nc);
-    float schlickGGX2 = calcSchlickGGX(nl);
-
-    return schlickGGX1 * schlickGGX2;
-}
-
-vec3 calcCookTorrance()
-{
-    vec3 f0 = vec3(0.5);
-    f0 = mix(f0, material.diffuseColor.xyz, material.metallic);
-
-    float d = calcDistribution();
-    vec3 f = calcFresnel(f0);
-    float g = calcGeometric();
-
-    return vec3(d * f * g) / max(4.0 * max(dot(normal, cameraDirection), 0.0) * max(dot(normal, lightDirection), 0.0), 0.001);
-}
-
-vec3 calcFullMix()
-{
-    return texture(material.diffuseTexture, outUvCoord).xyz;
-    vec3 diffuse = texture(material.diffuseTexture, outUvCoord).xyz * material.diffuseColor.xyz;
-    return diffuse * vec3(calcCookTorrance());
+    return (CalcAmbience() + CalcDiffuse() + CalcSpecular()) * texture(material.diffuseTexture, outUvCoord).xyz;
 }
 
 void main() 
 {
-    // lightDirection = normalize(light.pos - modelPos);
-    modelPos = vec3(projMatrix * viewMatrix * modelMatrix * vec4(outFragPos, 1.0));
+    // modelPos = vec3(modelMatrix * vec4(outFragPos, 1.0));
+    lightDirection = normalize(light.pos - modelPos);
+
+
     lightDirection = normalize(modelPos - light.pos);
     cameraDirection = normalize(cameraPos - modelPos);
-    halfwayDirection = normalize(lightDirection + cameraDirection);
     normal = normalize(outNormal);
-    cosTheta = max(dot(lightDirection, normal), 0.0); // cos(angle)
 
-
-    fragColor = vec4(calcFullMix(), 1.0 - material.transparency);
+    fragColor = vec4(CalcFullMix(), 1.0 - material.transparency);
 }

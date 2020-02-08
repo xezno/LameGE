@@ -45,7 +45,7 @@ namespace ECSEngine.Assets
         {
             if (int.TryParse(str, out int tmp))
                 return tmp;
-            Debug.Log($"Could not successfully parse float from string '{str}'.", Debug.DebugSeverity.High);
+            Debug.Log($"Could not successfully parse int from string '{str}'.", Debug.DebugSeverity.High);
             return 0;
         }
 
@@ -58,7 +58,7 @@ namespace ECSEngine.Assets
         {
             if (uint.TryParse(str, out uint tmp))
                 return tmp;
-            Debug.Log($"Could not successfully parse float from string '{str}'.", Debug.DebugSeverity.High);
+            Debug.Log($"Could not successfully parse unsigned int from string '{str}'.", Debug.DebugSeverity.High);
             return 0;
         }
 

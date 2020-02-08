@@ -24,8 +24,8 @@ namespace ECSEngine.Managers
         private IEntity selectedEntity;
 
         private uint vbo, vao, ebo;
-        private int currentShaderItem;
-        private int currentSceneHierarchyItem;
+        private int currentShaderItem, currentSceneHierarchyItem;
+        private string currentShaderSource = "";
         private bool shouldRender, showPlayground, showSceneHierarchy, showPerformanceStats, showInspector, showShaderEditor;
 
         public ImGuiManager()
@@ -216,7 +216,7 @@ namespace ECSEngine.Managers
 
         private void DrawShaderEditor()
         {
-            ImGui.Begin("Shader editor", ref showShaderEditor);
+            ImGui.Begin("Shader options", ref showShaderEditor);
             
             if (selectedEntity != null && selectedEntity.HasComponent<ShaderComponent>())
             {
@@ -227,14 +227,21 @@ namespace ECSEngine.Managers
                     shaderNames[i] = selectedShaderComponent.shaders[i].fileName;
                 }
 
-                if (ImGui.ListBox("", ref currentShaderItem, shaderNames, selectedShaderComponent.shaders.Length))
-                {
-                    selectedEntity = SceneManager.instance.entities[currentSceneHierarchyItem];
-                }
-
                 if (selectedShaderComponent.shaders.Length > 0)
                 {
-                    ImGui.InputTextMultiline("Shader contents", ref selectedShaderComponent.shaders[currentShaderItem].shaderSource[0], uint.MaxValue, new Vector2(512, 512));
+                    if (ImGui.ListBox("", ref currentShaderItem, shaderNames, selectedShaderComponent.shaders.Length))
+                    {
+                        selectedEntity = SceneManager.instance.entities[currentSceneHierarchyItem];
+                        currentShaderSource = selectedShaderComponent.shaders[currentShaderItem].shaderSource[0];
+                    }
+
+                    if (ImGui.Button("Reload shader"))
+                    {
+                        selectedShaderComponent.CreateShader();
+                        selectedShaderComponent.shaders[currentShaderItem].ReadSourceFromFile();
+                        selectedShaderComponent.shaders[currentShaderItem].Compile();
+                        selectedShaderComponent.AttachAndLink();
+                    }
                 }
             }
             else
@@ -459,7 +466,17 @@ namespace ECSEngine.Managers
                         c = '\t';
                         break;
                     case KeyCode.Decimal:
+                    case KeyCode.Period:
                         c = '.';
+                        break;
+                    case KeyCode.Comma:
+                        c = ',';
+                        break;
+                    case KeyCode.Plus:
+                        c = '+';
+                        break;
+                    case KeyCode.Minus:
+                        c = '-';
                         break;
                     case KeyCode.Return:
                     case KeyCode.Right:
@@ -490,7 +507,7 @@ namespace ECSEngine.Managers
                         KeyboardEventArgs keyboardEventArgs = (KeyboardEventArgs)eventArgs;
                         io.KeysDown[keyboardEventArgs.keyboardKey] = true;
                         KeyCode keyCode = (KeyCode)keyboardEventArgs.keyboardKey;
-                        io.AddInputCharacter(KeyCodeToChar(keyCode));
+                        
                         if (keyCode == KeyCode.Shift)
                         {
                             io.KeyShift = true;
@@ -502,6 +519,10 @@ namespace ECSEngine.Managers
                         else if (keyCode == KeyCode.F1)
                         {
                             shouldRender = !shouldRender;
+                        }
+                        else
+                        {
+                            io.AddInputCharacter(KeyCodeToChar(keyCode));
                         }
                         break;
                     }

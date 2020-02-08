@@ -31,7 +31,7 @@ namespace SpaceGame.Components
 
             if (currentRotation.magnitude != 0)
             {
-                Debug.Log($"{currentRotation.normalized}");
+                // Debug.Log($"{currentRotation.normalized}");
                 // currentDirection *= currentRotation.normalized;
             }
 

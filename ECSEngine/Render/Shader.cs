@@ -23,10 +23,19 @@ namespace ECSEngine.Render
         /// </summary>
         public ShaderType shaderType { get; set; }
 
+        private string[] shaderSource_;
+
         /// <summary>
         /// The shader's source.
         /// </summary>
-        public string[] shaderSource { get; set; }
+        public string[] shaderSource { 
+            get => shaderSource_;
+            set
+            {
+                shaderSource_ = value;
+                Compile();
+            }
+        }
 
         /// <summary>
         /// Construct an instance of <see cref="Shader"/>, compile the shader and check for any errors.
@@ -38,24 +47,28 @@ namespace ECSEngine.Render
             this.shaderType = shaderType;
             fileName = path;
             glShader = Gl.CreateShader(shaderType);
-            shaderSource = new string[0];
+            shaderSource_ = new string[0];
 
+            ReadSourceFromFile();
             Compile();
+        }
 
-            CheckForErrors();
+        public void ReadSourceFromFile()
+        {
+            shaderSource_ = new string[1];
+            using (StreamReader streamReader = new StreamReader(fileName))
+                shaderSource_[0] = streamReader.ReadToEnd();
         }
 
         /// <summary>
         /// Read the shader source, and then compile it.
         /// </summary>
-        private void Compile()
+        public void Compile()
         {
-            shaderSource = new string[1];
-            using (StreamReader streamReader = new StreamReader(fileName))
-                shaderSource[0] = streamReader.ReadToEnd();
-
             Gl.ShaderSource(glShader, shaderSource);
             Gl.CompileShader(glShader);
+
+            CheckForErrors();
         }
 
         /// <summary>

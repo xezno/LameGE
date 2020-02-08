@@ -11,7 +11,7 @@ namespace ECSEngine.Components
         /// <summary>
         /// The OpenGL shader program.
         /// </summary>
-        private readonly uint shaderProgram;
+        private uint shaderProgram;
 
         /// <summary>
         /// A list of variables that have already thrown errors; used to prevent the console from becoming too densely populated with shader errors.
@@ -30,13 +30,29 @@ namespace ECSEngine.Components
         public ShaderComponent(params Shader[] shaders)
         {
             this.shaders = shaders;
-            shaderProgram = Gl.CreateProgram();
             errorLog = new List<string>();
+
+            CreateShader();
+            AttachAndLink();
+        }
+
+        public void CreateShader()
+        {
+            this.shaderProgram = Gl.CreateProgram();
+        }
+
+        /// <summary>
+        /// Attach and link all shaders.
+        /// </summary>
+        public void AttachAndLink()
+        {
             foreach (var shader in shaders)
             {
                 Gl.AttachShader(shaderProgram, shader.glShader);
             }
             Gl.LinkProgram(shaderProgram);
+
+            errorLog.Clear();
         }
 
         /// <summary>
