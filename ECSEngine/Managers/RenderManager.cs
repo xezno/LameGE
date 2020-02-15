@@ -25,6 +25,7 @@ namespace ECSEngine.Managers
             {
                 entity.Render();
             }
+
             lastFrameTime = (DateTime.Now - lastRender).Milliseconds;
             frametimeHistory[currentFrametimeIndex++] = lastFrameTime;
             if (currentFrametimeIndex == frametimeHistory.Length)

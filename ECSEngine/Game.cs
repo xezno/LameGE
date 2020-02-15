@@ -60,7 +60,7 @@ namespace ECSEngine
             nativeWindow.SwapInterval = 0;
             nativeWindow.Resize += Resize;
 
-            nativeWindow.Create(0, 0, RenderSettings.Default.GameResolutionX, RenderSettings.Default.GameResolutionY, NativeWindowStyle.Caption);
+            nativeWindow.Create(0, 0, RenderSettings.Default.gameResolutionX, RenderSettings.Default.gameResolutionY, NativeWindowStyle.Caption);
 
             nativeWindow.Caption = FilterString(gameProperties.windowTitle) ?? "ECSEngine";
 
@@ -171,7 +171,7 @@ namespace ECSEngine
         private void MouseMove(object sender, NativeWindowMouseEventArgs e) =>
             EventManager.BroadcastEvent(Event.MouseMove,
                 new MouseMoveEventArgs(new Vector2(
-                    e.Location.X, RenderSettings.Default.GameResolutionY - e.Location.Y - titlebarHeight
+                    e.Location.X, RenderSettings.Default.gameResolutionY - e.Location.Y - titlebarHeight
                                   ),
                     this)
                 );

@@ -12,7 +12,7 @@ namespace ECSEngine {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.3.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.4.0.0")]
     public sealed partial class RenderSettings : global::System.Configuration.ApplicationSettingsBase {
         
         private static RenderSettings defaultInstance = ((RenderSettings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new RenderSettings())));
@@ -26,24 +26,24 @@ namespace ECSEngine {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1600")]
-        public uint GameResolutionX {
+        public uint gameResolutionX {
             get {
-                return ((uint)(this["GameResolutionX"]));
+                return ((uint)(this["gameResolutionX"]));
             }
             set {
-                this["GameResolutionX"] = value;
+                this["gameResolutionX"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("900")]
-        public uint GameResolutionY {
+        public uint gameResolutionY {
             get {
-                return ((uint)(this["GameResolutionY"]));
+                return ((uint)(this["gameResolutionY"]));
             }
             set {
-                this["GameResolutionY"] = value;
+                this["gameResolutionY"] = value;
             }
         }
     }

@@ -22,7 +22,7 @@ namespace ECSEngine.Components
         public CameraComponent()
         {
             projMatrix = Matrix4x4f.Perspective(fieldOfView,
-                RenderSettings.Default.GameResolutionX / (float)RenderSettings.Default.GameResolutionY,
+                RenderSettings.Default.gameResolutionX / (float)RenderSettings.Default.gameResolutionY,
                 nearPlane,
                 farPlane);
         }

@@ -84,6 +84,7 @@
       <HintPath>..\packages\OpenGL.Net.0.8.4\lib\net461\OpenGL.Net.dll</HintPath>
     </Reference>
     <Reference Include="OpenGL.Net.CoreUI, Version=0.5.2.0, Culture=neutral, PublicKeyToken=null" />
+    <Reference Include="OpenGL.Net.Math, Version=0.8.4.0, Culture=neutral, PublicKeyToken=null" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

@@ -85,7 +85,7 @@ namespace ECSEngine.Entities
             if (results.Count <= 0)
                 throw new Exception("Component doesn't exist on this entity.");
 
-            return (T1) results.First();
+            return (T1)results.First();
         }
 
         public bool HasComponent<T1>()

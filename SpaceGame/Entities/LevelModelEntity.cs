@@ -13,7 +13,7 @@ namespace SpaceGame.Entities
         {
             AddComponent(new TransformComponent(new Vector3(0, 2f, -2f), Quaternion.identity, new Vector3(1, 1, 1)));
             AddComponent(new ShaderComponent(new Shader("Content/main.frag", OpenGL.ShaderType.FragmentShader), new Shader("Content/main.vert", OpenGL.ShaderType.VertexShader)));
-            AddMeshAndMaterialComponents("Content/sponza");
+            AddMeshAndMaterialComponents("Content/level01");
             // mainMaterial.diffuseTexture = GenNoiseTexture();
         }
 

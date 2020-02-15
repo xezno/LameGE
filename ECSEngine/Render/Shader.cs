@@ -28,7 +28,8 @@ namespace ECSEngine.Render
         /// <summary>
         /// The shader's source.
         /// </summary>
-        public string[] shaderSource { 
+        public string[] shaderSource
+        {
             get => shaderSource_;
             set
             {

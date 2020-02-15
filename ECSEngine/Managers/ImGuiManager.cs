@@ -217,7 +217,7 @@ namespace ECSEngine.Managers
         private void DrawShaderEditor()
         {
             ImGui.Begin("Shader options", ref showShaderEditor);
-            
+
             if (selectedEntity != null && selectedEntity.HasComponent<ShaderComponent>())
             {
                 var selectedShaderComponent = selectedEntity.GetComponent<ShaderComponent>();
@@ -278,11 +278,14 @@ namespace ECSEngine.Managers
             else
             {
 #if DEBUG
+                var debugText = $"ECS Engine\n" +
+                                   $"Press F1 to open the editor.\n" +
+                                   $"{RenderManager.instance.lastFrameTime}ms, {RenderManager.instance.calculatedFramerate}fps";
+                Vector2 debugTextPos = new Vector2(8, 8);
                 ImGui.GetBackgroundDrawList().AddText(
-                    new Vector2(0, 0), 0xFFFFFFFF, $"ECS Engine\n" +
-                                                   $"Press F1 to open the editor.\n" +
-                                                   $"{RenderManager.instance.lastFrameTime}ms, {RenderManager.instance.calculatedFramerate}fps"
-                );
+                    debugTextPos + new Vector2(1, 1), 0x88000000, debugText); // Shadow
+                ImGui.GetBackgroundDrawList().AddText(
+                    debugTextPos, 0xFFFFFFFF, debugText);
 #endif
             }
 
@@ -507,7 +510,7 @@ namespace ECSEngine.Managers
                         KeyboardEventArgs keyboardEventArgs = (KeyboardEventArgs)eventArgs;
                         io.KeysDown[keyboardEventArgs.keyboardKey] = true;
                         KeyCode keyCode = (KeyCode)keyboardEventArgs.keyboardKey;
-                        
+
                         if (keyCode == KeyCode.Shift)
                         {
                             io.KeyShift = true;

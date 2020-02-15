@@ -1,5 +1,6 @@
 ﻿using OpenGL;
 using System;
+using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -110,6 +111,9 @@ namespace ECSEngine.Render
             Gl.GenerateMipmap(TextureTarget.Texture2d);
         }
 
+        public Texture2D(ColorRGB24[] textureData, int width, int height) : this(ConvertColorToBinary(textureData), width, height)
+        { }
+
         /// <summary>
         /// Bind the texture to the current OpenGL context.
         /// </summary>
@@ -126,6 +130,19 @@ namespace ECSEngine.Render
         public override string ToString()
         {
             return path;
+        }
+
+        static byte[] ConvertColorToBinary(ColorRGB24[] textureData)
+        {
+            List<byte> binaryData = new List<byte>();
+            foreach (var color in textureData)
+            {
+                binaryData.Add(color.r);
+                binaryData.Add(color.g);
+                binaryData.Add(color.b);
+            }
+
+            return binaryData.ToArray();
         }
     }
 }

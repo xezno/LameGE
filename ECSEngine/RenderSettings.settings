@@ -2,10 +2,10 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="ECSEngine" GeneratedClassName="RenderSettings">
   <Profiles />
   <Settings>
-    <Setting Name="GameResolutionX" Type="System.UInt32" Scope="User">
+    <Setting Name="gameResolutionX" Type="System.UInt32" Scope="User">
       <Value Profile="(Default)">1600</Value>
     </Setting>
-    <Setting Name="GameResolutionY" Type="System.UInt32" Scope="User">
+    <Setting Name="gameResolutionY" Type="System.UInt32" Scope="User">
       <Value Profile="(Default)">900</Value>
     </Setting>
   </Settings>
