@@ -1,10 +1,12 @@
-﻿using ECSEngine.Attributes;
-using ECSEngine.Components;
-using ECSEngine.Events;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using ECSEngine.Attributes;
+using ECSEngine.Components;
+using ECSEngine.Events;
+using ECSEngine.Types;
+using ImGuiNET;
 
 namespace ECSEngine.Entities
 {
@@ -13,19 +15,35 @@ namespace ECSEngine.Entities
         /// <summary>
         /// The entity's parent; usually a manager.
         /// </summary>
-        public virtual IHasParent parent { get; set; }
+        public virtual IHasParent Parent { get; set; }
 
         /// <summary>
         /// A list of components that the entity contains.
         /// </summary>
-        public List<IComponent> components { get; private set; }
+        public List<IComponent> Components { get; private set; }
 
         /// <summary>
         /// Construct an <see cref="Entity{T}"/>.
         /// </summary>
         public Entity()
         {
-            components = new List<IComponent>();
+            Components = new List<IComponent>();
+        }
+
+        /// <summary>
+        /// Display the available components & their properties
+        /// within ImGUI.
+        /// </summary>
+        public virtual void RenderImGUI()
+        {
+            foreach (var component in Components)
+            {
+                if (ImGui.TreeNode(component.GetType().Name))
+                {
+                    component.RenderImGUI();
+                    ImGui.TreePop();
+                }
+            }
         }
 
         /// <summary>
@@ -37,16 +55,16 @@ namespace ECSEngine.Entities
              * that depend on other components, e.g. MeshComponent and ShaderComponent).  We should check these for
              * every entity is created in order to ensure that there are no missing components! */
 
-            foreach (var component in components)
+            foreach (var component in Components)
             {
                 foreach (var attribute in component.GetType().GetCustomAttributes())
                 {
                     if (attribute is RequiresAttribute)
                     {
                         // Okay - now let's check the RequiresAttribute for any required components:
-                        RequiresAttribute requiresAttribute = (RequiresAttribute)attribute;
-                        bool containsType = false;
-                        foreach (var otherComponent in components)
+                        var requiresAttribute = (RequiresAttribute)attribute;
+                        var containsType = false;
+                        foreach (var otherComponent in Components)
                         {
                             if (otherComponent.GetType() == requiresAttribute.requiredType)
                             {
@@ -67,8 +85,8 @@ namespace ECSEngine.Entities
         /// <param name="component">An instance of the desired component to add.</param>
         public virtual void AddComponent(IComponent component) // TODO: Consider just using a property instead of this cos its 10x cooler
         {
-            component.parent = this;
-            components.Add(component);
+            component.Parent = this;
+            Components.Add(component);
 
             // Component added - let's check for any missing component dependencies
             CheckComponentDependencies();
@@ -81,7 +99,7 @@ namespace ECSEngine.Entities
         /// <returns>The first component of type <typeparamref name="T1"/> from the entity's component list.</returns>
         public virtual T1 GetComponent<T1>()
         {
-            var results = components.FindAll(t => { return t.GetType() == typeof(T1); });
+            var results = Components.FindAll(t => { return t.GetType() == typeof(T1); });
             if (results.Count <= 0)
                 throw new Exception("Component doesn't exist on this entity.");
 
@@ -90,14 +108,13 @@ namespace ECSEngine.Entities
 
         public bool HasComponent<T1>()
         {
-            var results = components.FindAll(t => { return t.GetType() == typeof(T1); });
+            var results = Components.FindAll(t => { return t.GetType() == typeof(T1); });
             return !(results.Count <= 0);
         }
 
-
         public virtual void HandleEvent(Event eventType, IEventArgs baseEventArgs)
         {
-            foreach (IComponent component in components)
+            foreach (var component in Components)
             {
                 component.HandleEvent(eventType, baseEventArgs);
             }
@@ -105,7 +122,7 @@ namespace ECSEngine.Entities
 
         public virtual void Render()
         {
-            foreach (IComponent component in components)
+            foreach (var component in Components)
             {
                 component.Render();
             }
@@ -113,7 +130,7 @@ namespace ECSEngine.Entities
 
         public virtual void Update(float deltaTime)
         {
-            foreach (IComponent component in components)
+            foreach (var component in Components)
             {
                 component.Update(deltaTime);
             }

@@ -1,11 +1,11 @@
-﻿using ECSEngine;
+﻿using System;
 using ECSEngine.Components;
 using ECSEngine.Events;
 using ECSEngine.Managers;
 using ECSEngine.MathUtils;
 using OpenGL.CoreUI;
 
-namespace SpaceGame.Components
+namespace UlaidGame.Components
 {
     class PlayerMovementComponent : Component<PlayerMovementComponent>
     {
@@ -24,12 +24,12 @@ namespace SpaceGame.Components
         public override void Update(float deltaTime)
         {
             transformComponent.position += velocity * deltaTime;
-            SceneManager.instance.mainCamera.rotationEuler = EaseLerpVector3(SceneManager.instance.mainCamera.rotationEuler, 
-                new Vector3(velocity.z + velocity.y, 0, velocity.x) * new Vector3(rotationSensitivity, rotationSensitivity, rotationSensitivity), 
+            SceneManager.Instance.mainCamera.RotationEuler = EaseLerpVector3(SceneManager.Instance.mainCamera.RotationEuler,
+                new Vector3(velocity.z + velocity.y, 0, velocity.x) * new Vector3(rotationSensitivity, rotationSensitivity, rotationSensitivity),
                 0.01f);
-            SceneManager.instance.mainCamera.position = transformComponent.position;
+            SceneManager.Instance.mainCamera.Position = transformComponent.position;
 
-            if (currentRotation.magnitude != 0)
+            if (currentRotation.Magnitude != 0)
             {
                 // Debug.Log($"{currentRotation.normalized}");
                 // currentDirection *= currentRotation.normalized;
@@ -37,21 +37,21 @@ namespace SpaceGame.Components
 
             velocity += currentDirection * acceleration;
             velocity += new Vector3(
-                System.Math.Sign(velocity.x) * -deceleration,
-                System.Math.Sign(velocity.y) * -deceleration,
-                System.Math.Sign(velocity.z) * -deceleration
+                Math.Sign(velocity.x) * -deceleration,
+                Math.Sign(velocity.y) * -deceleration,
+                Math.Sign(velocity.z) * -deceleration
             );
 
             velocity = new Vector3(
-                System.Math.Max(System.Math.Min(velocity.x, maxSpeed), -maxSpeed),
-                System.Math.Max(System.Math.Min(velocity.y, maxSpeed), -maxSpeed),
-                System.Math.Max(System.Math.Min(velocity.z, maxSpeed), -maxSpeed)
+                Math.Max(Math.Min(velocity.x, maxSpeed), -maxSpeed),
+                Math.Max(Math.Min(velocity.y, maxSpeed), -maxSpeed),
+                Math.Max(Math.Min(velocity.z, maxSpeed), -maxSpeed)
             );
         }
 
         public float EaseLerp(float a, float b, float t)
         {
-            t = (float)(System.Math.Sin(t * (System.Math.PI / 2)));
+            t = (float)(Math.Sin(t * (Math.PI / 2)));
             return (1.0f - t) * a + t * b;
         }
 
@@ -66,7 +66,7 @@ namespace SpaceGame.Components
             {
                 KeyboardEventArgs keyboardEventArgs = (KeyboardEventArgs)baseEventArgs;
 
-                switch ((KeyCode)keyboardEventArgs.keyboardKey)
+                switch ((KeyCode)keyboardEventArgs.KeyboardKey)
                 {
                     case KeyCode.W:
                         currentDirection.z = eventType == Event.KeyDown ? -1 : 0;
@@ -92,10 +92,10 @@ namespace SpaceGame.Components
             {
                 MouseMoveEventArgs mouseEventArgs = (MouseMoveEventArgs)baseEventArgs;
                 // TODO: Replace with mouse delta
-                currentRotation += new Vector3((lastMousePos.y - mouseEventArgs.mousePosition.y) * -mouseSensitivityMultiplier,
-                    (lastMousePos.x - mouseEventArgs.mousePosition.x) * -mouseSensitivityMultiplier,
+                currentRotation += new Vector3((lastMousePos.y - mouseEventArgs.MousePosition.y) * -mouseSensitivityMultiplier,
+                    (lastMousePos.x - mouseEventArgs.MousePosition.x) * -mouseSensitivityMultiplier,
                     0);
-                lastMousePos = mouseEventArgs.mousePosition;
+                lastMousePos = mouseEventArgs.MousePosition;
             }
             else if (eventType == Event.GameStart)
             {

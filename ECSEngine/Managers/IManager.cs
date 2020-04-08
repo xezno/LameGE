@@ -1,4 +1,5 @@
 ﻿using ECSEngine.Events;
+using ECSEngine.Types;
 
 namespace ECSEngine.Managers
 {

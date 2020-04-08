@@ -1,4 +1,6 @@
-﻿namespace ECSEngine.MathUtils
+﻿using System;
+
+namespace ECSEngine.MathUtils
 {
     public struct Quaternion
     {
@@ -21,12 +23,13 @@
 
         public static Quaternion FromEulerAngles(Vector3 eulerAngles)
         {
-            float halfCosX = (float)System.Math.Cos(eulerAngles.x) / 2.0f;
-            float halfCosY = (float)System.Math.Cos(eulerAngles.y) / 2.0f;
-            float halfCosZ = (float)System.Math.Cos(eulerAngles.z) / 2.0f;
-            float halfSinX = (float)System.Math.Cos(eulerAngles.x) / 2.0f;
-            float halfSinY = (float)System.Math.Cos(eulerAngles.y) / 2.0f;
-            float halfSinZ = (float)System.Math.Cos(eulerAngles.z) / 2.0f;
+            var degToRad = 0.0174533f;
+            var halfCosX = (float)Math.Cos(eulerAngles.x * degToRad) / 2.0f;
+            var halfCosY = (float)Math.Cos(eulerAngles.y * degToRad) / 2.0f;
+            var halfCosZ = (float)Math.Cos(eulerAngles.z * degToRad) / 2.0f;
+            var halfSinX = (float)Math.Cos(eulerAngles.x * degToRad) / 2.0f;
+            var halfSinY = (float)Math.Cos(eulerAngles.y * degToRad) / 2.0f;
+            var halfSinZ = (float)Math.Cos(eulerAngles.z * degToRad) / 2.0f;
 
             return new Quaternion(halfCosX * halfCosY * halfCosZ + halfSinX * halfSinY * halfSinZ,
                 halfSinX * halfCosY * halfCosZ - halfCosX * halfSinY * halfSinZ,
@@ -37,9 +40,9 @@
         public Vector3 ToEulerAngles()
         {
             return new Vector3(
-                (float)System.Math.Atan2(2 * ((w * x) + (y * z)), 1 - 2 * ((x * x) + (y * y))),
-                (float)System.Math.Asin(2 * ((w * y) - (z * x))),
-                (float)System.Math.Atan2(2 * ((w * z) + (x * y)), 1 - 2 * ((y * y) + (z * z)))
+                (float)Math.Atan2(2 * ((w * x) + (y * z)), 1 - 2 * ((x * x) + (y * y))),
+                (float)Math.Asin(2 * ((w * y) - (z * x))),
+                (float)Math.Atan2(2 * ((w * z) + (x * y)), 1 - 2 * ((y * y) + (z * z)))
             );
         }
     }

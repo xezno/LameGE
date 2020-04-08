@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{C1EDBC7B-7C99-4B7E-AC37-CAB317A4C8DD}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>SpaceGame</RootNamespace>
-    <AssemblyName>SpaceGame</AssemblyName>
+    <RootNamespace>UlaidGame</RootNamespace>
+    <AssemblyName>UlaidGame</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>8</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -31,9 +32,10 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>8</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>SpaceGame.Program</StartupObject>
+    <StartupObject>UlaidGame.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -41,7 +43,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8</LangVersion>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
@@ -52,7 +54,7 @@
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x64</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8</LangVersion>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
@@ -63,7 +65,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8</LangVersion>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
@@ -74,16 +76,20 @@
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x86</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8</LangVersion>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="OpenGL.Net, Version=0.8.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OpenGL.Net.0.8.4\lib\net461\OpenGL.Net.dll</HintPath>
+    <Reference Include="OpenGL.Net, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Documents\Projects\OpenGL.Net\OpenGL.Net.CoreUI\bin\net461\Release\OpenGL.Net.dll</HintPath>
     </Reference>
-    <Reference Include="OpenGL.Net.CoreUI, Version=0.5.2.0, Culture=neutral, PublicKeyToken=null" />
+    <Reference Include="OpenGL.Net.CoreUI, Version=0.5.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Documents\Projects\OpenGL.Net\OpenGL.Net.CoreUI\bin\net461\Release\OpenGL.Net.CoreUI.dll</HintPath>
+    </Reference>
     <Reference Include="OpenGL.Net.Math, Version=0.8.4.0, Culture=neutral, PublicKeyToken=null" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -95,13 +101,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\BSP\BinaryReaderExt.cs" />
+    <Compile Include="Assets\BSP\BSPHeader.cs" />
+    <Compile Include="Assets\BSP\BSPLoader.cs" />
+    <Compile Include="Assets\BSP\BSPLumpInfo.cs" />
+    <Compile Include="Assets\BSP\BSPLumpType.cs" />
+    <Compile Include="Assets\BSP\Lumps\SurfEdgeLump.cs" />
+    <Compile Include="Assets\BSP\Lumps\BaseLump.cs" />
+    <Compile Include="Assets\BSP\Lumps\EdgeLump.cs" />
+    <Compile Include="Assets\BSP\Lumps\FaceLump.cs" />
+    <Compile Include="Assets\BSP\Lumps\PlaneLump.cs" />
+    <Compile Include="Assets\BSP\Lumps\VertexLump.cs" />
+    <Compile Include="Assets\BSP\Types\Edge.cs" />
+    <Compile Include="Assets\BSP\Types\Face.cs" />
+    <Compile Include="Assets\BSP\Types\Plane.cs" />
     <Compile Include="Components\PlayerMovementComponent.cs" />
     <Compile Include="Entities\LevelModelEntity.cs" />
     <Compile Include="Entities\PlanetEntity.cs" />
     <Compile Include="Entities\PlayerEntity.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SpaceGame.cs" />
+    <Compile Include="UlaidGame.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

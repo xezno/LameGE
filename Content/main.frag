@@ -102,10 +102,10 @@ void main()
     // modelPos = vec3(modelMatrix * vec4(outFragPos, 1.0));
     lightDirection = normalize(light.pos - modelPos);
 
-
     lightDirection = normalize(modelPos - light.pos);
     cameraDirection = normalize(cameraPos - modelPos);
     normal = normalize(outNormal);
 
-    fragColor = vec4(CalcFullMix(), 1.0 - material.transparency);
+    fragColor = vec4(CalcFullMix() * (outFragPos.z * 0.1), 1.0 - material.transparency);
+    // fragColor = vec4(outNormal.xyz, 1.0 - material.transparency);
 }

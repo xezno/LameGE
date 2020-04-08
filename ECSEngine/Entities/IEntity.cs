@@ -1,12 +1,13 @@
-﻿using ECSEngine.Components;
+﻿using System.Collections.Generic;
+using ECSEngine.Components;
 using ECSEngine.Events;
-using System.Collections.Generic;
+using ECSEngine.Types;
 
 namespace ECSEngine.Entities
 {
     public interface IEntity : IHasParent
     {
-        List<IComponent> components { get; }
+        List<IComponent> Components { get; }
 
         /// <summary>
         /// Called when an event is triggered.

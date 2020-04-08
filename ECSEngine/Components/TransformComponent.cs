@@ -18,7 +18,6 @@ namespace ECSEngine.Components
         /// The entity's rotation.
         /// </summary>
         // public Quaternion rotation; // TODO
-
         public Vector3 rotationEuler;
 
         /// <summary>
@@ -26,11 +25,11 @@ namespace ECSEngine.Components
         /// </summary>
         public Vector3 scale;
 
-        public Matrix4x4f matrix
+        public Matrix4x4f Matrix
         {
             get
             {
-                Matrix4x4f temp = Matrix4x4f.Identity;
+                var temp = Matrix4x4f.Identity;
                 temp.Translate(position.x, position.y, position.z);
                 temp.RotateX(rotationEuler.x);
                 temp.RotateY(rotationEuler.y);
@@ -49,7 +48,20 @@ namespace ECSEngine.Components
         public TransformComponent(Vector3 position, Quaternion rotation, Vector3 scale)
         {
             this.position = position;
-            this.rotationEuler = rotation.ToEulerAngles(); // TODO
+            rotationEuler = rotation.ToEulerAngles(); // TODO
+            this.scale = scale;
+        }
+
+        /// <summary>
+        /// Construct a new TransformComponent with the parameters specified.
+        /// </summary>
+        /// <param name="position">The entity's position.</param>
+        /// <param name="rotationEuler">The entity's rotation.</param>
+        /// <param name="scale">The entity's scale.</param>
+        public TransformComponent(Vector3 position, Vector3 rotationEuler, Vector3 scale)
+        {
+            this.position = position;
+            this.rotationEuler = rotationEuler; // TODO
             this.scale = scale;
         }
     }

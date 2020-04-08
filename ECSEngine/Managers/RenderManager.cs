@@ -1,5 +1,4 @@
-﻿using ECSEngine.Entities;
-using System;
+﻿using System;
 using System.Threading;
 
 namespace ECSEngine.Managers
@@ -8,10 +7,10 @@ namespace ECSEngine.Managers
     {
         private DateTime lastRender;
         private Random random = new Random();
-        public float lastFrameTime { get; private set; }
-        public int calculatedFramerate => (int)(1000f / Math.Max(lastFrameTime, 0.001f));
-        public float[] frametimeHistory { get; private set; } = new float[100];
-        public float[] framerateHistory { get; private set; } = new float[100];
+        public float LastFrameTime { get; private set; }
+        public int CalculatedFramerate => (int)(1000f / Math.Max(LastFrameTime, 0.001f));
+        public float[] FrametimeHistory { get; } = new float[1000];
+        public float[] FramerateHistory { get; } = new float[1000];
         private int currentFrametimeIndex;
         private int currentFramerateIndex;
         public bool fakeLag = false;
@@ -21,32 +20,42 @@ namespace ECSEngine.Managers
         /// </summary>
         public override void Run()
         {
-            foreach (IEntity entity in SceneManager.instance.entities)
+            foreach (var entity in SceneManager.Instance.Entities)
             {
                 entity.Render();
             }
 
-            lastFrameTime = (DateTime.Now - lastRender).Milliseconds;
-            frametimeHistory[currentFrametimeIndex++] = lastFrameTime;
-            if (currentFrametimeIndex == frametimeHistory.Length)
+            LastFrameTime = (DateTime.Now - lastRender).Milliseconds;
+            FrametimeHistory[currentFrametimeIndex++] = LastFrameTime;
+
+            if (currentFrametimeIndex == FrametimeHistory.Length)
             {
                 currentFrametimeIndex--;
-                for (int i = 0; i < frametimeHistory.Length; ++i)
-                    frametimeHistory[i] = frametimeHistory[(i + 1) % frametimeHistory.Length];
+                for (var i = 0; i < FrametimeHistory.Length; ++i)
+                    FrametimeHistory[i] = FrametimeHistory[(i + 1) % FrametimeHistory.Length];
             }
 
-
-            framerateHistory[currentFramerateIndex++] = calculatedFramerate;
-            if (currentFramerateIndex == framerateHistory.Length)
+            FramerateHistory[currentFramerateIndex++] = CalculatedFramerate;
+            if (currentFramerateIndex == FramerateHistory.Length)
             {
                 currentFramerateIndex--;
-                for (int i = 0; i < framerateHistory.Length; ++i)
-                    framerateHistory[i] = framerateHistory[(i + 1) % framerateHistory.Length];
+                for (var i = 0; i < FramerateHistory.Length; ++i)
+                    FramerateHistory[i] = FramerateHistory[(i + 1) % FramerateHistory.Length];
             }
 
             lastRender = DateTime.Now;
-            if (fakeLag)
-                Thread.Sleep(random.Next(16, 300));
+
+            // Are we rendering too fast?
+            if (LastFrameTime < (1000f / RenderSettings.Default.framerateLimit) && RenderSettings.Default.framerateLimit > 0)
+            {
+                // really crappy implementation
+                // TODO: do this differently
+                Thread.Sleep((int)Math.Ceiling((1000f / RenderSettings.Default.framerateLimit) - LastFrameTime));
+            }
+            else if (fakeLag)
+            {
+                Thread.Sleep(random.Next(150, 300));
+            }
         }
     }
 }

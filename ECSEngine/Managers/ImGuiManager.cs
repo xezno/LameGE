@@ -1,4 +1,6 @@
-﻿using ECSEngine.Attributes;
+﻿using System;
+using System.Collections.Generic;
+using System.Numerics;
 using ECSEngine.Components;
 using ECSEngine.Entities;
 using ECSEngine.Events;
@@ -6,11 +8,6 @@ using ECSEngine.Render;
 using ImGuiNET;
 using OpenGL;
 using OpenGL.CoreUI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using Quaternion = ECSEngine.MathUtils.Quaternion;
 using Vector4 = ECSEngine.MathUtils.Vector4;
 
 namespace ECSEngine.Managers
@@ -24,9 +21,9 @@ namespace ECSEngine.Managers
         private IEntity selectedEntity;
 
         private uint vbo, vao, ebo;
-        private int currentShaderItem, currentSceneHierarchyItem;
-        private string currentShaderSource = "";
-        private bool shouldRender, showPlayground, showSceneHierarchy, showPerformanceStats, showInspector, showShaderEditor;
+        private int currentSceneHierarchyItem;
+        private string currentConsoleInput = "", currentConsoleFilter = "";
+        private bool shouldRender, showPlayground, showSceneHierarchy, showPerformanceStats, showInspector, showConsole, showConsolePreview = true;
 
         public ImGuiManager()
         {
@@ -43,11 +40,11 @@ namespace ECSEngine.Managers
 
             InitFonts();
             InitKeymap();
-            InitGL();
+            InitGl();
         }
 
         #region "Initialization"
-        private void InitGL()
+        private void InitGl()
         {
             shaderComponent = new ShaderComponent(new Shader("Content/ImGUI/imgui.frag", ShaderType.FragmentShader),
                 new Shader("Content/ImGUI/imgui.vert", ShaderType.VertexShader));
@@ -60,7 +57,7 @@ namespace ECSEngine.Managers
         private void InitFonts()
         {
             io.Fonts.AddFontFromFileTTF("Content/Fonts/OpenSans/OpenSans-SemiBold.ttf", 16);
-            io.Fonts.GetTexDataAsRGBA32(out IntPtr pixels, out int width, out int height, out int bpp);
+            io.Fonts.GetTexDataAsRGBA32(out IntPtr pixels, out var width, out var height, out var bpp);
             io.Fonts.SetTexID((IntPtr)1);
             defaultFontTexture = new Texture2D(pixels, width, height, bpp);
             io.Fonts.ClearTexData();
@@ -105,8 +102,8 @@ namespace ECSEngine.Managers
                     showPerformanceStats = !showPerformanceStats;
                 if (ImGui.MenuItem("Toggle playground"))
                     showPlayground = !showPlayground;
-                if (ImGui.MenuItem("Toggle shader editor"))
-                    showShaderEditor = !showShaderEditor;
+                if (ImGui.MenuItem("Toggle console (`)"))
+                    showConsole = !showConsole;
 
                 if (ImGui.MenuItem("Show all"))
                 {
@@ -114,7 +111,7 @@ namespace ECSEngine.Managers
                     showInspector = true;
                     showPerformanceStats = true;
                     showPlayground = true;
-                    showShaderEditor = true;
+                    showConsole = true;
                 }
                 if (ImGui.MenuItem("Hide all"))
                 {
@@ -122,7 +119,7 @@ namespace ECSEngine.Managers
                     showInspector = false;
                     showPerformanceStats = false;
                     showPlayground = false;
-                    showShaderEditor = false;
+                    showConsole = false;
                 }
 
                 ImGui.EndMenu();
@@ -135,8 +132,8 @@ namespace ECSEngine.Managers
             ImGui.Begin("Playground", ref showPlayground);
 
             // Loading test
-            int progress = (int)(ImGui.GetTime() / 0.025f) % 100;
-            int filesLoaded = (int)Math.Round(progress * 0.25);
+            var progress = (int)(ImGui.GetTime() / 0.025f) % 100;
+            var filesLoaded = (int)Math.Round(progress * 0.25);
             ImGui.Text($"Loading, please wait... {@"|/-\"[(int)(ImGui.GetTime() / 0.25f) % 4]}");
             ImGui.TextUnformatted($"Files loaded: {progress}% ({filesLoaded} / 25)"); // TextUnformatted displays '%' without needing to format it as '%%'.
 
@@ -153,16 +150,7 @@ namespace ECSEngine.Managers
                 return;
             }
 
-            RenderObject(selectedEntity);
-
-            foreach (var objectComponent in selectedEntity.components)
-            {
-                if (ImGui.TreeNode(objectComponent.GetType().Name))
-                {
-                    RenderObject(objectComponent);
-                    ImGui.TreePop();
-                }
-            }
+            selectedEntity.RenderImGUI();
 
             ImGui.End();
         }
@@ -170,16 +158,20 @@ namespace ECSEngine.Managers
         private void DrawSceneHierarchy()
         {
             ImGui.Begin("Scene Hierarchy", ref showSceneHierarchy);
-            string[] entityNames = new string[SceneManager.instance.entities.Count];
-            for (int i = 0; i < SceneManager.instance.entities.Count; i++)
+            var entityNames = new string[SceneManager.Instance.Entities.Count];
+            for (var i = 0; i < SceneManager.Instance.Entities.Count; i++)
             {
-                entityNames[i] = SceneManager.instance.entities[i].GetType().Name;
+                entityNames[i] = SceneManager.Instance.Entities[i].GetType().Name;
             }
 
-            if (ImGui.ListBox("", ref currentSceneHierarchyItem, entityNames, entityNames.Length))
+            ImGui.PushItemWidth(-1);
+
+            if (ImGui.ListBox("##SceneListbox", ref currentSceneHierarchyItem, entityNames, entityNames.Length))
             {
-                selectedEntity = SceneManager.instance.entities[currentSceneHierarchyItem];
+                selectedEntity = SceneManager.Instance.Entities[currentSceneHierarchyItem];
             }
+
+            ImGui.PopItemWidth();
 
             ImGui.End();
         }
@@ -188,73 +180,55 @@ namespace ECSEngine.Managers
         {
             ImGui.Begin("Performance", ref showPerformanceStats);
 
-            ImGui.LabelText($"{RenderManager.instance.lastFrameTime}ms", "Current frametime");
+            ImGui.LabelText($"{RenderManager.Instance.LastFrameTime}ms", "Current frametime");
 
             ImGui.PlotHistogram(
                 "Average frame time",
-                ref RenderManager.instance.frametimeHistory[0],
-                RenderManager.instance.frametimeHistory.Length,
+                ref RenderManager.Instance.FrametimeHistory[0],
+                RenderManager.Instance.FrametimeHistory.Length,
                 0,
                 "",
                 0
             );
 
-            ImGui.LabelText($"{RenderManager.instance.calculatedFramerate}fps", "Current framerate");
+            ImGui.LabelText($"{RenderManager.Instance.CalculatedFramerate}fps", "Current framerate");
             ImGui.PlotLines(
                 "Average frame rate",
-                ref RenderManager.instance.framerateHistory[0],
-                RenderManager.instance.framerateHistory.Length,
+                ref RenderManager.Instance.FramerateHistory[0],
+                RenderManager.Instance.FramerateHistory.Length,
                 0,
                 "",
                 0
             );
 
-            ImGui.Checkbox($"Fake lag", ref RenderManager.instance.fakeLag);
+            ImGui.Checkbox("Fake lag", ref RenderManager.Instance.fakeLag);
 
             ImGui.End();
         }
 
-        private void DrawShaderEditor()
+        private void DrawConsole()
         {
-            ImGui.Begin("Shader options", ref showShaderEditor);
+            ImGui.Begin("Console", ref showConsole);
 
-            if (selectedEntity != null && selectedEntity.HasComponent<ShaderComponent>())
+            ImGui.PushItemWidth(-1);
+            ImGui.InputTextMultiline("Console", ref Debug.pastLogsStringConsole, UInt32.MaxValue, new Vector2(-1, -50), ImGuiInputTextFlags.ReadOnly);
+            ImGui.SetScrollHereY(1.0f);
+            ImGui.PopItemWidth();
+
+            if (ImGui.InputText("Filter", ref currentConsoleFilter, 256))
             {
-                var selectedShaderComponent = selectedEntity.GetComponent<ShaderComponent>();
-                string[] shaderNames = new string[selectedShaderComponent.shaders.Length];
-                for (int i = 0; i < selectedShaderComponent.shaders.Length; ++i)
-                {
-                    shaderNames[i] = selectedShaderComponent.shaders[i].fileName;
-                }
-
-                if (selectedShaderComponent.shaders.Length > 0)
-                {
-                    if (ImGui.ListBox("", ref currentShaderItem, shaderNames, selectedShaderComponent.shaders.Length))
-                    {
-                        selectedEntity = SceneManager.instance.entities[currentSceneHierarchyItem];
-                        currentShaderSource = selectedShaderComponent.shaders[currentShaderItem].shaderSource[0];
-                    }
-
-                    if (ImGui.Button("Reload shader"))
-                    {
-                        selectedShaderComponent.CreateShader();
-                        selectedShaderComponent.shaders[currentShaderItem].ReadSourceFromFile();
-                        selectedShaderComponent.shaders[currentShaderItem].Compile();
-                        selectedShaderComponent.AttachAndLink();
-                    }
-                }
+                Debug.CalcLogStringByFilter(currentConsoleFilter);
             }
-            else
-            {
-                ImGui.LabelText("Shader contents", "Select an entity with a shader component.");
-                currentShaderItem = 0;
-            }
+
+            ImGui.InputText("Input", ref currentConsoleInput, 256);
+
             ImGui.End();
         }
         #endregion
 
         public override void Run()
         {
+#if DEBUG
             ImGui.NewFrame();
             if (shouldRender)
             {
@@ -272,93 +246,38 @@ namespace ECSEngine.Managers
                 if (showInspector)
                     DrawInspector();
 
-                if (showShaderEditor)
-                    DrawShaderEditor();
+                if (showConsole)
+                    DrawConsole();
             }
             else
             {
-#if DEBUG
-                var debugText = $"ECS Engine\n" +
-                                   $"Press F1 to open the editor.\n" +
-                                   $"{RenderManager.instance.lastFrameTime}ms, {RenderManager.instance.calculatedFramerate}fps";
-                Vector2 debugTextPos = new Vector2(8, 8);
+                var debugText = "ECS Engine\n" +
+                                   "F1 for editor\n" +
+                                   $"{RenderManager.Instance.LastFrameTime}ms\n" +
+                                   $"{RenderManager.Instance.CalculatedFramerate}fps";
+                var debugTextPos = new Vector2(RenderSettings.Default.gameResolutionX - 128, 8);
                 ImGui.GetBackgroundDrawList().AddText(
                     debugTextPos + new Vector2(1, 1), 0x88000000, debugText); // Shadow
                 ImGui.GetBackgroundDrawList().AddText(
                     debugTextPos, 0xFFFFFFFF, debugText);
-#endif
             }
 
+            if (showConsolePreview && !(shouldRender && showConsole))
+            {
+                var consoleText = Debug.PastLogsString;
+                var consoleTextPos = new Vector2(8, 8);
+
+                if (shouldRender)
+                    consoleTextPos.Y += 20; // Offset if menu bar is visible
+
+                ImGui.GetBackgroundDrawList().AddText(
+                    consoleTextPos + new Vector2(1, 1), 0x88000000, consoleText); // Shadow
+                ImGui.GetBackgroundDrawList().AddText(
+                    consoleTextPos, 0xFFFFFFFF, consoleText);
+            }
             ImGui.Render();
             RenderImGui(ImGui.GetDrawData());
-        }
-
-        private void RenderObject(object objectToRender, int depth = 0)
-        {
-            // TODO: refactor this so it doesnt use dynamic
-            if (depth > 1) return; // Prevent any dumb stack overflow errors
-            foreach (var field in objectToRender.GetType().GetFields())
-            {
-                // this works but is, like, the worst solution ever
-                var referenceType = typeof(Ref<>).MakeGenericType(field.FieldType);
-                var reference = (dynamic /* alarm bells right here */)Activator.CreateInstance(referenceType, field, objectToRender);
-                if (field.FieldType == typeof(float))
-                {
-                    float value = reference.value;
-                    float min = float.MinValue;
-                    float max = float.MaxValue;
-                    bool useSlider = false;
-                    var fieldAttributes = field.GetCustomAttributes(false);
-                    foreach (var attrib in fieldAttributes.Where(o => o.GetType() == typeof(RangeAttribute)))
-                    {
-                        var rangeAttrib = (RangeAttribute)attrib;
-                        min = rangeAttrib.min;
-                        max = rangeAttrib.max;
-                        useSlider = true;
-                    }
-
-                    if (useSlider)
-                        ImGui.SliderFloat($"{field.Name}", ref value, min, max);
-                    else
-                        ImGui.InputFloat($"{field.Name}", ref value);
-                    reference.value = value;
-                }
-                else if (field.FieldType == typeof(ColorRGB24))
-                {
-                    Vector3 value = new Vector3(reference.value.r / 255f, reference.value.g / 255f, reference.value.b / 255f);
-                    ImGui.ColorEdit3($"{field.Name}", ref value);
-                    reference.value = new ColorRGB24((byte)(value.X * 255f), (byte)(value.Y * 255f), (byte)(value.Z * 255f));
-                }
-                else if (field.FieldType == typeof(MathUtils.Vector3))
-                {
-                    Vector3 value = reference.value.ConvertToNumerics();
-                    ImGui.DragFloat3(field.Name, ref value, 0.1f);
-                    reference.value = MathUtils.Vector3.ConvertFromNumerics(value);
-                }
-                else if (field.FieldType == typeof(Quaternion))
-                {
-                    Vector3 value = reference.value.ToEulerAngles().ConvertToNumerics();
-                    ImGui.DragFloat3(field.Name, ref value, 0.1f);
-                    reference.value = Quaternion.FromEulerAngles(MathUtils.Vector3.ConvertFromNumerics(value));
-                }
-                else if (field.FieldType == typeof(int))
-                {
-                    int value = reference.value;
-                    ImGui.DragInt($"{field.Name}", ref value);
-                    reference.value = value;
-                }
-                else if (field.FieldType == typeof(List<>) || field.FieldType.BaseType == typeof(Array))
-                {
-                    foreach (var element in (dynamic /* uh oh, we're at it again*/)field.GetValue(objectToRender))
-                    {
-                        RenderObject(element, depth + 1);
-                    }
-                }
-                else
-                {
-                    ImGui.LabelText($"{field.Name}", $"{field.GetValue(objectToRender)}");
-                }
-            }
+#endif
         }
 
         private void RenderImGui(ImDrawDataPtr drawData)
@@ -369,7 +288,7 @@ namespace ECSEngine.Managers
             Gl.Disable(EnableCap.DepthTest);
             Gl.Enable(EnableCap.ScissorTest);
 
-            Matrix4x4f projectionMatrix = Matrix4x4f.Ortho2D(0f, io.DisplaySize.X, io.DisplaySize.Y, 0.0f);
+            var projectionMatrix = Matrix4x4f.Ortho2D(0f, io.DisplaySize.X, io.DisplaySize.Y, 0.0f);
 
             shaderComponent.UseShader();
             shaderComponent.SetVariable("albedoTexture", 0);
@@ -391,19 +310,19 @@ namespace ECSEngine.Managers
 
             io.DisplaySize = windowSize;
 
-            for (int commandListIndex = 0; commandListIndex < drawData.CmdListsCount; commandListIndex++)
+            for (var commandListIndex = 0; commandListIndex < drawData.CmdListsCount; commandListIndex++)
             {
                 int indexOffset = 0, vertexOffset = 0;
-                ImDrawListPtr commandList = drawData.CmdListsRange[commandListIndex];
+                var commandList = drawData.CmdListsRange[commandListIndex];
 
                 Gl.BufferData(BufferTarget.ArrayBuffer, (uint)(commandList.VtxBuffer.Size * 20), commandList.VtxBuffer.Data, BufferUsage.DynamicDraw);
                 Gl.BufferData(BufferTarget.ElementArrayBuffer, (uint)(commandList.IdxBuffer.Size * 2), commandList.IdxBuffer.Data, BufferUsage.DynamicDraw);
 
-                for (int commandIndex = 0; commandIndex < commandList.CmdBuffer.Size; commandIndex++)
+                for (var commandIndex = 0; commandIndex < commandList.CmdBuffer.Size; commandIndex++)
                 {
                     var currentCommand = commandList.CmdBuffer[commandIndex];
 
-                    Vector4 clipBounds = new Vector4(
+                    var clipBounds = new Vector4(
                         (currentCommand.ClipRect.X - clipOffset.X) * clipScale.X,
                         (currentCommand.ClipRect.Y - clipOffset.Y) * clipScale.Y,
                         (currentCommand.ClipRect.Z - clipOffset.X) * clipScale.X,
@@ -428,7 +347,7 @@ namespace ECSEngine.Managers
         {
             // TODO: correctly handle different locales and keyboard layouts
             // This is currently only written for ISO UK qwerty.
-            char c = '\0';
+            var c = '\0';
             if (keyCode >= KeyCode.A && keyCode <= KeyCode.Z)
             {
                 c = (char)('a' + keyCode - KeyCode.A);
@@ -442,7 +361,7 @@ namespace ECSEngine.Managers
             {
                 if (io.KeyShift)
                 {
-                    List<char> characters = new List<char>()
+                    var characters = new List<char>
                     {
                         // 0   1    2    3    4    5    6    7    8    9   
                         ')', '!', '"', '£', '$', '%', '^', '&', '*', '('
@@ -507,33 +426,35 @@ namespace ECSEngine.Managers
             {
                 case Event.KeyDown:
                     {
-                        KeyboardEventArgs keyboardEventArgs = (KeyboardEventArgs)eventArgs;
-                        io.KeysDown[keyboardEventArgs.keyboardKey] = true;
-                        KeyCode keyCode = (KeyCode)keyboardEventArgs.keyboardKey;
+                        var keyboardEventArgs = (KeyboardEventArgs)eventArgs;
+                        io.KeysDown[keyboardEventArgs.KeyboardKey] = true;
+                        var keyCode = (KeyCode)keyboardEventArgs.KeyboardKey;
 
-                        if (keyCode == KeyCode.Shift)
+                        switch (keyCode)
                         {
-                            io.KeyShift = true;
-                        }
-                        else if (keyCode == KeyCode.Control)
-                        {
-                            io.KeyCtrl = true;
-                        }
-                        else if (keyCode == KeyCode.F1)
-                        {
-                            shouldRender = !shouldRender;
-                        }
-                        else
-                        {
-                            io.AddInputCharacter(KeyCodeToChar(keyCode));
+                            case KeyCode.Shift:
+                                io.KeyShift = true;
+                                break;
+                            case KeyCode.Control:
+                                io.KeyCtrl = true;
+                                break;
+                            case KeyCode.F1:
+                                shouldRender = !shouldRender;
+                                break;
+                            case KeyCode.OEM3:
+                                showConsole = !showConsole;
+                                break;
+                            default:
+                                io.AddInputCharacter(KeyCodeToChar(keyCode));
+                                break;
                         }
                         break;
                     }
                 case Event.KeyUp:
                     {
-                        KeyboardEventArgs keyboardEventArgs = (KeyboardEventArgs)eventArgs;
-                        io.KeysDown[keyboardEventArgs.keyboardKey] = false;
-                        KeyCode keyCode = (KeyCode)keyboardEventArgs.keyboardKey;
+                        var keyboardEventArgs = (KeyboardEventArgs)eventArgs;
+                        io.KeysDown[keyboardEventArgs.KeyboardKey] = false;
+                        var keyCode = (KeyCode)keyboardEventArgs.KeyboardKey;
                         if (keyCode == KeyCode.Shift)
                         {
                             io.KeyShift = false;
@@ -546,32 +467,32 @@ namespace ECSEngine.Managers
                     }
                 case Event.MouseMove:
                     {
-                        MouseMoveEventArgs mouseMoveEventArgs = (MouseMoveEventArgs)eventArgs;
-                        io.MousePos = new Vector2(mouseMoveEventArgs.mousePosition.x, mouseMoveEventArgs.mousePosition.y);
+                        var mouseMoveEventArgs = (MouseMoveEventArgs)eventArgs;
+                        io.MousePos = new Vector2(mouseMoveEventArgs.MousePosition.x, mouseMoveEventArgs.MousePosition.y);
                         break;
                     }
                 case Event.MouseButtonDown:
                     {
-                        MouseButtonEventArgs mouseButtonEventArgs = (MouseButtonEventArgs)eventArgs;
-                        io.MouseDown[mouseButtonEventArgs.mouseButton] = true;
+                        var mouseButtonEventArgs = (MouseButtonEventArgs)eventArgs;
+                        io.MouseDown[mouseButtonEventArgs.MouseButton] = true;
                         break;
                     }
                 case Event.MouseButtonUp:
                     {
-                        MouseButtonEventArgs mouseButtonEventArgs = (MouseButtonEventArgs)eventArgs;
-                        io.MouseDown[mouseButtonEventArgs.mouseButton] = false;
+                        var mouseButtonEventArgs = (MouseButtonEventArgs)eventArgs;
+                        io.MouseDown[mouseButtonEventArgs.MouseButton] = false;
                         break;
                     }
                 case Event.MouseScroll:
                     {
-                        MouseWheelEventArgs mouseWheelEventArgs = (MouseWheelEventArgs)eventArgs;
-                        io.MouseWheel += mouseWheelEventArgs.mouseScroll;
+                        var mouseWheelEventArgs = (MouseWheelEventArgs)eventArgs;
+                        io.MouseWheel += mouseWheelEventArgs.MouseScroll;
                         break;
                     }
                 case Event.WindowResized:
                     {
-                        WindowResizeEventArgs windowResizeEventArgs = (WindowResizeEventArgs)eventArgs;
-                        windowSize = new Vector2(windowResizeEventArgs.windowSize.x, windowResizeEventArgs.windowSize.y);
+                        var windowResizeEventArgs = (WindowResizeEventArgs)eventArgs;
+                        windowSize = new Vector2(windowResizeEventArgs.WindowSize.x, windowResizeEventArgs.WindowSize.y);
                         break;
                     }
                 default:

@@ -1,5 +1,6 @@
-﻿using OpenGL;
-using System.IO;
+﻿using System.IO;
+using System.Text;
+using OpenGL;
 
 namespace ECSEngine.Render
 {
@@ -11,29 +12,29 @@ namespace ECSEngine.Render
         /// <summary>
         /// The shader source's file name.
         /// </summary>
-        public string fileName { get; set; }
+        public string FileName { get; set; }
 
         /// <summary>
         /// OpenGL's reference to the shader.
         /// </summary>
-        public uint glShader { get; set; }
+        public uint GlShader { get; set; }
 
         /// <summary>
         /// The shader's type.
         /// </summary>
-        public ShaderType shaderType { get; set; }
+        public ShaderType ShaderType { get; set; }
 
-        private string[] shaderSource_;
+        private string[] shaderSource;
 
         /// <summary>
         /// The shader's source.
         /// </summary>
-        public string[] shaderSource
+        public string[] ShaderSource
         {
-            get => shaderSource_;
+            get => shaderSource;
             set
             {
-                shaderSource_ = value;
+                shaderSource = value;
                 Compile();
             }
         }
@@ -45,10 +46,10 @@ namespace ECSEngine.Render
         /// <param name="shaderType">The shader's type.</param>
         public Shader(string path, ShaderType shaderType)
         {
-            this.shaderType = shaderType;
-            fileName = path;
-            glShader = Gl.CreateShader(shaderType);
-            shaderSource_ = new string[0];
+            ShaderType = shaderType;
+            FileName = path;
+            GlShader = Gl.CreateShader(shaderType);
+            shaderSource = new string[0];
 
             ReadSourceFromFile();
             Compile();
@@ -56,9 +57,9 @@ namespace ECSEngine.Render
 
         public void ReadSourceFromFile()
         {
-            shaderSource_ = new string[1];
-            using (StreamReader streamReader = new StreamReader(fileName))
-                shaderSource_[0] = streamReader.ReadToEnd();
+            shaderSource = new string[1];
+            using (var streamReader = new StreamReader(FileName))
+                shaderSource[0] = streamReader.ReadToEnd();
         }
 
         /// <summary>
@@ -66,8 +67,8 @@ namespace ECSEngine.Render
         /// </summary>
         public void Compile()
         {
-            Gl.ShaderSource(glShader, shaderSource);
-            Gl.CompileShader(glShader);
+            Gl.ShaderSource(GlShader, ShaderSource);
+            Gl.CompileShader(GlShader);
 
             CheckForErrors();
         }
@@ -80,14 +81,14 @@ namespace ECSEngine.Render
             var glErrors = Gl.GetError();
             if (glErrors != ErrorCode.NoError)
             {
-                int maxLength = 1024;
-                var glErrorStr = new System.Text.StringBuilder(maxLength);
-                Gl.GetShaderInfoLog(glShader, maxLength, out int length, glErrorStr);
-                Debug.Log($"Problem compiling shader {fileName}: ({length}) {glErrors} - {glErrorStr}", Debug.DebugSeverity.High);
+                var maxLength = 1024;
+                var glErrorStr = new StringBuilder(maxLength);
+                Gl.GetShaderInfoLog(GlShader, maxLength, out var length, glErrorStr);
+                Debug.Log($"Problem compiling shader {FileName}: ({length}) {glErrors} - {glErrorStr}", Debug.DebugSeverity.High);
             }
             else
             {
-                Debug.Log($"Compiled shader {fileName} successfully");
+                Debug.Log($"Compiled shader {FileName} successfully");
             }
         }
     }

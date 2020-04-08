@@ -18,7 +18,7 @@ namespace ECSEngine.Components
         /// <summary>
         /// The <see cref="Mesh"/> to draw.
         /// </summary>
-        private readonly Mesh mesh;
+        public Mesh RenderMesh { get; }
 
         private ShaderComponent shaderComponent;
         private TransformComponent transformComponent;
@@ -29,7 +29,15 @@ namespace ECSEngine.Components
         /// <param name="path">The path to load the <see cref="Mesh"/> from.</param>
         public MeshComponent(string path)
         {
-            mesh = new Mesh(path);
+            RenderMesh = new Mesh(path);
+        }
+
+        /// <summary>
+        /// Construct a blank mesh component, with no loaded mesh.
+        /// </summary>
+        public MeshComponent()
+        {
+            RenderMesh = new Mesh();
         }
 
         /// <summary>
@@ -37,25 +45,25 @@ namespace ECSEngine.Components
         /// </summary>
         public override void Render()
         {
-            shaderComponent = ((IEntity)parent).GetComponent<ShaderComponent>();
-            transformComponent = ((IEntity)parent).GetComponent<TransformComponent>();
+            shaderComponent = ((IEntity)Parent).GetComponent<ShaderComponent>();
+            transformComponent = ((IEntity)Parent).GetComponent<TransformComponent>();
 
             shaderComponent.UseShader(); // TODO: Attach GetComponent function to IComponent
 
-            Gl.BindVertexArray(mesh.vao);
-            Gl.BindBuffer(BufferTarget.ArrayBuffer, mesh.vbo);
+            Gl.BindVertexArray(RenderMesh.vao);
+            Gl.BindBuffer(BufferTarget.ArrayBuffer, RenderMesh.vbo);
 
-            CameraEntity camera = ((SceneManager)parent.parent).mainCamera;
-            shaderComponent.SetVariable("projMatrix", camera.projMatrix);
-            shaderComponent.SetVariable("viewMatrix", camera.viewMatrix);
-            shaderComponent.SetVariable("cameraPos", camera.position);
-            shaderComponent.SetVariable("modelMatrix", transformComponent.matrix);
+            var camera = ((SceneManager)Parent.Parent).mainCamera;
+            shaderComponent.SetVariable("projMatrix", camera.ProjMatrix);
+            shaderComponent.SetVariable("viewMatrix", camera.ViewMatrix);
+            shaderComponent.SetVariable("cameraPos", camera.Position);
+            shaderComponent.SetVariable("modelMatrix", transformComponent.Matrix);
 
             GetComponent<MaterialComponent>().BindAll(shaderComponent);
 
-            SceneManager.instance.lights[0].Bind(shaderComponent);
+            SceneManager.Instance.lights[0].Bind(shaderComponent);
 
-            Gl.DrawArrays(PrimitiveType.Triangles, 0, mesh.elementCount * sizeof(float));
+            Gl.DrawArrays(PrimitiveType.Triangles, 0, RenderMesh.ElementCount * sizeof(float));
 
             Gl.BindVertexArray(0);
             Gl.BindBuffer(BufferTarget.ArrayBuffer, 0);

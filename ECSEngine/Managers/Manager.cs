@@ -1,7 +1,8 @@
-﻿using ECSEngine.Entities;
-using ECSEngine.Events;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using ECSEngine.Entities;
+using ECSEngine.Events;
+using ECSEngine.Types;
 
 namespace ECSEngine.Managers
 {
@@ -10,12 +11,14 @@ namespace ECSEngine.Managers
         /// <summary>
         /// The manager's parent; usually an instance of Game.
         /// </summary>
-        public virtual IHasParent parent { get; set; }
+        public virtual IHasParent Parent { get; set; }
+
+        public void RenderImGUI() { }
 
         /// <summary>
         /// A list of entities that the manager contains.
         /// </summary>
-        public List<IEntity> entities { get; } = new List<IEntity>();
+        public List<IEntity> Entities { get; } = new List<IEntity>();
 
         // All systems should be singletons.
         private static T privateInstance;
@@ -23,7 +26,7 @@ namespace ECSEngine.Managers
         /// <summary>
         /// Get the single instance of the desired manager.
         /// </summary>
-        public static T instance
+        public static T Instance
         {
             get
             {
@@ -39,7 +42,7 @@ namespace ECSEngine.Managers
         /// <param name="eventArgs">Any relevant information about the event.</param>
         public virtual void HandleEvent(Event eventType, IEventArgs eventArgs)
         {
-            foreach (IEntity entity in entities)
+            foreach (var entity in Entities)
             {
                 entity.HandleEvent(eventType, eventArgs);
             }
@@ -52,8 +55,8 @@ namespace ECSEngine.Managers
 
         public void AddEntity(IEntity entity)
         {
-            entity.parent = this;
-            entities.Add(entity);
+            entity.Parent = this;
+            Entities.Add(entity);
         }
     }
 }

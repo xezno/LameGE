@@ -10,8 +10,8 @@ namespace ECSEngine.MathUtils
 
         private static float DotGridGradient(int ix, int iy, float x, float y)
         {
-            float dx = x - ix;
-            float dy = y - iy;
+            var dx = x - ix;
+            var dy = y - iy;
 
             return (dx * gradientValues[iy, ix].x) + (dy * gradientValues[iy, ix].y);
         }
@@ -22,10 +22,10 @@ namespace ECSEngine.MathUtils
             if (gradientValues[0, 0].x != 0f && gradientValues[0, 0].y != 0f) return;
             // ReSharper restore CompareOfFloatsByEqualityOperator
 
-            Random random = new Random(seed);
-            for (int x = 0; x < gradientValues.GetLength(0); x++)
+            var random = new Random(seed);
+            for (var x = 0; x < gradientValues.GetLength(0); x++)
             {
-                for (int y = 0; y < gradientValues.GetLength(1); y++)
+                for (var y = 0; y < gradientValues.GetLength(1); y++)
                 {
                     gradientValues[x, y] = new Vector2(
                         ((float)random.NextDouble() * 2) - 1,
@@ -39,13 +39,13 @@ namespace ECSEngine.MathUtils
         {
             CalculateGradientValues(seed);
 
-            int x0 = (int)x;
-            int x1 = x0 + 1;
-            int y0 = (int)y;
-            int y1 = y0 + 1;
+            var x0 = (int)x;
+            var x1 = x0 + 1;
+            var y0 = (int)y;
+            var y1 = y0 + 1;
 
-            float sx = x - x0;
-            float sy = y - y0;
+            var sx = x - x0;
+            var sy = y - y0;
 
             float n0, n1, ix0, ix1;
             n0 = DotGridGradient(x0, y0, x, y);

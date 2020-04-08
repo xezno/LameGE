@@ -2,8 +2,8 @@
 {
     public class GameProperties
     {
-        public string gameName { get; set; }
-        public string gameNameShort { get; set; }
-        public string windowTitle { get; set; }
+        public string GameName { get; set; }
+        public string GameNameShort { get; set; }
+        public string WindowTitle { get; set; }
     }
 }

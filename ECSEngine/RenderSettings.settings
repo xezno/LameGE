@@ -3,10 +3,25 @@
   <Profiles />
   <Settings>
     <Setting Name="gameResolutionX" Type="System.UInt32" Scope="User">
-      <Value Profile="(Default)">1600</Value>
+      <Value Profile="(Default)">1920</Value>
     </Setting>
     <Setting Name="gameResolutionY" Type="System.UInt32" Scope="User">
-      <Value Profile="(Default)">900</Value>
+      <Value Profile="(Default)">1080</Value>
+    </Setting>
+    <Setting Name="vsyncEnabled" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="framerateLimit" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">60</Value>
+    </Setting>
+    <Setting Name="gamePosX" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">-1920</Value>
+    </Setting>
+    <Setting Name="gamePosY" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">32</Value>
+    </Setting>
+    <Setting Name="fullscreen" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>

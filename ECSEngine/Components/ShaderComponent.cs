@@ -1,8 +1,9 @@
-﻿using ECSEngine.MathUtils;
-using ECSEngine.Render;
-using OpenGL;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using ECSEngine.MathUtils;
+using ECSEngine.Render;
+using ImGuiNET;
+using OpenGL;
 
 namespace ECSEngine.Components
 {
@@ -23,6 +24,10 @@ namespace ECSEngine.Components
         /// </summary>
         public readonly Shader[] shaders;
 
+        // Imgui variables
+        private string currentShaderSource = "";
+        private int currentShaderItem;
+
         /// <summary>
         /// Construct a new ShaderComponent, attaching any of the shaders given.
         /// </summary>
@@ -38,7 +43,7 @@ namespace ECSEngine.Components
 
         public void CreateShader()
         {
-            this.shaderProgram = Gl.CreateProgram();
+            shaderProgram = Gl.CreateProgram();
         }
 
         /// <summary>
@@ -48,7 +53,7 @@ namespace ECSEngine.Components
         {
             foreach (var shader in shaders)
             {
-                Gl.AttachShader(shaderProgram, shader.glShader);
+                Gl.AttachShader(shaderProgram, shader.GlShader);
             }
             Gl.LinkProgram(shaderProgram);
 
@@ -77,12 +82,13 @@ namespace ECSEngine.Components
             if (variableLocation < 0)
             {
                 errorLog.Add(variableName);
-                Debug.Log($"The variable {variableName} does not exist on this shader.", Debug.DebugSeverity.High);
+                Debug.Log($"Tried to set value for variable {variableName} that does not exist on shaderprogram {shaderProgram}.", Debug.DebugSeverity.High);
                 return; // We can't continue, because the variable doesn't exist
             }
+
             if (variableValue == null)
             {
-                Debug.Log($"The variable {variableName} does not have a value.", Debug.DebugSeverity.High);
+                Debug.Log($"Tried to set value for variable {variableName}, but null value was given.", Debug.DebugSeverity.High);
                 return; // We can't continue, because the variable has no value
             }
 
@@ -116,6 +122,31 @@ namespace ECSEngine.Components
             {
                 errorLog.Add(variableName);
                 Debug.Log($"I don't know how to handle {variableValue.GetType().Name} yet :(", Debug.DebugSeverity.Medium);
+            }
+        }
+
+        public override void RenderImGUI()
+        {
+            base.RenderImGUI(); var shaderNames = new string[shaders.Length];
+            for (var i = 0; i < shaders.Length; ++i)
+            {
+                shaderNames[i] = shaders[i].FileName;
+            }
+
+            if (shaders.Length > 0)
+            {
+                if (ImGui.ListBox("", ref currentShaderItem, shaderNames, shaders.Length))
+                {
+                    currentShaderSource = shaders[currentShaderItem].ShaderSource[0];
+                }
+
+                if (ImGui.Button("Reload shader"))
+                {
+                    CreateShader();
+                    shaders[currentShaderItem].ReadSourceFromFile();
+                    shaders[currentShaderItem].Compile();
+                    AttachAndLink();
+                }
             }
         }
     }

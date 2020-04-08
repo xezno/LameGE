@@ -11,11 +11,11 @@ namespace ECSEngine.Events
         /// <summary>
         /// The object triggering the event.
         /// </summary>
-        object sender { get; set; }
+        object Sender { get; set; }
 
         /// <summary>
         /// The time at which the event was triggered.
         /// </summary>
-        DateTime timeSent { get; set; }
+        DateTime TimeSent { get; set; }
     }
 }

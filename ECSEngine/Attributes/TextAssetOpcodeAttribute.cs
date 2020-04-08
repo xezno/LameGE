@@ -5,7 +5,7 @@ namespace ECSEngine.Attributes
     /// <summary>
     /// Inform plaintext asset loaders of various fields with particular opcodes.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Field, AllowMultiple = true, Inherited = false)]
+    [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
     internal class TextAssetOpcodeAttribute : Attribute
     {
         /// <summary>
@@ -30,7 +30,7 @@ namespace ECSEngine.Attributes
 
         public TextAssetOpcodeAttribute(string opcode, bool invertValue = false)
         {
-            this.opcodes = new[] { opcode };
+            opcodes = new[] { opcode };
             this.invertValue = invertValue;
         }
     }

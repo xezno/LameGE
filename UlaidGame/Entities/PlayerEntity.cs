@@ -1,15 +1,15 @@
 ﻿using ECSEngine.Components;
 using ECSEngine.Entities;
 using ECSEngine.MathUtils;
-using SpaceGame.Components;
+using UlaidGame.Components;
 
-namespace SpaceGame.Entities
+namespace UlaidGame.Entities
 {
     public sealed class PlayerEntity : Entity<PlayerEntity>
     {
         public PlayerEntity()
         {
-            AddComponent(new TransformComponent(new Vector3(0, 2f, 0f), Quaternion.identity, new Vector3(1, 1, 1)));
+            AddComponent(new TransformComponent(new Vector3(0, -120f, 15f), Quaternion.identity, new Vector3(1, 1, 1)));
             AddComponent(new PlayerMovementComponent());
         }
     }

@@ -1,5 +1,4 @@
-﻿using ECSEngine.Entities;
-using System;
+﻿using System;
 using System.Threading;
 
 namespace ECSEngine.Managers
@@ -10,9 +9,9 @@ namespace ECSEngine.Managers
         private int minimumUpdateDelay = 8;
         public override void Run()
         {
-            int updateTime = (DateTime.Now - lastUpdate).Milliseconds;
-            float deltaTime = Math.Max(updateTime, 0.1f) / 1000.0f;
-            foreach (IEntity entity in SceneManager.instance.entities)
+            var updateTime = (DateTime.Now - lastUpdate).Milliseconds;
+            var deltaTime = Math.Max(updateTime, 0.1f) / 1000.0f;
+            foreach (var entity in SceneManager.Instance.Entities)
             {
                 entity.Update(deltaTime);
             }

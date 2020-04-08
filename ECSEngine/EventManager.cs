@@ -1,6 +1,6 @@
-﻿using ECSEngine.Events;
+﻿using System.Collections.Generic;
+using ECSEngine.Events;
 using ECSEngine.Managers;
-using System.Collections.Generic;
 
 namespace ECSEngine
 {
@@ -16,7 +16,7 @@ namespace ECSEngine
 
         public static void BroadcastEvent(Event eventType, IEventArgs eventArgs) // TODO: move to proper event implementation
         {
-            foreach (IManager system in systems)
+            foreach (var system in systems)
             {
                 system.HandleEvent(eventType, eventArgs);
             }

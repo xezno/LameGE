@@ -1,9 +1,10 @@
-﻿using OpenGL;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
+using OpenGL;
 using PixelFormat = OpenGL.PixelFormat;
 
 namespace ECSEngine.Render
@@ -42,13 +43,13 @@ namespace ECSEngine.Render
         {
             this.path = path;
             this.textureUnit = textureUnit;
-            this.glTexture = Gl.GenTexture();
+            glTexture = Gl.GenTexture();
             Gl.BindTexture(TextureTarget.Texture2d, glTexture);
-            using MemoryStream textureStream = new MemoryStream();
-            System.Drawing.Image image = System.Drawing.Image.FromFile(path);
+            using var textureStream = new MemoryStream();
+            var image = Image.FromFile(path);
             Debug.Log($"Image format: {image.PixelFormat}");
 
-            PixelFormat imageFormat = PixelFormat.Bgra;
+            var imageFormat = PixelFormat.Bgra;
             if (image.PixelFormat == System.Drawing.Imaging.PixelFormat.Format24bppRgb ||
                 image.PixelFormat == System.Drawing.Imaging.PixelFormat.Format32bppRgb)
                 imageFormat = PixelFormat.Bgr;
@@ -58,14 +59,14 @@ namespace ECSEngine.Render
             var textureData = new byte[textureStream.Length];
             textureStream.Read(textureData, 0, (int)textureStream.Length);
 
-            IntPtr textureDataPtr = Marshal.AllocHGlobal(textureData.Length);
+            var textureDataPtr = Marshal.AllocHGlobal(textureData.Length);
             Marshal.Copy(textureData, 0, textureDataPtr, textureData.Length);
 
             Gl.TexImage2D(TextureTarget.Texture2d, 0, InternalFormat.Rgba, image.Width, image.Height, 0, imageFormat, PixelType.UnsignedByte, textureDataPtr);
             Gl.GenerateMipmap(TextureTarget.Texture2d);
 
-            this.width = image.Width;
-            this.height = image.Height;
+            width = image.Width;
+            height = image.Height;
 
             image.Dispose();
 
@@ -76,16 +77,21 @@ namespace ECSEngine.Render
         {
             this.width = width;
             this.height = height;
-            this.path = "data-byte";
+            path = "byteData";
             this.textureUnit = textureUnit;
+            glTexture = Gl.GenTexture();
 
-            this.glTexture = Gl.GenTexture();
             Gl.BindTexture(TextureTarget.Texture2d, glTexture);
 
-            IntPtr textureDataPtr = Marshal.AllocHGlobal(textureData.Length);
+            var textureDataPtr = Marshal.AllocHGlobal(textureData.Length);
             Marshal.Copy(textureData, 0, textureDataPtr, textureData.Length);
 
-            Gl.TexImage2D(TextureTarget.Texture2d, 0, InternalFormat.Rgba, width, height, 0, PixelFormat.Bgr, PixelType.UnsignedByte, textureDataPtr);
+            if (width * height * 3 != textureData.Length)
+            {
+                throw new Exception("uh oh");
+            }
+
+            Gl.TexImage2D(TextureTarget.Texture2d, 0, InternalFormat.Rgba, width, height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, textureDataPtr);
             Gl.GenerateMipmap(TextureTarget.Texture2d);
 
             Marshal.FreeHGlobal(textureDataPtr);
@@ -103,15 +109,18 @@ namespace ECSEngine.Render
         {
             this.width = width;
             this.height = height;
-            this.path = "data-intptr";
+            path = "intPtrData";
             this.textureUnit = textureUnit;
-            this.glTexture = Gl.GenTexture();
+            glTexture = Gl.GenTexture();
             Gl.BindTexture(TextureTarget.Texture2d, glTexture);
             Gl.TexImage2D(TextureTarget.Texture2d, 0, InternalFormat.Rgba, width, height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, pixels);
             Gl.GenerateMipmap(TextureTarget.Texture2d);
         }
 
         public Texture2D(ColorRGB24[] textureData, int width, int height) : this(ConvertColorToBinary(textureData), width, height)
+        { }
+
+        public Texture2D(ColorRGBA32[] textureData, int width, int height) : this(ConvertColorToBinary(textureData), width, height)
         { }
 
         /// <summary>
@@ -134,12 +143,27 @@ namespace ECSEngine.Render
 
         static byte[] ConvertColorToBinary(ColorRGB24[] textureData)
         {
-            List<byte> binaryData = new List<byte>();
+            var binaryData = new List<byte>();
             foreach (var color in textureData)
             {
                 binaryData.Add(color.r);
                 binaryData.Add(color.g);
                 binaryData.Add(color.b);
+                binaryData.Add(255);
+            }
+
+            return binaryData.ToArray();
+        }
+
+        static byte[] ConvertColorToBinary(ColorRGBA32[] textureData)
+        {
+            var binaryData = new List<byte>();
+            foreach (var color in textureData)
+            {
+                binaryData.Add(color.r);
+                binaryData.Add(color.g);
+                binaryData.Add(color.b);
+                binaryData.Add(color.a);
             }
 
             return binaryData.ToArray();

@@ -1,10 +1,10 @@
-﻿using ECSEngine.Attributes;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using ECSEngine.Attributes;
 using ECSEngine.MathUtils;
 using ECSEngine.Render;
 using OpenGL;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 namespace ECSEngine.Assets
 {
@@ -24,13 +24,19 @@ namespace ECSEngine.Assets
         }
 
         /// <summary>
+        /// Create a plaintext asset that has not yet been loaded.
+        /// </summary>
+        public PlaintextAsset()
+        { }
+
+        /// <summary>
         /// Parse a string as a float, and output any issues to the console.
         /// </summary>
         /// <param name="str">The string to parse.</param>
         /// <returns>Either: 0 if the string was unable to be parsed correctly, or the float parsed from the string.</returns>
         private float ParseFloat(string str)
         {
-            if (float.TryParse(str, out float tmp))
+            if (float.TryParse(str, out var tmp))
                 return tmp;
             Debug.Log($"Could not successfully parse float from string '{str}'.", Debug.DebugSeverity.High);
             return 0;
@@ -43,7 +49,7 @@ namespace ECSEngine.Assets
         /// <returns>Either: 0 if the string was unable to be parsed correctly, or the integer parsed from the string.</returns>
         private int ParseInt(string str)
         {
-            if (int.TryParse(str, out int tmp))
+            if (int.TryParse(str, out var tmp))
                 return tmp;
             Debug.Log($"Could not successfully parse int from string '{str}'.", Debug.DebugSeverity.High);
             return 0;
@@ -56,7 +62,7 @@ namespace ECSEngine.Assets
         /// <returns>Either: 0 if the string was unable to be parsed correctly, or the unsigned integer parsed from the string.</returns>
         private uint ParseUnsignedInt(string str)
         {
-            if (uint.TryParse(str, out uint tmp))
+            if (uint.TryParse(str, out var tmp))
                 return tmp;
             Debug.Log($"Could not successfully parse unsigned int from string '{str}'.", Debug.DebugSeverity.High);
             return 0;
@@ -70,9 +76,9 @@ namespace ECSEngine.Assets
         /// <returns>Either: 0 if the string was unable to be parsed correctly, or the Vector2 parsed from the string.</returns>
         private Vector2 ParseVector2(string str, int startIndex = 0)
         {
-            string[] strSplit = str.Split(' ');
-            float x = ParseFloat(strSplit[startIndex]);
-            float y = ParseFloat(strSplit[startIndex + 1]);
+            var strSplit = str.Split(' ');
+            var x = ParseFloat(strSplit[startIndex]);
+            var y = ParseFloat(strSplit[startIndex + 1]);
             return new Vector2(x, y);
         }
 
@@ -85,10 +91,10 @@ namespace ECSEngine.Assets
         /// <returns>Either: 0 if the string was unable to be parsed correctly, or the Vector3 parsed from the string.</returns>
         private Vector3 ParseVector3(string str, int startIndex = 0)
         {
-            string[] strSplit = str.Split(' ');
-            float x = ParseFloat(strSplit[startIndex]);
-            float y = ParseFloat(strSplit[startIndex + 1]);
-            float z = ParseFloat(strSplit[startIndex + 2]);
+            var strSplit = str.Split(' ');
+            var x = ParseFloat(strSplit[startIndex]);
+            var y = ParseFloat(strSplit[startIndex + 1]);
+            var z = ParseFloat(strSplit[startIndex + 2]);
             return new Vector3(x, y, z);
         }
 
@@ -104,7 +110,7 @@ namespace ECSEngine.Assets
             var line = streamReader.ReadLine();
             while (line != null)
             {
-                int textureId = 0;
+                var textureId = 0;
                 var lineSplit = line.Split(' ');
                 var opcode = lineSplit[0];
                 foreach (var field in typeof(T).GetFields())
@@ -120,15 +126,15 @@ namespace ECSEngine.Assets
                                 if (!Path.IsPathRooted(texturePath))
                                     texturePath = Path.GetDirectoryName(assetPath) + "/" +
                                                 texturePath.Replace('\\', '/');
-                                Texture2D texture = new Texture2D(texturePath, TextureUnit.Texture0 + textureId++);
+                                var texture = new Texture2D(texturePath, TextureUnit.Texture0 + textureId++);
                                 field.SetValue(this, texture);
                             }
                             else if (field.FieldType == typeof(ColorRGB24))
                             {
-                                float r = ParseFloat(lineSplit[1]);
-                                float g = ParseFloat(lineSplit[2]);
-                                float b = ParseFloat(lineSplit[3]);
-                                ColorRGB24 color = new ColorRGB24((byte)(r * 255), (byte)(g * 255), (byte)(b * 255));
+                                var r = ParseFloat(lineSplit[1]);
+                                var g = ParseFloat(lineSplit[2]);
+                                var b = ParseFloat(lineSplit[3]);
+                                var color = new ColorRGB24((byte)(r * 255), (byte)(g * 255), (byte)(b * 255));
                                 field.SetValue(this, color);
                             }
                             else if (field.FieldType == typeof(Vector2))
@@ -169,13 +175,13 @@ namespace ECSEngine.Assets
                                 if (field.GetValue(this) == null)
                                     field.SetValue(this, new List<MeshFaceElement>());
 
-                                for (int index = 0; index < 3; ++index)
+                                for (var index = 0; index < 3; ++index)
                                 {
                                     var elementSplit = lineSplit[index + 1].Split('/');
-                                    uint v = ParseUnsignedInt(elementSplit[0]) - 1;
-                                    uint vt = ParseUnsignedInt(elementSplit[1]) - 1;
-                                    uint vn = ParseUnsignedInt(elementSplit[2]) - 1;
-                                    MeshFaceElement meshFaceElement = new MeshFaceElement(v, vt, vn);
+                                    var v = ParseUnsignedInt(elementSplit[0]) - 1;
+                                    var vt = ParseUnsignedInt(elementSplit[1]) - 1;
+                                    var vn = ParseUnsignedInt(elementSplit[2]) - 1;
+                                    var meshFaceElement = new MeshFaceElement(v, vt, vn);
                                     ((List<MeshFaceElement>)field.GetValue(this)).Add(meshFaceElement);
                                 }
 

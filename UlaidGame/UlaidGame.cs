@@ -1,14 +1,14 @@
-﻿using ECSEngine;
+﻿using System.Collections.Generic;
+using ECSEngine;
 using ECSEngine.Entities;
 using ECSEngine.Managers;
-using SpaceGame.Entities;
-using System.Collections.Generic;
+using UlaidGame.Entities;
 
-namespace SpaceGame
+namespace UlaidGame
 {
-    internal sealed class SpaceGame : Game
+    internal sealed class UlaidGame : Game
     {
-        public SpaceGame(string gamePropertyPath) : base(gamePropertyPath) { }
+        public UlaidGame(string gamePropertyPath) : base(gamePropertyPath) { }
 
         protected override void InitScene()
         {
@@ -20,7 +20,7 @@ namespace SpaceGame
             };
 
             foreach (IEntity entity in entities)
-                SceneManager.instance.AddEntity(entity);
+                SceneManager.Instance.AddEntity(entity);
         }
     }
 }

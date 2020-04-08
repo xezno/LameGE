@@ -8,14 +8,19 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System.CodeDom.Compiler;
+using System.Configuration;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
+
 namespace ECSEngine {
     
     
-    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.4.0.0")]
-    public sealed partial class RenderSettings : global::System.Configuration.ApplicationSettingsBase {
+    [CompilerGenerated()]
+    [GeneratedCode("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.4.0.0")]
+    public sealed partial class RenderSettings : ApplicationSettingsBase {
         
-        private static RenderSettings defaultInstance = ((RenderSettings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new RenderSettings())));
+        private static RenderSettings defaultInstance = ((RenderSettings)(Synchronized(new RenderSettings())));
         
         public static RenderSettings Default {
             get {
@@ -23,9 +28,9 @@ namespace ECSEngine {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1600")]
+        [UserScopedSetting()]
+        [DebuggerNonUserCode()]
+        [DefaultSettingValue("1920")]
         public uint gameResolutionX {
             get {
                 return ((uint)(this["gameResolutionX"]));
@@ -35,15 +40,75 @@ namespace ECSEngine {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("900")]
+        [UserScopedSetting()]
+        [DebuggerNonUserCode()]
+        [DefaultSettingValue("1080")]
         public uint gameResolutionY {
             get {
                 return ((uint)(this["gameResolutionY"]));
             }
             set {
                 this["gameResolutionY"] = value;
+            }
+        }
+        
+        [UserScopedSetting()]
+        [DebuggerNonUserCode()]
+        [DefaultSettingValue("True")]
+        public bool vsyncEnabled {
+            get {
+                return ((bool)(this["vsyncEnabled"]));
+            }
+            set {
+                this["vsyncEnabled"] = value;
+            }
+        }
+        
+        [UserScopedSetting()]
+        [DebuggerNonUserCode()]
+        [DefaultSettingValue("60")]
+        public int framerateLimit {
+            get {
+                return ((int)(this["framerateLimit"]));
+            }
+            set {
+                this["framerateLimit"] = value;
+            }
+        }
+        
+        [UserScopedSetting()]
+        [DebuggerNonUserCode()]
+        [DefaultSettingValue("-1920")]
+        public int gamePosX {
+            get {
+                return ((int)(this["gamePosX"]));
+            }
+            set {
+                this["gamePosX"] = value;
+            }
+        }
+        
+        [UserScopedSetting()]
+        [DebuggerNonUserCode()]
+        [DefaultSettingValue("32")]
+        public int gamePosY {
+            get {
+                return ((int)(this["gamePosY"]));
+            }
+            set {
+                this["gamePosY"] = value;
+            }
+        }
+        
+        [UserScopedSetting()]
+        [DebuggerNonUserCode()]
+        [DefaultSettingValue("True")]
+        public bool fullscreen {
+            get {
+                return ((bool)(this["fullscreen"]));
+            }
+            set {
+                this["fullscreen"] = value;
             }
         }
     }

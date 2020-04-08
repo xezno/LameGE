@@ -1,21 +1,22 @@
-﻿using ECSEngine.Events;
-using ECSEngine.Managers;
-using ECSEngine.MathUtils;
-using Newtonsoft.Json;
-using OpenGL;
-using OpenGL.CoreUI;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
+using ECSEngine.Events;
+using ECSEngine.Managers;
+using ECSEngine.MathUtils;
+using ECSEngine.Types;
+using Newtonsoft.Json;
+using OpenGL;
+using OpenGL.CoreUI;
 
 namespace ECSEngine
 {
     public class Game : IHasParent
     {
-        private readonly int titlebarHeight = 20; // TODO: I have no idea whether this is actually correct or not, but it works on win10.  _Will need changing based on platform later_
+        private readonly int titlebarHeight = 20; // HACK: windows 10 only!!
         private List<IManager> mainThreadManagers = new List<IManager>();
         private List<Thread> threads = new List<Thread>();
         private readonly Gl.DebugProc debugCallback; // Stored to prevent GC from collecting debug callback before it can be called
@@ -24,8 +25,10 @@ namespace ECSEngine
 
         protected NativeWindow nativeWindow;
 
-        public IHasParent parent { get; set; }
-        public bool isRunning = true;
+        public IHasParent Parent { get; set; }
+        public void RenderImGUI() { }
+
+        public bool isRunning = true; // TODO: properly detect window close event (needs adding within nativewindow)
 
         public Game(string gamePropertyPath)
         {
@@ -60,9 +63,10 @@ namespace ECSEngine
             nativeWindow.SwapInterval = 0;
             nativeWindow.Resize += Resize;
 
-            nativeWindow.Create(0, 0, RenderSettings.Default.gameResolutionX, RenderSettings.Default.gameResolutionY, NativeWindowStyle.Caption);
+            nativeWindow.Create(RenderSettings.Default.gamePosX, RenderSettings.Default.gamePosY, RenderSettings.Default.gameResolutionX, RenderSettings.Default.gameResolutionY, NativeWindowStyle.Caption);
 
-            nativeWindow.Caption = FilterString(gameProperties.windowTitle) ?? "ECSEngine";
+            nativeWindow.Fullscreen = RenderSettings.Default.fullscreen;
+            nativeWindow.Caption = FilterString(gameProperties.WindowTitle) ?? "ECSEngine Game";
 
             // TODO: get choice of monitor to use.
 
@@ -89,26 +93,26 @@ namespace ECSEngine
         protected virtual void InitSystems()
         {
             mainThreadManagers = new List<IManager> {
-                RenderManager.instance,
-                ImGuiManager.instance
+                RenderManager.Instance,
+                ImGuiManager.Instance
             };
 
             foreach (var mainThreadManager in mainThreadManagers)
             {
                 EventManager.AddManager(mainThreadManager);
-                mainThreadManager.parent = this;
+                mainThreadManager.Parent = this;
             }
 
-            List<IManager> multiThreadedManagers = new List<IManager>
+            var multiThreadedManagers = new List<IManager>
             {
-                UpdateManager.instance,
-                SceneManager.instance
+                UpdateManager.Instance,
+                SceneManager.Instance
             };
 
             foreach (var multiThreadedManager in multiThreadedManagers)
             {
                 EventManager.AddManager(multiThreadedManager);
-                multiThreadedManager.parent = this;
+                multiThreadedManager.Parent = this;
 
                 threads.Add(new Thread(() =>
                 {
@@ -178,7 +182,7 @@ namespace ECSEngine
 
         private void MouseUp(object sender, NativeWindowMouseEventArgs e)
         {
-            int button = 0;
+            var button = 0;
             if ((e.Buttons & MouseButton.Left) != 0) button = 0;
             else if ((e.Buttons & MouseButton.Middle) != 0) button = 1;
             else if ((e.Buttons & MouseButton.Right) != 0) button = 2;
@@ -188,7 +192,7 @@ namespace ECSEngine
 
         private void MouseDown(object sender, NativeWindowMouseEventArgs e)
         {
-            int button = 0;
+            var button = 0;
             if ((e.Buttons & MouseButton.Left) != 0) button = 0;
             else if ((e.Buttons & MouseButton.Middle) != 0) button = 1;
             else if ((e.Buttons & MouseButton.Right) != 0) button = 2;
@@ -216,7 +220,7 @@ namespace ECSEngine
         {
             Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            foreach (IManager manager in mainThreadManagers)
+            foreach (var manager in mainThreadManagers)
             {
                 manager.Run();
             }

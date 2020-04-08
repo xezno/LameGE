@@ -1,10 +1,12 @@
-﻿namespace ECSEngine
+﻿namespace ECSEngine.Types
 {
     /// <summary>
     /// Any class that is able to have a parent.
     /// </summary>
     public interface IHasParent
     {
-        IHasParent parent { get; set; }
+        IHasParent Parent { get; set; }
+
+        void RenderImGUI();
     }
 }

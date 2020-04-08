@@ -1,9 +1,9 @@
-﻿using ECSEngine.Assets;
+﻿using System;
+using System.Collections.Generic;
+using ECSEngine.Assets;
 using ECSEngine.Attributes;
 using ECSEngine.MathUtils;
 using OpenGL;
-using System;
-using System.Collections.Generic;
 
 namespace ECSEngine.Render
 {
@@ -19,7 +19,7 @@ namespace ECSEngine.Render
         /// <summary>
         /// The number of OpenGL elements to draw.
         /// </summary>
-        public int elementCount => faceElements.Count;
+        public int ElementCount => faceElements.Count;
 
         [TextAssetOpcode("v")]
         public List<Vector3> vertices = new List<Vector3>();
@@ -43,6 +43,11 @@ namespace ECSEngine.Render
         }
 
         /// <summary>
+        /// Create a new <see cref="Mesh"/> that has not been loaded from the disk.
+        /// </summary>
+        public Mesh() { }
+
+        /// <summary>
         /// Generate the relevant OpenGL array and buffer objects, preparing them for on-screen drawing.
         /// </summary>
         public void GenerateBuffers()
@@ -53,10 +58,10 @@ namespace ECSEngine.Render
             vbo = Gl.GenBuffer();
 
             // Unpack data so that OpenGL can read it
-            int vertexAttribSize = 8;
+            var vertexAttribSize = 8;
             glData = new float[faceElements.Count * vertexAttribSize];
 
-            for (int i = 0; i < faceElements.Count; ++i)
+            for (var i = 0; i < faceElements.Count; ++i)
             {
                 var dataToAdd = new[]
                 {
@@ -67,9 +72,10 @@ namespace ECSEngine.Render
                     uvCoords[(int)faceElements[i].uvIndex].y,
                     normals[(int)faceElements[i].normalIndex].x,
                     normals[(int)faceElements[i].normalIndex].y,
-                    normals[(int)faceElements[i].normalIndex].z,
+                    normals[(int)faceElements[i].normalIndex].z
                 };
-                for (int dataIndex = 0; dataIndex < dataToAdd.Length; ++dataIndex)
+
+                for (var dataIndex = 0; dataIndex < dataToAdd.Length; ++dataIndex)
                     glData[i * vertexAttribSize + dataIndex] = dataToAdd[dataIndex];
             }
 

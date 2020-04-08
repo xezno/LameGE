@@ -1,11 +1,9 @@
 ﻿using ECSEngine.Assets;
 using ECSEngine.Attributes;
-
 using OpenGL;
 
 namespace ECSEngine.Render
 {
-    // TODO: clean this up somehow
     public class Material : PlaintextAsset<Material>
     {
         // Base MTL parameters
@@ -51,19 +49,19 @@ namespace ECSEngine.Render
 
         // Clara.io PBR extensions
         [TextAssetOpcode("Pr")]
-        [Range()]
+        [Range]
         public float roughness;
         [TextAssetOpcode("map_Pr")]
         public Texture2D roughnessTexture;
 
         [TextAssetOpcode("Pm")]
-        [Range()]
+        [Range]
         public float metallic;
         [TextAssetOpcode("map_Pm")]
         public Texture2D metallicTexture;
 
         [TextAssetOpcode("Ps")]
-        [Range()]
+        [Range]
         public float sheen;
         [TextAssetOpcode("map_Ps")]
         public Texture2D sheenTexture;
@@ -83,7 +81,6 @@ namespace ECSEngine.Render
         [TextAssetOpcode("anisor")]
         public float anisotropyRot;
 
-        public Material(string path) : base(path)
-        { }
+        public Material(string path) : base(path) { }
     }
 }

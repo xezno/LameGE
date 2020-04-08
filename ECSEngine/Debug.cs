@@ -1,11 +1,37 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using System.Reflection;
+using ECSEngine.Managers;
 
 namespace ECSEngine
 {
     public static class Debug
     {
+        /// <summary>
+        /// All previous logged strings from the current session.
+        /// </summary>
+        public static List<string> PastLogs { get; private set; } = new List<string>();
+
+        /// <summary>
+        /// A shortened copy of <see cref="PastLogs"/> available as a string.
+        /// </summary>
+        public static string PastLogsString { get; private set; }
+
+        /// <summary>
+        /// The number of lines to use for the <see cref="PastLogsString"/> value.
+        /// </summary>
+        private static int pastLogsStringLength = 5;
+
+        /// <summary>
+        /// Should the <see cref="pastLogsStringConsole"/> use a filter?
+        /// </summary>
+        private static bool pastLogsStringConsoleUseFilter;
+
+        /// <summary>
+        /// All previous logged strings from the current session for display within the <see cref="ImGuiManager"/> console.
+        /// </summary>
+        public static string pastLogsStringConsole; // TODO: replace with property
+
         /// <summary>
         /// The available severity levels for a debug message.
         /// </summary>
@@ -15,7 +41,7 @@ namespace ECSEngine
             Medium,
             High,
             Fatal
-        };
+        }
 
         /// <summary>
         /// Display a message to the console.
@@ -25,9 +51,9 @@ namespace ECSEngine
         public static void Log(string str, DebugSeverity severity = DebugSeverity.Low)
         {
             // Prepare method name & method class name
-            StackTrace stackTrace = new StackTrace();
-            StackFrame[] stackFrames = stackTrace.GetFrames();
-            MethodBase method = stackFrames?[1].GetMethod();
+            var stackTrace = new StackTrace();
+            var stackFrames = stackTrace.GetFrames();
+            var method = stackFrames?[1].GetMethod();
 
             /* BUG: Some functions (namely ogl's debug callback) run on a separate thread, so 
              * they mess with the console's foreground color before another thread has finished outputting.
@@ -48,7 +74,47 @@ namespace ECSEngine
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
                     break;
             }
-            Console.WriteLine($"[{DateTime.Now.ToString("T")}] {method?.ReflectedType?.Name}, {method?.Name} ({severity}): {str}");
+
+            var logText =
+                $"[{DateTime.Now:T}] {method?.ReflectedType?.Name}, {method?.Name} ({severity}): {str}";
+
+            Console.WriteLine(logText);
+            PastLogs.Add(logText);
+
+            // We convert to string here for performance reasons (means we aren't potentially doing it multiple times per frame)
+            var pastLogsStart = Math.Max(0, PastLogs.Count - pastLogsStringLength);
+            var pastLogsCount = Math.Min(PastLogs.Count, pastLogsStringLength);
+            var pastLogsArray = PastLogs.ToArray();
+            PastLogsString = string.Join("\n", pastLogsArray, pastLogsStart, pastLogsCount);
+
+            if (!pastLogsStringConsoleUseFilter)
+            {
+                pastLogsStringConsole = string.Join("\n", pastLogsArray, 0, pastLogsArray.Length);
+            }
         }
+
+        public static void CalcLogStringByFilter(string filter)
+        {
+            if (string.IsNullOrEmpty(filter))
+            {
+                pastLogsStringConsoleUseFilter = false;
+                return;
+            }
+
+            pastLogsStringConsoleUseFilter = true;
+
+            var filteredLogs = new List<string>();
+
+            foreach (var pastLog in PastLogs)
+            {
+                if (GetFilterMatch(pastLog, filter))
+                    filteredLogs.Add(pastLog);
+            }
+
+            pastLogsStringConsole = string.Join("\n", filteredLogs.ToArray(), 0, filteredLogs.Count);
+        }
+
+        // TODO: use fuzzy search
+        private static bool GetFilterMatch(string str, string filter) => str.Contains(filter);
     }
 }

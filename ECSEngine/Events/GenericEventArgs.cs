@@ -10,21 +10,21 @@ namespace ECSEngine.Events
         /// <summary>
         /// The object triggering the event.
         /// </summary>
-        public object sender { get; set; }
+        public object Sender { get; set; }
 
         /// <summary>
         /// The time at which the event was triggered.
         /// </summary>
-        public DateTime timeSent { get; set; }
+        public DateTime TimeSent { get; set; }
 
         /// <summary>
-        /// Construct a new instance of <see cref="GenericEventArgs"/>; the <see cref="timeSent"/> will be automatically set.
+        /// Construct a new instance of <see cref="GenericEventArgs"/>; the <see cref="TimeSent"/> will be automatically set.
         /// </summary>
         /// <param name="sender">The object triggering the event.</param>
         public GenericEventArgs(object sender)
         {
-            this.sender = sender;
-            this.timeSent = DateTime.Now;
+            Sender = sender;
+            TimeSent = DateTime.Now;
         }
     }
 }

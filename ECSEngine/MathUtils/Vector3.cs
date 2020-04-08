@@ -1,4 +1,5 @@
-﻿using OpenGL;
+﻿using System;
+using OpenGL;
 
 namespace ECSEngine.MathUtils
 {
@@ -19,8 +20,8 @@ namespace ECSEngine.MathUtils
         /// </summary>
         public float z;
 
-        public float magnitude => (float)System.Math.Sqrt(x * x + y * y + z * z);
-        public Vector3 normalized { get => this / magnitude; }
+        public float Magnitude => (float)Math.Sqrt(x * x + y * y + z * z);
+        public Vector3 Normalized { get => this / Magnitude; }
 
         /// <summary>
         /// Construct a <see cref="Vector3"/> with three initial values.
@@ -85,7 +86,7 @@ namespace ECSEngine.MathUtils
 
         public System.Numerics.Vector3 ConvertToNumerics()
         {
-            return new System.Numerics.Vector3(this.x, this.y, this.z);
+            return new System.Numerics.Vector3(x, y, z);
         }
     }
 }

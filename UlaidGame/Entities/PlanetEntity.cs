@@ -2,8 +2,10 @@
 using ECSEngine.Entities;
 using ECSEngine.MathUtils;
 using ECSEngine.Render;
+using OpenGL;
+using Quaternion = ECSEngine.MathUtils.Quaternion;
 
-namespace SpaceGame.Entities
+namespace UlaidGame.Entities
 {
     public sealed class PlanetEntity : Entity<PlanetEntity>
     {
@@ -11,7 +13,7 @@ namespace SpaceGame.Entities
         public PlanetEntity()
         {
             AddComponent(new TransformComponent(new Vector3(0, 2f, -2f), Quaternion.identity, new Vector3(1, 1, 1)));
-            AddComponent(new ShaderComponent(new Shader("Content/Planet/main.frag", OpenGL.ShaderType.FragmentShader), new Shader("Content/Planet/main.vert", OpenGL.ShaderType.VertexShader)));
+            AddComponent(new ShaderComponent(new Shader("Content/Planet/main.frag", ShaderType.FragmentShader), new Shader("Content/Planet/main.vert", ShaderType.VertexShader)));
             AddMeshAndMaterialComponents("Content/Planet/PlanetTest");
         }
 
