@@ -7,12 +7,13 @@ namespace ECSEngine.Managers
     {
         private DateTime lastRender;
         private Random random = new Random();
+        private int currentFrametimeIndex;
+        private int currentFramerateIndex;
+
         public float LastFrameTime { get; private set; }
         public int CalculatedFramerate => (int)(1000f / Math.Max(LastFrameTime, 0.001f));
         public float[] FrametimeHistory { get; } = new float[1000];
         public float[] FramerateHistory { get; } = new float[1000];
-        private int currentFrametimeIndex;
-        private int currentFramerateIndex;
 
         /// <summary>
         /// Render all the entities within the world manager.

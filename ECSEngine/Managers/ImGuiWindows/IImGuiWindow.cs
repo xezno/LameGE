@@ -2,8 +2,8 @@
 {
     internal interface IImGuiWindow
     {
-        string Title { get; }
         bool Render { get; set; }
+        string Title { get; }
         string IconGlyph { get; }
 
         void Draw();

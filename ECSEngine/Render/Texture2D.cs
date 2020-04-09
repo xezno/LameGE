@@ -71,6 +71,8 @@ namespace ECSEngine.Render
             image.Dispose();
 
             Marshal.FreeHGlobal(textureDataPtr);
+
+            Debug.Log($"Texture {path} has texture ptr {glTexture}");
         }
 
         public Texture2D(byte[] textureData, int width, int height, TextureUnit textureUnit = TextureUnit.Texture0)

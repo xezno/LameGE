@@ -22,12 +22,10 @@ namespace ECSEngine.Managers.ImGuiWindows.Editor
             }
 
             ImGui.PushItemWidth(-1);
-
             if (ImGui.ListBox("Hierarchy", ref currentSceneHierarchyItem, entityNames, entityNames.Length))
             {
                 selectedEntity = SceneManager.Instance.Entities[currentSceneHierarchyItem];
             }
-
             ImGui.PopItemWidth();
 
             ImGui.Separator();

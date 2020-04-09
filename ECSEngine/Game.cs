@@ -105,7 +105,8 @@ namespace ECSEngine
             var multiThreadedManagers = new List<IManager>
             {
                 UpdateManager.Instance,
-                SceneManager.Instance
+                SceneManager.Instance,
+                ScriptManager.Instance
             };
 
             foreach (var multiThreadedManager in multiThreadedManagers)

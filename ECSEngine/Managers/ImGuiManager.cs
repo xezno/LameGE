@@ -2,6 +2,7 @@
 using ECSEngine.Components;
 using ECSEngine.Events;
 using ECSEngine.Managers.ImGuiWindows;
+using ECSEngine.Managers.ImGuiWindows.Addons;
 using ECSEngine.Managers.ImGuiWindows.Editor;
 using ECSEngine.Managers.ImGuiWindows.Overlays;
 using ECSEngine.Managers.ImGuiWindows.Scripts;
@@ -28,7 +29,9 @@ namespace ECSEngine.Managers
         private readonly List<ImGuiMenu> menus = new List<ImGuiMenu>()
         {
             new ImGuiMenu(FontAwesome5.File, "File", new List<IImGuiWindow>()),
-            new ImGuiMenu(FontAwesome5.PuzzlePiece, "Addons", new List<IImGuiWindow>()),
+            new ImGuiMenu(FontAwesome5.PuzzlePiece, "Addons", new List<IImGuiWindow>() {
+                new AddonBrowserWindow()
+            }),
             new ImGuiMenu(FontAwesome5.FileCode, "Scripts", new List<IImGuiWindow>()
             {
                 new ScriptCompileWindow()
@@ -38,7 +41,8 @@ namespace ECSEngine.Managers
                 new PlaygroundWindow(),
                 new ScenePropertiesWindow(),
                 new ConsoleWindow(),
-                new PerformanceWindow()
+                new PerformanceWindow(),
+                new TextureBrowserWindow()
             })
         };
 

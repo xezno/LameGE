@@ -1,8 +1,8 @@
-﻿using System;
+﻿using ECSEngine.Assets;
+using ImGuiNET;
+using System;
 using System.Diagnostics;
 using System.Numerics;
-using ECSEngine.Assets;
-using ImGuiNET;
 
 namespace ECSEngine.Managers.ImGuiWindows.Scripts
 {
@@ -21,7 +21,7 @@ namespace ECSEngine.Managers.ImGuiWindows.Scripts
             if (ImGui.IsMouseDoubleClicked(ImGuiMouseButton.Left))
             {
                 Process ideProcess = new Process();
-                ideProcess.StartInfo = new ProcessStartInfo("code Content/");
+                ideProcess.StartInfo = new ProcessStartInfo("code", "Content/");
                 ideProcess.Start();
             }
             ImGui.PopItemWidth();
