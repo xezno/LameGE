@@ -34,13 +34,13 @@ namespace ECSEngine.Entities
         /// Display the available components & their properties
         /// within ImGUI.
         /// </summary>
-        public virtual void RenderImGUI()
+        public virtual void RenderImGui()
         {
             foreach (var component in Components)
             {
                 if (ImGui.TreeNode(component.GetType().Name))
                 {
-                    component.RenderImGUI();
+                    component.RenderImGui();
                     ImGui.TreePop();
                 }
             }

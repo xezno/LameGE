@@ -25,7 +25,7 @@ namespace ECSEngine.Components
         /// <summary>
         /// Display draw all available properties within ImGUI.
         /// </summary>
-        public virtual void RenderImGUI()
+        public virtual void RenderImGui()
         {
             RenderImGuiFields();
         }

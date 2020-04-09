@@ -1,7 +1,10 @@
 ﻿using ECSEngine.Assets;
 using ECSEngine.Components;
-using ECSEngine.Entities;
 using ECSEngine.Events;
+using ECSEngine.Managers.ImGuiWindows;
+using ECSEngine.Managers.ImGuiWindows.Editor;
+using ECSEngine.Managers.ImGuiWindows.Overlays;
+using ECSEngine.Managers.ImGuiWindows.Scripts;
 using ECSEngine.Render;
 using ImGuiNET;
 using OpenGL;
@@ -19,12 +22,31 @@ namespace ECSEngine.Managers
         private ShaderComponent shaderComponent;
         private Vector2 windowSize;
         private ImGuiIOPtr io;
-        private IEntity selectedEntity;
 
         private uint vbo, vao, ebo;
-        private int currentSceneHierarchyItem;
-        private string currentConsoleInput = "", currentConsoleFilter = "";
-        private bool shouldRender, showPlayground, showSceneHierarchy, showPerformanceStats, showInspector, showConsole, showConsolePreview = true;
+        private bool showEditor;
+        private readonly List<ImGuiMenu> menus = new List<ImGuiMenu>()
+        {
+            new ImGuiMenu(FontAwesome5.File, "File", new List<IImGuiWindow>()),
+            new ImGuiMenu(FontAwesome5.PuzzlePiece, "Addons", new List<IImGuiWindow>()),
+            new ImGuiMenu(FontAwesome5.FileCode, "Scripts", new List<IImGuiWindow>()
+            {
+                new ScriptCompileWindow()
+            }),
+            new ImGuiMenu(FontAwesome5.Cogs, "Editor", new List<IImGuiWindow>()
+            {
+                new PlaygroundWindow(),
+                new ScenePropertiesWindow(),
+                new ConsoleWindow(),
+                new PerformanceWindow()
+            })
+        };
+
+        private List<IImGuiWindow> overlays = new List<IImGuiWindow>()
+        {
+            new ConsoleOverlayWindow(),
+            new PerformanceOverlayWindow()
+        };
 
         public ImGuiManager()
         {
@@ -113,151 +135,27 @@ namespace ECSEngine.Managers
         private void DrawMenuBar()
         {
             ImGui.BeginMainMenuBar();
-            if (ImGui.BeginMenu("File"))
+
+            foreach (var menu in menus)
             {
-                ImGui.MenuItem(FontAwesome5.FileDownload + " Load Map");
-                ImGui.MenuItem(FontAwesome5.CloudDownloadAlt + " Load Online Map");
-                ImGui.Separator();
-                ImGui.MenuItem(FontAwesome5.Sync + " Reload All Scripts");
-                ImGui.Separator();
-                ImGui.MenuItem(FontAwesome5.SignOutAlt + " Exit");
-                ImGui.EndMenu();
+                if (menu.windows.Count < 0) continue;
+
+                if (ImGui.BeginMenu($"{menu.IconGlyph} {menu.Title}"))
+                {
+                    foreach (var window in menu.windows)
+                    {
+                        if (ImGui.MenuItem($"{window.IconGlyph} {window.Title}"))
+                        {
+                            window.Render = !window.Render;
+                        }
+                    }
+
+                    ImGui.EndMenu();
+                }
             }
 
-            if (ImGui.BeginMenu("Window"))
-            {
-                if (ImGui.MenuItem(FontAwesome5.Sitemap + " Toggle scene hierarchy"))
-                    showSceneHierarchy = !showSceneHierarchy;
-                if (ImGui.MenuItem(FontAwesome5.Info + " Toggle inspector"))
-                    showInspector = !showInspector;
-                if (ImGui.MenuItem(FontAwesome5.ChartLine + " Toggle performance stats"))
-                    showPerformanceStats = !showPerformanceStats;
-                if (ImGui.MenuItem(FontAwesome5.Play + " Toggle playground"))
-                    showPlayground = !showPlayground;
-                if (ImGui.MenuItem(FontAwesome5.Terminal + " Toggle console (F2)"))
-                    showConsole = !showConsole;
 
-                ImGui.Separator();
-
-                if (ImGui.MenuItem(FontAwesome5.ToggleOn + " Show all"))
-                {
-                    showSceneHierarchy = true;
-                    showInspector = true;
-                    showPerformanceStats = true;
-                    showPlayground = true;
-                    showConsole = true;
-                }
-                if (ImGui.MenuItem(FontAwesome5.ToggleOff + " Hide all"))
-                {
-                    showSceneHierarchy = false;
-                    showInspector = false;
-                    showPerformanceStats = false;
-                    showPlayground = false;
-                    showConsole = false;
-                }
-
-                ImGui.EndMenu();
-            }
             ImGui.EndMainMenuBar();
-        }
-
-        private void DrawPlayground()
-        {
-            ImGui.Begin("Playground", ref showPlayground);
-
-            // Loading test
-            var progress = (int)(ImGui.GetTime() / 0.025f) % 100;
-            var filesLoaded = (int)Math.Round(progress * 0.25);
-            ImGui.Text($"Loading, please wait... {@"|/-\"[(int)(ImGui.GetTime() / 0.25f) % 4]}");
-            ImGui.TextUnformatted($"Files loaded: {progress}% ({filesLoaded} / 25)"); // TextUnformatted displays '%' without needing to format it as '%%'.
-            ImGui.TextUnformatted($"Test " + FontAwesome5.Egg);
-
-            ImGui.End();
-        }
-
-        private void DrawInspector()
-        {
-            ImGui.Begin("Inspector Gadget", ref showInspector);
-
-            if (selectedEntity == null)
-            {
-                ImGui.End();
-                return;
-            }
-
-            selectedEntity.RenderImGUI();
-
-            ImGui.End();
-        }
-
-        private void DrawSceneHierarchy()
-        {
-            ImGui.Begin("Scene Hierarchy", ref showSceneHierarchy);
-            var entityNames = new string[SceneManager.Instance.Entities.Count];
-            for (var i = 0; i < SceneManager.Instance.Entities.Count; i++)
-            {
-                entityNames[i] = SceneManager.Instance.Entities[i].GetType().Name;
-            }
-
-            ImGui.PushItemWidth(-1);
-
-            if (ImGui.ListBox("Hierarchy", ref currentSceneHierarchyItem, entityNames, entityNames.Length))
-            {
-                selectedEntity = SceneManager.Instance.Entities[currentSceneHierarchyItem];
-            }
-
-            ImGui.PopItemWidth();
-
-            ImGui.End();
-        }
-
-        private void DrawPerformanceStats()
-        {
-            ImGui.Begin("Performance", ref showPerformanceStats);
-
-            ImGui.LabelText($"{RenderManager.Instance.LastFrameTime}ms", "Current frametime");
-
-            ImGui.PlotHistogram(
-                "Average frame time",
-                ref RenderManager.Instance.FrametimeHistory[0],
-                RenderManager.Instance.FrametimeHistory.Length,
-                0,
-                "",
-                0
-            );
-
-            ImGui.LabelText($"{RenderManager.Instance.CalculatedFramerate}fps", "Current framerate");
-            ImGui.PlotLines(
-                "Average frame rate",
-                ref RenderManager.Instance.FramerateHistory[0],
-                RenderManager.Instance.FramerateHistory.Length,
-                0,
-                "",
-                0
-            );
-
-            ImGui.Checkbox("Fake lag", ref RenderManager.Instance.fakeLag);
-
-            ImGui.End();
-        }
-
-        private void DrawConsole()
-        {
-            ImGui.Begin("Console", ref showConsole);
-
-            ImGui.PushItemWidth(-1);
-            ImGui.SetScrollHereY(1.0f);
-            ImGui.InputTextMultiline("Console", ref Debug.pastLogsStringConsole, UInt32.MaxValue, new Vector2(-1, -52), ImGuiInputTextFlags.ReadOnly);
-            ImGui.PopItemWidth();
-
-            if (ImGui.InputText("Filter", ref currentConsoleFilter, 256))
-            {
-                Debug.CalcLogStringByFilter(currentConsoleFilter);
-            }
-
-            ImGui.InputText("Input", ref currentConsoleInput, 256);
-
-            ImGui.End();
         }
         #endregion
 
@@ -265,51 +163,33 @@ namespace ECSEngine.Managers
         {
 #if DEBUG
             ImGui.NewFrame();
-            if (shouldRender)
+
+            if (showEditor)
             {
                 DrawMenuBar();
 
-                if (showPlayground)
-                    DrawPlayground();
-
-                if (showSceneHierarchy)
-                    DrawSceneHierarchy();
-
-                if (showPerformanceStats)
-                    DrawPerformanceStats();
-
-                if (showInspector)
-                    DrawInspector();
-
-                if (showConsole)
-                    DrawConsole();
+                foreach (var menu in menus)
+                {
+                    foreach (var window in menu.windows)
+                    {
+                        if (window.Render)
+                        {
+                            ImGui.Begin($"{window.IconGlyph} {window.Title}");
+                            window.Draw();
+                            ImGui.End();
+                        }
+                    }
+                }
             }
             else
             {
-                var debugText = FontAwesome5.Poop + " Engine\n" +
-                                   "F1 for editor\n" +
-                                   $"{RenderManager.Instance.LastFrameTime}ms\n" +
-                                   $"{RenderManager.Instance.CalculatedFramerate}fps";
-                var debugTextPos = new Vector2(RenderSettings.Default.gameResolutionX - 128, 8);
-                ImGui.GetBackgroundDrawList().AddText(
-                    debugTextPos + new Vector2(1, 1), 0x88000000, debugText); // Shadow
-                ImGui.GetBackgroundDrawList().AddText(
-                    debugTextPos, 0xFFFFFFFF, debugText);
+                foreach (var window in overlays)
+                {
+                    if (window.Render)
+                        window.Draw();
+                }
             }
 
-            if (showConsolePreview && !(shouldRender && showConsole))
-            {
-                var consoleText = Debug.PastLogsString;
-                var consoleTextPos = new Vector2(8, 8);
-
-                if (shouldRender)
-                    consoleTextPos.Y += 20; // Offset if menu bar is visible
-
-                ImGui.GetBackgroundDrawList().AddText(
-                    consoleTextPos + new Vector2(1, 1), 0x88000000, consoleText); // Shadow
-                ImGui.GetBackgroundDrawList().AddText(
-                    consoleTextPos, 0xFFFFFFFF, consoleText);
-            }
             ImGui.Render();
             RenderImGui(ImGui.GetDrawData());
 #endif
@@ -474,10 +354,7 @@ namespace ECSEngine.Managers
                                 io.KeyCtrl = true;
                                 break;
                             case KeyCode.F1:
-                                shouldRender = !shouldRender;
-                                break;
-                            case KeyCode.F2:
-                                showConsole = !showConsole;
+                                showEditor = !showEditor;
                                 break;
                             default:
                                 io.AddInputCharacter(KeyCodeToChar(keyCode));

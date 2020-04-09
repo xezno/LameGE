@@ -7,6 +7,6 @@
     {
         IHasParent Parent { get; set; }
 
-        void RenderImGUI();
+        void RenderImGui();
     }
 }

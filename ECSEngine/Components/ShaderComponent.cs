@@ -125,9 +125,9 @@ namespace ECSEngine.Components
             }
         }
 
-        public override void RenderImGUI()
+        public override void RenderImGui()
         {
-            base.RenderImGUI(); var shaderNames = new string[shaders.Length];
+            base.RenderImGui(); var shaderNames = new string[shaders.Length];
             for (var i = 0; i < shaders.Length; ++i)
             {
                 shaderNames[i] = shaders[i].FileName;

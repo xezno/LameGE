@@ -13,7 +13,6 @@ namespace ECSEngine.Managers
         public float[] FramerateHistory { get; } = new float[1000];
         private int currentFrametimeIndex;
         private int currentFramerateIndex;
-        public bool fakeLag = false;
 
         /// <summary>
         /// Render all the entities within the world manager.
@@ -51,10 +50,6 @@ namespace ECSEngine.Managers
                 // really crappy implementation
                 // TODO: do this differently
                 Thread.Sleep((int)Math.Ceiling((1000f / RenderSettings.Default.framerateLimit) - LastFrameTime));
-            }
-            else if (fakeLag)
-            {
-                Thread.Sleep(random.Next(150, 300));
             }
         }
     }

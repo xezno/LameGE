@@ -25,7 +25,7 @@ namespace ECSEngine
         protected NativeWindow nativeWindow;
 
         public IHasParent Parent { get; set; }
-        public void RenderImGUI() { }
+        public void RenderImGui() { }
 
         public bool isRunning = true; // TODO: properly detect window close event (needs adding within nativewindow)
 

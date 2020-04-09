@@ -312,6 +312,15 @@
     <Compile Include="Components\IComponent.cs" />
     <Compile Include="Entities\IEntity.cs" />
     <Compile Include="GameProperties.cs" />
+    <Compile Include="Managers\ImGuiMenu.cs" />
+    <Compile Include="Managers\ImGuiWindows\Overlays\ConsoleOverlayWindow.cs" />
+    <Compile Include="Managers\ImGuiWindows\Editor\ConsoleWindow.cs" />
+    <Compile Include="Managers\ImGuiWindows\IImGuiWindow.cs" />
+    <Compile Include="Managers\ImGuiWindows\Overlays\PerformanceOverlayWindow.cs" />
+    <Compile Include="Managers\ImGuiWindows\Editor\PerformanceWindow.cs" />
+    <Compile Include="Managers\ImGuiWindows\Editor\PlaygroundWindow.cs" />
+    <Compile Include="Managers\ImGuiWindows\Editor\ScenePropertiesWindow.cs" />
+    <Compile Include="Managers\ImGuiWindows\Scripts\ScriptCompileWindow.cs" />
     <Compile Include="MathUtils\Levenshtein.cs" />
     <Compile Include="Types\IHasParent.cs" />
     <Compile Include="MathUtils\Noise.cs" />
