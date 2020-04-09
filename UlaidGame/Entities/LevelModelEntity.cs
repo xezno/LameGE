@@ -1,9 +1,9 @@
-﻿using System;
-using ECSEngine.Components;
+﻿using ECSEngine.Components;
 using ECSEngine.Entities;
 using ECSEngine.MathUtils;
 using ECSEngine.Render;
 using OpenGL;
+using System;
 using UlaidGame.Assets.BSP;
 using UlaidGame.Assets.BSP.Lumps;
 using UlaidGame.Assets.BSP.Types;
@@ -22,24 +22,44 @@ namespace UlaidGame.Entities
             AddComponent(new ShaderComponent(new Shader("Content/main.frag", ShaderType.FragmentShader),
                 new Shader("Content/main.vert", ShaderType.VertexShader)));
 
-            bspLoader = new BSPLoader("Content/de_MW2_Terminal_v1.bsp");
+            bspLoader = new BSPLoader("Content/gm_construct.bsp");
             AddMeshAndMaterialComponents("Content/level01");
         }
 
         private void GenerateBSPMesh()
         {
             var meshComponent = new MeshComponent();
-            var vertexLump = (VertexLump)bspLoader.Lumps[(int) BspLumpType.LumpVertexes];
-            var planeLump = (PlaneLump)bspLoader.Lumps[(int)BspLumpType.LumpPlanes];
-            var edgeLump = (EdgeLump)bspLoader.Lumps[(int)BspLumpType.LumpEdges];
-            var surfEdgeLump = (SurfEdgeLump)bspLoader.Lumps[(int)BspLumpType.LumpSurfEdges];
-            var faceLump = (FaceLump) bspLoader.Lumps[(int) BspLumpType.LumpFaces];
+            var vertexLump = (Lump<Vector3>)bspLoader.Lumps[(int)BspLumpType.LumpVertexes];
+            var planeLump = (Lump<Plane>)bspLoader.Lumps[(int)BspLumpType.LumpPlanes];
+            var edgeLump = (Lump<Edge>)bspLoader.Lumps[(int)BspLumpType.LumpEdges];
+            var surfEdgeLump = (Lump<int>)bspLoader.Lumps[(int)BspLumpType.LumpSurfEdges];
+            var faceLump = (Lump<Face>)bspLoader.Lumps[(int)BspLumpType.LumpFaces];
+            var texInfoLump = (Lump<TexInfo>)bspLoader.Lumps[(int)BspLumpType.LumpTexInfo];
 
             // setup vertices
             foreach (var vertex in vertexLump.Contents)
             {
                 meshComponent.RenderMesh.vertices.Add(vertex);
-                meshComponent.RenderMesh.uvCoords.Add(new Vector2(0, 0));
+            }
+
+            // setup uv coords
+
+            foreach (var texInfo in texInfoLump.Contents)
+            {
+                string logStr = "";
+                for (int x = 0; x < 2; ++x)
+                {
+                    for (int y = 0; y < 4; ++y)
+                    {
+                        logStr += $"{texInfo.textureVecs[x, y]}\t";
+                    }
+
+                    logStr += "\n\t";
+                }
+                // u = tv(0,0) * x + tv(0,1) * y + tv(0,2) * z + tv(0,3)
+                // v = tv(1,0) * x + tv(1,1) * y + tv(1,2) * z + tv(1,3)
+
+                meshComponent.RenderMesh.uvCoords.Add(new Vector2(texInfo.textureVecs[0, 0], texInfo.textureVecs[0, 1]) / 1000f);
             }
 
             // setup normals
@@ -87,17 +107,17 @@ namespace UlaidGame.Entities
 
                         meshComponent.RenderMesh.faceElements.Add(new MeshFaceElement(
                             (uint)rootPoint,
-                            0,
+                            (uint)face.texInfo,
                             face.planeNumber
                         ));
                         meshComponent.RenderMesh.faceElements.Add(new MeshFaceElement(
                             (uint)firstPoint,
-                            0,
+                            (uint)face.texInfo,
                             face.planeNumber
                         ));
                         meshComponent.RenderMesh.faceElements.Add(new MeshFaceElement(
                             (uint)secondPoint,
-                            0,
+                            (uint)face.texInfo,
                             face.planeNumber
                         ));
                     }

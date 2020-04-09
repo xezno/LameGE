@@ -1,6 +1,6 @@
+using CSScriptLibrary;
 using System;
 using System.Diagnostics;
-using CSScriptLibrary;
 
 // The VB.NET samples can be found here: https://github.com/oleg-shilo/cs-script/tree/master/Source/NuGet/content/vb
 //

@@ -1,9 +1,9 @@
+using csscript;
+using CSScriptLibrary;
 using System;
 using System.CodeDom.Compiler;
 using System.IO;
 using System.Linq;
-using csscript;
-using CSScriptLibrary;
 
 // The VB.NET samples can be found here: https://github.com/oleg-shilo/cs-script/tree/master/Source/NuGet/content/vb
 //

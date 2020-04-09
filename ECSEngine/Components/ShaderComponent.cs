@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using ECSEngine.MathUtils;
+﻿using ECSEngine.MathUtils;
 using ECSEngine.Render;
 using ImGuiNET;
 using OpenGL;
+using System;
+using System.Collections.Generic;
 
 namespace ECSEngine.Components
 {

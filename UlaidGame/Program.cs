@@ -20,7 +20,7 @@
                 Debug.Log($"FATAL ERROR: {e.ToString()}", DebugSeverity.Fatal);
             }
 #endif
-            while (GameInstance.isRunning);
+            while (GameInstance.isRunning) ;
             // Game has shutdown at this point
         }
     }

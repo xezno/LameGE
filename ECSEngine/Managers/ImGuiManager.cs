@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Numerics;
+﻿using ECSEngine.Assets;
 using ECSEngine.Components;
 using ECSEngine.Entities;
 using ECSEngine.Events;
@@ -8,6 +6,9 @@ using ECSEngine.Render;
 using ImGuiNET;
 using OpenGL;
 using OpenGL.CoreUI;
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using Vector4 = ECSEngine.MathUtils.Vector4;
 
 namespace ECSEngine.Managers
@@ -34,7 +35,6 @@ namespace ECSEngine.Managers
 
             io.BackendFlags |= ImGuiBackendFlags.HasMouseCursors;
             io.ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
-            io.MouseDrawCursor = true; // Use custom mouse cursor
 
             ImGui.StyleColorsDark();
 
@@ -56,7 +56,28 @@ namespace ECSEngine.Managers
 
         private void InitFonts()
         {
-            io.Fonts.AddFontFromFileTTF("Content/Fonts/OpenSans/OpenSans-SemiBold.ttf", 16);
+            var glyphMinAdvanceX = 24;
+            var fontSizePixels = 15;
+
+            io.Fonts.AddFontFromFileTTF("Content/Fonts/Roboto/Roboto-Medium.ttf", fontSizePixels);
+
+            unsafe
+            {
+                var faRanges = new ushort[] { FontAwesome5.IconMin, FontAwesome5.IconMax, 0 };
+                var faConfig = ImGuiNative.ImFontConfig_ImFontConfig();
+                faConfig->MergeMode = 1;
+                faConfig->GlyphMinAdvanceX = glyphMinAdvanceX;
+
+                fixed (ushort* rangePtr = faRanges)
+                {
+                    io.Fonts.AddFontFromFileTTF("Content/Fonts/FontAwesome/fa-solid-900.ttf", fontSizePixels, faConfig, (IntPtr)rangePtr);
+                }
+
+                ImGuiNative.ImFontConfig_destroy(faConfig);
+            }
+
+            io.Fonts.Build();
+
             io.Fonts.GetTexDataAsRGBA32(out IntPtr pixels, out var width, out var height, out var bpp);
             io.Fonts.SetTexID((IntPtr)1);
             defaultFontTexture = new Texture2D(pixels, width, height, bpp);
@@ -92,20 +113,33 @@ namespace ECSEngine.Managers
         private void DrawMenuBar()
         {
             ImGui.BeginMainMenuBar();
+            if (ImGui.BeginMenu("File"))
+            {
+                ImGui.MenuItem(FontAwesome5.FileDownload + " Load Map");
+                ImGui.MenuItem(FontAwesome5.CloudDownloadAlt + " Load Online Map");
+                ImGui.Separator();
+                ImGui.MenuItem(FontAwesome5.Sync + " Reload All Scripts");
+                ImGui.Separator();
+                ImGui.MenuItem(FontAwesome5.SignOutAlt + " Exit");
+                ImGui.EndMenu();
+            }
+
             if (ImGui.BeginMenu("Window"))
             {
-                if (ImGui.MenuItem("Toggle scene hierarchy"))
+                if (ImGui.MenuItem(FontAwesome5.Sitemap + " Toggle scene hierarchy"))
                     showSceneHierarchy = !showSceneHierarchy;
-                if (ImGui.MenuItem("Toggle inspector"))
+                if (ImGui.MenuItem(FontAwesome5.Info + " Toggle inspector"))
                     showInspector = !showInspector;
-                if (ImGui.MenuItem("Toggle performance stats"))
+                if (ImGui.MenuItem(FontAwesome5.ChartLine + " Toggle performance stats"))
                     showPerformanceStats = !showPerformanceStats;
-                if (ImGui.MenuItem("Toggle playground"))
+                if (ImGui.MenuItem(FontAwesome5.Play + " Toggle playground"))
                     showPlayground = !showPlayground;
-                if (ImGui.MenuItem("Toggle console (`)"))
+                if (ImGui.MenuItem(FontAwesome5.Terminal + " Toggle console (F2)"))
                     showConsole = !showConsole;
 
-                if (ImGui.MenuItem("Show all"))
+                ImGui.Separator();
+
+                if (ImGui.MenuItem(FontAwesome5.ToggleOn + " Show all"))
                 {
                     showSceneHierarchy = true;
                     showInspector = true;
@@ -113,7 +147,7 @@ namespace ECSEngine.Managers
                     showPlayground = true;
                     showConsole = true;
                 }
-                if (ImGui.MenuItem("Hide all"))
+                if (ImGui.MenuItem(FontAwesome5.ToggleOff + " Hide all"))
                 {
                     showSceneHierarchy = false;
                     showInspector = false;
@@ -136,6 +170,7 @@ namespace ECSEngine.Managers
             var filesLoaded = (int)Math.Round(progress * 0.25);
             ImGui.Text($"Loading, please wait... {@"|/-\"[(int)(ImGui.GetTime() / 0.25f) % 4]}");
             ImGui.TextUnformatted($"Files loaded: {progress}% ({filesLoaded} / 25)"); // TextUnformatted displays '%' without needing to format it as '%%'.
+            ImGui.TextUnformatted($"Test " + FontAwesome5.Egg);
 
             ImGui.End();
         }
@@ -166,7 +201,7 @@ namespace ECSEngine.Managers
 
             ImGui.PushItemWidth(-1);
 
-            if (ImGui.ListBox("##SceneListbox", ref currentSceneHierarchyItem, entityNames, entityNames.Length))
+            if (ImGui.ListBox("Hierarchy", ref currentSceneHierarchyItem, entityNames, entityNames.Length))
             {
                 selectedEntity = SceneManager.Instance.Entities[currentSceneHierarchyItem];
             }
@@ -211,8 +246,8 @@ namespace ECSEngine.Managers
             ImGui.Begin("Console", ref showConsole);
 
             ImGui.PushItemWidth(-1);
-            ImGui.InputTextMultiline("Console", ref Debug.pastLogsStringConsole, UInt32.MaxValue, new Vector2(-1, -50), ImGuiInputTextFlags.ReadOnly);
             ImGui.SetScrollHereY(1.0f);
+            ImGui.InputTextMultiline("Console", ref Debug.pastLogsStringConsole, UInt32.MaxValue, new Vector2(-1, -52), ImGuiInputTextFlags.ReadOnly);
             ImGui.PopItemWidth();
 
             if (ImGui.InputText("Filter", ref currentConsoleFilter, 256))
@@ -251,7 +286,7 @@ namespace ECSEngine.Managers
             }
             else
             {
-                var debugText = "ECS Engine\n" +
+                var debugText = FontAwesome5.Poop + " Engine\n" +
                                    "F1 for editor\n" +
                                    $"{RenderManager.Instance.LastFrameTime}ms\n" +
                                    $"{RenderManager.Instance.CalculatedFramerate}fps";
@@ -441,7 +476,7 @@ namespace ECSEngine.Managers
                             case KeyCode.F1:
                                 shouldRender = !shouldRender;
                                 break;
-                            case KeyCode.OEM3:
+                            case KeyCode.F2:
                                 showConsole = !showConsole;
                                 break;
                             default:

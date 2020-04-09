@@ -1,22 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Threading;
-using ECSEngine.Events;
+﻿using ECSEngine.Events;
 using ECSEngine.Managers;
 using ECSEngine.MathUtils;
 using ECSEngine.Types;
 using Newtonsoft.Json;
 using OpenGL;
 using OpenGL.CoreUI;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace ECSEngine
 {
     public class Game : IHasParent
     {
-        private readonly int titlebarHeight = 20; // HACK: windows 10 only!!
         private List<IManager> mainThreadManagers = new List<IManager>();
         private List<Thread> threads = new List<Thread>();
         private readonly Gl.DebugProc debugCallback; // Stored to prevent GC from collecting debug callback before it can be called
@@ -57,7 +56,7 @@ namespace ECSEngine
             nativeWindow.MouseMove += MouseMove;
             nativeWindow.MouseWheel += MouseWheel;
 
-            nativeWindow.CursorVisible = true; // Hide mouse cursor
+            nativeWindow.CursorVisible = true;
             nativeWindow.Animation = false; // Changing this to true makes input poll like once every 500ms.  so don't change it
             nativeWindow.DepthBits = 24;
             nativeWindow.SwapInterval = 0;
@@ -174,11 +173,8 @@ namespace ECSEngine
         // For some reason this offsets by the titlebar height, and it's inverted, so we have to do some quick maths to fix that
         private void MouseMove(object sender, NativeWindowMouseEventArgs e) =>
             EventManager.BroadcastEvent(Event.MouseMove,
-                new MouseMoveEventArgs(new Vector2(
-                    e.Location.X, RenderSettings.Default.gameResolutionY - e.Location.Y - titlebarHeight
-                                  ),
-                    this)
-                );
+                new MouseMoveEventArgs(new Vector2(e.Location.X, RenderSettings.Default.gameResolutionY - e.Location.Y),
+                    this));
 
         private void MouseUp(object sender, NativeWindowMouseEventArgs e)
         {

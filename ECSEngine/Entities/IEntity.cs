@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using ECSEngine.Components;
+﻿using ECSEngine.Components;
 using ECSEngine.Events;
 using ECSEngine.Types;
+using System.Collections.Generic;
 
 namespace ECSEngine.Entities
 {

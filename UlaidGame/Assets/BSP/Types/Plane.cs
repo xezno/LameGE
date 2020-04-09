@@ -2,7 +2,7 @@
 
 namespace UlaidGame.Assets.BSP.Types
 {
-    struct Plane
+    class Plane
     {
         public Vector3 normal;
         public float dist;

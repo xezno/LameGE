@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using ECSEngine.Attributes;
+﻿using ECSEngine.Attributes;
 using ECSEngine.MathUtils;
 using ECSEngine.Render;
 using OpenGL;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace ECSEngine.Assets
 {

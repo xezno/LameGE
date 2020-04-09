@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using ECSEngine.Attributes;
+﻿using ECSEngine.Attributes;
 using ECSEngine.Components;
 using ECSEngine.Events;
 using ECSEngine.Types;
 using ImGuiNET;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace ECSEngine.Entities
 {

@@ -106,15 +106,11 @@
     <Compile Include="Assets\BSP\BSPLoader.cs" />
     <Compile Include="Assets\BSP\BSPLumpInfo.cs" />
     <Compile Include="Assets\BSP\BSPLumpType.cs" />
-    <Compile Include="Assets\BSP\Lumps\SurfEdgeLump.cs" />
-    <Compile Include="Assets\BSP\Lumps\BaseLump.cs" />
-    <Compile Include="Assets\BSP\Lumps\EdgeLump.cs" />
-    <Compile Include="Assets\BSP\Lumps\FaceLump.cs" />
-    <Compile Include="Assets\BSP\Lumps\PlaneLump.cs" />
-    <Compile Include="Assets\BSP\Lumps\VertexLump.cs" />
+    <Compile Include="Assets\BSP\Lumps\Lump.cs" />
     <Compile Include="Assets\BSP\Types\Edge.cs" />
     <Compile Include="Assets\BSP\Types\Face.cs" />
     <Compile Include="Assets\BSP\Types\Plane.cs" />
+    <Compile Include="Assets\BSP\Types\TexInfo.cs" />
     <Compile Include="Components\PlayerMovementComponent.cs" />
     <Compile Include="Entities\LevelModelEntity.cs" />
     <Compile Include="Entities\PlanetEntity.cs" />

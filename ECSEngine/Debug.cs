@@ -1,7 +1,7 @@
-﻿using System;
+﻿using ECSEngine.Managers;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using ECSEngine.Managers;
 
 namespace ECSEngine
 {
@@ -115,6 +115,22 @@ namespace ECSEngine
         }
 
         // TODO: use fuzzy search
-        private static bool GetFilterMatch(string str, string filter) => str.Contains(filter);
+        private static bool GetFilterMatch(string str, string filter)
+        {
+            if (filter.Contains(","))
+            {
+                foreach (var splitFilter in filter.Split(','))
+                {
+                    if (str.Contains(splitFilter))
+                        return true;
+                }
+
+                return false;
+            }
+            else
+            {
+                return str.Contains(filter);
+            }
+        }
     }
 }

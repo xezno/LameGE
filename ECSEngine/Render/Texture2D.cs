@@ -1,10 +1,10 @@
-﻿using System;
+﻿using OpenGL;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
-using OpenGL;
 using PixelFormat = OpenGL.PixelFormat;
 
 namespace ECSEngine.Render

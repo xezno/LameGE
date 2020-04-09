@@ -1,9 +1,9 @@
+using CSScriptLibrary;
 using System;
 using System.Reflection;
 using System.Runtime.Remoting.Lifetime;
 using System.Threading;
 using System.Threading.Tasks;
-using CSScriptLibrary;
 
 // The VB.NET samples can be found here: https://github.com/oleg-shilo/cs-script/tree/master/Source/NuGet/content/vb
 //

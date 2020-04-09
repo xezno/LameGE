@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using ECSEngine.Attributes;
+﻿using ECSEngine.Attributes;
 using ECSEngine.Entities;
 using ECSEngine.Events;
 using ECSEngine.Types;
 using ImGuiNET;
 using OpenGL;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
 using Quaternion = ECSEngine.MathUtils.Quaternion;
 
 namespace ECSEngine.Components

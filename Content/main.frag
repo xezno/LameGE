@@ -107,5 +107,7 @@ void main()
     normal = normalize(outNormal);
 
     fragColor = vec4(CalcFullMix() * (outFragPos.z * 0.1), 1.0 - material.transparency);
+
+    // fragColor = vec4(vec3(outUvCoord.xy, (outFragPos.z * 0.1)), 1.0);
     // fragColor = vec4(outNormal.xyz, 1.0 - material.transparency);
 }
