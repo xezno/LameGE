@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ECSEngine.Managers
 {
-    class ImGuiMenu
+    public class ImGuiMenu
     {
         public string Title { get; }
         public string IconGlyph { get; }

@@ -16,6 +16,7 @@ namespace ECSEngine
 {
     public class Game : IHasParent
     {
+        private int titlebarHeight = 18;
         private List<IManager> mainThreadManagers = new List<IManager>();
         private List<Thread> threads = new List<Thread>();
         private readonly Gl.DebugProc debugCallback; // Stored to prevent GC from collecting debug callback before it can be called
@@ -174,7 +175,7 @@ namespace ECSEngine
         // For some reason this offsets by the titlebar height, and it's inverted, so we have to do some quick maths to fix that
         private void MouseMove(object sender, NativeWindowMouseEventArgs e) =>
             EventManager.BroadcastEvent(Event.MouseMove,
-                new MouseMoveEventArgs(new Vector2(e.Location.X, RenderSettings.Default.gameResolutionY - e.Location.Y),
+                new MouseMoveEventArgs(new Vector2(e.Location.X, RenderSettings.Default.gameResolutionY - e.Location.Y - (RenderSettings.Default.fullscreen ? 0 : titlebarHeight)),
                     this));
 
         private void MouseUp(object sender, NativeWindowMouseEventArgs e)
@@ -209,7 +210,7 @@ namespace ECSEngine
         private void DebugCallback(DebugSource source, DebugType type, uint id, DebugSeverity severity, int length, IntPtr message, IntPtr userParam)
         {
             if (severity >= DebugSeverity.DebugSeverityMedium)
-                Debug.Log($"OpenGL Error {id}: {Marshal.PtrToStringAnsi(message, length)}", Debug.DebugSeverity.Fatal);
+                Debug.Log($"OpenGL Error {id}: {Marshal.PtrToStringAnsi(message, length)}", Debug.Severity.Fatal);
         }
         #endregion
 

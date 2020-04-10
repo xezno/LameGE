@@ -8,19 +8,14 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.CodeDom.Compiler;
-using System.Configuration;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-
 namespace ECSEngine {
     
     
-    [CompilerGenerated()]
-    [GeneratedCode("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.4.0.0")]
-    public sealed partial class RenderSettings : ApplicationSettingsBase {
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.4.0.0")]
+    public sealed partial class RenderSettings : global::System.Configuration.ApplicationSettingsBase {
         
-        private static RenderSettings defaultInstance = ((RenderSettings)(Synchronized(new RenderSettings())));
+        private static RenderSettings defaultInstance = ((RenderSettings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new RenderSettings())));
         
         public static RenderSettings Default {
             get {
@@ -28,9 +23,9 @@ namespace ECSEngine {
             }
         }
         
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("1920")]
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1280")]
         public uint gameResolutionX {
             get {
                 return ((uint)(this["gameResolutionX"]));
@@ -40,9 +35,9 @@ namespace ECSEngine {
             }
         }
         
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("1080")]
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("720")]
         public uint gameResolutionY {
             get {
                 return ((uint)(this["gameResolutionY"]));
@@ -52,9 +47,9 @@ namespace ECSEngine {
             }
         }
         
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("True")]
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool vsyncEnabled {
             get {
                 return ((bool)(this["vsyncEnabled"]));
@@ -64,9 +59,9 @@ namespace ECSEngine {
             }
         }
         
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("60")]
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
         public int framerateLimit {
             get {
                 return ((int)(this["framerateLimit"]));
@@ -76,9 +71,9 @@ namespace ECSEngine {
             }
         }
         
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("-1920")]
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("32")]
         public int gamePosX {
             get {
                 return ((int)(this["gamePosX"]));
@@ -88,9 +83,9 @@ namespace ECSEngine {
             }
         }
         
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("32")]
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("32")]
         public int gamePosY {
             get {
                 return ((int)(this["gamePosY"]));
@@ -100,9 +95,9 @@ namespace ECSEngine {
             }
         }
         
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("True")]
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool fullscreen {
             get {
                 return ((bool)(this["fullscreen"]));

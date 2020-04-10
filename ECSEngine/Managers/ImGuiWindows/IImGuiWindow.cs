@@ -1,6 +1,6 @@
 ﻿namespace ECSEngine.Managers.ImGuiWindows
 {
-    internal interface IImGuiWindow
+    public interface IImGuiWindow
     {
         bool Render { get; set; }
         string Title { get; }

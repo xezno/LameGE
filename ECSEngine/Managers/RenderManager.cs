@@ -10,10 +10,12 @@ namespace ECSEngine.Managers
         private int currentFrametimeIndex;
         private int currentFramerateIndex;
 
+        private const int FramesToCount = 120;
+
         public float LastFrameTime { get; private set; }
         public int CalculatedFramerate => (int)(1000f / Math.Max(LastFrameTime, 0.001f));
-        public float[] FrametimeHistory { get; } = new float[1000];
-        public float[] FramerateHistory { get; } = new float[1000];
+        public float[] FrametimeHistory { get; } = new float[FramesToCount];
+        public float[] FramerateHistory { get; } = new float[FramesToCount];
 
         /// <summary>
         /// Render all the entities within the world manager.

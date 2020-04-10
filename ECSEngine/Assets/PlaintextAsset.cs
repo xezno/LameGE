@@ -38,7 +38,7 @@ namespace ECSEngine.Assets
         {
             if (float.TryParse(str, out var tmp))
                 return tmp;
-            Debug.Log($"Could not successfully parse float from string '{str}'.", Debug.DebugSeverity.High);
+            Debug.Log($"Could not successfully parse float from string '{str}'.", Debug.Severity.High);
             return 0;
         }
 
@@ -51,7 +51,7 @@ namespace ECSEngine.Assets
         {
             if (int.TryParse(str, out var tmp))
                 return tmp;
-            Debug.Log($"Could not successfully parse int from string '{str}'.", Debug.DebugSeverity.High);
+            Debug.Log($"Could not successfully parse int from string '{str}'.", Debug.Severity.High);
             return 0;
         }
 
@@ -64,7 +64,7 @@ namespace ECSEngine.Assets
         {
             if (uint.TryParse(str, out var tmp))
                 return tmp;
-            Debug.Log($"Could not successfully parse unsigned int from string '{str}'.", Debug.DebugSeverity.High);
+            Debug.Log($"Could not successfully parse unsigned int from string '{str}'.", Debug.Severity.High);
             return 0;
         }
 
@@ -188,7 +188,7 @@ namespace ECSEngine.Assets
                             }
                             else
                             {
-                                Debug.Log($"Unknown attribute type {field.FieldType.Name} on opcode {string.Join(" ", ((TextAssetOpcodeAttribute)attribute).opcodes)}.", Debug.DebugSeverity.High);
+                                Debug.Log($"Unknown attribute type {field.FieldType.Name} on opcode {string.Join(" ", ((TextAssetOpcodeAttribute)attribute).opcodes)}.", Debug.Severity.High);
                             }
                         }
                     }

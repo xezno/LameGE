@@ -341,3 +341,7 @@ healthchecksdb
 
 # Copyrighted map files
 *.bsp
+
+# Copyrighted skybox
+mr_08/
+/Content/Scripts/.vscode

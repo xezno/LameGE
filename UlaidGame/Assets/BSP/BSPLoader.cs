@@ -41,10 +41,10 @@ namespace UlaidGame.Assets.BSP
             binaryReader.ReadBytes(3);
 
             if (!header.magicNumber.SequenceEqual(new[] { (byte)'V', (byte)'B', (byte)'S', (byte)'P' }))
-                Debug.Log("Not a valid BSP file!", Debug.DebugSeverity.High);
+                Debug.Log("Not a valid BSP file!", Debug.Severity.High);
 
             if (header.version != 20)
-                Debug.Log($"BSP version {header.version} is unsupported; will try to parse map anyway.", Debug.DebugSeverity.Medium);
+                Debug.Log($"BSP version {header.version} is unsupported; will try to parse map anyway.", Debug.Severity.Medium);
 
             // Parse lumps info - assume 64 lumps are present
             for (int i = 0; i < 64; ++i)
@@ -104,7 +104,7 @@ namespace UlaidGame.Assets.BSP
                     Lumps[(int)lumpType] = ReadTexInfoLump(lump, binaryReader);
                     break;
                 default:
-                    Debug.Log($"No lump reader for {lumpType}", Debug.DebugSeverity.Medium);
+                    Debug.Log($"No lump reader for {lumpType}", Debug.Severity.Medium);
                     break;
             }
 

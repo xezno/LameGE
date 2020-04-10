@@ -15,9 +15,6 @@ namespace ECSEngine.Managers.ImGuiWindows.Overlays
             var consoleText = Debug.PastLogsString;
             var consoleTextPos = new Vector2(8, 8);
 
-            if (!Render)
-                consoleTextPos.Y += 20; // Offset if menu bar is visible
-
             ImGui.GetBackgroundDrawList().AddText(
                 consoleTextPos + new Vector2(1, 1), 0x88000000, consoleText); // Shadow
             ImGui.GetBackgroundDrawList().AddText(

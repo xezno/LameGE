@@ -1,5 +1,6 @@
-﻿using System;
-using CSScriptLibrary;
+﻿using CSScriptLibrary;
+using System.IO;
+using System.Reflection;
 
 namespace ECSEngine.Managers
 {
@@ -8,9 +9,10 @@ namespace ECSEngine.Managers
         public ScriptManager()
         {
             var scriptPath = "Content/Scripts/TestScript.cs";
-            
+            CSScript.GlobalSettings.SearchDirs += Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\Content\\Scripts;";
+            Debug.Log($"CSScript search: {CSScript.GlobalSettings.SearchDirs}");
             CSScript.EvaluatorConfig.Engine = EvaluatorEngine.Mono;
-            CSScript.GlobalSettings.UseAlternativeCompiler = @"%CSSCRIPT_DIR%\Lib\CSSCodeProvider.v4.6.dll"; 
+            CSScript.GlobalSettings.UseAlternativeCompiler = @"Content/CSScript/CSSRoslynProvider.dll";
 
             Debug.Log($"Using engine {CSScript.EvaluatorConfig.Engine}");
             Debug.Log($"Loading script {scriptPath}");

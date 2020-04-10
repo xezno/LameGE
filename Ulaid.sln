@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECSEngine", "ECSEngine\ECSE
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UlaidGame", "UlaidGame\UlaidGame.csproj", "{C1EDBC7B-7C99-4B7E-AC37-CAB317A4C8DD}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UlaidGame.Scripts", "Content\Scripts\UlaidGame.Scripts.csproj", "{FA65E913-C044-457B-9F3B-4F46C2C3C946}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,17 @@ Global
 		{C1EDBC7B-7C99-4B7E-AC37-CAB317A4C8DD}.Release|x64.Build.0 = Release|Any CPU
 		{C1EDBC7B-7C99-4B7E-AC37-CAB317A4C8DD}.Release|x86.ActiveCfg = Release|Any CPU
 		{C1EDBC7B-7C99-4B7E-AC37-CAB317A4C8DD}.Release|x86.Build.0 = Release|Any CPU
+		{FA65E913-C044-457B-9F3B-4F46C2C3C946}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA65E913-C044-457B-9F3B-4F46C2C3C946}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA65E913-C044-457B-9F3B-4F46C2C3C946}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FA65E913-C044-457B-9F3B-4F46C2C3C946}.Debug|x64.Build.0 = Debug|Any CPU
+		{FA65E913-C044-457B-9F3B-4F46C2C3C946}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FA65E913-C044-457B-9F3B-4F46C2C3C946}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA65E913-C044-457B-9F3B-4F46C2C3C946}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA65E913-C044-457B-9F3B-4F46C2C3C946}.Release|x64.ActiveCfg = Release|Any CPU
+		{FA65E913-C044-457B-9F3B-4F46C2C3C946}.Release|x64.Build.0 = Release|Any CPU
+		{FA65E913-C044-457B-9F3B-4F46C2C3C946}.Release|x86.ActiveCfg = Release|Any CPU
+		{FA65E913-C044-457B-9F3B-4F46C2C3C946}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

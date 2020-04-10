@@ -35,7 +35,7 @@ namespace ECSEngine
         /// <summary>
         /// The available severity levels for a debug message.
         /// </summary>
-        public enum DebugSeverity
+        public enum Severity
         {
             Low,
             Medium,
@@ -48,7 +48,7 @@ namespace ECSEngine
         /// </summary>
         /// <param name="str">The message to output.</param>
         /// <param name="severity">The severity of the message, determining its color.</param>
-        public static void Log(string str, DebugSeverity severity = DebugSeverity.Low)
+        public static void Log(string str, Severity severity = Severity.Low)
         {
             // Prepare method name & method class name
             var stackTrace = new StackTrace();
@@ -61,16 +61,16 @@ namespace ECSEngine
 
             switch (severity)
             {
-                case DebugSeverity.Fatal:
+                case Severity.Fatal:
                     Console.ForegroundColor = ConsoleColor.Red;
                     break;
-                case DebugSeverity.High:
+                case Severity.High:
                     Console.ForegroundColor = ConsoleColor.DarkRed;
                     break;
-                case DebugSeverity.Low:
+                case Severity.Low:
                     Console.ForegroundColor = ConsoleColor.DarkGray;
                     break;
-                case DebugSeverity.Medium:
+                case Severity.Medium:
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
                     break;
             }

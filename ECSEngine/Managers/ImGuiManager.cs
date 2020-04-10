@@ -26,10 +26,12 @@ namespace ECSEngine.Managers
 
         private uint vbo, vao, ebo;
         private bool showEditor;
-        private readonly List<ImGuiMenu> menus = new List<ImGuiMenu>()
+
+        public List<ImGuiMenu> Menus { get; } = new List<ImGuiMenu>()
         {
             new ImGuiMenu(FontAwesome5.File, "File", new List<IImGuiWindow>()),
-            new ImGuiMenu(FontAwesome5.PuzzlePiece, "Addons", new List<IImGuiWindow>() {
+            new ImGuiMenu(FontAwesome5.PuzzlePiece, "Addons", new List<IImGuiWindow>()
+            {
                 new AddonBrowserWindow()
             }),
             new ImGuiMenu(FontAwesome5.FileCode, "Scripts", new List<IImGuiWindow>()
@@ -46,7 +48,7 @@ namespace ECSEngine.Managers
             })
         };
 
-        private List<IImGuiWindow> overlays = new List<IImGuiWindow>()
+        public List<IImGuiWindow> Overlays { get; } = new List<IImGuiWindow>()
         {
             new ConsoleOverlayWindow(),
             new PerformanceOverlayWindow()
@@ -140,7 +142,7 @@ namespace ECSEngine.Managers
         {
             ImGui.BeginMainMenuBar();
 
-            foreach (var menu in menus)
+            foreach (var menu in Menus)
             {
                 if (menu.windows.Count < 0) continue;
 
@@ -172,7 +174,7 @@ namespace ECSEngine.Managers
             {
                 DrawMenuBar();
 
-                foreach (var menu in menus)
+                foreach (var menu in Menus)
                 {
                     foreach (var window in menu.windows)
                     {
@@ -187,7 +189,7 @@ namespace ECSEngine.Managers
             }
             else
             {
-                foreach (var window in overlays)
+                foreach (var window in Overlays)
                 {
                     if (window.Render)
                         window.Draw();

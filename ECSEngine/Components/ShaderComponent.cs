@@ -82,13 +82,13 @@ namespace ECSEngine.Components
             if (variableLocation < 0)
             {
                 errorLog.Add(variableName);
-                Debug.Log($"Tried to set value for variable {variableName} that does not exist on shaderprogram {shaderProgram}.", Debug.DebugSeverity.High);
+                Debug.Log($"Tried to set value for variable {variableName} that does not exist on shaderprogram {shaderProgram}.", Debug.Severity.High);
                 return; // We can't continue, because the variable doesn't exist
             }
 
             if (variableValue == null)
             {
-                Debug.Log($"Tried to set value for variable {variableName}, but null value was given.", Debug.DebugSeverity.High);
+                Debug.Log($"Tried to set value for variable {variableName}, but null value was given.", Debug.Severity.High);
                 return; // We can't continue, because the variable has no value
             }
 
@@ -121,7 +121,7 @@ namespace ECSEngine.Components
             else if (!errorLog.Contains(variableName))
             {
                 errorLog.Add(variableName);
-                Debug.Log($"I don't know how to handle {variableValue.GetType().Name} yet :(", Debug.DebugSeverity.Medium);
+                Debug.Log($"I don't know how to handle {variableValue.GetType().Name} yet :(", Debug.Severity.Medium);
             }
         }
 
