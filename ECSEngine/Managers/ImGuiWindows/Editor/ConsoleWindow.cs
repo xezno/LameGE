@@ -5,15 +5,15 @@ using System.Numerics;
 
 namespace ECSEngine.Managers.ImGuiWindows.Editor
 {
-    class ConsoleWindow : IImGuiWindow
+    class ConsoleWindow : ImGuiWindow
     {
-        public bool Render { get; set; }
-        public string IconGlyph { get; } = FontAwesome5.Terminal;
-        public string Title { get; } = "Console";
+        public override bool Render { get; set; }
+        public override string IconGlyph { get; } = FontAwesome5.Terminal;
+        public override string Title { get; } = "Console";
 
         private string currentConsoleFilter = "", currentConsoleInput = "";
 
-        public void Draw()
+        public override void Draw()
         {
             ImGui.PushItemWidth(-1);
             ImGui.SetScrollHereY(1.0f);

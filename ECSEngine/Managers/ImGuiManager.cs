@@ -27,7 +27,7 @@ namespace ECSEngine.Managers
         private uint vbo, vao, ebo;
         private bool showEditor;
 
-        public List<ImGuiMenu> Menus { get; } = new List<ImGuiMenu>()
+        private List<ImGuiMenu> Menus { get; } = new List<ImGuiMenu>()
         {
             new ImGuiMenu(FontAwesome5.File, "File", new List<IImGuiWindow>()),
             new ImGuiMenu(FontAwesome5.PuzzlePiece, "Addons", new List<IImGuiWindow>()
@@ -65,6 +65,7 @@ namespace ECSEngine.Managers
             io.ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
 
             ImGui.StyleColorsDark();
+            ImGui.PushStyleVar(ImGuiStyleVar.FrameRounding, 3f);
 
             InitFonts();
             InitKeymap();
@@ -85,9 +86,9 @@ namespace ECSEngine.Managers
         private void InitFonts()
         {
             var glyphMinAdvanceX = 24;
-            var fontSizePixels = 15;
+            var fontSizePixels = 16;
 
-            io.Fonts.AddFontFromFileTTF("Content/Fonts/Roboto/Roboto-Medium.ttf", fontSizePixels);
+            io.Fonts.AddFontFromFileTTF("Content/Fonts/OpenSans/OpenSans-SemiBold.ttf", fontSizePixels);
 
             unsafe
             {
@@ -140,6 +141,7 @@ namespace ECSEngine.Managers
 
         private void DrawMenuBar()
         {
+            ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(4, 6));
             ImGui.BeginMainMenuBar();
 
             foreach (var menu in Menus)
@@ -160,8 +162,8 @@ namespace ECSEngine.Managers
                 }
             }
 
-
             ImGui.EndMainMenuBar();
+            ImGui.PopStyleVar();
         }
         #endregion
 
@@ -189,9 +191,10 @@ namespace ECSEngine.Managers
             }
             else
             {
-                foreach (var window in Overlays)
+                for (int i = 0; i < Overlays.Count; ++i)
                 {
-                    if (window.Render)
+                    var window = Overlays[i];
+                    if (window != null && window.Render)
                         window.Draw();
                 }
             }

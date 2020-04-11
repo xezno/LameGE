@@ -28,13 +28,8 @@ namespace UlaidGame.Components
                 new Vector3(velocity.z + velocity.y, 0, velocity.x) * new Vector3(rotationSensitivity, rotationSensitivity, rotationSensitivity),
                 0.01f);
             SceneManager.Instance.mainCamera.Position = transformComponent.position;
-
-            if (currentRotation.Magnitude != 0)
-            {
-                // Debug.Log($"{currentRotation.normalized}");
-                // currentDirection *= currentRotation.normalized;
-            }
-
+            SceneManager.Instance.mainCamera.RotationEuler = currentRotation;
+            
             velocity += currentDirection * acceleration;
             velocity += new Vector3(
                 Math.Sign(velocity.x) * -deceleration,

@@ -3,11 +3,11 @@ using ImGuiNET;
 
 namespace ECSEngine.Managers.ImGuiWindows.Addons
 {
-    class AddonBrowserWindow : IImGuiWindow
+    class AddonBrowserWindow : ImGuiWindow
     {
-        public bool Render { get; set; }
-        public string Title { get; } = "Addon Browser";
-        public string IconGlyph { get; } = FontAwesome5.PuzzlePiece;
+        public override bool Render { get; set; }
+        public override string Title { get; } = "Addon Browser";
+        public override string IconGlyph { get; } = FontAwesome5.PuzzlePiece;
 
         private string[] addonCategories = new[]
         {
@@ -23,7 +23,7 @@ namespace ECSEngine.Managers.ImGuiWindows.Addons
 
         private int currentCategoryIndex;
 
-        public void Draw()
+        public override void Draw()
         {
             ImGui.PushItemWidth(-1);
             ImGui.ListBox("Categories", ref currentCategoryIndex, addonCategories, addonCategories.Length, addonCategories.Length);

@@ -22,7 +22,7 @@ namespace UlaidGame.Entities
             AddComponent(new ShaderComponent(new Shader("Content/main.frag", ShaderType.FragmentShader),
                 new Shader("Content/main.vert", ShaderType.VertexShader)));
 
-            bspLoader = new BSPLoader("Content/gm_construct.bsp");
+            bspLoader = new BSPLoader("Content/gm_flatgrass.bsp");
             AddMeshAndMaterialComponents("Content/level01");
         }
 

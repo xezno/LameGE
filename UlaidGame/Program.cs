@@ -1,4 +1,7 @@
-﻿namespace UlaidGame
+﻿using System;
+using ECSEngine;
+
+namespace UlaidGame
 {
     class Program
     {
@@ -17,7 +20,7 @@
             }
             catch (Exception e)
             {
-                Debug.Log($"FATAL ERROR: {e.ToString()}", DebugSeverity.Fatal);
+                Debug.Log($"FATAL ERROR: {e.ToString()}", Debug.Severity.Fatal);
             }
 #endif
             while (GameInstance.isRunning) ;

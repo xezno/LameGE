@@ -1,32 +1,42 @@
 using ECSEngine;
+using ECSEngine.Assets;
 using ECSEngine.Managers;
 using ECSEngine.Managers.ImGuiWindows;
 using ImGuiNET;
+using System.Linq;
 
 namespace UlaidGame.Scripts
 {
-    class TestScript
+    class ScriptPreviewWindowInjector
     {
-        public int Number { get; private set; } = 12;
-
         public void Run()
         {
-            Debug.Log($"abracadabra; Number is {++Number}", Debug.Severity.Fatal);
-
-            ImGuiManager.Instance.Overlays.Add(new TestWindow());
+            Debug.Log("Hello, world!");
+            ImGuiManager.Instance.Overlays.Add(new ScriptPreviewWindow());
         }
+
+        public void Unload() { }
     }
 
-    class TestWindow : IImGuiWindow
+    class ScriptPreviewWindow : IImGuiWindow
     {
         public bool Render { get; set; } = true;
-        public string Title { get; }
-        public string IconGlyph { get; }
+        public string Title { get; } = "Scripts";
+        public string IconGlyph { get; } = FontAwesome5.FileCode;
 
         public void Draw()
         {
-            ImGui.Begin("Test Window");
-            ImGui.Button("Test 1234");
+            ImGui.Begin("Scripts");
+            for (int i = 0; i < ScriptManager.Instance.ScriptList.Count; ++i)
+            {
+                var scriptName = ScriptManager.Instance.ScriptList.Keys.ToArray()[i];
+                ImGui.LabelText("##hidelabel", scriptName);
+                ImGui.SameLine();
+                if (ImGui.Button("Reload"))
+                {
+                    ScriptManager.Instance.ReloadScript(scriptName);
+                }
+            }
             ImGui.End();
         }
     }

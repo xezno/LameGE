@@ -16,31 +16,48 @@ namespace ECSEngine
 {
     public class Game : IHasParent
     {
+        #region "Variables"
+        private readonly Gl.DebugProc debugCallback; // Stored to prevent GC from collecting debug callback before it can be called
+        private readonly string gamePropertyPath;
+        private readonly List<Thread> threads = new List<Thread>();
+
         private int titlebarHeight = 18;
         private List<IManager> mainThreadManagers = new List<IManager>();
-        private List<Thread> threads = new List<Thread>();
-        private readonly Gl.DebugProc debugCallback; // Stored to prevent GC from collecting debug callback before it can be called
-        private string gamePropertyPath;
         private GameProperties gameProperties;
 
         protected NativeWindow nativeWindow;
 
-        public IHasParent Parent { get; set; }
-        public void RenderImGui() { }
-
         public bool isRunning = true; // TODO: properly detect window close event (needs adding within nativewindow)
+        public IHasParent Parent { get; set; }
+        #endregion
 
+        #region "Methods"
         public Game(string gamePropertyPath)
         {
             this.gamePropertyPath = gamePropertyPath;
             debugCallback = DebugCallback;
         }
 
+        public void RenderImGui() { }
+
         public void Run()
         {
             LoadGameProperties();
             InitNativeWindow();
         }
+
+        private void Render(object sender, NativeWindowEventArgs e)
+        {
+            Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
+            foreach (var manager in mainThreadManagers)
+            {
+                manager.Run();
+            }
+
+            Gl.Finish();
+        }
+        #endregion
 
         #region Initialization
         private void InitNativeWindow()
@@ -213,17 +230,5 @@ namespace ECSEngine
                 Debug.Log($"OpenGL Error {id}: {Marshal.PtrToStringAnsi(message, length)}", Debug.Severity.Fatal);
         }
         #endregion
-
-        private void Render(object sender, NativeWindowEventArgs e)
-        {
-            Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
-            foreach (var manager in mainThreadManagers)
-            {
-                manager.Run();
-            }
-
-            Gl.Finish();
-        }
     }
 }

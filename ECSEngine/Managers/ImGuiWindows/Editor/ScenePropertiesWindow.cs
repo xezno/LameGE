@@ -4,16 +4,16 @@ using ImGuiNET;
 
 namespace ECSEngine.Managers.ImGuiWindows.Editor
 {
-    class ScenePropertiesWindow : IImGuiWindow
+    class ScenePropertiesWindow : ImGuiWindow
     {
-        public bool Render { get; set; }
-        public string IconGlyph { get; } = FontAwesome5.Sitemap;
-        public string Title { get; } = "Scene Properties";
+        public override bool Render { get; set; }
+        public override string IconGlyph { get; } = FontAwesome5.Sitemap;
+        public override string Title { get; } = "Scene Properties";
 
         private int currentSceneHierarchyItem;
         private IEntity selectedEntity;
 
-        public void Draw()
+        public override void Draw()
         {
             var entityNames = new string[SceneManager.Instance.Entities.Count];
             for (var i = 0; i < SceneManager.Instance.Entities.Count; i++)

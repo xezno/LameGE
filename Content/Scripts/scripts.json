@@ -1,7 +1,9 @@
 {
     "scriptList": [
-      "TestWindow.cs",
-      "TestScript.cs"
+      {
+        "path":"TestScript.cs",
+        "entryPoint":"Run"
+      }
     ],
     "name":"TestScript",
     "license":"MPL-2.0",

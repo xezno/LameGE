@@ -313,6 +313,7 @@
     <Compile Include="Entities\IEntity.cs" />
     <Compile Include="GameProperties.cs" />
     <Compile Include="Managers\ImGuiMenu.cs" />
+    <Compile Include="Managers\ImGuiWindows\ImGuiWindow.cs" />
     <Compile Include="Managers\ImGuiWindows\Addons\AddonBrowserWindow.cs" />
     <Compile Include="Managers\ImGuiWindows\Editor\TextureBrowserWindow.cs" />
     <Compile Include="Managers\ImGuiWindows\Overlays\ConsoleOverlayWindow.cs" />

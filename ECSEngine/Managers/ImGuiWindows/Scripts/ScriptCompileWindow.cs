@@ -6,13 +6,13 @@ using System.Numerics;
 
 namespace ECSEngine.Managers.ImGuiWindows.Scripts
 {
-    class ScriptCompileWindow : IImGuiWindow
+    class ScriptCompileWindow : ImGuiWindow
     {
-        public bool Render { get; set; }
-        public string Title { get; } = "Script Compilation";
-        public string IconGlyph { get; } = FontAwesome5.FileCode;
+        public override bool Render { get; set; }
+        public override string Title { get; } = "Script Compilation";
+        public override string IconGlyph { get; } = FontAwesome5.FileCode;
 
-        public void Draw()
+        public override void Draw()
         {
             ImGui.PushItemWidth(-1);
             ImGui.SetScrollHereY(1.0f);

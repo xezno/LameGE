@@ -4,13 +4,13 @@ using System;
 
 namespace ECSEngine.Managers.ImGuiWindows.Editor
 {
-    class PlaygroundWindow : IImGuiWindow
+    class PlaygroundWindow : ImGuiWindow
     {
-        public bool Render { get; set; }
-        public string IconGlyph { get; } = FontAwesome5.Play;
-        public string Title { get; } = "Playground";
+        public override bool Render { get; set; }
+        public override string IconGlyph { get; } = FontAwesome5.Play;
+        public override string Title { get; } = "Playground";
 
-        public void Draw()
+        public override void Draw()
         {
             // Loading test
             var progress = (int)(ImGui.GetTime() / 0.025f) % 100;
