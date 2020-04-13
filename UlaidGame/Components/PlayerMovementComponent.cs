@@ -29,7 +29,7 @@ namespace UlaidGame.Components
                 0.01f);
             SceneManager.Instance.mainCamera.Position = transformComponent.position;
             SceneManager.Instance.mainCamera.RotationEuler = currentRotation;
-            
+
             velocity += currentDirection * acceleration;
             velocity += new Vector3(
                 Math.Sign(velocity.x) * -deceleration,

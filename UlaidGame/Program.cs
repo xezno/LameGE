@@ -1,5 +1,7 @@
-﻿using System;
+﻿#if !DEBUG
+using System;
 using ECSEngine;
+#endif
 
 namespace UlaidGame
 {
@@ -10,7 +12,6 @@ namespace UlaidGame
         static void Main(string[] args)
         {
             GameInstance = new UlaidGame("GameProperties.json");
-
 #if DEBUG
             GameInstance.Run();
 #else

@@ -94,33 +94,30 @@ namespace UlaidGame.Entities
 
                         if (vertPoint == rootPoint)
                             continue;
-                        else
-                            firstPoint = vertPoint;
+                        firstPoint = vertPoint;
 
                         vertPoint = edge.vertexIndices[reversed ? 1 : 0];
 
                         if (vertPoint == rootPoint)
                             continue;
-                        else
-                            secondPoint = vertPoint;
-
-
-                        meshComponent.RenderMesh.faceElements.Add(new MeshFaceElement(
-                            (uint)rootPoint,
-                            (uint)face.texInfo,
-                            face.planeNumber
-                        ));
-                        meshComponent.RenderMesh.faceElements.Add(new MeshFaceElement(
-                            (uint)firstPoint,
-                            (uint)face.texInfo,
-                            face.planeNumber
-                        ));
-                        meshComponent.RenderMesh.faceElements.Add(new MeshFaceElement(
-                            (uint)secondPoint,
-                            (uint)face.texInfo,
-                            face.planeNumber
-                        ));
+                        secondPoint = vertPoint;
                     }
+
+                    meshComponent.RenderMesh.faceElements.Add(new MeshFaceElement(
+                        (uint)rootPoint,
+                        (uint)face.texInfo,
+                        face.planeNumber
+                    ));
+                    meshComponent.RenderMesh.faceElements.Add(new MeshFaceElement(
+                        (uint)firstPoint,
+                        (uint)face.texInfo,
+                        face.planeNumber
+                    ));
+                    meshComponent.RenderMesh.faceElements.Add(new MeshFaceElement(
+                        (uint)secondPoint,
+                        (uint)face.texInfo,
+                        face.planeNumber
+                    ));
                 }
             }
 

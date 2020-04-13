@@ -233,9 +233,11 @@ namespace UlaidGame.Assets.BSP
                     styles = binaryReader.ReadBytes(4),
                     lightmapOffset = binaryReader.ReadInt32(),
                     area = binaryReader.ReadSingle(),
-                    lightmapTextureMinsInLuxels = new[] { binaryReader.ReadInt32(), binaryReader.ReadInt32()
+                    lightmapTextureMinsInLuxels = new[] {
+                        binaryReader.ReadInt32(), binaryReader.ReadInt32()
                     },
-                    lightmapTextureSizeInLuxels = new[] { binaryReader.ReadInt32(), binaryReader.ReadInt32()
+                    lightmapTextureSizeInLuxels = new[] {
+                        binaryReader.ReadInt32(), binaryReader.ReadInt32()
                     },
                     origFace = binaryReader.ReadInt32(),
                     numPrims = binaryReader.ReadUInt16(),

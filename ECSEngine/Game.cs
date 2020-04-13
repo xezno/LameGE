@@ -1,5 +1,6 @@
 ﻿using ECSEngine.Events;
 using ECSEngine.Managers;
+using ECSEngine.Managers.Scripting;
 using ECSEngine.MathUtils;
 using ECSEngine.Types;
 using Newtonsoft.Json;
