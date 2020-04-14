@@ -15,10 +15,17 @@ namespace ECSEngine.Managers.ImGuiWindows.Editor
 
         public override void Draw()
         {
+            ImGui.Button(FontAwesome5.Plus);
+            ImGui.SameLine();
+            ImGui.Button(FontAwesome5.Trash);
+            ImGui.SameLine();
+            ImGui.Button(FontAwesome5.Clone);
+            ImGui.Separator();
+
             var entityNames = new string[SceneManager.Instance.Entities.Count];
             for (var i = 0; i < SceneManager.Instance.Entities.Count; i++)
             {
-                entityNames[i] = SceneManager.Instance.Entities[i].GetType().Name;
+                entityNames[i] = $"{SceneManager.Instance.Entities[i].IconGlyph} {SceneManager.Instance.Entities[i].Name ?? SceneManager.Instance.Entities[i].GetType().Name}";
             }
 
             ImGui.PushItemWidth(-1);

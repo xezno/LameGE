@@ -2,17 +2,18 @@
 using ImGuiNET;
 using System;
 using System.Numerics;
+using OpenGL;
 
 namespace ECSEngine.Managers.ImGuiWindows.Editor
 {
     class TextureBrowserWindow : ImGuiWindow
     {
-        public override bool Render { get; set; }
-        public override string Title { get; } = "Texture Browser (WIP)";
+        public override string Title { get; } = "Texture Browser";
         public override string IconGlyph { get; } = FontAwesome5.Square;
+        public override bool Render { get; set; } = true;
+        private int selectedTextureUnit = 0;
 
-        private int selectedTextureUnit;
-
+        // this does not work
         public override void Draw()
         {
             ImGui.SliderInt("Texture ptr", ref selectedTextureUnit, 0, 128);

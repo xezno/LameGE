@@ -27,7 +27,7 @@ namespace ECSEngine.Managers
         private uint vbo, vao, ebo;
         private bool showEditor;
 
-        private List<ImGuiMenu> Menus { get; } = new List<ImGuiMenu>()
+        public List<ImGuiMenu> Menus { get; } = new List<ImGuiMenu>()
         {
             new ImGuiMenu(FontAwesome5.File, "File", new List<IImGuiWindow>()),
             new ImGuiMenu(FontAwesome5.PuzzlePiece, "Addons", new List<IImGuiWindow>()

@@ -1,4 +1,5 @@
-﻿using ECSEngine.Components;
+﻿using ECSEngine.Assets;
+using ECSEngine.Components;
 using ECSEngine.MathUtils;
 using OpenGL;
 using Quaternion = ECSEngine.MathUtils.Quaternion;
@@ -10,6 +11,8 @@ namespace ECSEngine.Entities
     /// </summary>
     public sealed class CameraEntity : Entity<CameraEntity>
     {
+        public override string IconGlyph { get; } = FontAwesome5.Camera;
+
         /// <summary>
         /// Gets the projection matrix from the camera component.
         /// </summary>

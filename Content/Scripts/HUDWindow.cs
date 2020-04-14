@@ -1,4 +1,5 @@
-﻿using ECSEngine;
+﻿using System.Collections.Generic;
+using ECSEngine;
 using ECSEngine.Assets;
 using ECSEngine.Managers;
 using ECSEngine.Managers.ImGuiWindows;
@@ -13,7 +14,10 @@ namespace UlaidGame.Scripts
         public void Run()
         {
             Debug.Log("Hello, world!");
-            ImGuiManager.Instance.Overlays.Add(new HUDWindow());
+            ImGuiManager.Instance.Menus.Add(new ImGuiMenu(FontAwesome5.FileCode, "Custom", new List<IImGuiWindow>()
+            {
+                new HUDWindow()
+            }));
         }
 
         public void Unload() { }
@@ -27,7 +31,7 @@ namespace UlaidGame.Scripts
 
     class HUDWindow : IImGuiWindow
     {
-        public bool Render { get; set; } = true;
+        public bool Render { get; set; }
         public string Title { get; } = "Scripts";
         public string IconGlyph { get; } = FontAwesome5.FileCode;
 
@@ -35,7 +39,6 @@ namespace UlaidGame.Scripts
 
         private void DrawScriptsWindow()
         {
-            ImGui.Begin("Scripts");
             for (int i = 0; i < ScriptManager.Instance.ScriptList.Count; ++i)
             {
                 var scriptName = ScriptManager.Instance.ScriptList.Keys.ToArray()[i];
@@ -46,21 +49,11 @@ namespace UlaidGame.Scripts
                     ScriptManager.Instance.ReloadScript(scriptName);
                 }
             }
-            ImGui.End();
-        }
-
-        private void DrawHud()
-        {
-            ImGui.Begin("Hud");
-            ImGui.LabelText("Health", Player.Health.ToString());
-            ImGui.LabelText("Shields", Player.Shields.ToString());
-            ImGui.End();
         }
 
         public void Draw()
         {
             DrawScriptsWindow();
-            DrawHud();
         }
     }
 }

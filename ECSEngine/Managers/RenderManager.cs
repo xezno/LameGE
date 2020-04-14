@@ -6,7 +6,6 @@ namespace ECSEngine.Managers
     public class RenderManager : Manager<RenderManager>
     {
         private DateTime lastRender;
-        private Random random = new Random();
         private int currentFrametimeIndex;
         private int currentFramerateIndex;
 
@@ -18,13 +17,14 @@ namespace ECSEngine.Managers
         public float[] FramerateHistory { get; } = new float[FramesToCount];
 
         /// <summary>
-        /// Render all the entities within the world manager.
+        /// Render all the entities within the render manager.
         /// </summary>
         public override void Run()
         {
             foreach (var entity in SceneManager.Instance.Entities)
             {
-                entity.Render();
+                if (entity.Enabled)
+                    entity.Render();
             }
 
             LastFrameTime = (DateTime.Now - lastRender).Milliseconds;

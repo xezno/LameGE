@@ -4,6 +4,7 @@ using ECSEngine.MathUtils;
 using ECSEngine.Render;
 using OpenGL;
 using System;
+using ECSEngine.Assets;
 using UlaidGame.Assets.BSP;
 using UlaidGame.Assets.BSP.Lumps;
 using UlaidGame.Assets.BSP.Types;
@@ -12,8 +13,11 @@ namespace UlaidGame.Entities
 {
     public sealed class LevelModelEntity : Entity<LevelModelEntity>
     {
+        public override string IconGlyph { get; } = FontAwesome5.LayerGroup;
+
         private BSPLoader bspLoader;
         private Material mainMaterial;
+
         public LevelModelEntity()
         {
             AddComponent(new TransformComponent(new Vector3(0, 2f, -2f),

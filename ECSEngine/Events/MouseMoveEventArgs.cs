@@ -21,14 +21,20 @@ namespace ECSEngine.Events
         public Vector2 MousePosition { get; }
 
         /// <summary>
+        /// The mouse cursor's position relative to the last update.
+        /// </summary>
+        public Vector2 MouseDelta { get; }
+
+        /// <summary>
         /// Construct a new instance of <see cref="MouseMoveEventArgs"/>; the <see cref="TimeSent"/> will be automatically set.
         /// </summary>
         /// <param name="mousePosition">The cursor's new position relative to the window.</param>
         /// <param name="sender">The object triggering the event.</param>
-        public MouseMoveEventArgs(Vector2 mousePosition, object sender)
+        public MouseMoveEventArgs(Vector2 mouseDelta, Vector2 mousePosition, object sender)
         {
             Sender = sender;
             TimeSent = DateTime.Now;
+            MouseDelta = mouseDelta;
             MousePosition = mousePosition;
         }
     }
