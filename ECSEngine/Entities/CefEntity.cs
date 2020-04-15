@@ -2,17 +2,17 @@
 using System.Drawing;
 using System.IO;
 using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 using CefSharp;
 using CefSharp.OffScreen;
+using CefSharp.Structs;
 using ECSEngine.Assets;
 using ECSEngine.Components;
+using ECSEngine.Entities.CEF;
 using ECSEngine.Events;
 using ECSEngine.MathUtils;
 using ECSEngine.Render;
-using ImGuiNET;
 using OpenGL;
+using Size = System.Drawing.Size;
 
 namespace ECSEngine.Entities
 {
@@ -20,17 +20,10 @@ namespace ECSEngine.Entities
     {
         // file://{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/Content/UI/index.html
         private string cefFilePath = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/Content/UI/index.html";
-        private Texture2D browserWindowTexture;
 
         public override string IconGlyph { get; } = FontAwesome5.Wrench;
-
-        private byte[] textureData;
-        private Bitmap textureBitmap;
-        private bool setupTexture;
         private bool readyToDraw;
         private ChromiumWebBrowser browser;
-        DateTime startTime, endTime;
-        private bool updateTexture;
 
         public CefEntity()
         {
@@ -47,7 +40,7 @@ namespace ECSEngine.Entities
             // setup cef instance
             var browserSettings = new BrowserSettings
             {
-                WindowlessFrameRate = 60
+                WindowlessFrameRate = 120
             };
 
             var cefSettings = new CefSettings();
@@ -57,10 +50,14 @@ namespace ECSEngine.Entities
             var requestContext = new RequestContext(requestContextSettings);
             browser = new ChromiumWebBrowser(cefFilePath, browserSettings, requestContext);
             browser.Size = new Size((int)RenderSettings.Default.gameResolutionX - 16, (int)RenderSettings.Default.gameResolutionY - 16);
+            browser.RenderHandler = new CEF.RenderHandler(browser);
 
             browser.BrowserInitialized += (sender, args) => { browser.Load(cefFilePath); };
-
             browser.LoadError += (sender, args) => Debug.Log($"Browser error {args.ErrorCode}");
+
+            byte[] emptyData = new byte[browser.Size.Width * browser.Size.Height * 4];
+            GetComponent<MaterialComponent>().materials[0].diffuseTexture =
+                new Texture2D(emptyData, browser.Size.Width, browser.Size.Height);
             
             EventHandler<LoadingStateChangedEventArgs> handler = null;
             handler = (sender, args) =>
@@ -70,59 +67,10 @@ namespace ECSEngine.Entities
                 browser.LoadingStateChanged -= handler;
 
                 Debug.Log($"CEF has finished loading page {cefFilePath}");
-                browser.ScreenshotAsync(true).ContinueWith(SendBitmapToTexture);
+                readyToDraw = true;
             };
             
             browser.LoadingStateChanged += handler;
-        }
-
-        private void SetupTextureOnMainThread(byte[] data, Bitmap bitmap)
-        {
-            Debug.Log("Setting up texture");
-            browserWindowTexture = new Texture2D(data, bitmap.Width, bitmap.Height);
-            
-            Debug.Log("Ready to draw.");
-
-            Debug.Log($"Texture bitmap ptr: {browserWindowTexture.glTexture}");
-
-            GetComponent<MaterialComponent>().materials[0].diffuseTexture = browserWindowTexture;
-            setupTexture = false;
-            readyToDraw = true;
-        }
-
-        private void SendBitmapToTexture(Task<Bitmap> bitmapTask)
-        {
-            Debug.Log("Got texture");
-
-            bitmapTask.Wait();
-            var bitmap = bitmapTask.Result;
-
-            textureData = BitmapToBytes(bitmap);
-            textureBitmap = bitmap;
-            setupTexture = true;
-        }
-
-        private byte[] BitmapToBytes(Bitmap bitmap)
-        {
-            byte[] data = new byte[bitmap.Width * bitmap.Height * 4];
-
-            int i = 0;
-
-            for (int y = bitmap.Height - 1; y >= 0; --y)
-            {
-                for (int x = 0; x < bitmap.Width; ++x)
-                {
-                    var color = bitmap.GetPixel(x, y);
-                    data[i] = color.R; // R
-                    data[i + 1] = color.G; // G
-                    data[i + 2] = color.B; // B
-                    data[i + 3] = color.A; // A
-
-                    i += 4;
-                }
-            }
-
-            return data;
         }
 
         public override void Render()
@@ -133,51 +81,31 @@ namespace ECSEngine.Entities
             // declare a bool that allows us to detect when we need to
             // setup the texture.
 
-            if (setupTexture)
-                SetupTextureOnMainThread(textureData, textureBitmap);
+            // if (!readyToDraw) return;
 
-            if (updateTexture)
-                UpdateTextureOnMainThread();
-
-            if (!readyToDraw) return;
-
+            SetTextureData();
             // draw to screen
             base.Render();
         }
 
-        public void UpdateBrowserView()
+        private void SetTextureData()
         {
-            browser.ScreenshotAsync(true).ContinueWith(UpdateScreenshot);
+            var renderHandler = ((RenderHandler) browser.RenderHandler);
+            if (!renderHandler.NeedsPaint)
+                return;
+
+            Paint(renderHandler.Type, renderHandler.DirtyRect, renderHandler.Buffer, renderHandler.Width, renderHandler.Height);
+            renderHandler.NeedsPaint = false;
         }
 
-        private void UpdateScreenshot(Task<Bitmap> bitmapTask)
+        private void Paint(PaintElementType type, Rect dirtyRect, IntPtr buffer, int width, int height)
         {
-            startTime = DateTime.Now;
-            bitmapTask.Wait();
-            var bitmap = bitmapTask.Result;
-            textureBitmap = bitmap;
-            textureData = BitmapToBytes(bitmap);
-            updateTexture = true;
-        }
+            Gl.BindTexture(TextureTarget.Texture2d, GetComponent<MaterialComponent>().materials[0].diffuseTexture.glTexture);
 
-        public void UpdateTextureOnMainThread()
-        {
-            var textureDataPtr = Marshal.AllocHGlobal(textureData.Length);
-            Marshal.Copy(textureData, 0, textureDataPtr, textureData.Length);
-
-            var glTexturePtr = GetComponent<MaterialComponent>().materials[0].diffuseTexture.glTexture;
-
-            Gl.BindTexture(TextureTarget.Texture2d, glTexturePtr);
-
-            Gl.TexSubImage2D(TextureTarget.Texture2d, 0, 0, 0, textureBitmap.Width, textureBitmap.Height, PixelFormat.Rgba, PixelType.UnsignedByte, textureDataPtr);
+            Gl.TexSubImage2D(TextureTarget.Texture2d, 0, dirtyRect.X, dirtyRect.Y, dirtyRect.Width, dirtyRect.Height, PixelFormat.Bgra, PixelType.UnsignedByte, buffer);
             Gl.GenerateMipmap(TextureTarget.Texture2d);
 
             Gl.BindTexture(TextureTarget.Texture2d, 0);
-
-            Marshal.FreeHGlobal(textureDataPtr);
-            endTime = DateTime.Now;
-            Debug.Log($"Screenshot update took {(endTime - startTime).TotalSeconds}");
-            updateTexture = false;
         }
 
         public override void HandleEvent(Event eventType, IEventArgs baseEventArgs)
@@ -189,13 +117,6 @@ namespace ECSEngine.Entities
             }
 
             base.HandleEvent(eventType, baseEventArgs);
-        }
-
-        public override void RenderImGui()
-        {
-            if (ImGui.Button("Update"))
-                UpdateBrowserView();
-            base.RenderImGui();
         }
     }
 }

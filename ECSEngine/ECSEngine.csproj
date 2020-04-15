@@ -302,6 +302,7 @@
     <Compile Include="Debug.cs" />
     <Compile Include="Entities\CameraEntity.cs" />
     <Compile Include="Entities\CefEntity.cs" />
+    <Compile Include="Entities\CEF\RenderHandler.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\LightEntity.cs" />
     <Compile Include="EventManager.cs" />

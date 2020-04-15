@@ -4,6 +4,7 @@
         <style>
             :root {
                 --color: #aaaaaa88;
+                --shadow: 0 0 20px #00000088;
             }
 
             @font-face {
@@ -13,6 +14,7 @@
 
             * {
                 box-sizing: border-box;
+                text-shadow: var(--shadow);
             }
 
             body {
@@ -44,6 +46,7 @@
                 background: var(--color);
                 float: left;
                 margin-right: 15px;
+                box-shadow: var(--shadow);
             }
 
             #lower {
@@ -143,11 +146,9 @@
 
         <script>
             var healthElem = document.querySelector("#health");
-            function a() {
+            function addHealth() {
                 healthElem.innerHTML++;
             }
-
-            setInterval(a, 25);
         </script>
     </body>
 </html>

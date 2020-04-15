@@ -81,5 +81,5 @@ void main()
     cameraDirection = normalize(cameraPos - modelPos);
     normal = normalize(outNormal);
 
-    fragColor = texture(material.diffuseTexture, outUvCoord);
+    fragColor = texture(material.diffuseTexture, outUvCoord * vec2(1, -1));
 }
