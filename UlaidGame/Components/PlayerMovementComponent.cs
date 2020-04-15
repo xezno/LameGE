@@ -19,7 +19,6 @@ namespace UlaidGame.Components
         public float mouseSensitivityMultiplier = 0.1f;
         public float rotationSensitivity = 0.5f;
         private TransformComponent transformComponent;
-        private Vector2 lastMousePos;
 
         public override void Update(float deltaTime)
         {
@@ -87,10 +86,9 @@ namespace UlaidGame.Components
             {
                 MouseMoveEventArgs mouseEventArgs = (MouseMoveEventArgs)baseEventArgs;
                 // TODO: Replace with mouse delta
-                currentRotation += new Vector3((lastMousePos.y - mouseEventArgs.MousePosition.y) * -mouseSensitivityMultiplier,
-                    (lastMousePos.x - mouseEventArgs.MousePosition.x) * -mouseSensitivityMultiplier,
+                currentRotation += new Vector3(mouseEventArgs.MouseDelta.y * -mouseSensitivityMultiplier,
+                    mouseEventArgs.MouseDelta.x * -mouseSensitivityMultiplier,
                     0);
-                lastMousePos = mouseEventArgs.MousePosition;
             }
             else if (eventType == Event.GameStart)
             {

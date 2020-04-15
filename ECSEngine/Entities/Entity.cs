@@ -7,11 +7,31 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using ECSEngine.Assets;
 
 namespace ECSEngine.Entities
 {
     public class Entity<T> : IEntity
     {
+        private string name;
+
+        public bool Enabled { get; set; } = true;
+
+        public virtual string Name {
+            get
+            {
+                if (string.IsNullOrEmpty(name)) 
+                    return GetType().Name;
+
+                return name;
+            }
+            set => name = value;
+        }
+
+        public virtual string IconGlyph { get; } = FontAwesome5.Cube;
+
+        public virtual List<string> Tags { get; set; } = new List<string>();
+
         /// <summary>
         /// The entity's parent; usually a manager.
         /// </summary>
@@ -36,6 +56,23 @@ namespace ECSEngine.Entities
         /// </summary>
         public virtual void RenderImGui()
         {
+            // Entity info
+            //var enabledVal = Enabled;
+            //ImGui.Checkbox("##hidelabel", ref enabledVal);
+            //if (Enabled != enabledVal)
+            //    Enabled = enabledVal;
+
+            ImGui.Text($"{IconGlyph} {GetType().Name}");
+
+            var nameVal = Name;
+
+            ImGui.InputText("##hidelabel", ref nameVal, 256);
+            if (nameVal != Name)
+                Name = nameVal;
+
+            ImGui.Separator();
+
+            // Components
             foreach (var component in Components)
             {
                 if (ImGui.TreeNode(component.GetType().Name))
@@ -59,10 +96,9 @@ namespace ECSEngine.Entities
             {
                 foreach (var attribute in component.GetType().GetCustomAttributes())
                 {
-                    if (attribute is RequiresAttribute)
+                    if (attribute is RequiresAttribute requiresAttribute)
                     {
                         // Okay - now let's check the RequiresAttribute for any required components:
-                        var requiresAttribute = (RequiresAttribute)attribute;
                         var containsType = false;
                         foreach (var otherComponent in Components)
                         {

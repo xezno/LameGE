@@ -7,7 +7,12 @@ namespace ECSEngine.Entities
 {
     public interface IEntity : IHasParent
     {
+        string Name { get; set; }
+        List<string> Tags { get; set; }
+
         List<IComponent> Components { get; }
+        string IconGlyph { get; }
+        bool Enabled { get; set; }
 
         /// <summary>
         /// Called when an event is triggered.

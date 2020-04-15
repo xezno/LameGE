@@ -113,7 +113,6 @@
     <Compile Include="Assets\BSP\Types\TexInfo.cs" />
     <Compile Include="Components\PlayerMovementComponent.cs" />
     <Compile Include="Entities\LevelModelEntity.cs" />
-    <Compile Include="Entities\PlanetEntity.cs" />
     <Compile Include="Entities\PlayerEntity.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

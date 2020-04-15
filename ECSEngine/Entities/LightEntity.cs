@@ -1,12 +1,16 @@
-﻿using ECSEngine.Components;
+﻿using ECSEngine.Assets;
+using ECSEngine.Components;
 using ECSEngine.MathUtils;
 
 namespace ECSEngine.Entities
 {
     public sealed class LightEntity : Entity<LightEntity>
     {
+        public override string IconGlyph { get; } = FontAwesome5.Lightbulb;
+
         private TransformComponent transformComponent;
         private LightComponent lightComponent;
+
         public LightEntity()
         {
             // Add mesh component

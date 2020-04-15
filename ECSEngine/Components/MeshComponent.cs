@@ -9,6 +9,10 @@ namespace ECSEngine.Components
     /// <summary>
     /// Contains the component-based code used in order to render
     /// a mesh on-screen.
+    /// REQUIRES:
+    ///  - <see cref="MaterialComponent " />
+    ///  - <see cref="ShaderComponent   ">
+    ///  - <see cref="TransformComponent">
     /// </summary>
     [Requires(typeof(MaterialComponent))]
     [Requires(typeof(ShaderComponent))]
@@ -25,6 +29,10 @@ namespace ECSEngine.Components
 
         /// <summary>
         /// Construct an instance of MeshComponent, loading the mesh from the path specified.
+        /// <para>REQUIRES:</para>
+        /// <para> - <see cref="MaterialComponent"/></para>
+        /// <para> - <see cref="ShaderComponent"/></para>
+        /// <para> - <see cref="TransformComponent"/></para>
         /// </summary>
         /// <param name="path">The path to load the <see cref="Mesh"/> from.</param>
         public MeshComponent(string path)

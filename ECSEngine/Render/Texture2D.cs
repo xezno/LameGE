@@ -88,7 +88,7 @@ namespace ECSEngine.Render
             var textureDataPtr = Marshal.AllocHGlobal(textureData.Length);
             Marshal.Copy(textureData, 0, textureDataPtr, textureData.Length);
 
-            if (width * height * 3 != textureData.Length)
+            if (width * height * 4 != textureData.Length)
             {
                 throw new Exception("uh oh");
             }

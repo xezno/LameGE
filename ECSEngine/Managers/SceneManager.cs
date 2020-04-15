@@ -17,11 +17,17 @@ namespace ECSEngine.Managers
         /// </summary>
         public SceneManager()
         {
-            mainCamera = new CameraEntity();
+            mainCamera = new CameraEntity()
+            {
+                Name = "Main Camera"
+            };
             AddEntity(mainCamera);
 
             lights = new List<LightEntity>();
-            var mainLight = new LightEntity();
+            var mainLight = new LightEntity()
+            {
+                Name = "Test Light"
+            };
             lights.Add(mainLight);
             AddEntity(mainLight);
         }

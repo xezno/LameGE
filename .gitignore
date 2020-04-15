@@ -344,4 +344,10 @@ healthchecksdb
 
 # Copyrighted skybox
 mr_08/
+
+# VSCode
 /Content/Scripts/.vscode
+
+# Copyrighted fonts
+/Content/Fonts/Futura
+/Content/UI/Fonts/Futura

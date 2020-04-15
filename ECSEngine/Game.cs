@@ -17,7 +17,7 @@ namespace ECSEngine
 {
     public class Game : IHasParent
     {
-        #region "Variables"
+        #region Variables
         private readonly Gl.DebugProc debugCallback; // Stored to prevent GC from collecting debug callback before it can be called
         private readonly string gamePropertyPath;
         private readonly List<Thread> threads = new List<Thread>();
@@ -27,12 +27,15 @@ namespace ECSEngine
         private GameProperties gameProperties;
 
         protected NativeWindow nativeWindow;
+        private Vector2 lastMousePos;
 
         public bool isRunning = true; // TODO: properly detect window close event (needs adding within nativewindow)
+        
         public IHasParent Parent { get; set; }
+        public MouseMode MouseMode { get; set; } = MouseMode.Locked;
         #endregion
 
-        #region "Methods"
+        #region Methods
         public Game(string gamePropertyPath)
         {
             this.gamePropertyPath = gamePropertyPath;
@@ -191,10 +194,19 @@ namespace ECSEngine
         private void MouseWheel(object sender, NativeWindowMouseEventArgs e) => EventManager.BroadcastEvent(Event.MouseScroll, new MouseWheelEventArgs(e.WheelTicks, this));
 
         // For some reason this offsets by the titlebar height, and it's inverted, so we have to do some quick maths to fix that
-        private void MouseMove(object sender, NativeWindowMouseEventArgs e) =>
+        private void MouseMove(object sender, NativeWindowMouseEventArgs e)
+        {
+            var mousePos = new Vector2(e.Location.X,
+                RenderSettings.Default.gameResolutionY - e.Location.Y -
+                (RenderSettings.Default.fullscreen ? 0 : titlebarHeight));
             EventManager.BroadcastEvent(Event.MouseMove,
-                new MouseMoveEventArgs(new Vector2(e.Location.X, RenderSettings.Default.gameResolutionY - e.Location.Y - (RenderSettings.Default.fullscreen ? 0 : titlebarHeight)),
+                new MouseMoveEventArgs(lastMousePos - mousePos, mousePos,
                     this));
+            lastMousePos = mousePos;
+
+            //if (MouseMode == MouseMode.Locked)
+            //    nativeWindow.SetCursorPos(new Point(0, 0));
+        }
 
         private void MouseUp(object sender, NativeWindowMouseEventArgs e)
         {
