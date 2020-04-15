@@ -12,22 +12,23 @@ namespace UlaidGame.Components
         // inb4 "why are these public" - it's for imgui
         public Vector3 velocity;
         public Vector3 currentDirection;
+        public Vector3 currentInput;
         public Vector3 currentRotation;
         public float acceleration = 0.125f;
         public float deceleration = 0.0625f;
         public float maxSpeed = 10.0f;
         public float mouseSensitivityMultiplier = 0.1f;
-        public float rotationSensitivity = 0.5f;
+        public float rotationSensitivity = 3f;
         private TransformComponent transformComponent;
 
         public override void Update(float deltaTime)
         {
             transformComponent.position += velocity * deltaTime;
-            SceneManager.Instance.mainCamera.RotationEuler = EaseLerpVector3(SceneManager.Instance.mainCamera.RotationEuler,
-                new Vector3(velocity.z + velocity.y, 0, velocity.x) * new Vector3(rotationSensitivity, rotationSensitivity, rotationSensitivity),
-                0.01f);
             SceneManager.Instance.mainCamera.Position = transformComponent.position;
-            SceneManager.Instance.mainCamera.RotationEuler = currentRotation;
+            SceneManager.Instance.mainCamera.RotationEuler = currentRotation * rotationSensitivity;
+            transformComponent.rotationEuler = currentRotation * rotationSensitivity;
+
+            currentDirection = (transformComponent.Forward * currentInput.z) + (transformComponent.Right * currentInput.x) + (transformComponent.Up * currentInput.y);
 
             velocity += currentDirection * acceleration;
             velocity += new Vector3(
@@ -63,22 +64,22 @@ namespace UlaidGame.Components
                 switch ((KeyCode)keyboardEventArgs.KeyboardKey)
                 {
                     case KeyCode.W:
-                        currentDirection.z = eventType == Event.KeyDown ? -1 : 0;
+                        currentInput.z = eventType == Event.KeyDown ? -1 : 0;
                         break;
                     case KeyCode.A:
-                        currentDirection.x = eventType == Event.KeyDown ? -1 : 0;
+                        currentInput.x = eventType == Event.KeyDown ? -1 : 0;
                         break;
                     case KeyCode.S:
-                        currentDirection.z = eventType == Event.KeyDown ? 1 : 0;
+                        currentInput.z = eventType == Event.KeyDown ? 1 : 0;
                         break;
                     case KeyCode.D:
-                        currentDirection.x = eventType == Event.KeyDown ? 1 : 0;
+                        currentInput.x = eventType == Event.KeyDown ? 1 : 0;
                         break;
                     case KeyCode.Space:
-                        currentDirection.y = eventType == Event.KeyDown ? 1 : 0;
+                        currentInput.y = eventType == Event.KeyDown ? 1 : 0;
                         break;
                     case KeyCode.Control:
-                        currentDirection.y = eventType == Event.KeyDown ? -1 : 0;
+                        currentInput.y = eventType == Event.KeyDown ? -1 : 0;
                         break;
                 }
             }

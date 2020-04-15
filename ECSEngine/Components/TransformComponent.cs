@@ -39,6 +39,33 @@ namespace ECSEngine.Components
             }
         }
 
+        public Vector3 Forward
+        {
+            get
+            {
+                var inverseColumn = Matrix.Inverse.Column2;
+                return new Vector3(inverseColumn.x, inverseColumn.y, inverseColumn.z).Normalized;
+            }
+        }
+
+        public Vector3 Up
+        {
+            get
+            {
+                var inverseColumn = Matrix.Inverse.Column1;
+                return new Vector3(inverseColumn.x, inverseColumn.y, inverseColumn.z).Normalized;
+            }
+        }
+
+        public Vector3 Right
+        {
+            get
+            {
+                var inverseColumn = Matrix.Inverse.Column0;
+                return new Vector3(inverseColumn.x, inverseColumn.y, inverseColumn.z).Normalized;
+            }
+        }
+
         /// <summary>
         /// Construct a new TransformComponent with the parameters specified.
         /// </summary>
