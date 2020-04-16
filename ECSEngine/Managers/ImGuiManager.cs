@@ -75,8 +75,8 @@ namespace ECSEngine.Managers
         #region "Initialization"
         private void InitGl()
         {
-            shaderComponent = new ShaderComponent(new Shader("Content/ImGUI/imgui.frag", ShaderType.FragmentShader),
-                new Shader("Content/ImGUI/imgui.vert", ShaderType.VertexShader));
+            shaderComponent = new ShaderComponent(new Shader("Content/Shaders/ImGUI/imgui.frag", ShaderType.FragmentShader),
+                new Shader("Content/Shaders/ImGUI/imgui.vert", ShaderType.VertexShader));
 
             vao = Gl.GenVertexArray();
             vbo = Gl.GenBuffer();

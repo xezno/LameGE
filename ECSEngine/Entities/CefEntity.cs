@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using System.IO;
 using System.Reflection;
 using CefSharp;
@@ -16,9 +15,9 @@ using Size = System.Drawing.Size;
 
 namespace ECSEngine.Entities
 {
+    // TODO: Move to component, render to a texture and make a HudEntity instead
     public sealed class CefEntity : Entity<CefEntity>
     {
-        // file://{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/Content/UI/index.html
         private string cefFilePath = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/Content/UI/index.html";
 
         public override string IconGlyph { get; } = FontAwesome5.Wrench;
@@ -30,8 +29,8 @@ namespace ECSEngine.Entities
             AddComponent(new ShaderComponent(new Shader("Content/UI/Shaders/main.frag", ShaderType.FragmentShader),
                 new Shader("Content/UI/Shaders/main.vert", ShaderType.VertexShader)));
             AddComponent(new TransformComponent(new Vector3(0, 0, -2), new Vector3(0, 0, 0), new Vector3(1, 1, 1)));
-            AddComponent(new MaterialComponent(new Material("Content/cube.mtl")));
-            AddComponent(new MeshComponent("Content/cube.obj"));
+            AddComponent(new MaterialComponent(new Material("Content/Materials/cube.mtl")));
+            AddComponent(new MeshComponent("Content/Models/cube.obj"));
             InitBrowser();
         }
 

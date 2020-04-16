@@ -21,7 +21,16 @@ namespace ECSEngine.MathUtils
         public float z;
 
         public float Magnitude => (float)Math.Sqrt(x * x + y * y + z * z);
-        public Vector3 Normalized { get => this / Magnitude; }
+
+        public Vector3 Normalized
+        {
+            get
+            {
+                if (Math.Abs(Magnitude) < 0.0001f) 
+                    return new Vector3(0, 0, 0);
+                return this / Magnitude;
+            }
+        }
 
         /// <summary>
         /// Construct a <see cref="Vector3"/> with three initial values.
@@ -35,8 +44,6 @@ namespace ECSEngine.MathUtils
             this.y = y;
             this.z = z;
         }
-
-        // TODO: Add more mathematical operators for both other Vector3s and floats too
 
         public static Vector3 operator *(Vector3 a, Vector3 b) => new Vector3(a.x * b.x,
                                                                                 a.y * b.y,

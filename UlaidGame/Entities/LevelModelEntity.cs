@@ -4,6 +4,7 @@ using ECSEngine.MathUtils;
 using ECSEngine.Render;
 using OpenGL;
 using System;
+using ECSEngine;
 using ECSEngine.Assets;
 using UlaidGame.Assets.BSP;
 using UlaidGame.Assets.BSP.Lumps;
@@ -23,11 +24,11 @@ namespace UlaidGame.Entities
             AddComponent(new TransformComponent(new Vector3(0, 2f, -2f),
                                                 new Vector3(270, 0, 0),
                                                 new Vector3(1, 1, 1) * 0.01f));
-            AddComponent(new ShaderComponent(new Shader("Content/main.frag", ShaderType.FragmentShader),
-                new Shader("Content/main.vert", ShaderType.VertexShader)));
+            AddComponent(new ShaderComponent(new Shader("Content/Shaders/Standard/main.frag", ShaderType.FragmentShader),
+                new Shader("Content/Shaders/Standard/main.vert", ShaderType.VertexShader)));
 
-            bspLoader = new BSPLoader("Content/gm_flatgrass.bsp");
-            AddMeshAndMaterialComponents("Content/level01");
+            bspLoader = new BSPLoader("Content/Maps/gm_construct.bsp");
+            AddMeshAndMaterialComponents("level01");
         }
 
         private void GenerateBSPMesh()
@@ -47,7 +48,6 @@ namespace UlaidGame.Entities
             }
 
             // setup uv coords
-
             foreach (var texInfo in texInfoLump.Contents)
             {
                 string logStr = "";
@@ -60,10 +60,7 @@ namespace UlaidGame.Entities
 
                     logStr += "\n\t";
                 }
-                // u = tv(0,0) * x + tv(0,1) * y + tv(0,2) * z + tv(0,3)
-                // v = tv(1,0) * x + tv(1,1) * y + tv(1,2) * z + tv(1,3)
 
-                meshComponent.RenderMesh.uvCoords.Add(new Vector2(texInfo.textureVecs[0, 0], texInfo.textureVecs[0, 1]) / 1000f);
             }
 
             // setup normals
@@ -107,19 +104,32 @@ namespace UlaidGame.Entities
                         secondPoint = vertPoint;
                     }
 
+                    var texInfo = texInfoLump.Contents[face.texInfo];
+                    // u = tv(0,0) * x + tv(0,1) * y + tv(0,2) * z + tv(0,3)
+                    // v = tv(1,0) * x + tv(1,1) * y + tv(1,2) * z + tv(1,3)
+
+                    var rootPointCoords = vertexLump.Contents[rootPoint];
+                    var firstPointCoords = vertexLump.Contents[firstPoint];
+                    var secondPointCoords = vertexLump.Contents[secondPoint];
+
+
+                    meshComponent.RenderMesh.uvCoords.Add(GetUVCoords(texInfo, rootPointCoords));
+                    meshComponent.RenderMesh.uvCoords.Add(GetUVCoords(texInfo, firstPointCoords));
+                    meshComponent.RenderMesh.uvCoords.Add(GetUVCoords(texInfo, secondPointCoords));
+
                     meshComponent.RenderMesh.faceElements.Add(new MeshFaceElement(
                         (uint)rootPoint,
-                        (uint)face.texInfo,
+                        (uint)meshComponent.RenderMesh.uvCoords.Count - 3,
                         face.planeNumber
                     ));
                     meshComponent.RenderMesh.faceElements.Add(new MeshFaceElement(
                         (uint)firstPoint,
-                        (uint)face.texInfo,
+                        (uint)meshComponent.RenderMesh.uvCoords.Count - 2,
                         face.planeNumber
                     ));
                     meshComponent.RenderMesh.faceElements.Add(new MeshFaceElement(
                         (uint)secondPoint,
-                        (uint)face.texInfo,
+                        (uint)meshComponent.RenderMesh.uvCoords.Count - 1,
                         face.planeNumber
                     ));
                 }
@@ -128,9 +138,22 @@ namespace UlaidGame.Entities
             meshComponent.RenderMesh.GenerateBuffers();
             AddComponent(meshComponent);
         }
+
+        private Vector2 GetUVCoords(TexInfo texInfo, Vector3 coords)
+        {
+            var uCoord = texInfo.textureVecs[0, 0] * coords.x + texInfo.textureVecs[0, 1] * coords.y + texInfo.textureVecs[0, 2] * coords.z +
+                             texInfo.textureVecs[0, 3];
+            var vCoord = texInfo.textureVecs[1, 0] * coords.x + texInfo.textureVecs[1, 1] * coords.y + texInfo.textureVecs[1, 2] * coords.z +
+                             texInfo.textureVecs[1, 3];
+
+            vCoord = 1.0f - vCoord; // Flip for opengl
+
+            return new Vector2(uCoord, vCoord) / 1000.0f;
+        }
+
         private void AddMeshAndMaterialComponents(string path)
         {
-            mainMaterial = new Material($"{path}.mtl");
+            mainMaterial = new Material($"Content/Materials/{path}.mtl");
             AddComponent(new MaterialComponent(mainMaterial));
             GenerateBSPMesh();
         }
