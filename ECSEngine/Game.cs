@@ -207,7 +207,11 @@ namespace ECSEngine
         }
 
         // TODO: Fix mouse wheel
-        private void MouseWheel(object sender, NativeWindowMouseEventArgs e) => EventManager.BroadcastEvent(Event.MouseScroll, new MouseWheelEventArgs(e.WheelTicks, this));
+        private void MouseWheel(object sender, NativeWindowMouseEventArgs e)
+        {
+            EventManager.BroadcastEvent(Event.MouseScroll, new MouseWheelEventArgs(e.WheelTicks, this));
+            //Debug.Log($"Scrolled by {e.WheelTicks} ticks");
+        }
 
         // For some reason this offsets by the titlebar height, and it's inverted, so we have to do some quick maths to fix that
         private void MouseMove(object sender, NativeWindowMouseEventArgs e)

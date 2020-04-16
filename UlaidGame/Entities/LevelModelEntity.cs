@@ -27,7 +27,7 @@ namespace UlaidGame.Entities
             AddComponent(new ShaderComponent(new Shader("Content/Shaders/Standard/main.frag", ShaderType.FragmentShader),
                 new Shader("Content/Shaders/Standard/main.vert", ShaderType.VertexShader)));
 
-            bspLoader = new BSPLoader("Content/Maps/gm_flatgrass.bsp");
+            bspLoader = new BSPLoader("Content/Maps/gm_construct.bsp");
             AddMeshAndMaterialComponents("level01");
         }
 

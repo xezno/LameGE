@@ -45,8 +45,6 @@ namespace ECSEngine.MathUtils
             this.z = z;
         }
 
-        // TODO: Add more mathematical operators for both other Vector3s and floats too
-
         public static Vector3 operator *(Vector3 a, Vector3 b) => new Vector3(a.x * b.x,
                                                                                 a.y * b.y,
                                                                                 a.z * b.z);
