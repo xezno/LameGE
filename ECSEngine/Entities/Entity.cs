@@ -57,6 +57,7 @@ namespace ECSEngine.Entities
         public virtual void RenderImGui()
         {
             // Entity info
+            // TODO: Fix
             //var enabledVal = Enabled;
             //ImGui.Checkbox("##hidelabel", ref enabledVal);
             //if (Enabled != enabledVal)

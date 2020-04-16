@@ -23,11 +23,11 @@ namespace UlaidGame.Entities
             AddComponent(new TransformComponent(new Vector3(0, 2f, -2f),
                                                 new Vector3(270, 0, 0),
                                                 new Vector3(1, 1, 1) * 0.01f));
-            AddComponent(new ShaderComponent(new Shader("Content/main.frag", ShaderType.FragmentShader),
-                new Shader("Content/main.vert", ShaderType.VertexShader)));
+            AddComponent(new ShaderComponent(new Shader("Content/Shaders/Standard/main.frag", ShaderType.FragmentShader),
+                new Shader("Content/Shaders/Standard/main.vert", ShaderType.VertexShader)));
 
-            bspLoader = new BSPLoader("Content/gm_flatgrass.bsp");
-            AddMeshAndMaterialComponents("Content/level01");
+            bspLoader = new BSPLoader("Content/Maps/gm_flatgrass.bsp");
+            AddMeshAndMaterialComponents("level01");
         }
 
         private void GenerateBSPMesh()
@@ -130,7 +130,7 @@ namespace UlaidGame.Entities
         }
         private void AddMeshAndMaterialComponents(string path)
         {
-            mainMaterial = new Material($"{path}.mtl");
+            mainMaterial = new Material($"Content/Materials/{path}.mtl");
             AddComponent(new MaterialComponent(mainMaterial));
             GenerateBSPMesh();
         }

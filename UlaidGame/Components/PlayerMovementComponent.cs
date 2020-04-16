@@ -86,7 +86,6 @@ namespace UlaidGame.Components
             else if (eventType == Event.MouseMove)
             {
                 MouseMoveEventArgs mouseEventArgs = (MouseMoveEventArgs)baseEventArgs;
-                // TODO: Replace with mouse delta
                 currentRotation += new Vector3(mouseEventArgs.MouseDelta.y * -mouseSensitivityMultiplier,
                     mouseEventArgs.MouseDelta.x * -mouseSensitivityMultiplier,
                     0);
