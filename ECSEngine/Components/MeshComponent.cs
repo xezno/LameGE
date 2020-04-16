@@ -1,6 +1,7 @@
 ﻿using ECSEngine.Attributes;
 using ECSEngine.Entities;
 using ECSEngine.Managers;
+using ECSEngine.MathUtils;
 using ECSEngine.Render;
 using OpenGL;
 
@@ -66,6 +67,8 @@ namespace ECSEngine.Components
             shaderComponent.SetVariable("viewMatrix", camera.ViewMatrix);
             shaderComponent.SetVariable("cameraPos", camera.Position);
             shaderComponent.SetVariable("modelMatrix", transformComponent.Matrix);
+            shaderComponent.SetVariable("fogNear", 0.02f);
+            shaderComponent.SetVariable("skyColor", new Vector3(100 / 255f, 149 / 255f, 237 / 255f)); // Cornflower blue
 
             GetComponent<MaterialComponent>().BindAll(shaderComponent);
 

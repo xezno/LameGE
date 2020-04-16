@@ -28,7 +28,10 @@ namespace UlaidGame.Components
             SceneManager.Instance.mainCamera.RotationEuler = currentRotation * rotationSensitivity;
             transformComponent.rotationEuler = currentRotation * rotationSensitivity;
 
-            currentDirection = (transformComponent.Forward * currentInput.z) + (transformComponent.Right * currentInput.x) + (transformComponent.Up * currentInput.y);
+            currentDirection = (transformComponent.Forward * currentInput.z) + (transformComponent.Right * currentInput.x);
+            currentDirection.y += currentInput.y;
+
+            currentDirection = currentDirection.Normalized;
 
             velocity += currentDirection * acceleration;
             velocity += new Vector3(

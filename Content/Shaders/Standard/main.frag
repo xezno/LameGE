@@ -63,7 +63,9 @@ uniform mat4 projMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 modelMatrix;
 
+uniform vec3 skyColor;
 uniform vec3 cameraPos;
+uniform float fogNear;
 
 out vec4 fragColor;
 
@@ -108,7 +110,9 @@ void main()
     cameraDirection = normalize(cameraPos - modelPos);
     normal = normalize(outNormal);
 
-    fragColor = vec4(CalcFullMix() * (1.0 - (outFragPos.z * 0.1)), 1.0 - material.transparency);
+    fragColor = vec4(outUvCoord, 1.0, 1.0);
+
+    fragColor = vec4(mix(skyColor, CalcFullMix(), clamp(1.0 - (fogNear * outFragPos.z), 0.0, 1.0)), 1.0 - material.transparency);
 
     // fragColor = vec4(vec3(outUvCoord.xy, (outFragPos.z * 0.1)), 1.0);
     // fragColor = vec4(outNormal.xyz, 1.0 - material.transparency);

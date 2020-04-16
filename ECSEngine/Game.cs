@@ -28,6 +28,7 @@ namespace ECSEngine
 
         protected NativeWindow nativeWindow;
         private Vector2 lastMousePos;
+        private bool ignoreSingleMouseInput;
 
         public bool isRunning = true; // TODO: properly detect window close event (needs adding within nativewindow)
         
@@ -77,14 +78,19 @@ namespace ECSEngine
             nativeWindow.MouseUp += MouseUp;
             nativeWindow.MouseMove += MouseMove;
             nativeWindow.MouseWheel += MouseWheel;
+            nativeWindow.MouseLeave += NativeWindowOnMouseLeave;
+            nativeWindow.MouseEnter += NativeWindowOnMouseEnter;
 
             nativeWindow.CursorVisible = true;
-            nativeWindow.Animation = false; // Changing this to true makes input poll like once every 500ms.  so don't change it
+            nativeWindow.Animation = false; // Changing this to true makes input poll like once every 500ms. so don't change it
             nativeWindow.DepthBits = 24;
             nativeWindow.SwapInterval = 0;
             nativeWindow.Resize += Resize;
 
             nativeWindow.Create(RenderSettings.Default.gamePosX, RenderSettings.Default.gamePosY, RenderSettings.Default.gameResolutionX, RenderSettings.Default.gameResolutionY, NativeWindowStyle.Caption);
+
+            // nativeWindow.SetCursorPos(new Point((int)(RenderSettings.Default.gamePosX + (RenderSettings.Default.gameResolutionX / 2)),
+            //  (int)(RenderSettings.Default.gamePosY + (RenderSettings.Default.gameResolutionY / 2))));
 
             nativeWindow.Fullscreen = RenderSettings.Default.fullscreen;
             nativeWindow.Caption = FilterString(gameProperties.WindowTitle) ?? "ECSEngine Game";
@@ -94,6 +100,16 @@ namespace ECSEngine
             nativeWindow.Show();
             nativeWindow.Run();
             nativeWindow.Destroy();
+        }
+
+        private void NativeWindowOnMouseEnter(object sender, NativeWindowMouseEventArgs e)
+        {
+            ignoreSingleMouseInput = true;
+        }
+
+        private void NativeWindowOnMouseLeave(object sender, NativeWindowEventArgs e)
+        {
+            ignoreSingleMouseInput = true;
         }
 
         private string FilterString(string str)
@@ -199,10 +215,21 @@ namespace ECSEngine
             var mousePos = new Vector2(e.Location.X,
                 RenderSettings.Default.gameResolutionY - e.Location.Y -
                 (RenderSettings.Default.fullscreen ? 0 : titlebarHeight));
+
+            var mouseDelta = lastMousePos - mousePos;
+
+            if (ignoreSingleMouseInput)
+            {
+                mouseDelta = new Vector2(0, 0);
+                ignoreSingleMouseInput = false;
+            }
+
             EventManager.BroadcastEvent(Event.MouseMove,
-                new MouseMoveEventArgs(lastMousePos - mousePos, mousePos,
+                new MouseMoveEventArgs(mouseDelta, mousePos,
                     this));
+
             lastMousePos = mousePos;
+
 
             //if (MouseMode == MouseMode.Locked)
             //    nativeWindow.SetCursorPos(new Point(0, 0));
