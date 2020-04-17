@@ -41,6 +41,11 @@ namespace ECSEngine.Components
             RenderMesh = new Mesh(path);
         }
 
+        public MeshComponent(Mesh mesh)
+        {
+            RenderMesh = mesh;
+        }
+
         /// <summary>
         /// Construct a blank mesh component, with no loaded mesh.
         /// </summary>

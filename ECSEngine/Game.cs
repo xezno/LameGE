@@ -179,6 +179,8 @@ namespace ECSEngine
         private void ContextCreated(object sender, NativeWindowEventArgs e)
         {
             Debug.Log($"OpenGL {Gl.GetString(StringName.Version)}");
+            CheckHardwareCompatibility();
+
             Gl.ReadBuffer(ReadBufferMode.Back);
             Gl.ClearColor(100 / 255f, 149 / 255f, 237 / 255f, 1); // Cornflower blue (https://en.wikipedia.org/wiki/Web_colors#X11_color_names)
             Gl.Enable(EnableCap.Blend);
@@ -272,6 +274,25 @@ namespace ECSEngine
         {
             if (severity >= DebugSeverity.DebugSeverityMedium)
                 Debug.Log($"OpenGL Error {id}: {Marshal.PtrToStringAnsi(message, length)}", Debug.Severity.Fatal);
+        }
+
+        private void CheckHardwareCompatibility()
+        {
+            var requiredExtensions = new[] {"ARB_spirv_extensions"};
+            var existingExtensions = new List<String>();
+
+            var extensionCount = 0;
+            Gl.GetInteger(GetPName.NumExtensions, out extensionCount);
+
+            for (int i = 0; i < extensionCount; ++i)
+            {
+                existingExtensions.Add(Gl.GetString(StringName.Extensions, (uint)i));
+            }
+
+            foreach (var extension in existingExtensions)
+            {
+                Debug.Log($"Ext: {extension}");
+            }
         }
         #endregion
     }

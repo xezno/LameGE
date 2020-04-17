@@ -28,9 +28,9 @@ namespace ECSEngine.Entities
         {
             AddComponent(new ShaderComponent(new Shader("Content/UI/Shaders/main.frag", ShaderType.FragmentShader),
                 new Shader("Content/UI/Shaders/main.vert", ShaderType.VertexShader)));
-            AddComponent(new TransformComponent(new Vector3(0, 0, -2), new Vector3(0, 0, 0), new Vector3(1, 1, 1)));
-            AddComponent(new MaterialComponent(new Material("Content/Materials/cube.mtl")));
-            AddComponent(new MeshComponent("Content/Models/cube.obj"));
+            AddComponent(new TransformComponent(new Vector3(0, 0, 0), new Vector3(0, 0, 0), new Vector3(1, 1, 1)));
+            AddComponent(new MaterialComponent(new Material("Content/UI/plane.mtl")));
+            AddComponent(new MeshComponent(Primitives.Plane));
             InitBrowser();
         }
 
