@@ -78,17 +78,19 @@ namespace ECSEngine.Render
         /// </summary>
         private void CheckForErrors()
         {
-            var glErrors = Gl.GetError();
-            if (glErrors != ErrorCode.NoError)
+            Gl.GetShader(GlShader, ShaderParameterName.CompileStatus, out int isCompiledInt);
+            var isCompiled = (isCompiledInt == 1);
+
+            if (isCompiled)
+            {
+                Debug.Log($"Compiled shader {FileName} successfully");
+            }
+            else
             {
                 var maxLength = 1024;
                 var glErrorStr = new StringBuilder(maxLength);
                 Gl.GetShaderInfoLog(GlShader, maxLength, out var length, glErrorStr);
-                Debug.Log($"Problem compiling shader {FileName}: ({length}) {glErrors} - {glErrorStr}", Debug.Severity.High);
-            }
-            else
-            {
-                Debug.Log($"Compiled shader {FileName} successfully");
+                Debug.Log($"Problem compiling shader {FileName}: {glErrorStr}", Debug.Severity.High);
             }
         }
     }
