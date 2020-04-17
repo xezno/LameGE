@@ -305,6 +305,7 @@
     <Compile Include="Entities\CEF\RenderHandler.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\LightEntity.cs" />
+    <Compile Include="Entities\SkyboxEntity.cs" />
     <Compile Include="EventManager.cs" />
     <Compile Include="Events\Event.cs" />
     <Compile Include="Events\GenericEventArgs.cs" />

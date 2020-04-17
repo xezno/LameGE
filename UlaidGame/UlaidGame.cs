@@ -19,10 +19,15 @@ namespace UlaidGame
                 {
                     Name = "Player"
                 },
+                new SkyboxEntity()
+                {
+                    Name = "Skybox"
+                },
                 new LevelModelEntity()
                 {
                     Name = "Generated BSP Mesh"
                 },
+                // TODO: fix this (anything that renders afterwards won't render at all?)
                 new CefEntity()
                 {
                     Name = "CEF HUD Entity"

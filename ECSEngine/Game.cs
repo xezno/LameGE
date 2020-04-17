@@ -12,6 +12,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
+using ECSEngine.Render;
 
 namespace ECSEngine
 {
@@ -29,6 +30,8 @@ namespace ECSEngine
         protected NativeWindow nativeWindow;
         private Vector2 lastMousePos;
         private bool ignoreSingleMouseInput;
+        
+        private Framebuffer mainFramebuffer;
 
         public bool isRunning = true; // TODO: properly detect window close event (needs adding within nativewindow)
         
@@ -53,12 +56,18 @@ namespace ECSEngine
 
         private void Render(object sender, NativeWindowEventArgs e)
         {
-            Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit); // Clear non-fb
+            mainFramebuffer.PreRender();
+            Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit); // Clear fb
 
             foreach (var manager in mainThreadManagers)
             {
-                manager.Run();
+                if (manager.GetType() != typeof(ImGuiManager))
+                    manager.Run();
             }
+
+            mainFramebuffer.Render();
+            ImGuiManager.Instance.Run();
 
             Gl.Finish();
         }
@@ -87,7 +96,7 @@ namespace ECSEngine
             nativeWindow.SwapInterval = 0;
             nativeWindow.Resize += Resize;
 
-            nativeWindow.Create(RenderSettings.Default.gamePosX, RenderSettings.Default.gamePosY, RenderSettings.Default.gameResolutionX, RenderSettings.Default.gameResolutionY, NativeWindowStyle.Caption);
+            nativeWindow.Create(RenderSettings.Default.gamePosX, RenderSettings.Default.gamePosY, RenderSettings.Default.gameResolutionX + 16, RenderSettings.Default.gameResolutionY + 16, NativeWindowStyle.Caption);
 
             // nativeWindow.SetCursorPos(new Point((int)(RenderSettings.Default.gamePosX + (RenderSettings.Default.gameResolutionX / 2)),
             //  (int)(RenderSettings.Default.gamePosY + (RenderSettings.Default.gameResolutionY / 2))));
@@ -182,7 +191,6 @@ namespace ECSEngine
             CheckHardwareCompatibility();
 
             Gl.ReadBuffer(ReadBufferMode.Back);
-            Gl.ClearColor(100 / 255f, 149 / 255f, 237 / 255f, 1); // Cornflower blue (https://en.wikipedia.org/wiki/Web_colors#X11_color_names)
             Gl.Enable(EnableCap.Blend);
             Gl.Enable(EnableCap.CullFace);
             Gl.Enable(EnableCap.DepthTest);
@@ -193,6 +201,8 @@ namespace ECSEngine
             InitSystems();
             InitScene();
             LoadContent();
+
+            mainFramebuffer = new Framebuffer();
 
             // Setup complete - broadcast the game started event
             EventManager.BroadcastEvent(Event.GameStart, new GenericEventArgs(this));
@@ -218,9 +228,10 @@ namespace ECSEngine
         // For some reason this offsets by the titlebar height, and it's inverted, so we have to do some quick maths to fix that
         private void MouseMove(object sender, NativeWindowMouseEventArgs e)
         {
-            var mousePos = new Vector2(e.Location.X,
+            // TODO: Fix mouse positioning
+            var mousePos = new Vector2(e.Location.X + 16,
                 RenderSettings.Default.gameResolutionY - e.Location.Y -
-                (RenderSettings.Default.fullscreen ? 0 : titlebarHeight));
+                (RenderSettings.Default.fullscreen ? 0 : titlebarHeight) + 16);
 
             var mouseDelta = lastMousePos - mousePos;
 
