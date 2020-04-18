@@ -310,6 +310,7 @@
     <Compile Include="DebugUtils\RconPacket.cs" />
     <Compile Include="DebugUtils\RconPacketOrigin.cs" />
     <Compile Include="DebugUtils\RconPacketType.cs" />
+    <Compile Include="DebugUtils\RconWebFrontend.cs" />
     <Compile Include="Entities\CameraEntity.cs" />
     <Compile Include="Entities\CefEntity.cs" />
     <Compile Include="Entities\CEF\RenderHandler.cs" />
@@ -340,7 +341,7 @@
     <Compile Include="Managers\ImGuiWindows\Editor\PlaygroundWindow.cs" />
     <Compile Include="Managers\ImGuiWindows\Editor\ScenePropertiesWindow.cs" />
     <Compile Include="Managers\ImGuiWindows\Scripts\ScriptCompileWindow.cs" />
-    <Compile Include="Managers\RemoteConsoleManager.cs" />
+    <Compile Include="Managers\RconManager.cs" />
     <Compile Include="Managers\Scripting\ScriptConfig.cs" />
     <Compile Include="Managers\Scripting\ScriptManager.cs" />
     <Compile Include="MathUtils\Levenshtein.cs" />

@@ -109,7 +109,7 @@ namespace ECSEngine {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Schlinx")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string rconPassword {
             get {
                 return ((string)(this["rconPassword"]));

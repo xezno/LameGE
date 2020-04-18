@@ -67,7 +67,7 @@ header {
 }
 
 .console-message, .console-input-message {
-    width: 100vw;
+    width: 100%;
     padding: 4px;
     padding-left: 16px;
     position: relative;
@@ -83,27 +83,40 @@ header {
     color: var(--input-text);
 }
 
-.console-message::before, .console-input-message::before {
+.console-message::before, .console-input-message::before, .console-message::after {
     content: ' ';
     display: inline-block;
     width: 4px;
     overflow: hidden;
     position: absolute;
     left: 0;
-    top: 0;
-    bottom: 0;
+    top: 1px;
+    bottom: 1px;
     background: #000;
     display: flex;
     align-items: center;
     justify-content: center;
+    color: #00000000;
 
     transition: 150ms all ease-in-out;
 }
 
-.console-message:hover::before, .console-input-message:hover::before {
+.console-message::after {
+    content: 'jump';
+    left: unset;
+    right: 0;
+    background: #00000000;
+}
+
+.console-message:hover::before, .console-input-message:hover::before, .console-message:hover::after {
     width: 42px;
     padding: 8px;
     color: black;
+}
+
+.console-message:hover::after  {
+    color: white;
+    background: #00000088;
 }
 
 .console-message:hover, .console-input-message:hover {

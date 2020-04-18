@@ -8,6 +8,8 @@
         InputInProgress,
         Suggestions,
         LogHistory,
+        RequestAuth,
+        Authenticate,
         Error = 0xFF
     }
 }

@@ -24,7 +24,7 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="rconPassword" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Schlinx</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="rconEnabled" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>

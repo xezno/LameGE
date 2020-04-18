@@ -142,10 +142,10 @@ namespace ECSEngine
 
             var multiThreadedManagers = new List<IManager>
             {
+                RconManager.Instance,
                 UpdateManager.Instance,
                 SceneManager.Instance,
-                ScriptManager.Instance,
-                RemoteConsoleManager.Instance
+                ScriptManager.Instance
             };
 
             foreach (var multiThreadedManager in multiThreadedManagers)

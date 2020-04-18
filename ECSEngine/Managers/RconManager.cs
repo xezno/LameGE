@@ -3,13 +3,12 @@ using System.Text;
 using System.Collections.Generic;
 using System.Diagnostics;
 using ECSEngine.DebugUtils;
-using ECSEngine.MathUtils;
 using Fleck;
 using Newtonsoft.Json;
 
 namespace ECSEngine.Managers
 {
-    public sealed class RemoteConsoleManager : Manager<RemoteConsoleManager>
+    public sealed class RconManager : Manager<RconManager>
     {
         private int port = 42069;
         private WebSocketServer socketServer;
@@ -33,10 +32,12 @@ namespace ECSEngine.Managers
             new DebugCommand(new [] { "fullscreenEnabled" }, "Toggle fullscreen", "0"),
             new DebugCommand(new [] { "vsyncEnabled" }, "Toggle vsync", "0"),
             new DebugCommand(new [] { "fpsLimit" }, "Set fps limit (-1 to disable)", "75"),
-            new DebugCommand(new [] { "editorEnablde" }, "Toggle editor", "0")
+            new DebugCommand(new [] { "editorEnabled" }, "Toggle editor", "1"),
+            new DebugCommand(new [] { "addEntity" }, "Add an entity", ""),
+            new DebugCommand(new [] { "find" }, "Find all commands containing a string", "")
         };
 
-        public RemoteConsoleManager()
+        public RconManager()
         {
             if (!GameSettings.Default.rconEnabled)
                 return;
@@ -47,7 +48,6 @@ namespace ECSEngine.Managers
             socketServer.Start(InitConnection);
 
             FleckLog.LogAction = CustomFleckLog;
-
         }
 
         private void CustomFleckLog(LogLevel level, string message, Exception ex)
@@ -83,7 +83,7 @@ namespace ECSEngine.Managers
 
         private void OnOpen()
         {
-            Logging.Log("Remote console connection started");
+            Logging.Log($"Remote console connection started: {localSocket.ConnectionInfo.ClientIpAddress}:{localSocket.ConnectionInfo.ClientPort}");
             connected = true;
         }
 
@@ -95,17 +95,36 @@ namespace ECSEngine.Managers
 
         private void OnMessage(string message)
         {
-            // Logging.Log($"Remote Console message: {message}");
             var rconPacket = Newtonsoft.Json.JsonConvert.DeserializeObject<RconPacket>(message);
 
-            // Logging.Log($"Rcon packet info: {rconPacket.origin} / {rconPacket.type}");
-
             if (rconPacket.type == RconPacketType.Handshake)
+            {
+                Logging.Log("Received handshake from client.");
+                if (string.IsNullOrEmpty(GameSettings.Default.rconPassword))
+                {
+                    Logging.Log("Rcon authentication is disabled! Please enter a password in GameSettings if this is incorrect", Logging.Severity.Medium);
+
+                    if (localSocket.ConnectionInfo.ClientIpAddress != "127.0.0.1")
+                    {
+                        Logging.Log("Rcon connection attempt from non-local machine was blocked.", Logging.Severity.Medium);
+                        return;
+                    }
+
+                    authenticated = true;
+                    SendLogHistory();
+                }
+                else
+                {
+                    // We need authentication!
+                    SendPacket(new RconPacket(RconPacketOrigin.Server, RconPacketType.RequestAuth, new Dictionary<string, string>()));
+                }
+            }
+
+            if (rconPacket.type == RconPacketType.Authenticate)
             {
                 if (rconPacket.data["password"] == GameSettings.Default.rconPassword)
                 {
                     authenticated = true;
-                    // Send log history
                     SendLogHistory();
                 }
                 else
@@ -158,7 +177,7 @@ namespace ECSEngine.Managers
             int count = 0;
             foreach (var command in commands)
             {
-                if (command.aliases[0].IndexOf(input, StringComparison.CurrentCultureIgnoreCase) >= 0)
+                if (command.aliases[0].IndexOf(input, StringComparison.CurrentCultureIgnoreCase) >= 0 || command.description.IndexOf(input, StringComparison.CurrentCultureIgnoreCase) >= 0)
                 {
                     suggestions.Add(command);
                     count++;

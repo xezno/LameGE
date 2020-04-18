@@ -85,8 +85,8 @@ namespace ECSEngine.DebugUtils
 
             Console.WriteLine(logText);
             PastLogs.Add(logText);
-            RemoteConsoleManager.Instance.SendDebugLog(DateTime.Now, stackTrace, logTextNoSeverity, severity);
-            LogHistory.Add(new DebugHistoryEntry(DateTime.Now, stackTrace, str, severity));
+            RconManager.Instance.SendDebugLog(DateTime.Now, stackTrace, logTextNoSeverity, severity);
+            LogHistory.Add(new DebugHistoryEntry(DateTime.Now, stackTrace, logTextNoSeverity, severity));
 
             // We convert to string here for performance reasons (means we aren't potentially doing it multiple times per frame)
             var pastLogsStart = Math.Max(0, PastLogs.Count - pastLogsStringLength);
