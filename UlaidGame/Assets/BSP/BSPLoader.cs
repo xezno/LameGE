@@ -1,4 +1,4 @@
-﻿using ECSEngine;
+﻿using ECSEngine.Debug;
 using ECSEngine.MathUtils;
 using System.IO;
 using System.Linq;
@@ -16,7 +16,7 @@ namespace UlaidGame.Assets.BSP
         {
             using var streamReader = new StreamReader(path);
             using var binaryReader = new BinaryReader(streamReader.BaseStream);
-            Debug.Log($"Reading BSP file {path}");
+            Logging.Log($"Reading BSP file {path}");
 
             ReadFile(binaryReader);
         }
@@ -41,10 +41,10 @@ namespace UlaidGame.Assets.BSP
             binaryReader.ReadBytes(3);
 
             if (!header.magicNumber.SequenceEqual(new[] { (byte)'V', (byte)'B', (byte)'S', (byte)'P' }))
-                Debug.Log("Not a valid BSP file!", Debug.Severity.High);
+                Logging.Log("Not a valid BSP file!", Logging.Severity.High);
 
             if (header.version != 20)
-                Debug.Log($"BSP version {header.version} is unsupported; will try to parse map anyway.", Debug.Severity.Medium);
+                Logging.Log($"BSP version {header.version} is unsupported; will try to parse map anyway.", Logging.Severity.Medium);
 
             // Parse lumps info - assume 64 lumps are present
             for (int i = 0; i < 64; ++i)
@@ -60,7 +60,7 @@ namespace UlaidGame.Assets.BSP
 
             // Get map revision
             header.mapRevision = binaryReader.ReadInt32();
-            Debug.Log($"BSP file has map revision {header.mapRevision}");
+            Logging.Log($"BSP file has map revision {header.mapRevision}");
         }
 
         private void ReadLumps(BinaryReader binaryReader)
@@ -69,7 +69,7 @@ namespace UlaidGame.Assets.BSP
             {
                 var lump = header.lumpDirectory[i];
                 var lumpType = (BspLumpType)i;
-                Debug.Log($"{lumpType} at {lump.offset} {lump.length}");
+                Logging.Log($"{lumpType} at {lump.offset} {lump.length}");
                 if (lump.length > 0)
                 {
                     ReadLump(binaryReader, lump, lumpType);
@@ -104,7 +104,7 @@ namespace UlaidGame.Assets.BSP
                     Lumps[(int)lumpType] = ReadTexInfoLump(lump, binaryReader);
                     break;
                 default:
-                    Debug.Log($"No lump reader for {lumpType}", Debug.Severity.Medium);
+                    Logging.Log($"No lump reader for {lumpType}", Logging.Severity.Medium);
                     break;
             }
 
@@ -116,7 +116,7 @@ namespace UlaidGame.Assets.BSP
         {
             var texInfoCount = lump.length / 4; // Edges are 4 bytes long (2 int16)
             var texInfoLump = new Lump<TexInfo>();
-            Debug.Log($"Edge lump size: {texInfoCount}");
+            Logging.Log($"Edge lump size: {texInfoCount}");
 
             for (int i = 0; i < texInfoCount; ++i)
             {
@@ -147,7 +147,7 @@ namespace UlaidGame.Assets.BSP
         {
             var edgeCount = lump.length / 4; // Edges are 4 bytes long (2 int16)
             var edgeLump = new Lump<Edge>();
-            Debug.Log($"Edge lump size: {edgeCount}");
+            Logging.Log($"Edge lump size: {edgeCount}");
 
             for (int i = 0; i < edgeCount; ++i)
             {
@@ -165,7 +165,7 @@ namespace UlaidGame.Assets.BSP
         {
             var surfEdgeCount = lump.length / 4; // Edges are 4 bytes long (1 int32)
             var surfEdgeLump = new Lump<int>();
-            Debug.Log($"Surfedge lump size: {surfEdgeCount}");
+            Logging.Log($"Surfedge lump size: {surfEdgeCount}");
 
             for (int i = 0; i < surfEdgeCount; ++i)
             {
@@ -180,7 +180,7 @@ namespace UlaidGame.Assets.BSP
         {
             var planeCount = lump.length / 20; // Planes are 20 bytes long
             var planeLump = new Lump<Plane>();
-            Debug.Log($"Plane lump size: {planeCount}");
+            Logging.Log($"Plane lump size: {planeCount}");
 
             for (int i = 0; i < planeCount; ++i)
             {
@@ -200,7 +200,7 @@ namespace UlaidGame.Assets.BSP
         {
             var vertexCount = lump.length / 12; // Vertices are 12 bytes long (3 float)
             var vertexLump = new Lump<Vector3>();
-            Debug.Log($"Vertex lump size: {vertexCount}");
+            Logging.Log($"Vertex lump size: {vertexCount}");
 
             for (int i = 0; i < vertexCount; ++i)
             {
@@ -215,7 +215,7 @@ namespace UlaidGame.Assets.BSP
         {
             var faceCount = lump.length / 56; // Faces are 56 bytes long
             var faceLump = new Lump<Face>();
-            Debug.Log($"Face lump size: {faceCount}");
+            Logging.Log($"Face lump size: {faceCount}");
 
             for (int i = 0; i < faceCount; ++i)
             {

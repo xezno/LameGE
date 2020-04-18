@@ -26,7 +26,7 @@ namespace ECSEngine.MathUtils
         {
             get
             {
-                if (Math.Abs(Magnitude) < 0.0001f) 
+                if (Math.Abs(Magnitude) < 0.0001f)
                     return new Vector3(0, 0, 0);
                 return this / Magnitude;
             }

@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using ECSEngine;
-using ECSEngine.Assets;
+﻿using ECSEngine.Assets;
+using ECSEngine.Debug;
 using ECSEngine.Managers;
 using ECSEngine.Managers.ImGuiWindows;
 using ECSEngine.Managers.Scripting;
 using ImGuiNET;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace UlaidGame.Scripts
@@ -13,7 +13,7 @@ namespace UlaidGame.Scripts
     {
         public void Run()
         {
-            Debug.Log("Hello, world!");
+            Logging.Log("Hello, world!");
             ImGuiManager.Instance.Menus.Add(new ImGuiMenu(FontAwesome5.FileCode, "Custom", new List<IImGuiWindow>()
             {
                 new HUDWindow()

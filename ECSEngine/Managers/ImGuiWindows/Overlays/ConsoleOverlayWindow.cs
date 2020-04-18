@@ -11,7 +11,7 @@ namespace ECSEngine.Managers.ImGuiWindows.Overlays
 
         public override void Draw()
         {
-            DrawShadowLabel(Debug.PastLogsString, new Vector2(8, 8));
+            DrawShadowLabel(Debug.Logging.PastLogsString, new Vector2(8, 8));
         }
     }
 }

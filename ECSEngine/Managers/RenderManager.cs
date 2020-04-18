@@ -48,11 +48,11 @@ namespace ECSEngine.Managers
             lastRender = DateTime.Now;
 
             // Are we rendering too fast?
-            if (LastFrameTime < (1000f / RenderSettings.Default.framerateLimit) && RenderSettings.Default.framerateLimit > 0)
+            if (LastFrameTime < (1000f / GameSettings.Default.framerateLimit) && GameSettings.Default.framerateLimit > 0)
             {
                 // really crappy implementation
                 // TODO: do this differently
-                Thread.Sleep((int)Math.Ceiling((1000f / RenderSettings.Default.framerateLimit) - LastFrameTime));
+                Thread.Sleep((int)Math.Ceiling((1000f / GameSettings.Default.framerateLimit) - LastFrameTime));
             }
         }
     }

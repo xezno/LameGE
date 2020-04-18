@@ -1,4 +1,5 @@
-﻿using ECSEngine.Attributes;
+﻿using ECSEngine.Assets;
+using ECSEngine.Attributes;
 using ECSEngine.Components;
 using ECSEngine.Events;
 using ECSEngine.Types;
@@ -7,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using ECSEngine.Assets;
 
 namespace ECSEngine.Entities
 {
@@ -17,10 +17,11 @@ namespace ECSEngine.Entities
 
         public bool Enabled { get; set; } = true;
 
-        public virtual string Name {
+        public virtual string Name
+        {
             get
             {
-                if (string.IsNullOrEmpty(name)) 
+                if (string.IsNullOrEmpty(name))
                     return GetType().Name;
 
                 return name;

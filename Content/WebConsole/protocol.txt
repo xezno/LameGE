@@ -1,0 +1,23 @@
+WebConsole protocol
+-------------------
+
+1 byte: '0' or '1' (client or server) -> origin of the packet
+1 byte: packet type
+    0x00: initial handshake
+    0x01: client input
+    0x02: server response / debug log
+    0x03: client in-progress input
+    0x04: server suggestion
+    rest unused
+
+depending on the packet type:
+    0x00 (handshake):
+        - n bytes: password string (null-terminated)
+    0x01 (client inp):
+        - n bytes: client input string (null-terminated)
+    0x02 (server response):
+        - n bytes: json response string (null-terminated)
+    0x03 (in-progress inp):
+        - n bytes: client current input string (null-terminated)
+    0x03 (server suggestion):
+        - n bytes: server auto-complete string (null-terminated)

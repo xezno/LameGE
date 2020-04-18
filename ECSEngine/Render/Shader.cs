@@ -84,11 +84,11 @@ namespace ECSEngine.Render
                 var maxLength = 1024;
                 var glErrorStr = new StringBuilder(maxLength);
                 Gl.GetShaderInfoLog(GlShader, maxLength, out var length, glErrorStr);
-                Debug.Log($"Problem compiling shader {FileName}: ({length}) {glErrors} - {glErrorStr}", Debug.Severity.High);
+                Debug.Logging.Log($"Problem compiling shader {FileName}: ({length}) {glErrors} - {glErrorStr}", Debug.Logging.Severity.High);
             }
             else
             {
-                Debug.Log($"Compiled shader {FileName} successfully");
+                Debug.Logging.Log($"Compiled shader {FileName} successfully");
             }
         }
     }
