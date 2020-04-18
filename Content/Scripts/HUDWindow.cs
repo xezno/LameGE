@@ -1,5 +1,5 @@
 ﻿using ECSEngine.Assets;
-using ECSEngine.Debug;
+using ECSEngine.DebugUtils;
 using ECSEngine.Managers;
 using ECSEngine.Managers.ImGuiWindows;
 using ECSEngine.Managers.Scripting;

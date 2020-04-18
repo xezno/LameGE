@@ -1,4 +1,4 @@
-﻿using ECSEngine.Debug;
+﻿using ECSEngine.DebugUtils;
 using ECSEngine.MathUtils;
 using System.IO;
 using System.Linq;

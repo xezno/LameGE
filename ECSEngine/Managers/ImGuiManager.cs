@@ -337,7 +337,7 @@ namespace ECSEngine.Managers
                         break;
                     default:
                         c = '?';
-                        Debug.Logging.Log($"Unhandled character {keyCode} received");
+                        DebugUtils.Logging.Log($"Unhandled character {keyCode} received");
                         break;
                 }
             }
@@ -417,7 +417,7 @@ namespace ECSEngine.Managers
                         break;
                     }
                 default:
-                    Debug.Logging.Log($"Unhandled event of type {eventType}");
+                    DebugUtils.Logging.Log($"Unhandled event of type {eventType}");
                     break;
             }
         }

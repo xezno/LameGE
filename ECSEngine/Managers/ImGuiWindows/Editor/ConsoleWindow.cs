@@ -17,12 +17,12 @@ namespace ECSEngine.Managers.ImGuiWindows.Editor
         {
             ImGui.PushItemWidth(-1);
             ImGui.SetScrollHereY(1.0f);
-            ImGui.InputTextMultiline("Console", ref Debug.Logging.pastLogsStringConsole, UInt32.MaxValue, new Vector2(-1, -52), ImGuiInputTextFlags.ReadOnly);
+            ImGui.InputTextMultiline("Console", ref DebugUtils.Logging.pastLogsStringConsole, UInt32.MaxValue, new Vector2(-1, -52), ImGuiInputTextFlags.ReadOnly);
             ImGui.PopItemWidth();
 
             if (ImGui.InputText("Filter", ref currentConsoleFilter, 256))
             {
-                Debug.Logging.CalcLogStringByFilter(currentConsoleFilter);
+                DebugUtils.Logging.CalcLogStringByFilter(currentConsoleFilter);
             }
 
             ImGui.InputText("Input", ref currentConsoleInput, 256);

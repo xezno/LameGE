@@ -103,6 +103,7 @@ header {
 .console-message:hover::before, .console-input-message:hover::before {
     width: 42px;
     padding: 8px;
+    color: black;
 }
 
 .console-message:hover, .console-input-message:hover {
@@ -111,7 +112,7 @@ header {
 
 .console-input-message::before {
     background: var(--input);
-    color: var(--input-text);
+    color: var(--input);
 }
 
 .console-message.low {
@@ -119,9 +120,13 @@ header {
     color: var(--low-text);
 }
 
-.console-message.low .console-timestamp, .console-message.low::before {
+.console-message.low .console-timestamp {
     background: var(--low-text);
     color: black;
+}
+
+.console-message.low::before {
+    background: var(--low-text);
 }
 
 .console-message.medium {
@@ -129,29 +134,13 @@ header {
     color: var(--medium-text);
 }
 
-.console-message.medium .console-timestamp, .console-message.medium::before {
+.console-message.medium .console-timestamp {
     background: var(--medium-text);
     color: black;
 }
 
-.console-message.low:hover::before {
-    content: 'LOW';
-}
-
-.console-message.medium:hover::before {
-    content: 'MEDIUM';
-}
-
-.console-message.fatal:hover::before {
-    CONTENT: 'FATAL';
-}
-
-.console-message.high:hover::before {
-    content: 'HIGH';
-}
-
-.console-input-message:hover::before {
-    content: 'USER';
+.console-message.medium::before {
+    background: var(--medium-text);
 }
 
 .console-message.high {
@@ -159,9 +148,13 @@ header {
     color: var(--high-text);
 }
 
-.console-message.high .console-timestamp, .console-message.high::before {
+.console-message.high .console-timestamp {
     background: var(--high-text);
     color: black;
+}
+
+.console-message.high::before {
+    background: var(--high-text);
 }
 
 .console-message.fatal {
@@ -169,7 +162,75 @@ header {
     color: var(--fatal-text);
 }
 
-.console-message.fatal .console-timestamp, .console-message.fatal::before {
+.console-message.fatal .console-timestamp {
     background: var(--fatal-text);
     color: white;
+}
+
+.console-message.fatal::before {
+    background: var(--fatal-text);
+}
+
+.console-message.low::before {
+    content: 'LOW';
+}
+
+.console-message.medium::before {
+    content: 'MEDIUM';
+}
+
+.console-message.fatal::before {
+    CONTENT: 'FATAL';
+}
+
+.console-message.high::before {
+    content: 'HIGH';
+}
+
+.console-input-message::before {
+    content: 'INPUT';
+}
+
+.console-suggestions {
+    position: absolute;
+    height: fit-content;
+    bottom: 27px;
+    background: #111;
+    padding: 12px;
+
+    list-style: none;
+    visibility: hidden;
+}
+
+.console-suggestions li {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 10px 0;
+}
+
+.console-suggestions li > * { 
+    width: 100%;
+}
+
+.console-suggestions li:not(:last-child) {
+    border-bottom: 1px solid #ffffff22;
+}
+
+.console-suggestion-description {
+    font-size: 0.8em;
+    color: #aaa;
+}
+
+.console-suggestion-error {
+    color: #ff5e5e;
+}
+
+.console-suggestion-value {
+    color: #ffc800;
+}
+
+.console-suggestion-value:not(:empty)::before, .console-suggestion-value:not(:empty)::after {
+    content: "\"";
 }

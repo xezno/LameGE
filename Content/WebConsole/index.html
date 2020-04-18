@@ -13,7 +13,9 @@
                 <div class="console" id="console">
                 </div>
             </div>
-            <input id="console-input" class="console-input" placeholder="Input..." onkeypress="inputKeyDown(event)" />
+            <ul class="console-suggestions" id="console-suggestions">
+            </ul>
+            <input id="console-input" class="console-input" placeholder="Input..." onkeyup="inputKeyDown(event)" />
         </main>
 
         <script src="script/frontend.js"></script> 

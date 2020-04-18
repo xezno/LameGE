@@ -52,7 +52,7 @@ namespace ECSEngine.Entities
             browser.RenderHandler = new CEF.RenderHandler(browser);
 
             browser.BrowserInitialized += (sender, args) => { browser.Load(cefFilePath); };
-            browser.LoadError += (sender, args) => Debug.Logging.Log($"Browser error {args.ErrorCode}");
+            browser.LoadError += (sender, args) => DebugUtils.Logging.Log($"Browser error {args.ErrorCode}");
 
             byte[] emptyData = new byte[browser.Size.Width * browser.Size.Height * 4];
             GetComponent<MaterialComponent>().materials[0].diffuseTexture =
@@ -65,7 +65,7 @@ namespace ECSEngine.Entities
 
                 browser.LoadingStateChanged -= handler;
 
-                Debug.Logging.Log($"CEF has finished loading page {cefFilePath}");
+                // Debug.Logging.Log($"CEF has finished loading page {cefFilePath}");
                 readyToDraw = true;
             };
 

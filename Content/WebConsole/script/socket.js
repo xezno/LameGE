@@ -13,11 +13,35 @@ function sendHandshake()
         origin: 0,
         type: 0,
         data: {
-            password: password + "\0"
+            password: password
         }
     }
     sendObject(packet);
     console.log("Sent handshake");
+}
+
+function sendInput(input)
+{
+    var packet = {
+        origin: 0,
+        type: 1,
+        data: {
+            input: input
+        }
+    }
+    sendObject(packet);
+}
+
+function sendInputInProgress(input)
+{
+    var packet = {
+        origin: 0,
+        type: 3,
+        data: {
+            input: input
+        }
+    }
+    sendObject(packet);
 }
 
 function handleMessage(e)
@@ -30,6 +54,19 @@ function handleMessage(e)
             case 0x05: // Response
                 writeLogString(packet);
                 break;
+            case 0x04: // Suggestions
+                if (packet.data.suggestions == null)
+                {
+                    writeSuggestions([]);
+                }
+                else
+                {
+                    writeSuggestions(JSON.parse(packet.data.suggestions));
+                }
+                break;
+            case 0xFF: // Error
+                alert("Error: " + packet.data.errorMessage);
+                break;
             default:
                 console.log("Unhandled ", res);
                 break;
@@ -39,7 +76,7 @@ function handleMessage(e)
 
 function writeLogString(packet)
 {
-    logMessage(packet.data.logString, packet.data.severity);
+    logMessage(packet.data.timestamp, packet.data.stackTrace, packet.data.str, packet.data.severity);
 }
 
 socket.addEventListener("message", handleMessage);

@@ -179,7 +179,7 @@ namespace ECSEngine
         #region Event Handlers
         private void ContextCreated(object sender, NativeWindowEventArgs e)
         {
-            Debug.Logging.Log($"OpenGL {Gl.GetString(StringName.Version)}");
+            DebugUtils.Logging.Log($"OpenGL {Gl.GetString(StringName.Version)}");
             Gl.ReadBuffer(ReadBufferMode.Back);
             Gl.ClearColor(100 / 255f, 149 / 255f, 237 / 255f, 1); // Cornflower blue (https://en.wikipedia.org/wiki/Web_colors#X11_color_names)
             Gl.Enable(EnableCap.Blend);
@@ -272,7 +272,7 @@ namespace ECSEngine
         private void DebugCallback(DebugSource source, DebugType type, uint id, DebugSeverity severity, int length, IntPtr message, IntPtr userParam)
         {
             if (severity >= DebugSeverity.DebugSeverityMedium)
-                Debug.Logging.Log($"OpenGL Error {id}: {Marshal.PtrToStringAnsi(message, length)}", Debug.Logging.Severity.Fatal);
+                DebugUtils.Logging.Log($"OpenGL Error {id}: {Marshal.PtrToStringAnsi(message, length)}", DebugUtils.Logging.Severity.Fatal);
         }
         #endregion
     }
