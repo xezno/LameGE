@@ -5,13 +5,6 @@ namespace ECSEngine.DebugUtils
 {
     public class DebugHistoryEntry
     {
-        /*
-         * Timestamp
-         * Stack trace
-         * String
-         * Severity
-         */
-
         public DateTime timestamp;
         public StackTrace stackTrace;
         public string str;

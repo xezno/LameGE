@@ -29,5 +29,8 @@
     <Setting Name="rconEnabled" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="rconPort" Type="System.String" Scope="User">
+      <Value Profile="(Default)">42069</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

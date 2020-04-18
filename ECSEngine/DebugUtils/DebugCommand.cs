@@ -1,16 +1,34 @@
-﻿namespace ECSEngine.DebugUtils
+﻿using System;
+
+namespace ECSEngine.DebugUtils
 {
     public class DebugCommand
     {
-        public string[] aliases;
+        public string name;
         public string description;
-        public string value;
 
-        public DebugCommand(string[] aliases, string description, string value)
+        public bool MatchSuggestion(string input) =>
+            (name.IndexOf(input, StringComparison.CurrentCultureIgnoreCase) >= 0 ||
+             description.IndexOf(input, StringComparison.CurrentCultureIgnoreCase) >= 0);
+    }
+
+    public class DebugCommand<T> : DebugCommand
+    {
+        private Func<T> getter;
+        private Action<T> setter;
+
+        public T value
         {
-            this.aliases = aliases;
+            get => getter();
+            set => setter(value);
+        }
+
+        public DebugCommand(string name, string description, Func<T> getter, Action<T> setter)
+        {
+            this.name = name;
             this.description = description;
-            this.value = value;
+            this.setter = setter;
+            this.getter = getter;
         }
     }
 }

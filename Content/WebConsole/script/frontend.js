@@ -42,7 +42,7 @@ function writeSuggestions(suggestionsList)
                 <span class="console-suggestion-description">{{description}}</span>
             </li>`;
             
-        var templateProcessed = template.replace("{{alias}}", suggestion.aliases[0]).replace("{{description}}", suggestion.description).replace("{{currentValue}}", suggestion.value);
+        var templateProcessed = template.replace("{{alias}}", suggestion.name).replace("{{description}}", suggestion.description).replace("{{currentValue}}", suggestion.value);
 
         document.getElementById("console-suggestions").innerHTML += templateProcessed;
     }

@@ -1,55 +1,60 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Diagnostics;
-using ECSEngine.DebugUtils;
+﻿using ECSEngine.DebugUtils;
 using Fleck;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Text;
 
 namespace ECSEngine.Managers
 {
     public sealed class RconManager : Manager<RconManager>
     {
-        private int port = 42069;
-        private WebSocketServer socketServer;
+        #region Fields
         private bool connected;
         private bool authenticated;
         private IWebSocketConnection localSocket;
 
-        private DebugCommand[] commands =
-        {
-            new DebugCommand(new [] { "loadLevel" }, "Load a level", "gm_construct.bsp"),
-            new DebugCommand(new [] { "reload" }, "Reload all content", ""),
-            new DebugCommand(new [] { "loadScript" }, "Load a script", ""),
-            new DebugCommand(new [] { "anvil" }, "Display Anvil status", ""),
-            new DebugCommand(new [] { "reloadAnvil" }, "Reload Anvil", ""),
-            new DebugCommand(new [] { "loadScriptAnvil" }, "Load Anvil script", ""),
-            new DebugCommand(new [] { "cheatsEnabled" }, "Toggle cheats", "1"),
-            new DebugCommand(new [] { "rconPassword" }, "Set rcon password", "Schlinx"),
-            new DebugCommand(new [] { "rconEnabled" }, "Toggle rcon", "1"),
-            new DebugCommand(new [] { "renderResX" }, "Set render resolution (X)", "1280"),
-            new DebugCommand(new [] { "renderResY" }, "Set render resolution (Y)", "720"),
-            new DebugCommand(new [] { "fullscreenEnabled" }, "Toggle fullscreen", "0"),
-            new DebugCommand(new [] { "vsyncEnabled" }, "Toggle vsync", "0"),
-            new DebugCommand(new [] { "fpsLimit" }, "Set fps limit (-1 to disable)", "75"),
-            new DebugCommand(new [] { "editorEnabled" }, "Toggle editor", "1"),
-            new DebugCommand(new [] { "addEntity" }, "Add an entity", ""),
-            new DebugCommand(new [] { "find" }, "Find all commands containing a string", "")
-        };
+        private List<DebugCommand> debugCommands = new List<DebugCommand>();
+        #endregion
 
+        #region Constructor
         public RconManager()
         {
+            // WARNING! DO NOT LOG IN HERE!
+
             if (!GameSettings.Default.rconEnabled)
                 return;
 
-            socketServer = new WebSocketServer($"ws://0.0.0.0:{port}");
-            socketServer.SupportedSubProtocols = new[] { "ulaidRcon" };
-            socketServer.ListenerSocket.NoDelay = false;
-            socketServer.Start(InitConnection);
-
             FleckLog.LogAction = CustomFleckLog;
+
+            var socketServer = new WebSocketServer($"ws://0.0.0.0:{GameSettings.Default.rconPort}")
+            {
+                SupportedSubProtocols = new[] { "ulaidRcon" },
+                ListenerSocket =
+                {
+                    NoDelay = false
+                }
+            };
+
+            socketServer.Start(InitConnection);
+        }
+        #endregion
+
+        #region Command Registry
+        public void RegisterCommand<T>(string name, string description, Func<T> getter, Action<T> setter)
+        {
+            debugCommands.Add(new DebugCommand<T>(name, description, getter, setter));
         }
 
+        public void RegisterCommand<T>(string name, string description, Action method)
+        {
+            // debugCommands.Add(new DebugCommand<T>(name, description));
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        #region Fleck / Websocket Events
         private void CustomFleckLog(LogLevel level, string message, Exception ex)
         {
             if (level != LogLevel.Error) // We don't care about anything that isn't an error (currently).
@@ -64,13 +69,11 @@ namespace ECSEngine.Managers
                 case LogLevel.Error:
                     logSeverity = Logging.Severity.High;
                     break;
-                case LogLevel.Debug:
-                case LogLevel.Info:
-                default:
-                    break;
             }
 
             Logging.Log(message, logSeverity);
+            if (ex != null)
+                Logging.Log(ex.ToString(), Logging.Severity.High);
         }
 
         private void InitConnection(IWebSocketConnection socket)
@@ -97,62 +100,87 @@ namespace ECSEngine.Managers
         {
             var rconPacket = Newtonsoft.Json.JsonConvert.DeserializeObject<RconPacket>(message);
 
-            if (rconPacket.type == RconPacketType.Handshake)
+            switch (rconPacket.type)
             {
-                Logging.Log("Received handshake from client.");
-                if (string.IsNullOrEmpty(GameSettings.Default.rconPassword))
-                {
-                    Logging.Log("Rcon authentication is disabled! Please enter a password in GameSettings if this is incorrect", Logging.Severity.Medium);
-
-                    if (localSocket.ConnectionInfo.ClientIpAddress != "127.0.0.1")
-                    {
-                        Logging.Log("Rcon connection attempt from non-local machine was blocked.", Logging.Severity.Medium);
-                        return;
-                    }
-
-                    authenticated = true;
-                    SendLogHistory();
-                }
-                else
-                {
-                    // We need authentication!
-                    SendPacket(new RconPacket(RconPacketOrigin.Server, RconPacketType.RequestAuth, new Dictionary<string, string>()));
-                }
-            }
-
-            if (rconPacket.type == RconPacketType.Authenticate)
-            {
-                if (rconPacket.data["password"] == GameSettings.Default.rconPassword)
-                {
-                    authenticated = true;
-                    SendLogHistory();
-                }
-                else
-                {
-                    Logging.Log("Rcon password was incorrect");
-                    SendPacket(new RconPacket(RconPacketOrigin.Server, RconPacketType.Error, new Dictionary<string, string>()
-                    {
-                        { "errorMessage", "Password incorrect :(" }
-                    }));
-                    localSocket.Close();
-                }
+                case RconPacketType.Handshake:
+                    HandleHandshake(rconPacket);
+                    break;
+                case RconPacketType.Authenticate:
+                    HandleAuthentication(rconPacket);
+                    break;
             }
 
             if (!authenticated) return;
 
-            if (rconPacket.type == RconPacketType.Input)
+            switch (rconPacket.type)
             {
-                Logging.Log($"Received input {rconPacket.data["input"]}");
+                case RconPacketType.Input:
+                    HandleInput(rconPacket);
+                    break;
+                case RconPacketType.InputInProgress:
+                    HandleInputInProgress(rconPacket);
+                    break;
             }
-            else if (rconPacket.type == RconPacketType.InputInProgress)
+        }
+        #endregion
+
+        #region Packet Handlers
+        private void HandleHandshake(RconPacket rconPacket)
+        {
+            Logging.Log("Received handshake from client.");
+            if (string.IsNullOrEmpty(GameSettings.Default.rconPassword))
             {
-                SendSuggestions(rconPacket.data["input"]);
+                Logging.Log("Rcon authentication is disabled! Please enter a password in GameSettings if this is incorrect", Logging.Severity.Medium);
+
+                if (localSocket.ConnectionInfo.ClientIpAddress != "127.0.0.1")
+                {
+                    Logging.Log("Rcon connection attempt from non-local machine was blocked.", Logging.Severity.Medium);
+                    return;
+                }
+
+                authenticated = true;
+                SendLogHistory();
+            }
+            else
+            {
+                // We need authentication!
+                SendPacket(RconPacketType.RequestAuth, new Dictionary<string, string>());
             }
         }
 
-        private void SendPacket(RconPacket packet)
+        private void HandleAuthentication(RconPacket rconPacket)
         {
-            var str = JsonConvert.SerializeObject(packet);
+            if (rconPacket.data["password"] == GameSettings.Default.rconPassword)
+            {
+                authenticated = true;
+                SendLogHistory();
+            }
+            else
+            {
+                Logging.Log("Rcon password was incorrect");
+                SendPacket(RconPacketType.Error, new Dictionary<string, string>()
+                {
+                    { "errorMessage", "Password incorrect :(" }
+                });
+                localSocket.Close();
+            }
+        }
+
+        private void HandleInput(RconPacket rconPacket)
+        {
+            Logging.Log($"Received input {rconPacket.data["input"]}");
+        }
+
+        private void HandleInputInProgress(RconPacket rconPacket)
+        {
+            SendSuggestions(rconPacket.data["input"]);
+        }
+        #endregion
+
+        #region Packet Senders
+        private void SendPacket(RconPacketType type, Dictionary<string, string> data)
+        {
+            var str = JsonConvert.SerializeObject(new RconPacket(RconPacketOrigin.Server, type, data));
             var bytes = Encoding.UTF8.GetBytes(str);
             localSocket.Send(bytes);
         }
@@ -161,13 +189,13 @@ namespace ECSEngine.Managers
         {
             foreach (var historyEntry in Logging.LogHistory)
             {
-                SendPacket(new RconPacket(RconPacketOrigin.Server, RconPacketType.LogHistory, new Dictionary<string, string>()
+                SendPacket(RconPacketType.LogHistory, new Dictionary<string, string>()
                 {
                     { "timestamp", historyEntry.timestamp.ToString("T") },
                     { "stackTrace", historyEntry.stackTrace.ToString() },
                     { "str", historyEntry.str },
                     { "severity", historyEntry.severity.ToString().ToLower() }
-                }));
+                });
             }
         }
 
@@ -175,9 +203,9 @@ namespace ECSEngine.Managers
         {
             List<DebugCommand> suggestions = new List<DebugCommand>();
             int count = 0;
-            foreach (var command in commands)
+            foreach (var command in debugCommands)
             {
-                if (command.aliases[0].IndexOf(input, StringComparison.CurrentCultureIgnoreCase) >= 0 || command.description.IndexOf(input, StringComparison.CurrentCultureIgnoreCase) >= 0)
+                if (command.MatchSuggestion(input))
                 {
                     suggestions.Add(command);
                     count++;
@@ -189,14 +217,14 @@ namespace ECSEngine.Managers
 
             if (suggestions.Count == 0)
             {
-                SendPacket(new RconPacket(RconPacketOrigin.Server, RconPacketType.Suggestions, new Dictionary<string, string>() { }));
+                SendPacket(RconPacketType.Suggestions, new Dictionary<string, string>() { });
             }
             else
             {
-                SendPacket(new RconPacket(RconPacketOrigin.Server, RconPacketType.Suggestions, new Dictionary<string, string>()
+                SendPacket(RconPacketType.Suggestions, new Dictionary<string, string>()
                 {
                     { "suggestions", JsonConvert.SerializeObject(suggestions) }
-                }));
+                });
             }
         }
 
@@ -204,14 +232,30 @@ namespace ECSEngine.Managers
         {
             if (connected && authenticated)
             {
-                SendPacket(new RconPacket(RconPacketOrigin.Server, RconPacketType.Response, new Dictionary<string, string>()
+                SendPacket(RconPacketType.Response, new Dictionary<string, string>()
                 {
                     { "timestamp", timestamp.ToString("T") },
                     { "stackTrace", stackTrace.ToString() },
                     { "str", log },
                     { "severity", severity.ToString().ToLower() }
-                }));
+                });
             }
         }
+        #endregion
+
+        #region Debug commands
+
+        public string Find(string str)
+        {
+            List<DebugCommand> suggestions = new List<DebugCommand>();
+            foreach (var command in debugCommands)
+            {
+                if (command.MatchSuggestion(str))
+                    suggestions.Add(command);
+            }
+
+            return JsonConvert.SerializeObject(suggestions);
+        }
+        #endregion
     }
 }

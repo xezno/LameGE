@@ -130,5 +130,17 @@ namespace ECSEngine {
                 this["rconEnabled"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("42069")]
+        public string rconPort {
+            get {
+                return ((string)(this["rconPort"]));
+            }
+            set {
+                this["rconPort"] = value;
+            }
+        }
     }
 }
