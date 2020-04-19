@@ -30,11 +30,11 @@ The following project-specific naming conventions are used:
 
 ## Support
 
-Since ECSEngine / SpaceGame are both personal projects that I am developing solely within my free time, I cannot guarantee or provide any maintenance or support right now.  In the future, this might change - it all depends on the direction the project takes.
+Since ECSEngine / UlaidGame are both personal projects that I am developing solely within my free time, I cannot guarantee or provide any maintenance or support right now.  In the future, this might change - it all depends on the direction the project takes.
 
 ## Roadmap
 
-As previously mentioned, ECSEngine and SpaceGame are both free-time projects and I have no step-by-step roadmap.  That being said, there are a few large goals that I want to achieve within this project:
+As previously mentioned, ECSEngine and UlaidGame are both free-time projects and I have no step-by-step roadmap.  That being said, there are a few large goals that I want to achieve within this project:
 
 - Procedurally-generated planets with some form of noise (OpenSimplex, Perlin, etc.)
 - Physically based rendering for all objects within a scene
