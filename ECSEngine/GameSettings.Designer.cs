@@ -142,5 +142,17 @@ namespace ECSEngine {
                 this["rconPort"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("42020")]
+        public string webPort {
+            get {
+                return ((string)(this["webPort"]));
+            }
+            set {
+                this["webPort"] = value;
+            }
+        }
     }
 }

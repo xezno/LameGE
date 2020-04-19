@@ -310,7 +310,7 @@
     <Compile Include="DebugUtils\RconPacket.cs" />
     <Compile Include="DebugUtils\RconPacketOrigin.cs" />
     <Compile Include="DebugUtils\RconPacketType.cs" />
-    <Compile Include="DebugUtils\RconWebFrontend.cs" />
+    <Compile Include="Managers\RconWebFrontend.cs" />
     <Compile Include="Entities\CameraEntity.cs" />
     <Compile Include="Entities\CefEntity.cs" />
     <Compile Include="Entities\CEF\RenderHandler.cs" />

@@ -32,5 +32,8 @@
     <Setting Name="rconPort" Type="System.String" Scope="User">
       <Value Profile="(Default)">42069</Value>
     </Setting>
+    <Setting Name="webPort" Type="System.String" Scope="User">
+      <Value Profile="(Default)">42020</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
