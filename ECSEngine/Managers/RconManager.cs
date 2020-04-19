@@ -187,16 +187,15 @@ namespace ECSEngine.Managers
 
         private void SendLogHistory()
         {
-            foreach (var historyEntry in Logging.LogHistory)
+            var entries = new List<Dictionary<string, string>>();
+            foreach (var entry in Logging.LogHistory)
             {
-                SendPacket(RconPacketType.LogHistory, new Dictionary<string, string>()
-                {
-                    { "timestamp", historyEntry.timestamp.ToString("T") },
-                    { "stackTrace", historyEntry.stackTrace.ToString() },
-                    { "str", historyEntry.str },
-                    { "severity", historyEntry.severity.ToString().ToLower() }
-                });
+                entries.Add(GetResultDictionary(entry.timestamp, entry.stackTrace, entry.str, entry.severity));
             }
+            SendPacket(RconPacketType.LogHistory, new Dictionary<string, string>()
+            {
+                { "entries", JsonConvert.SerializeObject(entries) }
+            });
         }
 
         private void SendSuggestions(string input)
@@ -232,14 +231,20 @@ namespace ECSEngine.Managers
         {
             if (connected && authenticated)
             {
-                SendPacket(RconPacketType.Response, new Dictionary<string, string>()
-                {
-                    { "timestamp", timestamp.ToString("T") },
-                    { "stackTrace", stackTrace.ToString() },
-                    { "str", log },
-                    { "severity", severity.ToString().ToLower() }
-                });
+                SendPacket(RconPacketType.Response, GetResultDictionary(timestamp, stackTrace, log, severity));
             }
+        }
+
+        private Dictionary<string, string> GetResultDictionary(DateTime timestamp, StackTrace stackTrace, string log,
+            Logging.Severity severity)
+        {
+            return new Dictionary<string, string>()
+            {
+                {"timestamp", timestamp.ToString("T")},
+                {"stackTrace", stackTrace.ToString()},
+                {"str", log},
+                {"severity", severity.ToString().ToLower()}
+            };
         }
         #endregion
 

@@ -72,38 +72,56 @@ function handleMessage(e)
 {
     e.data.text().then((res) => {
         var packet = JSON.parse(res);
-        switch (packet.type)
-        {
-            case packetTypes.RequestAuth:
-                sendAuthentication();
-                break;
-            case packetTypes.Response: // Response
-            case packetTypes.LogHistory: // Response
-                writeLogString(packet);
-                break;
-            case packetTypes.Suggestions: // Suggestions
-                if (packet.data.suggestions == null)
-                {
-                    writeSuggestions([]);
-                }
-                else
-                {
-                    writeSuggestions(JSON.parse(packet.data.suggestions));
-                }
-                break;
-            case packetTypes.Error: // Error
-                alert("Error: " + packet.data.errorMessage);
-                break;
-            default:
-                console.log("Unhandled ", res);
-                break;
-        }
+        handlePacket(packet);
     });
+}
+
+function handlePacket(packet)
+{
+    switch (packet.type)
+    {
+        case packetTypes.RequestAuth:
+            sendAuthentication();
+            break;
+        case packetTypes.Response:
+            writeLogString(packet);
+            break;
+        case packetTypes.LogHistory:
+            writeLogHistory(packet);
+            break;
+        case packetTypes.Suggestions:
+            if (packet.data.suggestions == null)
+            {
+                writeSuggestions([]);
+            }
+            else
+            {
+                writeSuggestions(JSON.parse(packet.data.suggestions));
+            }
+            break;
+        case packetTypes.Error: // Error
+            alert("Error: " + packet.data.errorMessage);
+            break;
+        default:
+            console.log("Unhandled ", res);
+            break;
+    }
 }
 
 function writeLogString(packet)
 {
     logMessage(packet.data.timestamp, packet.data.stackTrace, packet.data.str, packet.data.severity);
+}
+
+function writeLogHistory(packet)
+{
+    console.log(packet);
+    var entries = JSON.parse(packet.data.entries);
+    console.log("writing history");
+    for (var entry of entries)
+    {
+        logMessage(entry.timestamp, entry.stackTrace, entry.str, entry.severity);
+    }
 }
 
 function tryConnect()
