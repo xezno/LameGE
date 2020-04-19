@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ECSEngine.DebugUtils
+namespace ECSEngine.DebugUtils.Rcon
 {
     class RconPacket
     {

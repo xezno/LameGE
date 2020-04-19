@@ -313,9 +313,9 @@
     <Compile Include="DebugUtils\DebugResultType.cs" />
     <Compile Include="DebugUtils\Logging.cs" />
     <Compile Include="DebugUtils\DebugResult.cs" />
-    <Compile Include="DebugUtils\RconPacket.cs" />
-    <Compile Include="DebugUtils\RconPacketOrigin.cs" />
-    <Compile Include="DebugUtils\RconPacketType.cs" />
+    <Compile Include="DebugUtils\Rcon\RconPacket.cs" />
+    <Compile Include="DebugUtils\Rcon\RconPacketOrigin.cs" />
+    <Compile Include="DebugUtils\Rcon\RconPacketType.cs" />
     <Compile Include="Managers\RconWebFrontend.cs" />
     <Compile Include="Entities\CameraEntity.cs" />
     <Compile Include="Entities\CefEntity.cs" />
