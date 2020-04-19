@@ -316,6 +316,7 @@
     <Compile Include="Entities\CEF\RenderHandler.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\LightEntity.cs" />
+    <Compile Include="Entities\SkyboxEntity.cs" />
     <Compile Include="EventManager.cs" />
     <Compile Include="Events\Event.cs" />
     <Compile Include="Events\GenericEventArgs.cs" />
@@ -345,6 +346,8 @@
     <Compile Include="Managers\Scripting\ScriptConfig.cs" />
     <Compile Include="Managers\Scripting\ScriptManager.cs" />
     <Compile Include="MathUtils\Levenshtein.cs" />
+    <Compile Include="Render\Framebuffer.cs" />
+    <Compile Include="Render\Primitives.cs" />
     <Compile Include="Types\IHasParent.cs" />
     <Compile Include="MathUtils\Noise.cs" />
     <Compile Include="MathUtils\Vector4.cs" />

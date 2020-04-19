@@ -63,14 +63,14 @@ uniform mat4 projMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 modelMatrix;
 
-uniform vec3 skyColor;
 uniform vec3 cameraPos;
+
+uniform vec3 skyColor;
 uniform float fogNear;
 
 out vec4 fragColor;
 
 vec3 modelPos;
-
 vec3 normal;
 vec3 lightDirection;
 vec3 cameraDirection;
@@ -96,14 +96,13 @@ vec3 CalcSpecular()
 
 vec3 CalcFullMix()
 {
-    // return outVertexPos.xyz;
-    return texture(material.diffuseTexture, outUvCoord).xyz;
+    // return texture(material.diffuseTexture, outUvCoord).xyz;
     return (CalcAmbience() + CalcDiffuse() + CalcSpecular()) * texture(material.diffuseTexture, outUvCoord).xyz;
 }
 
 void main() 
 {
-    // modelPos = vec3(modelMatrix * vec4(outFragPos, 1.0));
+    modelPos = vec3(modelMatrix * vec4(outFragPos, 1.0));
     lightDirection = normalize(light.pos - modelPos);
 
     lightDirection = normalize(modelPos - light.pos);
@@ -113,7 +112,4 @@ void main()
     fragColor = vec4(outUvCoord, 1.0, 1.0);
 
     fragColor = vec4(mix(skyColor, CalcFullMix(), clamp(1.0 - (fogNear * outFragPos.z), 0.0, 1.0)), 1.0 - material.transparency);
-
-    // fragColor = vec4(vec3(outUvCoord.xy, (outFragPos.z * 0.1)), 1.0);
-    // fragColor = vec4(outNormal.xyz, 1.0 - material.transparency);
 }

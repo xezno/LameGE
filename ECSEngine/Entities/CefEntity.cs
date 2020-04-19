@@ -28,9 +28,9 @@ namespace ECSEngine.Entities
         {
             AddComponent(new ShaderComponent(new Shader("Content/UI/Shaders/main.frag", ShaderType.FragmentShader),
                 new Shader("Content/UI/Shaders/main.vert", ShaderType.VertexShader)));
-            AddComponent(new TransformComponent(new Vector3(0, 0, -2), new Vector3(0, 0, 0), new Vector3(1, 1, 1)));
-            AddComponent(new MaterialComponent(new Material("Content/Materials/cube.mtl")));
-            AddComponent(new MeshComponent("Content/Models/cube.obj"));
+            AddComponent(new TransformComponent(new Vector3(0, 0, 0), new Vector3(0, 0, 0), new Vector3(1, 1, 1)));
+            AddComponent(new MaterialComponent(new Material("Content/UI/plane.mtl")));
+            AddComponent(new MeshComponent(Primitives.Plane));
             InitBrowser();
         }
 
@@ -48,7 +48,7 @@ namespace ECSEngine.Entities
             var requestContextSettings = new RequestContextSettings();
             var requestContext = new RequestContext(requestContextSettings);
             browser = new ChromiumWebBrowser(cefFilePath, browserSettings, requestContext);
-            browser.Size = new Size((int)GameSettings.Default.gameResolutionX - 16, (int)GameSettings.Default.gameResolutionY - 16);
+            browser.Size = new Size((int)RenderSettings.Default.gameResolutionX, (int)RenderSettings.Default.gameResolutionY);
             browser.RenderHandler = new CEF.RenderHandler(browser);
 
             browser.BrowserInitialized += (sender, args) => { browser.Load(cefFilePath); };

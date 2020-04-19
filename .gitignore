@@ -344,6 +344,7 @@ healthchecksdb
 
 # Copyrighted skybox
 mr_08/
+/Content/Materials/mr_08_map.png
 
 # VSCode
 /Content/Scripts/.vscode
