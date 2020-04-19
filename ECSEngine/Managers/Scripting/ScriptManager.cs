@@ -19,11 +19,11 @@ namespace ECSEngine.Managers.Scripting
         private void Init()
         {
             CSScript.GlobalSettings.SearchDirs += Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\Content\\Scripts;";
-            Debug.Log($"CSScript search dirs: {CSScript.GlobalSettings.SearchDirs}");
+            DebugUtils.Logging.Log($"CSScript search dirs: {CSScript.GlobalSettings.SearchDirs}");
             CSScript.CacheEnabled = false;
             CSScript.EvaluatorConfig.Engine = EvaluatorEngine.Mono;
 
-            Debug.Log($"Using engine {CSScript.EvaluatorConfig.Engine}");
+            DebugUtils.Logging.Log($"Using engine {CSScript.EvaluatorConfig.Engine}");
             CSScript.GlobalSettings.UseAlternativeCompiler = @"Content/CSScript/CSSRoslynProvider.dll";
 
             using var streamReader = new StreamReader("Content/Scripts/scripts.json");
@@ -32,7 +32,7 @@ namespace ECSEngine.Managers.Scripting
 
             foreach (var script in config.ScriptList)
             {
-                Debug.Log($"Loaded script {script.Path}");
+                DebugUtils.Logging.Log($"Loaded script {script.Path}");
                 if (script.EntryPoint == null)
                 {
                     LoadScript("Content/Scripts/" + script.Path);
@@ -45,12 +45,12 @@ namespace ECSEngine.Managers.Scripting
 
                     if (entryMethod == null)
                     {
-                        Debug.Log($"Entry point {script.EntryPoint} not found!", Debug.Severity.High);
+                        DebugUtils.Logging.Log($"Entry point {script.EntryPoint} not found!", DebugUtils.Logging.Severity.High);
                         return;
                     }
                     entryMethod.Invoke((object)scriptInstance, new object[] { });
 
-                    Debug.Log($"Entry point {script.EntryPoint}");
+                    DebugUtils.Logging.Log($"Entry point {script.EntryPoint}");
                 }
             }
         }
@@ -63,7 +63,7 @@ namespace ECSEngine.Managers.Scripting
 
         public dynamic LoadScript(string path)
         {
-            Debug.Log($"Loading script {path}");
+            DebugUtils.Logging.Log($"Loading script {path}");
 
             dynamic instance = CSScript.Evaluator.LoadFile(path);
             ScriptList.Add(path, instance);

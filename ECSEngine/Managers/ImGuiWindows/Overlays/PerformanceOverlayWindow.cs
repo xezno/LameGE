@@ -16,7 +16,7 @@ namespace ECSEngine.Managers.ImGuiWindows.Overlays
                             $"{RenderManager.Instance.LastFrameTime}ms\n" +
                             $"{RenderManager.Instance.CalculatedFramerate}fps";
 
-            DrawShadowLabel(debugText, new Vector2(RenderSettings.Default.gameResolutionX - 128, 8));
+            DrawShadowLabel(debugText, new Vector2(GameSettings.Default.gameResolutionX - 128, 8));
         }
     }
 }

@@ -1,11 +1,10 @@
-﻿using ECSEngine.Components;
+﻿using ECSEngine.Assets;
+using ECSEngine.Components;
 using ECSEngine.Entities;
 using ECSEngine.MathUtils;
 using ECSEngine.Render;
 using OpenGL;
 using System;
-using ECSEngine;
-using ECSEngine.Assets;
 using UlaidGame.Assets.BSP;
 using UlaidGame.Assets.BSP.Lumps;
 using UlaidGame.Assets.BSP.Types;

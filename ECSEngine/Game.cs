@@ -31,7 +31,7 @@ namespace ECSEngine
         private bool ignoreSingleMouseInput;
 
         public bool isRunning = true; // TODO: properly detect window close event (needs adding within nativewindow)
-        
+
         public IHasParent Parent { get; set; }
         public MouseMode MouseMode { get; set; } = MouseMode.Locked;
         #endregion
@@ -87,12 +87,12 @@ namespace ECSEngine
             nativeWindow.SwapInterval = 0;
             nativeWindow.Resize += Resize;
 
-            nativeWindow.Create(RenderSettings.Default.gamePosX, RenderSettings.Default.gamePosY, RenderSettings.Default.gameResolutionX, RenderSettings.Default.gameResolutionY, NativeWindowStyle.Caption);
+            nativeWindow.Create(GameSettings.Default.gamePosX, GameSettings.Default.gamePosY, GameSettings.Default.gameResolutionX, GameSettings.Default.gameResolutionY, NativeWindowStyle.Caption);
 
             // nativeWindow.SetCursorPos(new Point((int)(RenderSettings.Default.gamePosX + (RenderSettings.Default.gameResolutionX / 2)),
             //  (int)(RenderSettings.Default.gamePosY + (RenderSettings.Default.gameResolutionY / 2))));
 
-            nativeWindow.Fullscreen = RenderSettings.Default.fullscreen;
+            nativeWindow.Fullscreen = GameSettings.Default.fullscreen;
             nativeWindow.Caption = FilterString(gameProperties.WindowTitle) ?? "ECSEngine Game";
 
             // TODO: get choice of monitor to use.
@@ -144,7 +144,9 @@ namespace ECSEngine
             {
                 UpdateManager.Instance,
                 SceneManager.Instance,
-                ScriptManager.Instance
+                ScriptManager.Instance,
+                RconManager.Instance,
+                RconWebFrontendManager.Instance,
             };
 
             foreach (var multiThreadedManager in multiThreadedManagers)
@@ -178,7 +180,7 @@ namespace ECSEngine
         #region Event Handlers
         private void ContextCreated(object sender, NativeWindowEventArgs e)
         {
-            Debug.Log($"OpenGL {Gl.GetString(StringName.Version)}");
+            DebugUtils.Logging.Log($"OpenGL {Gl.GetString(StringName.Version)}");
             Gl.ReadBuffer(ReadBufferMode.Back);
             Gl.ClearColor(100 / 255f, 149 / 255f, 237 / 255f, 1); // Cornflower blue (https://en.wikipedia.org/wiki/Web_colors#X11_color_names)
             Gl.Enable(EnableCap.Blend);
@@ -217,8 +219,8 @@ namespace ECSEngine
         private void MouseMove(object sender, NativeWindowMouseEventArgs e)
         {
             var mousePos = new Vector2(e.Location.X,
-                RenderSettings.Default.gameResolutionY - e.Location.Y -
-                (RenderSettings.Default.fullscreen ? 0 : titlebarHeight));
+                GameSettings.Default.gameResolutionY - e.Location.Y -
+                (GameSettings.Default.fullscreen ? 0 : titlebarHeight));
 
             var mouseDelta = lastMousePos - mousePos;
 
@@ -271,7 +273,7 @@ namespace ECSEngine
         private void DebugCallback(DebugSource source, DebugType type, uint id, DebugSeverity severity, int length, IntPtr message, IntPtr userParam)
         {
             if (severity >= DebugSeverity.DebugSeverityMedium)
-                Debug.Log($"OpenGL Error {id}: {Marshal.PtrToStringAnsi(message, length)}", Debug.Severity.Fatal);
+                DebugUtils.Logging.Log($"OpenGL Error {id}: {Marshal.PtrToStringAnsi(message, length)}", DebugUtils.Logging.Severity.Fatal);
         }
         #endregion
     }

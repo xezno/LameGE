@@ -2,7 +2,6 @@
 using ImGuiNET;
 using System;
 using System.Numerics;
-using OpenGL;
 
 namespace ECSEngine.Managers.ImGuiWindows.Editor
 {
