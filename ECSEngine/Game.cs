@@ -34,7 +34,7 @@ namespace ECSEngine
         private Framebuffer mainFramebuffer;
 
         public bool isRunning = true; // TODO: properly detect window close event (needs adding within nativewindow)
-        
+
         public IHasParent Parent { get; set; }
         public MouseMode MouseMode { get; set; } = MouseMode.Locked;
         #endregion
@@ -95,13 +95,12 @@ namespace ECSEngine
             nativeWindow.DepthBits = 24;
             nativeWindow.SwapInterval = 0;
             nativeWindow.Resize += Resize;
-
             nativeWindow.Create(RenderSettings.Default.gamePosX, RenderSettings.Default.gamePosY, RenderSettings.Default.gameResolutionX + 16, RenderSettings.Default.gameResolutionY + 16, NativeWindowStyle.Caption);
 
             // nativeWindow.SetCursorPos(new Point((int)(RenderSettings.Default.gamePosX + (RenderSettings.Default.gameResolutionX / 2)),
             //  (int)(RenderSettings.Default.gamePosY + (RenderSettings.Default.gameResolutionY / 2))));
 
-            nativeWindow.Fullscreen = RenderSettings.Default.fullscreen;
+            nativeWindow.Fullscreen = GameSettings.Default.fullscreen;
             nativeWindow.Caption = FilterString(gameProperties.WindowTitle) ?? "ECSEngine Game";
 
             // TODO: get choice of monitor to use.
@@ -153,7 +152,9 @@ namespace ECSEngine
             {
                 UpdateManager.Instance,
                 SceneManager.Instance,
-                ScriptManager.Instance
+                ScriptManager.Instance,
+                RconManager.Instance,
+                RconWebFrontendManager.Instance,
             };
 
             foreach (var multiThreadedManager in multiThreadedManagers)
@@ -189,7 +190,6 @@ namespace ECSEngine
         {
             Debug.Log($"OpenGL {Gl.GetString(StringName.Version)}");
             CheckHardwareCompatibility();
-
             Gl.ReadBuffer(ReadBufferMode.Back);
             Gl.Enable(EnableCap.Blend);
             Gl.Enable(EnableCap.CullFace);
@@ -284,7 +284,7 @@ namespace ECSEngine
         private void DebugCallback(DebugSource source, DebugType type, uint id, DebugSeverity severity, int length, IntPtr message, IntPtr userParam)
         {
             if (severity >= DebugSeverity.DebugSeverityMedium)
-                Debug.Log($"OpenGL Error {id}: {Marshal.PtrToStringAnsi(message, length)}", Debug.Severity.Fatal);
+                DebugUtils.Logging.Log($"OpenGL Error {id}: {Marshal.PtrToStringAnsi(message, length)}", DebugUtils.Logging.Severity.Fatal);
         }
 
         private void CheckHardwareCompatibility()

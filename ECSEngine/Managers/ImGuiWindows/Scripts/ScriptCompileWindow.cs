@@ -16,7 +16,7 @@ namespace ECSEngine.Managers.ImGuiWindows.Scripts
         {
             ImGui.PushItemWidth(-1);
             ImGui.SetScrollHereY(1.0f);
-            ImGui.InputTextMultiline("Console", ref Debug.pastLogsStringConsole, UInt32.MaxValue, new Vector2(-1, -1), ImGuiInputTextFlags.ReadOnly);
+            ImGui.InputTextMultiline("Console", ref DebugUtils.Logging.pastLogsStringConsole, UInt32.MaxValue, new Vector2(-1, -1), ImGuiInputTextFlags.ReadOnly);
 
             if (ImGui.IsMouseDoubleClicked(ImGuiMouseButton.Left))
             {

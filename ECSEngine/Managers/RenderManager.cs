@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace ECSEngine.Managers
 {
-    public class RenderManager : Manager<RenderManager>
+    public unsafe class RenderManager : Manager<RenderManager>
     {
         private DateTime lastRender;
         private int currentFrametimeIndex;
@@ -15,6 +15,17 @@ namespace ECSEngine.Managers
         public int CalculatedFramerate => (int)(1000f / Math.Max(LastFrameTime, 0.001f));
         public float[] FrametimeHistory { get; } = new float[FramesToCount];
         public float[] FramerateHistory { get; } = new float[FramesToCount];
+
+        public RenderManager()
+        {
+            RconManager.Instance.RegisterCommand("renderResX", "Horizontal render resolution",
+                () => GameSettings.Default.gameResolutionX,
+                (v) => GameSettings.Default.gameResolutionX = v);
+
+            RconManager.Instance.RegisterCommand("renderResY", "Vertical render resolution",
+                () => GameSettings.Default.gameResolutionY,
+                (v) => GameSettings.Default.gameResolutionY = v);
+        }
 
         /// <summary>
         /// Render all the entities within the render manager.
@@ -48,11 +59,11 @@ namespace ECSEngine.Managers
             lastRender = DateTime.Now;
 
             // Are we rendering too fast?
-            if (LastFrameTime < (1000f / RenderSettings.Default.framerateLimit) && RenderSettings.Default.framerateLimit > 0)
+            if (LastFrameTime < (1000f / GameSettings.Default.framerateLimit) && GameSettings.Default.framerateLimit > 0)
             {
                 // really crappy implementation
                 // TODO: do this differently
-                Thread.Sleep((int)Math.Ceiling((1000f / RenderSettings.Default.framerateLimit) - LastFrameTime));
+                Thread.Sleep((int)Math.Ceiling((1000f / GameSettings.Default.framerateLimit) - LastFrameTime));
             }
         }
     }

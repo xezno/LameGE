@@ -47,7 +47,7 @@ namespace ECSEngine.Render
             Gl.BindTexture(TextureTarget.Texture2d, glTexture);
             using var textureStream = new MemoryStream();
             var image = Image.FromFile(path);
-            Debug.Log($"Image format: {image.PixelFormat}");
+            DebugUtils.Logging.Log($"Image format: {image.PixelFormat}");
 
             var imageFormat = PixelFormat.Bgra;
             if (image.PixelFormat == System.Drawing.Imaging.PixelFormat.Format24bppRgb ||
@@ -72,7 +72,7 @@ namespace ECSEngine.Render
 
             Marshal.FreeHGlobal(textureDataPtr);
 
-            Debug.Log($"Texture {path} has texture ptr {glTexture}");
+            DebugUtils.Logging.Log($"Texture {path} has texture ptr {glTexture}");
         }
 
         public Texture2D(byte[] textureData, int width, int height, TextureUnit textureUnit = TextureUnit.Texture0)

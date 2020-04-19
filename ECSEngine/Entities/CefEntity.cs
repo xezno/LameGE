@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
-using CefSharp;
+﻿using CefSharp;
 using CefSharp.OffScreen;
 using CefSharp.Structs;
 using ECSEngine.Assets;
@@ -11,6 +8,9 @@ using ECSEngine.Events;
 using ECSEngine.MathUtils;
 using ECSEngine.Render;
 using OpenGL;
+using System;
+using System.IO;
+using System.Reflection;
 using Size = System.Drawing.Size;
 
 namespace ECSEngine.Entities
@@ -52,12 +52,12 @@ namespace ECSEngine.Entities
             browser.RenderHandler = new CEF.RenderHandler(browser);
 
             browser.BrowserInitialized += (sender, args) => { browser.Load(cefFilePath); };
-            browser.LoadError += (sender, args) => Debug.Log($"Browser error {args.ErrorCode}");
+            browser.LoadError += (sender, args) => DebugUtils.Logging.Log($"Browser error {args.ErrorCode}");
 
             byte[] emptyData = new byte[browser.Size.Width * browser.Size.Height * 4];
             GetComponent<MaterialComponent>().materials[0].diffuseTexture =
                 new Texture2D(emptyData, browser.Size.Width, browser.Size.Height);
-            
+
             EventHandler<LoadingStateChangedEventArgs> handler = null;
             handler = (sender, args) =>
             {
@@ -65,10 +65,10 @@ namespace ECSEngine.Entities
 
                 browser.LoadingStateChanged -= handler;
 
-                Debug.Log($"CEF has finished loading page {cefFilePath}");
+                // Debug.Logging.Log($"CEF has finished loading page {cefFilePath}");
                 readyToDraw = true;
             };
-            
+
             browser.LoadingStateChanged += handler;
         }
 
@@ -89,7 +89,7 @@ namespace ECSEngine.Entities
 
         private void SetTextureData()
         {
-            var renderHandler = ((RenderHandler) browser.RenderHandler);
+            var renderHandler = ((RenderHandler)browser.RenderHandler);
             if (!renderHandler.NeedsPaint)
                 return;
 
