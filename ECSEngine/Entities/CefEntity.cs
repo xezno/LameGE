@@ -48,7 +48,7 @@ namespace ECSEngine.Entities
             var requestContextSettings = new RequestContextSettings();
             var requestContext = new RequestContext(requestContextSettings);
             browser = new ChromiumWebBrowser(cefFilePath, browserSettings, requestContext);
-            browser.Size = new Size((int)RenderSettings.Default.gameResolutionX, (int)RenderSettings.Default.gameResolutionY);
+            browser.Size = new Size((int)GameSettings.Default.gameResolutionX, (int)GameSettings.Default.gameResolutionY);
             browser.RenderHandler = new CEF.RenderHandler(browser);
 
             browser.BrowserInitialized += (sender, args) => { browser.Load(cefFilePath); };

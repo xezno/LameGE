@@ -1,7 +1,9 @@
-﻿using ECSEngine.Events;
+﻿using ECSEngine.DebugUtils;
+using ECSEngine.Events;
 using ECSEngine.Managers;
 using ECSEngine.Managers.Scripting;
 using ECSEngine.MathUtils;
+using ECSEngine.Render;
 using ECSEngine.Types;
 using Newtonsoft.Json;
 using OpenGL;
@@ -12,7 +14,6 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
-using ECSEngine.Render;
 
 namespace ECSEngine
 {
@@ -30,7 +31,7 @@ namespace ECSEngine
         protected NativeWindow nativeWindow;
         private Vector2 lastMousePos;
         private bool ignoreSingleMouseInput;
-        
+
         private Framebuffer mainFramebuffer;
 
         public bool isRunning = true; // TODO: properly detect window close event (needs adding within nativewindow)
@@ -95,7 +96,7 @@ namespace ECSEngine
             nativeWindow.DepthBits = 24;
             nativeWindow.SwapInterval = 0;
             nativeWindow.Resize += Resize;
-            nativeWindow.Create(RenderSettings.Default.gamePosX, RenderSettings.Default.gamePosY, RenderSettings.Default.gameResolutionX + 16, RenderSettings.Default.gameResolutionY + 16, NativeWindowStyle.Caption);
+            nativeWindow.Create(GameSettings.Default.gamePosX, GameSettings.Default.gamePosY, GameSettings.Default.gameResolutionX + 16, GameSettings.Default.gameResolutionY + 16, NativeWindowStyle.Caption);
 
             // nativeWindow.SetCursorPos(new Point((int)(RenderSettings.Default.gamePosX + (RenderSettings.Default.gameResolutionX / 2)),
             //  (int)(RenderSettings.Default.gamePosY + (RenderSettings.Default.gameResolutionY / 2))));
@@ -188,7 +189,7 @@ namespace ECSEngine
         #region Event Handlers
         private void ContextCreated(object sender, NativeWindowEventArgs e)
         {
-            Debug.Log($"OpenGL {Gl.GetString(StringName.Version)}");
+            Logging.Log($"OpenGL {Gl.GetString(StringName.Version)}");
             CheckHardwareCompatibility();
             Gl.ReadBuffer(ReadBufferMode.Back);
             Gl.Enable(EnableCap.Blend);
@@ -230,8 +231,8 @@ namespace ECSEngine
         {
             // TODO: Fix mouse positioning
             var mousePos = new Vector2(e.Location.X + 16,
-                RenderSettings.Default.gameResolutionY - e.Location.Y -
-                (RenderSettings.Default.fullscreen ? 0 : titlebarHeight) + 16);
+                GameSettings.Default.gameResolutionY - e.Location.Y -
+                (GameSettings.Default.fullscreen ? 0 : titlebarHeight) + 16);
 
             var mouseDelta = lastMousePos - mousePos;
 
@@ -289,7 +290,7 @@ namespace ECSEngine
 
         private void CheckHardwareCompatibility()
         {
-            var requiredExtensions = new[] {"ARB_spirv_extensions"};
+            var requiredExtensions = new[] { "ARB_spirv_extensions" };
             var existingExtensions = new List<String>();
 
             var extensionCount = 0;
@@ -302,7 +303,7 @@ namespace ECSEngine
 
             foreach (var extension in existingExtensions)
             {
-                Debug.Log($"Ext: {extension}");
+                Logging.Log($"Ext: {extension}");
             }
         }
         #endregion

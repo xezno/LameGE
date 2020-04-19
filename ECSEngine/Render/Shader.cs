@@ -1,4 +1,5 @@
-﻿using OpenGL;
+﻿using ECSEngine.DebugUtils;
+using OpenGL;
 using System.IO;
 using System.Text;
 
@@ -83,14 +84,14 @@ namespace ECSEngine.Render
 
             if (isCompiled)
             {
-                Debug.Log($"Compiled shader {FileName} successfully");
+                Logging.Log($"Compiled shader {FileName} successfully");
             }
             else
             {
                 var maxLength = 1024;
                 var glErrorStr = new StringBuilder(maxLength);
                 Gl.GetShaderInfoLog(GlShader, maxLength, out var length, glErrorStr);
-                Debug.Log($"Problem compiling shader {FileName}: {glErrorStr}", Debug.Severity.High);
+                Logging.Log($"Problem compiling shader {FileName}: {glErrorStr}", Logging.Severity.High);
             }
         }
     }

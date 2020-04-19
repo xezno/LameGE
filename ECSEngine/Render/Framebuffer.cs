@@ -1,6 +1,6 @@
-﻿using System;
-using ECSEngine.Components;
+﻿using ECSEngine.Components;
 using OpenGL;
+using System;
 
 namespace ECSEngine.Render
 {
@@ -62,7 +62,7 @@ namespace ECSEngine.Render
             var texture = Gl.GenTexture();
             Gl.BindTexture(TextureTarget.Texture2d, texture);
             Gl.TexImage2D(TextureTarget.Texture2d, 0, internalFormat,
-                (int)RenderSettings.Default.gameResolutionX, (int)RenderSettings.Default.gameResolutionY, 0,
+                (int)GameSettings.Default.gameResolutionX, (int)GameSettings.Default.gameResolutionY, 0,
                 pixelFormat, pixelType, IntPtr.Zero);
 
             Gl.TexParameter(TextureTarget.Texture2d, TextureParameterName.TextureMinFilter, Gl.LINEAR);
