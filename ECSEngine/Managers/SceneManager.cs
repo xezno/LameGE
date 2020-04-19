@@ -1,5 +1,6 @@
 ﻿using ECSEngine.Entities;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace ECSEngine.Managers
 {
@@ -30,6 +31,10 @@ namespace ECSEngine.Managers
             };
             lights.Add(mainLight);
             AddEntity(mainLight);
+
+            
+            RconManager.Instance.RegisterCommand("getHierarchy", "List scene hierarchy",
+                () => JsonConvert.SerializeObject(Entities));
         }
     }
 }

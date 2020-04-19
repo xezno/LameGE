@@ -16,7 +16,7 @@ namespace ECSEngine.Managers
         private bool authenticated;
         private IWebSocketConnection localSocket;
 
-        private List<DebugCommand> debugCommands = new List<DebugCommand>();
+        private List<DebugMember> debugCommands = new List<DebugMember>();
         #endregion
 
         #region Constructor
@@ -45,13 +45,12 @@ namespace ECSEngine.Managers
         #region Command Registry
         public void RegisterCommand<T>(string name, string description, Func<T> getter, Action<T> setter)
         {
-            debugCommands.Add(new DebugCommand<T>(name, description, getter, setter));
+            debugCommands.Add(new DebugVariable<T>(name, description, getter, setter));
         }
 
-        public void RegisterCommand<T>(string name, string description, Action method)
+        public void RegisterCommand(string name, string description, Func<string> method)
         {
-            // debugCommands.Add(new DebugCommand<T>(name, description));
-            throw new NotImplementedException();
+            debugCommands.Add(new DebugMethod<string>(name, description, method));
         }
         #endregion
 
@@ -225,7 +224,7 @@ namespace ECSEngine.Managers
 
         private void SendSuggestions(string input)
         {
-            List<DebugCommand> suggestions = new List<DebugCommand>();
+            List<DebugMember> suggestions = new List<DebugMember>();
             int count = 0;
             foreach (var command in debugCommands)
             {
@@ -277,7 +276,7 @@ namespace ECSEngine.Managers
 
         public string Find(string str)
         {
-            List<DebugCommand> suggestions = new List<DebugCommand>();
+            List<DebugMember> suggestions = new List<DebugMember>();
             foreach (var command in debugCommands)
             {
                 if (command.MatchSuggestion(str))

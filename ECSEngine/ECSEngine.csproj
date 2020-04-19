@@ -306,7 +306,9 @@
     <Compile Include="Components\MeshComponent.cs" />
     <Compile Include="Components\ShaderComponent.cs" />
     <Compile Include="Components\TransformComponent.cs" />
-    <Compile Include="DebugUtils\DebugCommand.cs" />
+    <Compile Include="DebugUtils\DebugMember.cs" />
+    <Compile Include="DebugUtils\DebugMethod.cs" />
+    <Compile Include="DebugUtils\DebugVariable.cs" />
     <Compile Include="DebugUtils\DebugHistoryEntry.cs" />
     <Compile Include="DebugUtils\DebugResultType.cs" />
     <Compile Include="DebugUtils\Logging.cs" />

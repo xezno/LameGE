@@ -48,8 +48,12 @@ function writeSuggestions(suggestionsList)
                 <span class="console-suggestion-command">{{alias}} <span class="console-suggestion-value">{{currentValue}}</span></span>
                 <span class="console-suggestion-description">{{description}}</span>
             </li>`;
+
+        if (suggestion.value == undefined)
+            suggestion.value = "";
             
         var templateProcessed = template.replace("{{alias}}", suggestion.name).replace("{{description}}", suggestion.description).replace("{{currentValue}}", suggestion.value);
+
 
         document.getElementById("console-suggestions").innerHTML += templateProcessed;
     }

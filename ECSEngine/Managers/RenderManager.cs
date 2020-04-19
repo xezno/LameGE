@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace ECSEngine.Managers
 {
-    public unsafe class RenderManager : Manager<RenderManager>
+    public class RenderManager : Manager<RenderManager>
     {
         private DateTime lastRender;
         private int currentFrametimeIndex;
