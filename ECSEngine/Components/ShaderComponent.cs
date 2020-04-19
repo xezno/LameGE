@@ -4,6 +4,7 @@ using ImGuiNET;
 using OpenGL;
 using System;
 using System.Collections.Generic;
+using ECSEngine.DebugUtils;
 
 namespace ECSEngine.Components
 {
@@ -82,7 +83,7 @@ namespace ECSEngine.Components
             if (variableLocation < 0)
             {
                 errorLog.Add(variableName);
-                // Debug.Logging.Log($"Tried to set value for variable {variableName} that does not exist on shaderprogram {shaderProgram}.", Debug.Logging.Severity.High);
+                Logging.Log($"Tried to set value for variable {variableName} that does not exist on shader program {shaderProgram}.", Logging.Severity.High);
                 return; // We can't continue, because the variable doesn't exist
             }
 
