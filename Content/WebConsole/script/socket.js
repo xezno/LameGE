@@ -1,5 +1,6 @@
 var port = 42069;
 var socket;
+var authenticated = false;
 
 var packetTypes = {
     Handshake: 0,
@@ -10,12 +11,14 @@ var packetTypes = {
     LogHistory: 5,
     RequestAuth: 6,
     Authenticate: 7,
+    RequestLogHistory: 8,
 
     Error: 255
 };
 
 function sendObject(obj)
 {
+    console.log("sent packet of type " + obj.type);
     socket.send(JSON.stringify(obj));
 }
 
@@ -68,9 +71,21 @@ function sendAuthentication()
     sendObject(packet);
 }
 
+function sendLogHistoryRequest()
+{
+    var packet = {
+        origin: 0,
+        type: packetTypes.RequestLogHistory,
+        data: { }
+    }
+    sendObject(packet);
+}
+
 function handleOpen()
 {
+    console.log("Connected");
     sendHandshake();
+    sendLogHistoryRequest();
     showConnectionMessage(false);
 }
 
@@ -90,10 +105,12 @@ function handleMessage(e)
 
 function handlePacket(packet)
 {
+    console.log("Received packet of type " + packet.type);
     switch (packet.type)
     {
         case packetTypes.RequestAuth:
             sendAuthentication();
+            sendLogHistoryRequest();
             break;
         case packetTypes.Response:
             writeLogString(packet);

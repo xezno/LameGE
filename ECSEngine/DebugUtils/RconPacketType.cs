@@ -10,6 +10,7 @@
         LogHistory,
         RequestAuth,
         Authenticate,
+        RequestLogHistory,
         Error = 0xFF
     }
 }

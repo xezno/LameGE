@@ -10,6 +10,7 @@ using OpenGL;
 using OpenGL.CoreUI;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -290,7 +291,7 @@ namespace ECSEngine
 
         private void CheckHardwareCompatibility()
         {
-            var requiredExtensions = new[] { "ARB_spirv_extensions" };
+            var requiredExtensions = new[] { "GL_ARB_spirv_extensions" };
             var existingExtensions = new List<String>();
 
             var extensionCount = 0;
@@ -301,9 +302,12 @@ namespace ECSEngine
                 existingExtensions.Add(Gl.GetString(StringName.Extensions, (uint)i));
             }
 
-            foreach (var extension in existingExtensions)
+            foreach (var extension in requiredExtensions)
             {
-                Logging.Log($"Ext: {extension}");
+                if (!existingExtensions.Contains(extension))
+                {
+                    Logging.Log($"GPU does not support extension {extension}", Logging.Severity.Fatal);
+                }
             }
         }
         #endregion

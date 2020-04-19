@@ -8,6 +8,7 @@ using System.Text;
 
 namespace ECSEngine.Managers
 {
+    // TODO: switch to more extensible (i.e. use class-based solution)
     public sealed class RconManager : Manager<RconManager>
     {
         #region Fields
@@ -108,9 +109,15 @@ namespace ECSEngine.Managers
                 case RconPacketType.Authenticate:
                     HandleAuthentication(rconPacket);
                     break;
-            }
+                default:
+                    if (!authenticated)
+                    {
+                        SendPacket(RconPacketType.RequestAuth, new Dictionary<string, string>());
+                        return;
+                    }
 
-            if (!authenticated) return;
+                    break;
+            }
 
             switch (rconPacket.type)
             {
@@ -119,6 +126,9 @@ namespace ECSEngine.Managers
                     break;
                 case RconPacketType.InputInProgress:
                     HandleInputInProgress(rconPacket);
+                    break;
+                case RconPacketType.RequestLogHistory:
+                    HandleRequestLogHistory(rconPacket);
                     break;
             }
         }
@@ -139,12 +149,6 @@ namespace ECSEngine.Managers
                 }
 
                 authenticated = true;
-                SendLogHistory();
-            }
-            else
-            {
-                // We need authentication!
-                SendPacket(RconPacketType.RequestAuth, new Dictionary<string, string>());
             }
         }
 
@@ -175,6 +179,11 @@ namespace ECSEngine.Managers
         {
             SendSuggestions(rconPacket.data["input"]);
         }
+
+        private void HandleRequestLogHistory(RconPacket rconPacket)
+        {
+            SendLogHistory();
+        }
         #endregion
 
         #region Packet Senders
@@ -185,17 +194,33 @@ namespace ECSEngine.Managers
             localSocket.Send(bytes);
         }
 
-        private void SendLogHistory()
+        private void SendLogHistory(int offset = 0)
         {
             var entries = new List<Dictionary<string, string>>();
-            foreach (var entry in Logging.LogHistory)
+            int count = 0;
+            int maxChunkSize = 3;
+            bool limitWasReached = false;
+            for (int i = offset; i < Logging.LogHistory.Count; ++i)
             {
+                var entry = Logging.LogHistory[i];
                 entries.Add(GetResultDictionary(entry.timestamp, entry.stackTrace, entry.str, entry.severity));
+                count++;
+                if (count >= maxChunkSize)
+                {
+                    limitWasReached = true;
+                    break;
+                }
             }
+
             SendPacket(RconPacketType.LogHistory, new Dictionary<string, string>()
             {
                 { "entries", JsonConvert.SerializeObject(entries) }
             });
+
+            if (limitWasReached)
+            {
+                SendLogHistory(offset + count);
+            }
         }
 
         private void SendSuggestions(string input)

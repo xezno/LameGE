@@ -34,7 +34,6 @@ namespace ECSEngine.Render
         public void PreRender()
         {
             Gl.BindFramebuffer(FramebufferTarget.Framebuffer, framebufferObject);
-            // Render everything else
         }
 
         public void Render()
