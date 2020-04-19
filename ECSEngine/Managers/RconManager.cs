@@ -33,7 +33,7 @@ namespace ECSEngine.Managers
                 SupportedSubProtocols = new[] { "ulaidRcon" },
                 ListenerSocket =
                 {
-                    NoDelay = false
+                    NoDelay = true
                 }
             };
 

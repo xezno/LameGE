@@ -68,6 +68,18 @@ function sendAuthentication()
     sendObject(packet);
 }
 
+function handleOpen()
+{
+    sendHandshake();
+    showConnectionMessage(false);
+}
+
+function handleClose()
+{
+    console.log("Connection closed");
+    showConnectionMessage(true);
+}
+
 function handleMessage(e)
 {
     e.data.text().then((res) => {
@@ -115,9 +127,7 @@ function writeLogString(packet)
 
 function writeLogHistory(packet)
 {
-    console.log(packet);
     var entries = JSON.parse(packet.data.entries);
-    console.log("writing history");
     for (var entry of entries)
     {
         logMessage(entry.timestamp, entry.stackTrace, entry.str, entry.severity);
@@ -129,8 +139,8 @@ function tryConnect()
     console.log("Trying to connect...");
     socket = new WebSocket("ws://127.0.0.1:" + port, [ "ulaidRcon" ]);
     socket.addEventListener("message", handleMessage);
-    socket.addEventListener("open", () => sendHandshake());
-    socket.addEventListener("close", () => console.log("Connection closed"));
+    socket.addEventListener("open", handleOpen);
+    socket.addEventListener("close",handleClose);
     socket.addEventListener("error", function(e) {
         console.log("Websocket fucked it (again): ", event);
 

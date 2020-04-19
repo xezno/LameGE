@@ -1,33 +1,40 @@
 var consoleWrapper = document.getElementById("console-wrapper");
 var consoleInput = document.getElementById("console-input");
+var message = document.getElementById("message");
+var consoleDiv = document.getElementById("console");
+var consoleSuggestions = document.getElementById("console-suggestions");
+
+function showConnectionMessage(shown)
+{
+    message.style.visibility = shown ? "visible" : "hidden";
+}
 
 function inputKeyDown(e)
 {
     if (e.keyCode == 13)
     {
-        // submit console input
         logInput(consoleInput.value);
         consoleInput.value = "";
     }
     
     if (consoleInput.value == "")
     {
-        document.getElementById("console-suggestions").style.visibility = "hidden";
+        consoleSuggestions.style.visibility = "hidden";
     }
     else
     {
-        document.getElementById("console-suggestions").style.visibility = "visible";
+        consoleSuggestions.style.visibility = "visible";
         sendInputInProgress(consoleInput.value);
     }
 }
 
 function writeSuggestions(suggestionsList)
 {
-    document.getElementById("console-suggestions").innerHTML = "";
+    consoleSuggestions.innerHTML = "";
 
-    if (suggestionsList.length == 0)
+    if (suggestionsList.length == 0 || suggestionsList == null)
     {
-        document.getElementById("console-suggestions").innerHTML = `
+        consoleSuggestions.innerHTML = `
         <li>
             <span class="console-suggestion-error">No commands found.</span>
         </li>`;
@@ -50,7 +57,7 @@ function writeSuggestions(suggestionsList)
 
 function writeToConsole(str)
 {
-    document.getElementById("console").innerHTML += str;
+    consoleDiv.innerHTML += str;
     consoleWrapper.scrollTo(0, consoleWrapper.scrollHeight);
 }
 

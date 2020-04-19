@@ -83,7 +83,7 @@ header {
     color: var(--input-text);
 }
 
-.console-message::before, .console-input-message::before, .console-message::after {
+.console-message::before, .console-input-message::before {
     content: ' ';
     display: inline-block;
     width: 4px;
@@ -101,22 +101,10 @@ header {
     transition: 150ms all ease-in-out;
 }
 
-.console-message::after {
-    content: 'jump';
-    left: unset;
-    right: 0;
-    background: #00000000;
-}
-
-.console-message:hover::before, .console-input-message:hover::before, .console-message:hover::after {
+.console-message:hover::before, .console-input-message:hover::before {
     width: 42px;
     padding: 8px;
     color: black;
-}
-
-.console-message:hover::after  {
-    color: white;
-    background: #00000088;
 }
 
 .console-message:hover, .console-input-message:hover {
@@ -246,4 +234,30 @@ header {
 
 .console-suggestion-value:not(:empty)::before, .console-suggestion-value:not(:empty)::after {
     content: "\"";
+}
+
+.message {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    background: #111;
+    padding: 10px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 250px;
+    height: 100px;
+    margin-left: -125px;
+    margin-top: -50px;
+
+    z-index: 1000;
+}
+
+.message > * {
+    width: 100%;
+}
+
+.message-title {
+    font-size: 1.2em;
 }
