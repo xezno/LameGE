@@ -1,4 +1,4 @@
-﻿namespace ECSEngine.DebugUtils
+﻿namespace ECSEngine.DebugUtils.Rcon
 {
     enum RconPacketType
     {

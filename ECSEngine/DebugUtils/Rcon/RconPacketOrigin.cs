@@ -1,4 +1,4 @@
-﻿namespace ECSEngine.DebugUtils
+﻿namespace ECSEngine.DebugUtils.Rcon
 {
     // unnecessary?
     enum RconPacketOrigin
