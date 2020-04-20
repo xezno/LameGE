@@ -314,7 +314,6 @@
     <Compile Include="DebugUtils\Logging.cs" />
     <Compile Include="DebugUtils\DebugResult.cs" />
     <Compile Include="DebugUtils\Rcon\RconPacket.cs" />
-    <Compile Include="DebugUtils\Rcon\RconPacketOrigin.cs" />
     <Compile Include="DebugUtils\Rcon\RconPacketType.cs" />
     <Compile Include="Managers\RconWebFrontend.cs" />
     <Compile Include="Entities\CameraEntity.cs" />
@@ -338,7 +337,7 @@
     <Compile Include="GameProperties.cs" />
     <Compile Include="Managers\ImGuiMenu.cs" />
     <Compile Include="Managers\ImGuiWindows\ImGuiWindow.cs" />
-    <Compile Include="Managers\ImGuiWindows\Addons\AddonBrowserWindow.cs" />
+    <Compile Include="Managers\ImGuiWindows\Addons\AnvilBrowserWindow.cs" />
     <Compile Include="Managers\ImGuiWindows\Editor\TextureBrowserWindow.cs" />
     <Compile Include="Managers\ImGuiWindows\Overlays\ConsoleOverlayWindow.cs" />
     <Compile Include="Managers\ImGuiWindows\Editor\ConsoleWindow.cs" />

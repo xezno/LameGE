@@ -3,10 +3,10 @@ using ImGuiNET;
 
 namespace ECSEngine.Managers.ImGuiWindows.Addons
 {
-    class AddonBrowserWindow : ImGuiWindow
+    class AnvilBrowserWindow : ImGuiWindow
     {
         public override bool Render { get; set; }
-        public override string Title { get; } = "Addon Browser";
+        public override string Title { get; } = "Anvil Browser";
         public override string IconGlyph { get; } = FontAwesome5.PuzzlePiece;
 
         private string[] addonCategories = new[]

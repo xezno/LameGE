@@ -7,10 +7,10 @@
         Response,
         InputInProgress,
         Suggestions,
-        LogHistory,
         RequestAuth,
         Authenticate,
         RequestLogHistory,
-        Error = 0xFF
+        LogHistory,
+        Error = 255
     }
 }

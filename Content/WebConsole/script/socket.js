@@ -8,10 +8,10 @@ var packetTypes = {
     Response: 2,
     InputInProgress: 3,
     Suggestions: 4,
-    LogHistory: 5,
-    RequestAuth: 6,
-    Authenticate: 7,
-    RequestLogHistory: 8,
+    RequestAuth: 5,
+    Authenticate: 6,
+    RequestLogHistory: 7,
+    LogHistory: 8,
 
     Error: 255
 };
@@ -25,7 +25,6 @@ function sendObject(obj)
 function sendHandshake()
 {
     var packet = {
-        origin: 0,
         type: packetTypes.Handshake
     }
     sendObject(packet);
@@ -34,7 +33,6 @@ function sendHandshake()
 function sendInput(input)
 {
     var packet = {
-        origin: 0,
         type: packetTypes.Input,
         data: {
             input: input
@@ -49,7 +47,6 @@ function sendInputInProgress(input)
         input = input.substring(0, input.indexOf(" "));
     
     var packet = {
-        origin: 0,
         type: packetTypes.InputInProgress,
         data: {
             input: input
@@ -62,7 +59,6 @@ function sendAuthentication()
 {
     var password = prompt("Enter password");
     var packet = {
-        origin: 0,
         type: packetTypes.Authenticate,
         data: {
             password: password
@@ -74,7 +70,6 @@ function sendAuthentication()
 function sendLogHistoryRequest()
 {
     var packet = {
-        origin: 0,
         type: packetTypes.RequestLogHistory,
         data: { }
     }

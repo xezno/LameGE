@@ -30,9 +30,9 @@ namespace ECSEngine.Managers
         public List<ImGuiMenu> Menus { get; } = new List<ImGuiMenu>()
         {
             new ImGuiMenu(FontAwesome5.File, "File", new List<IImGuiWindow>()),
-            new ImGuiMenu(FontAwesome5.PuzzlePiece, "Addons", new List<IImGuiWindow>()
+            new ImGuiMenu(FontAwesome5.Hammer, "Anvil", new List<IImGuiWindow>()
             {
-                new AddonBrowserWindow()
+                new AnvilBrowserWindow()
             }),
             new ImGuiMenu(FontAwesome5.FileCode, "Scripts", new List<IImGuiWindow>()
             {

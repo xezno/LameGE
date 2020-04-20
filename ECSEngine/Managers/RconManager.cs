@@ -189,7 +189,7 @@ namespace ECSEngine.Managers
         #region Packet Senders
         private void SendPacket(RconPacketType type, Dictionary<string, string> data)
         {
-            var str = JsonConvert.SerializeObject(new RconPacket(RconPacketOrigin.Server, type, data));
+            var str = JsonConvert.SerializeObject(new RconPacket(type, data));
             var bytes = Encoding.UTF8.GetBytes(str);
             localSocket.Send(bytes);
         }
