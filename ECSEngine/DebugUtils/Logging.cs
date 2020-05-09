@@ -45,6 +45,25 @@ namespace ECSEngine.DebugUtils
             Fatal
         }
 
+        private static void WriteLog(string str, StackTrace stackTrace, string logTextNoSeverity = "", Severity severity = Severity.Low)
+        {
+            Console.WriteLine(str);
+            PastLogs.Add(str);
+            RconManager.Instance.SendDebugLog(DateTime.Now, stackTrace, logTextNoSeverity, severity);
+            LogHistory.Add(new DebugHistoryEntry(DateTime.Now, stackTrace, logTextNoSeverity, severity));
+
+            // We convert to string here for performance reasons (means we aren't potentially doing it multiple times per frame)
+            var pastLogsStart = Math.Max(0, PastLogs.Count - pastLogsStringLength);
+            var pastLogsCount = Math.Min(PastLogs.Count, pastLogsStringLength);
+            var pastLogsArray = PastLogs.ToArray();
+            PastLogsString = string.Join("\n", pastLogsArray, pastLogsStart, pastLogsCount);
+
+            if (!pastLogsStringConsoleUseFilter)
+            {
+                pastLogsStringConsole = string.Join("\n", pastLogsArray, 0, pastLogsArray.Length);
+            }
+        }
+
         /// <summary>
         /// Display a message to the console.
         /// </summary>
@@ -83,21 +102,7 @@ namespace ECSEngine.DebugUtils
             var logTextNoSeverity =
                 $"[{method?.ReflectedType?.Name}] {str}";
 
-            Console.WriteLine(logText);
-            PastLogs.Add(logText);
-            RconManager.Instance.SendDebugLog(DateTime.Now, stackTrace, logTextNoSeverity, severity);
-            LogHistory.Add(new DebugHistoryEntry(DateTime.Now, stackTrace, logTextNoSeverity, severity));
-
-            // We convert to string here for performance reasons (means we aren't potentially doing it multiple times per frame)
-            var pastLogsStart = Math.Max(0, PastLogs.Count - pastLogsStringLength);
-            var pastLogsCount = Math.Min(PastLogs.Count, pastLogsStringLength);
-            var pastLogsArray = PastLogs.ToArray();
-            PastLogsString = string.Join("\n", pastLogsArray, pastLogsStart, pastLogsCount);
-
-            if (!pastLogsStringConsoleUseFilter)
-            {
-                pastLogsStringConsole = string.Join("\n", pastLogsArray, 0, pastLogsArray.Length);
-            }
+            WriteLog(logText, stackTrace, logTextNoSeverity, severity);
         }
 
         public static void CalcLogStringByFilter(string filter)

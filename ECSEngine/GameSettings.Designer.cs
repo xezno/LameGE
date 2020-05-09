@@ -61,7 +61,7 @@ namespace ECSEngine {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        [global::System.Configuration.DefaultSettingValueAttribute("120")]
         public int framerateLimit {
             get {
                 return ((int)(this["framerateLimit"]));
@@ -73,7 +73,7 @@ namespace ECSEngine {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("32")]
+        [global::System.Configuration.DefaultSettingValueAttribute("128")]
         public int gamePosX {
             get {
                 return ((int)(this["gamePosX"]));
@@ -85,7 +85,7 @@ namespace ECSEngine {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("32")]
+        [global::System.Configuration.DefaultSettingValueAttribute("128")]
         public int gamePosY {
             get {
                 return ((int)(this["gamePosY"]));
@@ -152,6 +152,30 @@ namespace ECSEngine {
             }
             set {
                 this["webPort"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.008")]
+        public float physicsTimeStep {
+            get {
+                return ((float)(this["physicsTimeStep"]));
+            }
+            set {
+                this["physicsTimeStep"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.004")]
+        public float updateTimeStep {
+            get {
+                return ((float)(this["updateTimeStep"]));
+            }
+            set {
+                this["updateTimeStep"] = value;
             }
         }
     }

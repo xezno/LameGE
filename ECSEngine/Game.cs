@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -154,6 +155,7 @@ namespace ECSEngine
             {
                 UpdateManager.Instance,
                 SceneManager.Instance,
+                PhysicsManager.Instance,
                 ScriptManager.Instance,
                 RconManager.Instance,
                 RconWebFrontendManager.Instance,
@@ -169,6 +171,9 @@ namespace ECSEngine
                     while (isRunning)
                     {
                         multiThreadedManager.Run();
+
+                        // Only update once every frame. Prevents multi-frame updating, but might break physics somewhere down the line
+                        Thread.Sleep((int)(GameSettings.Default.updateTimeStep * 1000f)); // TODO: Sync with framerate?
                     }
                 }));
             }

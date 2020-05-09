@@ -30,9 +30,16 @@ namespace ECSEngine.Managers
         {
             get
             {
-                if (privateInstance == null) privateInstance = Activator.CreateInstance<T>();
+                if (privateInstance == null)
+                    CreateInstance();
                 return privateInstance;
             }
+        }
+
+        public static void CreateInstance()
+        {
+            if (privateInstance == null) 
+                privateInstance = Activator.CreateInstance<T>();
         }
 
         /// <summary>

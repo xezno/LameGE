@@ -12,13 +12,13 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="framerateLimit" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">60</Value>
+      <Value Profile="(Default)">120</Value>
     </Setting>
     <Setting Name="gamePosX" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">32</Value>
+      <Value Profile="(Default)">128</Value>
     </Setting>
     <Setting Name="gamePosY" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">32</Value>
+      <Value Profile="(Default)">128</Value>
     </Setting>
     <Setting Name="fullscreen" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
@@ -34,6 +34,12 @@
     </Setting>
     <Setting Name="webPort" Type="System.String" Scope="User">
       <Value Profile="(Default)">42020</Value>
+    </Setting>
+    <Setting Name="physicsTimeStep" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">0.008</Value>
+    </Setting>
+    <Setting Name="updateTimeStep" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">0.004</Value>
     </Setting>
   </Settings>
 </SettingsFile>
