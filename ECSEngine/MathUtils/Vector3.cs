@@ -81,6 +81,10 @@ namespace ECSEngine.MathUtils
             return new Vertex3f(a.x, a.y, a.z);
         }
 
+        public static Vector3 up = new Vector3(0, 1, 0);
+        public static Vector3 right = new Vector3(1, 0, 0);
+        public static Vector3 forward = new Vector3(0, 0, 1);
+
         /// <summary>
         /// Get all values within the <see cref="Vector3"/> as a string.
         /// </summary>

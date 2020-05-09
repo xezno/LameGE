@@ -231,7 +231,7 @@ namespace ECSEngine
         private void MouseMove(object sender, NativeWindowMouseEventArgs e)
         {
             // TODO: Fix mouse positioning
-            var mousePos = new Vector2(e.Location.X + 16,
+            var mousePos = new Vector2(e.Location.X,
                 GameSettings.Default.gameResolutionY - e.Location.Y -
                 (GameSettings.Default.fullscreen ? 0 : titlebarHeight) + 16);
 

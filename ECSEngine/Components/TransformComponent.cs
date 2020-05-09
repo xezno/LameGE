@@ -1,5 +1,6 @@
 ﻿using ECSEngine.MathUtils;
 using OpenGL;
+using System;
 using Quaternion = ECSEngine.MathUtils.Quaternion;
 
 namespace ECSEngine.Components
@@ -48,10 +49,15 @@ namespace ECSEngine.Components
             }
         }
 
+        private bool MatrixInvertible => Math.Abs(Matrix.Determinant) > 1e-6f;
+
         public Vector3 Forward
         {
             get
             {
+                if (!MatrixInvertible)
+                    return Vector3.forward;
+
                 var inverseColumn = Matrix.Inverse.Column2;
                 return new Vector3(inverseColumn.x, inverseColumn.y, inverseColumn.z).Normalized;
             }
@@ -61,6 +67,9 @@ namespace ECSEngine.Components
         {
             get
             {
+                if (!MatrixInvertible)
+                    return Vector3.up;
+
                 var inverseColumn = Matrix.Inverse.Column1;
                 return new Vector3(inverseColumn.x, inverseColumn.y, inverseColumn.z).Normalized;
             }
@@ -70,6 +79,9 @@ namespace ECSEngine.Components
         {
             get
             {
+                if (!MatrixInvertible)
+                    return Vector3.right;
+
                 var inverseColumn = Matrix.Inverse.Column0;
                 return new Vector3(inverseColumn.x, inverseColumn.y, inverseColumn.z).Normalized;
             }
