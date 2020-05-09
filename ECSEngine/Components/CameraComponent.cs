@@ -33,10 +33,10 @@ namespace ECSEngine.Components
         {
             var transformComponent = GetComponent<TransformComponent>();
             viewMatrix = Matrix4x4f.Identity;
-            viewMatrix.RotateX(transformComponent.rotationEuler.x);
-            viewMatrix.RotateY(transformComponent.rotationEuler.y);
-            viewMatrix.RotateZ(transformComponent.rotationEuler.z);
-            viewMatrix *= (Matrix4x4f.LookAtDirection(transformComponent.position,
+            viewMatrix.RotateX(transformComponent.RotationEuler.x);
+            viewMatrix.RotateY(transformComponent.RotationEuler.y);
+            viewMatrix.RotateZ(transformComponent.RotationEuler.z);
+            viewMatrix *= (Matrix4x4f.LookAtDirection(transformComponent.Position,
                 new Vertex3f(0f, 0f, -1f),
                 new Vertex3f(0f, 1f, 0f)));
         }

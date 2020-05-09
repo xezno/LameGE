@@ -28,8 +28,8 @@ namespace ECSEngine.Entities
         /// </summary>
         public Vector3 Position
         {
-            get { return GetComponent<TransformComponent>().position; }
-            set { GetComponent<TransformComponent>().position = value; }
+            get { return GetComponent<TransformComponent>().Position; }
+            set { GetComponent<TransformComponent>().Position = value; }
         }
 
         /// <summary>
@@ -37,8 +37,8 @@ namespace ECSEngine.Entities
         /// </summary>
         public Vector3 RotationEuler
         {
-            get { return GetComponent<TransformComponent>().rotationEuler; }
-            set { GetComponent<TransformComponent>().rotationEuler = value; }
+            get { return GetComponent<TransformComponent>().RotationEuler; }
+            set { GetComponent<TransformComponent>().RotationEuler = value; }
         }
 
         /// <summary>

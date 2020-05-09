@@ -56,7 +56,7 @@ namespace ECSEngine.MathUtils
             n1 = DotGridGradient(x1, y1, x, y);
             ix1 = Lerp(n0, n1, sx);
 
-            //Debug.Log($"Perlin noise for pos {x}, {y}\n" +
+            //Logging.Log($"Perlin noise for pos {x}, {y}\n" +
             //          $"x0 = {x0}, x1 = {x1}, sx = {sx}\n" +
             //          $"y0 = {y0}, y1 = {y1}, sy = {sy}\n" +
             //          $"ix0 = {ix0}, ix1 = {ix1}, sy = {sy}\n" +

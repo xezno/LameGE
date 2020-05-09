@@ -2,7 +2,6 @@
 using ECSEngine.Components;
 using ECSEngine.Events;
 using ECSEngine.Managers.ImGuiWindows;
-using ECSEngine.Managers.ImGuiWindows.Addons;
 using ECSEngine.Managers.ImGuiWindows.Editor;
 using ECSEngine.Managers.ImGuiWindows.Overlays;
 using ECSEngine.Managers.ImGuiWindows.Scripts;
@@ -30,10 +29,6 @@ namespace ECSEngine.Managers
         public List<ImGuiMenu> Menus { get; } = new List<ImGuiMenu>()
         {
             new ImGuiMenu(FontAwesome5.File, "File", new List<IImGuiWindow>()),
-            new ImGuiMenu(FontAwesome5.Hammer, "Anvil", new List<IImGuiWindow>()
-            {
-                new AnvilBrowserWindow()
-            }),
             new ImGuiMenu(FontAwesome5.FileCode, "Scripts", new List<IImGuiWindow>()
             {
                 new ScriptCompileWindow()

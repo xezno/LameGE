@@ -14,7 +14,7 @@ namespace ECSEngine.Managers
         public virtual IHasParent Parent { get; set; }
 
         public void RenderImGui() { }
-
+        
         /// <summary>
         /// A list of entities that the manager contains.
         /// </summary>

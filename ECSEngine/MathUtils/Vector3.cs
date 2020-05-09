@@ -72,6 +72,10 @@ namespace ECSEngine.MathUtils
                                                                             a.y + b,
                                                                             a.z + b);
 
+        public static Vector3 operator %(Vector3 a, float b) => new Vector3(a.x % b,
+                                                                            a.y % b,
+                                                                            a.z % b);
+
         public static implicit operator Vertex3f(Vector3 a)
         {
             return new Vertex3f(a.x, a.y, a.z);

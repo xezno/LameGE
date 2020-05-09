@@ -24,7 +24,7 @@ namespace ECSEngine.Entities
 
         public void Bind(ShaderComponent shaderComponent)
         {
-            shaderComponent.SetVariable("light.pos", transformComponent.position);
+            shaderComponent.SetVariable("light.pos", transformComponent.Position);
             shaderComponent.SetVariable("light.range", lightComponent.range);
             shaderComponent.SetVariable("light.linear", lightComponent.linear);
             shaderComponent.SetVariable("light.quadratic", lightComponent.quadratic);

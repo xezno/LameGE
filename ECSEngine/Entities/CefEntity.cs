@@ -65,7 +65,7 @@ namespace ECSEngine.Entities
 
                 browser.LoadingStateChanged -= handler;
 
-                // Debug.Logging.Log($"CEF has finished loading page {cefFilePath}");
+                // Logging.Logging.Log($"CEF has finished loading page {cefFilePath}");
                 readyToDraw = true;
             };
 
@@ -82,9 +82,11 @@ namespace ECSEngine.Entities
 
             // if (!readyToDraw) return;
 
+            Gl.Disable(EnableCap.DepthTest);
             SetTextureData();
             // draw to screen
             base.Render();
+            Gl.Enable(EnableCap.DepthTest);
         }
 
         private void SetTextureData()

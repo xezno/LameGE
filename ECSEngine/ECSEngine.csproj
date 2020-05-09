@@ -337,7 +337,6 @@
     <Compile Include="GameProperties.cs" />
     <Compile Include="Managers\ImGuiMenu.cs" />
     <Compile Include="Managers\ImGuiWindows\ImGuiWindow.cs" />
-    <Compile Include="Managers\ImGuiWindows\Addons\AnvilBrowserWindow.cs" />
     <Compile Include="Managers\ImGuiWindows\Editor\TextureBrowserWindow.cs" />
     <Compile Include="Managers\ImGuiWindows\Overlays\ConsoleOverlayWindow.cs" />
     <Compile Include="Managers\ImGuiWindows\Editor\ConsoleWindow.cs" />
@@ -393,7 +392,9 @@
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Managers\ImGuiWindows\Addons\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

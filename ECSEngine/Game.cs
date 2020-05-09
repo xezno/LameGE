@@ -224,7 +224,7 @@ namespace ECSEngine
         private void MouseWheel(object sender, NativeWindowMouseEventArgs e)
         {
             EventManager.BroadcastEvent(Event.MouseScroll, new MouseWheelEventArgs(e.WheelTicks, this));
-            //Debug.Log($"Scrolled by {e.WheelTicks} ticks");
+            //Logging.Log($"Scrolled by {e.WheelTicks} ticks");
         }
 
         // For some reason this offsets by the titlebar height, and it's inverted, so we have to do some quick maths to fix that

@@ -23,10 +23,15 @@ namespace UlaidGame.Components
 
         public override void Update(float deltaTime)
         {
-            transformComponent.position += velocity * deltaTime;
-            SceneManager.Instance.mainCamera.Position = transformComponent.position;
+            transformComponent.Position += velocity * deltaTime;
+            SceneManager.Instance.mainCamera.Position = transformComponent.Position;
+
+            if (SceneManager.Instance.mainCamera.RotationEuler.x > 90)
+            {
+                // currentRotation.x = 90;
+            }
             SceneManager.Instance.mainCamera.RotationEuler = currentRotation * rotationSensitivity;
-            transformComponent.rotationEuler = currentRotation * rotationSensitivity;
+            transformComponent.RotationEuler = currentRotation * rotationSensitivity;
 
             currentDirection = (transformComponent.Forward * currentInput.z) + (transformComponent.Right * currentInput.x);
             currentDirection.y += currentInput.y;

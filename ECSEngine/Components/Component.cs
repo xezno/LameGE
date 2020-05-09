@@ -28,84 +28,134 @@ namespace ECSEngine.Components
         /// </summary>
         public virtual void RenderImGui()
         {
-            RenderImGuiFields();
+            RenderImGuiMembers();
         }
 
         /// <summary>
         /// Get all fields via reflection for use within ImGUI.
         /// </summary>
         /// <param name="depth"></param>
-        private void RenderImGuiFields(int depth = 0)
+        private void RenderImGuiMembers(int depth = 0)
         {
             // TODO: refactor this so it doesnt use dynamic
             if (depth > 1) return; // Prevent any dumb stack overflow errors
 
             foreach (var field in GetType().GetFields())
             {
-                RenderImGuiField(field, ref depth);
+                RenderImGuiMember(field, ref depth);
+            }
+            foreach (var property in GetType().GetProperties())
+            {
+                RenderImGuiMember(property, ref depth);
             }
         }
 
-        private void RenderImGuiField(FieldInfo field, ref int depth)
+        private void RenderImGuiMember(MemberInfo memberInfo, ref int depth)
         {
-            // this works but is, like, the worst solution ever
-            var referenceType = typeof(ReflectionRef<>).MakeGenericType(field.FieldType);
-            var reference = (dynamic /* alarm bells right here */)Activator.CreateInstance(referenceType, field, this);
-            if (field.FieldType == typeof(float))
+            Type type = null;
+            dynamic memberValue = null;
+            switch (memberInfo.MemberType)
             {
-                float value = reference.Value;
-                var min = float.MinValue;
-                var max = float.MaxValue;
-                var useSlider = false;
-                var fieldAttributes = field.GetCustomAttributes(false);
-                foreach (var attrib in fieldAttributes.Where(o => o.GetType() == typeof(RangeAttribute)))
-                {
-                    var rangeAttrib = (RangeAttribute)attrib;
-                    min = rangeAttrib.Min;
-                    max = rangeAttrib.Max;
-                    useSlider = true;
-                }
+                case MemberTypes.Field:
+                    memberValue = ((FieldInfo)memberInfo).GetValue(this);
+                    type = ((FieldInfo)memberInfo).FieldType;
+                    break;
+                case MemberTypes.Property:
+                    memberValue = ((PropertyInfo)memberInfo).GetValue(this);
+                    type = ((PropertyInfo)memberInfo).PropertyType;
+                    break;
+                default:
+                    throw new NotImplementedException($"Member type {memberInfo.MemberType} not implemented");
+            }
 
-                if (useSlider)
-                    ImGui.SliderFloat($"{field.Name}", ref value, min, max);
-                else
-                    ImGui.InputFloat($"{field.Name}", ref value);
-                reference.Value = value;
-            }
-            else if (field.FieldType == typeof(ColorRGB24))
+            // this works but is, like, the worst solution ever
+            var referenceType = typeof(ReflectionRef<>).MakeGenericType(type);
+            var reference = (dynamic /* alarm bells right here */)Activator.CreateInstance(referenceType, memberInfo, this);
+            if (type == typeof(float))
             {
-                var value = new Vector3(reference.Value.r / 255f, reference.Value.g / 255f, reference.Value.b / 255f);
-                ImGui.ColorEdit3($"{field.Name}", ref value);
-                reference.Value = new ColorRGB24((byte)(value.X * 255f), (byte)(value.Y * 255f), (byte)(value.Z * 255f));
+                DrawImGuiFloat(memberInfo, reference);
             }
-            else if (field.FieldType == typeof(MathUtils.Vector3))
+            else if (type == typeof(ColorRGB24))
             {
-                Vector3 value = reference.Value.ConvertToNumerics();
-                ImGui.DragFloat3(field.Name, ref value, 0.1f);
-                reference.Value = MathUtils.Vector3.ConvertFromNumerics(value);
+                DrawImGuiColor(memberInfo, reference);
             }
-            else if (field.FieldType == typeof(Quaternion))
+            else if (type == typeof(MathUtils.Vector3))
             {
-                Vector3 value = reference.Value.ToEulerAngles().ConvertToNumerics();
-                ImGui.DragFloat3(field.Name, ref value, 0.1f);
-                reference.Value = Quaternion.FromEulerAngles(MathUtils.Vector3.ConvertFromNumerics(value));
+                DrawImGuiVector3(memberInfo, reference);
             }
-            else if (field.FieldType == typeof(int))
+            else if (type == typeof(Quaternion))
             {
-                int value = reference.Value;
-                ImGui.DragInt($"{field.Name}", ref value);
-                reference.Value = value;
+                DrawImGuiQuaternion(memberInfo, reference);
             }
-            else if (field.FieldType == typeof(List<>) || field.FieldType.BaseType == typeof(Array))
+            else if (type == typeof(int))
             {
-                foreach (var element in (dynamic /* !!! */)field.GetValue(this))
-                {
-                    RenderImGuiFields(depth + 1);
-                }
+                DrawImGuiInt(memberInfo, reference);
+            }
+            else if (type == typeof(List<>) || type.BaseType == typeof(Array))
+            {
+                DrawImGuiArray(memberInfo, memberValue, depth);
             }
             else
             {
-                ImGui.LabelText($"{field.Name}", $"{field.GetValue(this)}");
+                ImGui.LabelText($"{memberInfo.Name}", $"{memberValue}");
+            }
+        }
+
+        private void DrawImGuiFloat(MemberInfo field, dynamic reference)
+        {
+            float value = reference.Value;
+            var min = float.MinValue;
+            var max = float.MaxValue;
+            var useSlider = false;
+            var fieldAttributes = field.GetCustomAttributes(false);
+            foreach (var attrib in fieldAttributes.Where(o => o.GetType() == typeof(RangeAttribute)))
+            {
+                var rangeAttrib = (RangeAttribute)attrib;
+                min = rangeAttrib.Min;
+                max = rangeAttrib.Max;
+                useSlider = true;
+            }
+
+            if (useSlider)
+                ImGui.SliderFloat($"{field.Name}", ref value, min, max);
+            else
+                ImGui.InputFloat($"{field.Name}", ref value);
+            reference.Value = value;
+        }
+
+        private void DrawImGuiColor(MemberInfo field, dynamic reference)
+        {
+            var value = new Vector3(reference.Value.r / 255f, reference.Value.g / 255f, reference.Value.b / 255f);
+            ImGui.ColorEdit3($"{field.Name}", ref value);
+            reference.Value = new ColorRGB24((byte)(value.X * 255f), (byte)(value.Y * 255f), (byte)(value.Z * 255f));
+        }
+
+        private void DrawImGuiVector3(MemberInfo field, dynamic reference)
+        {
+            Vector3 value = reference.Value.ConvertToNumerics();
+            ImGui.DragFloat3(field.Name, ref value, 0.1f);
+            reference.Value = MathUtils.Vector3.ConvertFromNumerics(value);
+        }
+
+        private void DrawImGuiQuaternion(MemberInfo field, dynamic reference)
+        {
+            Vector3 value = reference.Value.ToEulerAngles().ConvertToNumerics();
+            ImGui.DragFloat3(field.Name, ref value, 0.1f);
+            reference.Value = Quaternion.FromEulerAngles(MathUtils.Vector3.ConvertFromNumerics(value));
+        }
+
+        private void DrawImGuiInt(MemberInfo field, dynamic reference)
+        {
+            int value = reference.Value;
+            ImGui.DragInt($"{field.Name}", ref value);
+            reference.Value = value;
+        }
+
+        private void DrawImGuiArray(MemberInfo field, dynamic memberValue, int depth)
+        {
+            foreach (var element in memberValue)
+            {
+                RenderImGuiMembers(depth + 1);
             }
         }
 

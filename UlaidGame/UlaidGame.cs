@@ -1,8 +1,11 @@
 ﻿using ECSEngine;
+using ECSEngine.Assets;
 using ECSEngine.Entities;
 using ECSEngine.Managers;
+using ECSEngine.Managers.ImGuiWindows;
 using System.Collections.Generic;
 using UlaidGame.Entities;
+using UlaidGame.Managers.ImGuiWindows.Addons;
 
 namespace UlaidGame
 {
@@ -36,6 +39,18 @@ namespace UlaidGame
 
             foreach (IEntity entity in entities)
                 SceneManager.Instance.AddEntity(entity);
+
+            SetupCustomImGuiMenus();
+        }
+
+        private void SetupCustomImGuiMenus()
+        {
+            ImGuiManager.Instance.Menus.Add(
+                new ImGuiMenu(FontAwesome5.Hammer, "Anvil", new List<IImGuiWindow>()
+                {
+                    new AnvilBrowserWindow()
+                })
+            );
         }
     }
 }
