@@ -24,6 +24,9 @@ namespace ECSEngine.Entities
         private bool readyToDraw;
         private ChromiumWebBrowser browser;
 
+        private int mouseX, mouseY;
+        private RenderHandler renderHandler;
+
         public CefEntity()
         {
             AddComponent(new ShaderComponent(new Shader("Content/UI/Shaders/main.frag", ShaderType.FragmentShader),
@@ -39,10 +42,11 @@ namespace ECSEngine.Entities
             // setup cef instance
             var browserSettings = new BrowserSettings
             {
-                WindowlessFrameRate = 120
+                WindowlessFrameRate = 75,
             };
 
             var cefSettings = new CefSettings();
+            cefSettings.SetOffScreenRenderingBestPerformanceArgs();
             Cef.Initialize(cefSettings);
 
             var requestContextSettings = new RequestContextSettings();
@@ -50,9 +54,10 @@ namespace ECSEngine.Entities
             browser = new ChromiumWebBrowser(cefFilePath, browserSettings, requestContext);
             browser.Size = new Size((int)GameSettings.Default.gameResolutionX, (int)GameSettings.Default.gameResolutionY);
             browser.RenderHandler = new CEF.RenderHandler(browser);
-
             browser.BrowserInitialized += (sender, args) => { browser.Load(cefFilePath); };
             browser.LoadError += (sender, args) => DebugUtils.Logging.Log($"Browser error {args.ErrorCode}");
+
+            renderHandler = (RenderHandler)browser.RenderHandler;
 
             byte[] emptyData = new byte[browser.Size.Width * browser.Size.Height * 4];
             GetComponent<MaterialComponent>().materials[0].diffuseTexture =
@@ -91,7 +96,6 @@ namespace ECSEngine.Entities
 
         private void SetTextureData()
         {
-            var renderHandler = ((RenderHandler)browser.RenderHandler);
             if (!renderHandler.NeedsPaint)
                 return;
 
@@ -103,7 +107,8 @@ namespace ECSEngine.Entities
         {
             Gl.BindTexture(TextureTarget.Texture2d, GetComponent<MaterialComponent>().materials[0].diffuseTexture.glTexture);
 
-            Gl.TexSubImage2D(TextureTarget.Texture2d, 0, dirtyRect.X, dirtyRect.Y, dirtyRect.Width, dirtyRect.Height, PixelFormat.Bgra, PixelType.UnsignedByte, buffer);
+            // Switched to width/height instead of dirtyRect.width/dirtyRect.height, may not work properly?
+            Gl.TexSubImage2D(TextureTarget.Texture2d, 0, dirtyRect.X, dirtyRect.Y, width, height, PixelFormat.Bgra, PixelType.UnsignedByte, buffer);
             Gl.GenerateMipmap(TextureTarget.Texture2d);
 
             Gl.BindTexture(TextureTarget.Texture2d, 0);
@@ -115,6 +120,25 @@ namespace ECSEngine.Entities
             {
                 //browser.Dispose();
                 //requestContext.Dispose();
+            }
+            else if (eventType == Event.MouseButtonDown)
+            {
+                var mouseEventArgs = (MouseButtonEventArgs)baseEventArgs;
+                var mouseButtonType = mouseEventArgs.MouseButton == 0 ? MouseButtonType.Left : MouseButtonType.Right;
+                browser.GetBrowserHost().SendMouseClickEvent(new MouseEvent(mouseX, mouseY, CefEventFlags.None), mouseButtonType, false, 0);
+            }
+            else if (eventType == Event.MouseButtonUp)
+            {
+                var mouseEventArgs = (MouseButtonEventArgs)baseEventArgs;
+                var mouseButtonType = mouseEventArgs.MouseButton == 0 ? MouseButtonType.Left : MouseButtonType.Right;
+                browser.GetBrowserHost().SendMouseClickEvent(new MouseEvent(mouseX, mouseY, CefEventFlags.None), mouseButtonType, true, 0);
+            }
+            else if (eventType == Event.MouseMove)
+            {
+                var mouseMoveEventArgs = (MouseMoveEventArgs)baseEventArgs;
+                mouseX = (int)mouseMoveEventArgs.MousePosition.x;
+                mouseY = (int)mouseMoveEventArgs.MousePosition.y;
+                browser.GetBrowserHost().SendMouseMoveEvent(new MouseEvent(mouseX, mouseY, CefEventFlags.None), false);
             }
 
             base.HandleEvent(eventType, baseEventArgs);

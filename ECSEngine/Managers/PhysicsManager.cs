@@ -2,30 +2,139 @@
 using BepuPhysics.Collidables;
 using BepuPhysics.CollisionDetection;
 using BepuPhysics.Constraints;
+using BepuUtilities;
 using BepuUtilities.Memory;
 using System;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using System.Threading;
 
 namespace ECSEngine.Managers
 {
     public class PhysicsManager : Manager<PhysicsManager>
     {
         public Simulation Simulation { get; private set; }
-
-        private BufferPool bufferPool;
+        public BufferPool BufferPool { get; private set; }
+        public SimpleThreadDispatcher ThreadDispatcher { get; private set; }
 
         public PhysicsManager()
         {
-            bufferPool = new BufferPool();
+            BufferPool = new BufferPool();
 
-            Simulation = Simulation.Create(bufferPool, new NarrowPhaseCallbacks(), new PoseIntegratorCallbacks());
+            Simulation = Simulation.Create(BufferPool, new NarrowPhaseCallbacks(), new PoseIntegratorCallbacks(new Vector3(0, -9.8f, 0)));
+            ThreadDispatcher = new SimpleThreadDispatcher(Environment.ProcessorCount);
         }
-
 
         public override void Run()
         {
             base.Run();
+            Simulation.Timestep(GameSettings.Default.physicsTimeStep, ThreadDispatcher);
+        }
+    }
+
+    public class SimpleThreadDispatcher : IThreadDispatcher, IDisposable
+    {
+        public int ThreadCount { get; private set; }
+
+        volatile bool disposed;
+
+        Worker[] workers;
+        AutoResetEvent finished;
+
+        BufferPool[] bufferPools;
+
+        volatile Action<int> workerBody;
+        int workerIndex;
+        int completedWorkerCounter;
+
+        struct Worker
+        {
+            public Thread Thread;
+            public AutoResetEvent Signal;
+        }
+
+        public SimpleThreadDispatcher(int threadCount)
+        {
+            ThreadCount = threadCount;
+            workers = new Worker[threadCount - 1];
+            for (int i = 0; i < workers.Length; ++i)
+            {
+                workers[i] = new Worker { Thread = new Thread(WorkerLoop), Signal = new AutoResetEvent(false) };
+                workers[i].Thread.IsBackground = true;
+                workers[i].Thread.Start(workers[i].Signal);
+            }
+            finished = new AutoResetEvent(false);
+            bufferPools = new BufferPool[threadCount];
+            for (int i = 0; i < bufferPools.Length; ++i)
+            {
+                bufferPools[i] = new BufferPool();
+            }
+        }
+
+        void DispatchThread(int workerIndex)
+        {
+            workerBody(workerIndex);
+
+            if (Interlocked.Increment(ref completedWorkerCounter) == ThreadCount)
+            {
+                finished.Set();
+            }
+        }
+
+        void WorkerLoop(object untypedSignal)
+        {
+            var signal = (AutoResetEvent)untypedSignal;
+            while (true)
+            {
+                signal.WaitOne();
+                if (disposed)
+                    return;
+                DispatchThread(Interlocked.Increment(ref workerIndex) - 1);
+            }
+        }
+
+        void SignalThreads()
+        {
+            for (int i = 0; i < workers.Length; ++i)
+            {
+                workers[i].Signal.Set();
+            }
+        }
+
+        public void DispatchWorkers(Action<int> workerBody)
+        {
+            workerIndex = 1; // Just make the inline thread worker 0. While the other threads might start executing first, the user should never rely on the dispatch order.
+            completedWorkerCounter = 0;
+            this.workerBody = workerBody;
+            SignalThreads();
+
+            // Calling thread does work. No reason to spin up another worker and block this one!
+            DispatchThread(0);
+            finished.WaitOne();
+            this.workerBody = null;
+        }
+
+        public void Dispose()
+        {
+            if (!disposed)
+            {
+                disposed = true;
+                SignalThreads();
+                for (int i = 0; i < bufferPools.Length; ++i)
+                {
+                    bufferPools[i].Clear();
+                }
+                foreach (var worker in workers)
+                {
+                    worker.Thread.Join();
+                    worker.Signal.Dispose();
+                }
+            }
+        }
+
+        public BufferPool GetThreadMemoryPool(int workerIndex)
+        {
+            return bufferPools[workerIndex];
         }
     }
 

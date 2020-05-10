@@ -62,7 +62,7 @@ namespace ECSEngine.Render
             var textureDataPtr = Marshal.AllocHGlobal(textureData.Length);
             Marshal.Copy(textureData, 0, textureDataPtr, textureData.Length);
 
-            Gl.TexImage2D(TextureTarget.Texture2d, 0, InternalFormat.Rgba, image.Width, image.Height, 0, imageFormat, PixelType.UnsignedByte, textureDataPtr);
+            Gl.TexImage2D(TextureTarget.Texture2d, 0, InternalFormat.Rgba, image.Width, image.Height - 1/* fixes black pixel row*/, 0, imageFormat, PixelType.UnsignedByte, textureDataPtr);
             Gl.GenerateMipmap(TextureTarget.Texture2d);
 
             width = image.Width;
@@ -72,7 +72,7 @@ namespace ECSEngine.Render
 
             Marshal.FreeHGlobal(textureDataPtr);
 
-            DebugUtils.Logging.Log($"Texture {path} has texture ptr {glTexture}");
+            DebugUtils.Logging.Log($"Texture {path}: Size {width}x{height}, ptr {glTexture}");
         }
 
         public Texture2D(byte[] textureData, int width, int height, TextureUnit textureUnit = TextureUnit.Texture0)

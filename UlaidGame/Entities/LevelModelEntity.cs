@@ -1,6 +1,10 @@
-﻿using ECSEngine.Assets;
+﻿using BepuPhysics;
+using BepuPhysics.Collidables;
+using ECSEngine.Assets;
 using ECSEngine.Components;
+using ECSEngine.DebugUtils;
 using ECSEngine.Entities;
+using ECSEngine.Managers;
 using ECSEngine.MathUtils;
 using ECSEngine.Render;
 using OpenGL;
@@ -17,17 +21,29 @@ namespace UlaidGame.Entities
 
         private BSPLoader bspLoader;
         private Material mainMaterial;
+        private BepuPhysics.Collidables.Mesh physicsMesh;
+        private int physicsIndex;
+        private float bspScaleFactor = 0.0254000508f;
 
         public LevelModelEntity()
         {
-            AddComponent(new TransformComponent(new Vector3(0, 2f, -2f),
+            AddComponent(new TransformComponent(new Vector3(0, 300f, 0f),
                                                 new Vector3(270, 0, 0),
-                                                new Vector3(1, 1, 1) * 0.01f));
+                                                new Vector3(1, 1, 1) * bspScaleFactor));
             AddComponent(new ShaderComponent(new Shader("Content/Shaders/Standard/main.frag", ShaderType.FragmentShader),
                 new Shader("Content/Shaders/Standard/main.vert", ShaderType.VertexShader)));
 
-            bspLoader = new BSPLoader("Content/Maps/gm_construct.bsp");
+            bspLoader = new BSPLoader("Content/Maps/gm_flatgrass.bsp");
             AddMeshAndMaterialComponents("level01");
+            
+            var degToRad = 0.0174533f;
+            var transform = GetComponent<TransformComponent>();
+            // Add physics
+            physicsIndex = PhysicsManager.Instance.Simulation.Statics.Add(
+                new StaticDescription(transform.Position.ConvertToNumerics(), 
+                BepuUtilities.Quaternion.CreateFromYawPitchRoll(transform.RotationEuler.x * degToRad, transform.RotationEuler.y * degToRad, transform.RotationEuler.z * degToRad), 
+                new CollidableDescription(PhysicsManager.Instance.Simulation.Shapes.Add(physicsMesh), 0.1f)
+            ));
         }
 
         private void GenerateBSPMesh()
@@ -39,6 +55,47 @@ namespace UlaidGame.Entities
             var surfEdgeLump = (Lump<int>)bspLoader.Lumps[(int)BspLumpType.LumpSurfEdges];
             var faceLump = (Lump<Face>)bspLoader.Lumps[(int)BspLumpType.LumpFaces];
             var texInfoLump = (Lump<TexInfo>)bspLoader.Lumps[(int)BspLumpType.LumpTexInfo];
+
+            int triCount = 0;
+            foreach (var face in faceLump.Contents)
+            {
+                int rootPoint = 0, firstPoint = 0, secondPoint = 0;
+                for (int surfEdgeNum = 0; surfEdgeNum < face.numSurfEdges; surfEdgeNum++)
+                {
+                    var surfEdgeIndex = face.firstSurfEdge + surfEdgeNum;
+                    var edgeIndex = surfEdgeLump.Contents[surfEdgeIndex];
+
+                    bool reversed = edgeIndex < 0;
+                    Edge edge = edgeLump.Contents[Math.Abs(edgeIndex)];
+
+                    int vertPoint;
+                    if (surfEdgeNum == 0)
+                    {
+                        rootPoint = edge.vertexIndices[reversed ? 0 : 1];
+                        vertPoint = edge.vertexIndices[reversed ? 1 : 0];
+                    }
+                    else
+                    {
+                        vertPoint = edge.vertexIndices[reversed ? 0 : 1];
+
+                        if (vertPoint == rootPoint)
+                            continue;
+                        firstPoint = vertPoint;
+
+                        vertPoint = edge.vertexIndices[reversed ? 1 : 0];
+
+                        if (vertPoint == rootPoint)
+                            continue;
+                        secondPoint = vertPoint;
+                    }
+                    
+                    triCount++;
+                }
+            }
+            Logging.Log($"BSP has {triCount} tris");
+            var triangleIndex = 0;
+
+            PhysicsManager.Instance.BufferPool.Take<Triangle>(triCount, out var triangles);
 
             // setup vertices
             foreach (var vertex in vertexLump.Contents)
@@ -59,7 +116,6 @@ namespace UlaidGame.Entities
 
                     logStr += "\n\t";
                 }
-
             }
 
             // setup normals
@@ -71,8 +127,7 @@ namespace UlaidGame.Entities
             foreach (var face in faceLump.Contents)
             {
                 if (!face.onNode) continue;
-
-                int rootPoint = 0, vertPoint = 0, firstPoint = 0, secondPoint = 0;
+                int rootPoint = 0, firstPoint = 0, secondPoint = 0;
                 for (int surfEdgeNum = 0; surfEdgeNum < face.numSurfEdges; surfEdgeNum++)
                 {
                     var surfEdgeIndex = face.firstSurfEdge + surfEdgeNum;
@@ -83,6 +138,7 @@ namespace UlaidGame.Entities
                     bool reversed = edgeIndex < 0;
                     Edge edge = edgeLump.Contents[Math.Abs(edgeIndex)];
 
+                    int vertPoint;
                     if (surfEdgeNum == 0)
                     {
                         rootPoint = edge.vertexIndices[reversed ? 0 : 1];
@@ -111,7 +167,6 @@ namespace UlaidGame.Entities
                     var firstPointCoords = vertexLump.Contents[firstPoint];
                     var secondPointCoords = vertexLump.Contents[secondPoint];
 
-
                     meshComponent.RenderMesh.uvCoords.Add(GetUVCoords(texInfo, rootPointCoords));
                     meshComponent.RenderMesh.uvCoords.Add(GetUVCoords(texInfo, firstPointCoords));
                     meshComponent.RenderMesh.uvCoords.Add(GetUVCoords(texInfo, secondPointCoords));
@@ -131,8 +186,18 @@ namespace UlaidGame.Entities
                         (uint)meshComponent.RenderMesh.uvCoords.Count - 1,
                         face.planeNumber
                     ));
+                    
+                    // Triangle:
+                    // rootPoint - firstPoint - secondPoint
+                    triangles[triangleIndex++] = new Triangle(
+                        rootPointCoords.ConvertToNumerics(),
+                        firstPointCoords.ConvertToNumerics(),
+                        secondPointCoords.ConvertToNumerics()
+                    );
                 }
             }
+
+            physicsMesh = new BepuPhysics.Collidables.Mesh(triangles, new System.Numerics.Vector3(1, 1, 1) * bspScaleFactor, PhysicsManager.Instance.BufferPool);
 
             meshComponent.RenderMesh.GenerateBuffers();
             AddComponent(meshComponent);

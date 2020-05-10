@@ -154,8 +154,8 @@ namespace ECSEngine
             var multiThreadedManagers = new List<IManager>
             {
                 UpdateManager.Instance,
-                SceneManager.Instance,
                 PhysicsManager.Instance,
+                SceneManager.Instance,
                 ScriptManager.Instance,
                 RconManager.Instance,
                 RconWebFrontendManager.Instance,

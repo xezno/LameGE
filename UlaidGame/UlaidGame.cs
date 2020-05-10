@@ -30,6 +30,10 @@ namespace UlaidGame
                 {
                     Name = "Generated BSP Mesh"
                 },
+                new TestCubeEntity()
+                {
+                    Name = "Physics Box"
+                },
                 // TODO: fix this (anything that renders afterwards won't render at all?)
                 new CefEntity()
                 {
