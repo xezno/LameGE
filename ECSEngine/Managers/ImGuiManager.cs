@@ -226,12 +226,12 @@ namespace ECSEngine.Managers
 
             var clipOffset = drawData.DisplayPos;
             var clipScale = drawData.FramebufferScale;
-
+            int vertexOffset = 0;
             io.DisplaySize = windowSize;
 
             for (var commandListIndex = 0; commandListIndex < drawData.CmdListsCount; commandListIndex++)
             {
-                int indexOffset = 0, vertexOffset = 0;
+                int indexOffset = 0;
                 var commandList = drawData.CmdListsRange[commandListIndex];
 
                 Gl.BufferData(BufferTarget.ArrayBuffer, (uint)(commandList.VtxBuffer.Size * 20), commandList.VtxBuffer.Data, BufferUsage.DynamicDraw);
