@@ -226,7 +226,6 @@ namespace ECSEngine.Managers
 
             var clipOffset = drawData.DisplayPos;
             var clipScale = drawData.FramebufferScale;
-            int vertexOffset = 0;
             io.DisplaySize = windowSize;
 
             for (var commandListIndex = 0; commandListIndex < drawData.CmdListsCount; commandListIndex++)
@@ -249,11 +248,10 @@ namespace ECSEngine.Managers
                         );
                     Gl.Scissor((int)clipBounds.x, (int)(windowSize.Y - clipBounds.w), (int)(clipBounds.z - clipBounds.x), (int)(clipBounds.w - clipBounds.y));
                     defaultFontTexture.Bind();
-                    Gl.DrawElementsBaseVertex(PrimitiveType.Triangles, (int)currentCommand.ElemCount, DrawElementsType.UnsignedShort, (IntPtr)(indexOffset * 2), vertexOffset);
+                    Gl.DrawElementsBaseVertex(PrimitiveType.Triangles, (int)currentCommand.ElemCount, DrawElementsType.UnsignedShort, (IntPtr)(indexOffset * 2), 0);
 
                     indexOffset += (int)currentCommand.ElemCount;
                 }
-                vertexOffset += commandList.VtxBuffer.Size;
             }
 
             // TODO: Move these elsewhere to prevent later confusion
