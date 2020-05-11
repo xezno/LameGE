@@ -1,5 +1,5 @@
-﻿using Engine.DebugUtils;
-using Engine.MathUtils;
+﻿using Engine.Utils.DebugUtils;
+using Engine.Utils.MathUtils;
 using System.IO;
 using System.Linq;
 using Ulaid.Assets.BSP.Lumps;

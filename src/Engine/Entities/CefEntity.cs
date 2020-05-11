@@ -2,11 +2,14 @@
 using CefSharp.OffScreen;
 using CefSharp.Structs;
 using Engine.Assets;
-using Engine.Components;
+using Engine.ECS.Entities;
 using Engine.Entities.CEF;
 using Engine.Events;
-using Engine.MathUtils;
-using Engine.Render;
+using Engine.Renderer.GL.Components;
+using Engine.Renderer.GL.Render;
+using Engine.Utils;
+using Engine.Utils.DebugUtils;
+using Engine.Utils.MathUtils;
 using OpenGL;
 using System;
 using System.IO;
@@ -29,8 +32,8 @@ namespace Engine.Entities
 
         public CefEntity()
         {
-            AddComponent(new ShaderComponent(new Shader("Content/UI/Shaders/main.frag", ShaderType.FragmentShader),
-                new Shader("Content/UI/Shaders/main.vert", ShaderType.VertexShader)));
+            AddComponent(new ShaderComponent(new Shader("Content/UI/Shaders/main.frag", Shader.Type.FragmentShader),
+                new Shader("Content/UI/Shaders/main.vert", Shader.Type.VertexShader)));
             AddComponent(new TransformComponent(new Vector3(0, 0, 0), new Vector3(0, 0, 0), new Vector3(1, 1, 1)));
             AddComponent(new MaterialComponent(new Material("Content/UI/plane.mtl")));
             AddComponent(new MeshComponent(Primitives.Plane));
@@ -52,10 +55,10 @@ namespace Engine.Entities
             var requestContextSettings = new RequestContextSettings();
             var requestContext = new RequestContext(requestContextSettings);
             browser = new ChromiumWebBrowser(cefFilePath, browserSettings, requestContext);
-            browser.Size = new Size((int)GameSettings.Default.gameResolutionX, (int)GameSettings.Default.gameResolutionY);
+            browser.Size = new Size(GameSettings.GameResolutionX, GameSettings.GameResolutionY);
             browser.RenderHandler = new CEF.RenderHandler(browser);
             browser.BrowserInitialized += (sender, args) => { browser.Load(cefFilePath); };
-            browser.LoadError += (sender, args) => DebugUtils.Logging.Log($"Browser error {args.ErrorCode}");
+            browser.LoadError += (sender, args) => Logging.Log($"Browser error {args.ErrorCode}");
 
             renderHandler = (RenderHandler)browser.RenderHandler;
 

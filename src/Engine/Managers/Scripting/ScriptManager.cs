@@ -1,4 +1,6 @@
 ﻿using CSScriptLibrary;
+using Engine.ECS.Managers;
+using Engine.Utils.DebugUtils;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -19,11 +21,11 @@ namespace Engine.Managers.Scripting
         private void Init()
         {
             CSScript.GlobalSettings.SearchDirs += Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\Content\\Scripts;";
-            DebugUtils.Logging.Log($"CSScript search dirs: {CSScript.GlobalSettings.SearchDirs}");
+            Logging.Log($"CSScript search dirs: {CSScript.GlobalSettings.SearchDirs}");
             CSScript.CacheEnabled = false;
             CSScript.EvaluatorConfig.Engine = EvaluatorEngine.Mono;
 
-            DebugUtils.Logging.Log($"Using engine {CSScript.EvaluatorConfig.Engine}");
+            Logging.Log($"Using engine {CSScript.EvaluatorConfig.Engine}");
             CSScript.GlobalSettings.UseAlternativeCompiler = @"Content/CSScript/CSSRoslynProvider.dll";
 
             using var streamReader = new StreamReader("Content/Scripts/scripts.json");
@@ -32,7 +34,7 @@ namespace Engine.Managers.Scripting
 
             foreach (var script in config.ScriptList)
             {
-                DebugUtils.Logging.Log($"Loaded script {script.Path}");
+                Logging.Log($"Loaded script {script.Path}");
                 if (script.EntryPoint == null)
                 {
                     LoadScript("Content/Scripts/" + script.Path);
@@ -45,12 +47,12 @@ namespace Engine.Managers.Scripting
 
                     if (entryMethod == null)
                     {
-                        DebugUtils.Logging.Log($"Entry point {script.EntryPoint} not found!", DebugUtils.Logging.Severity.High);
+                        Logging.Log($"Entry point {script.EntryPoint} not found!", Logging.Severity.High);
                         return;
                     }
                     entryMethod.Invoke((object)scriptInstance, new object[] { });
 
-                    DebugUtils.Logging.Log($"Entry point {script.EntryPoint}");
+                    Logging.Log($"Entry point {script.EntryPoint}");
                 }
             }
         }
@@ -63,7 +65,7 @@ namespace Engine.Managers.Scripting
 
         public dynamic LoadScript(string path)
         {
-            DebugUtils.Logging.Log($"Loading script {path}");
+            Logging.Log($"Loading script {path}");
 
             dynamic instance = CSScript.Evaluator.LoadFile(path);
             ScriptList.Add(path, instance);

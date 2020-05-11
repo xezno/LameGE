@@ -1,0 +1,15 @@
+﻿{
+	"gameResolutionX": 1280,
+	"gameResolutionY": 720,
+	"vsyncEnabled": true,
+	"framerateLimit": 120,
+	"gamePosX": 128,
+	"gamePosY": 128,
+	"fullscreen": false,
+	"rconPassword": null,
+	"rconEnabled": false,
+	"rconPort": 42069,
+	"webPort": 42020,
+	"physTimeStep": 0.008,
+	"updateTimeStep": 0.004
+}

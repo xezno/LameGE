@@ -1,8 +1,10 @@
 ﻿using Engine;
 using Engine.Assets;
+using Engine.ECS.Entities;
 using Engine.Entities;
 using Engine.Managers;
-using Engine.Managers.ImGuiWindows;
+using Engine.Renderer.GL.Managers;
+using Engine.Renderer.GL.Managers.ImGuiWindows;
 using System.Collections.Generic;
 using Ulaid.Entities;
 using Ulaid.Managers.ImGuiWindows.Addons;

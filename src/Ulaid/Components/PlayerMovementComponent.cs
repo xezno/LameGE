@@ -1,7 +1,10 @@
 ﻿using Engine.Components;
+using Engine.ECS.Components;
 using Engine.Events;
 using Engine.Managers;
-using Engine.MathUtils;
+using Engine.Renderer.GL.Components;
+using Engine.Renderer.GL.Managers;
+using Engine.Utils.MathUtils;
 using OpenGL.CoreUI;
 using System;
 

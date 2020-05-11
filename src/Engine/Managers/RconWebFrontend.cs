@@ -1,5 +1,7 @@
-﻿using Engine.DebugUtils;
+﻿using Engine.ECS.Managers;
 using Engine.Events;
+using Engine.Utils;
+using Engine.Utils.DebugUtils;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -15,14 +17,14 @@ namespace Engine.Managers
 
         public RconWebFrontendManager()
         {
-            if (!GameSettings.Default.rconEnabled)
+            if (!GameSettings.RconEnabled)
                 return;
 
             listener = new HttpListener();
-            listener.Prefixes.Add($"http://127.0.0.1:{GameSettings.Default.webPort}/");
+            listener.Prefixes.Add($"http://127.0.0.1:{GameSettings.WebPort}/");
             listener.Start();
 
-            Logging.Log($"Web console is listening on :{GameSettings.Default.webPort}");
+            Logging.Log($"Web console is listening on :{GameSettings.WebPort}");
 
             httpThread = new Thread(HttpThread);
             httpThread.Start();

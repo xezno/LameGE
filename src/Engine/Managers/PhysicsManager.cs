@@ -4,6 +4,8 @@ using BepuPhysics.CollisionDetection;
 using BepuPhysics.Constraints;
 using BepuUtilities;
 using BepuUtilities.Memory;
+using Engine.ECS.Managers;
+using Engine.Utils;
 using System;
 using System.Numerics;
 using System.Runtime.CompilerServices;
@@ -28,7 +30,7 @@ namespace Engine.Managers
         public override void Run()
         {
             base.Run();
-            Simulation.Timestep(GameSettings.Default.physicsTimeStep, ThreadDispatcher);
+            Simulation.Timestep(GameSettings.PhysTimeStep, ThreadDispatcher);
         }
     }
 

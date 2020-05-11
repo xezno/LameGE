@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <OutputType>Library</OutputType>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Platforms>AnyCPU;x86</Platforms>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="ImGui.NET" Version="1.75.0" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="OpenGL.Net" Version="0.8.4" />
+    <PackageReference Include="OpenGL.Net.CoreUI" Version="0.8.4" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.0-preview.3.20214.6" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Engine.ECS\Engine.ECS.csproj" />
+    <ProjectReference Include="..\Engine.Utils\Engine.Utils.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="OpenGL.Net.CoreUI">
+      <HintPath>..\..\..\OpenGL.Net\OpenGL.Net.CoreUI\bin\net461\Debug\OpenGL.Net.CoreUI.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

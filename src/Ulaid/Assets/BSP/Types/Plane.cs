@@ -1,4 +1,4 @@
-﻿using Engine.MathUtils;
+﻿using Engine.Utils.MathUtils;
 
 namespace Ulaid.Assets.BSP.Types
 {

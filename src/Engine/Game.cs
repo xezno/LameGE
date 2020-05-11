@@ -1,26 +1,26 @@
-﻿using Engine.DebugUtils;
-using Engine.Events;
+﻿using Engine.Events;
 using Engine.Managers;
 using Engine.Managers.Scripting;
-using Engine.MathUtils;
-using Engine.Render;
+using Engine.Utils.MathUtils;
 using Engine.Types;
 using Newtonsoft.Json;
-using OpenGL;
 using OpenGL.CoreUI;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Threading;
+using Engine.ECS.Managers;
+using Engine.Renderer.GL.Render;
+using Engine.Renderer.GL.Managers;
+using Engine.Utils;
 
 namespace Engine
 {
     public class Game : IHasParent
     {
         #region Variables
-        private readonly Gl.DebugProc debugCallback; // Stored to prevent GC from collecting debug callback before it can be called
+        private readonly Engine.Renderer.GL.Renderer renderer;
         private readonly string gamePropertyPath;
         private readonly List<Thread> threads = new List<Thread>();
 
@@ -44,22 +44,24 @@ namespace Engine
         public Game(string gamePropertyPath)
         {
             this.gamePropertyPath = gamePropertyPath;
-            debugCallback = DebugCallback;
+            this.renderer = new Engine.Renderer.GL.Renderer();
         }
 
         public void RenderImGui() { }
 
         public void Run()
         {
+            GameSettings.LoadValues();
+
             LoadGameProperties();
             InitNativeWindow();
         }
 
         private void Render(object sender, NativeWindowEventArgs e)
         {
-            Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit); // Clear non-fb
+            renderer.PrepareRender();
             mainFramebuffer.PreRender();
-            Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit); // Clear fb
+            renderer.PrepareFramebufferRender();
 
             foreach (var manager in mainThreadManagers)
             {
@@ -70,7 +72,7 @@ namespace Engine
             mainFramebuffer.Render();
             ImGuiManager.Instance.Run();
 
-            Gl.Finish();
+            renderer.FinishRender();
         }
         #endregion
 
@@ -96,13 +98,13 @@ namespace Engine
             nativeWindow.DepthBits = 24;
             nativeWindow.SwapInterval = 0;
             nativeWindow.Resize += Resize;
-            nativeWindow.Create(GameSettings.Default.gamePosX, GameSettings.Default.gamePosY, GameSettings.Default.gameResolutionX + 16, GameSettings.Default.gameResolutionY + 16, NativeWindowStyle.Caption);
+            nativeWindow.Create(GameSettings.GamePosX, GameSettings.GamePosY, (uint)GameSettings.GameResolutionX + 16, (uint)GameSettings.GameResolutionY + 16, NativeWindowStyle.Caption);
 
             // nativeWindow.SetCursorPos(new Point((int)(RenderSettings.Default.gamePosX + (RenderSettings.Default.gameResolutionX / 2)),
             //  (int)(RenderSettings.Default.gamePosY + (RenderSettings.Default.gameResolutionY / 2))));
 
-            nativeWindow.Fullscreen = GameSettings.Default.fullscreen;
-            nativeWindow.Caption = FilterString(gameProperties.WindowTitle) ?? "ECSEngine Game";
+            nativeWindow.Fullscreen = GameSettings.Fullscreen;
+            // nativeWindow.Caption = FilterString(gameProperties.WindowTitle) ?? "ECSEngine Game";
 
             // TODO: get choice of monitor to use.
 
@@ -154,7 +156,7 @@ namespace Engine
                 UpdateManager.Instance,
                 PhysicsManager.Instance,
                 SceneManager.Instance,
-                ScriptManager.Instance,
+                // ScriptManager.Instance,
                 RconManager.Instance,
                 RconWebFrontendManager.Instance,
             };
@@ -171,7 +173,7 @@ namespace Engine
                         multiThreadedManager.Run();
 
                         // Only update once every frame. Prevents multi-frame updating, but might break physics somewhere down the line
-                        Thread.Sleep((int)(GameSettings.Default.updateTimeStep * 1000f)); // TODO: Sync with framerate?
+                        Thread.Sleep((int)(GameSettings.UpdateTimeStep * 1000f)); // TODO: Sync with framerate?
                     }
                 }));
             }
@@ -193,21 +195,13 @@ namespace Engine
         #region Event Handlers
         private void ContextCreated(object sender, NativeWindowEventArgs e)
         {
-            Logging.Log($"OpenGL {Gl.GetString(StringName.Version)}");
-            CheckHardwareCompatibility();
-            Gl.ReadBuffer(ReadBufferMode.Back);
-            Gl.Enable(EnableCap.Blend);
-            Gl.Enable(EnableCap.CullFace);
-            Gl.Enable(EnableCap.DepthTest);
-            Gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-
-            Gl.DebugMessageCallback(debugCallback, IntPtr.Zero);
+            renderer.Init();
 
             InitSystems();
             InitScene();
             LoadContent();
 
-            mainFramebuffer = new Framebuffer();
+            mainFramebuffer = new Framebuffer(GameSettings.GameResolutionX, GameSettings.GameResolutionY);
 
             // Setup complete - broadcast the game started event
             EventManager.BroadcastEvent(Event.GameStart, new GenericEventArgs(this));
@@ -218,7 +212,7 @@ namespace Engine
         {
             var windowSize = new Vector2(nativeWindow.ClientSize.Width, nativeWindow.ClientSize.Height);
 
-            Gl.Viewport(0, 0, nativeWindow.ClientSize.Width, nativeWindow.ClientSize.Height);
+            // renderer.SetViewportSize();
 
             EventManager.BroadcastEvent(Event.WindowResized, new WindowResizeEventArgs(windowSize, this));
         }
@@ -235,8 +229,8 @@ namespace Engine
         {
             // TODO: Fix mouse positioning
             var mousePos = new Vector2(e.Location.X,
-                GameSettings.Default.gameResolutionY - e.Location.Y -
-                (GameSettings.Default.fullscreen ? 0 : titlebarHeight) + 16);
+                GameSettings.GameResolutionY - e.Location.Y -
+                (GameSettings.Fullscreen ? 0 : titlebarHeight) + 16);
 
             var mouseDelta = lastMousePos - mousePos;
 
@@ -284,34 +278,6 @@ namespace Engine
         private void ContextDestroyed(object sender, NativeWindowEventArgs e)
         {
             isRunning = false;
-        }
-
-        private void DebugCallback(DebugSource source, DebugType type, uint id, DebugSeverity severity, int length, IntPtr message, IntPtr userParam)
-        {
-            if (severity >= DebugSeverity.DebugSeverityMedium)
-                DebugUtils.Logging.Log($"OpenGL Error {id}: {Marshal.PtrToStringAnsi(message, length)}", DebugUtils.Logging.Severity.Fatal);
-        }
-
-        private void CheckHardwareCompatibility()
-        {
-            var requiredExtensions = new[] { "GL_ARB_spirv_extensions" };
-            var existingExtensions = new List<String>();
-
-            var extensionCount = 0;
-            Gl.GetInteger(GetPName.NumExtensions, out extensionCount);
-
-            for (int i = 0; i < extensionCount; ++i)
-            {
-                existingExtensions.Add(Gl.GetString(StringName.Extensions, (uint)i));
-            }
-
-            foreach (var extension in requiredExtensions)
-            {
-                if (!existingExtensions.Contains(extension))
-                {
-                    Logging.Log($"GPU does not support extension {extension}", Logging.Severity.Fatal);
-                }
-            }
         }
         #endregion
     }

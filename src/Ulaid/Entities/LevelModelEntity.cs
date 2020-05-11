@@ -1,13 +1,12 @@
 ﻿using BepuPhysics;
 using BepuPhysics.Collidables;
 using Engine.Assets;
-using Engine.Components;
-using Engine.DebugUtils;
-using Engine.Entities;
+using Engine.ECS.Entities;
 using Engine.Managers;
-using Engine.MathUtils;
-using Engine.Render;
-using OpenGL;
+using Engine.Renderer.GL.Components;
+using Engine.Renderer.GL.Render;
+using Engine.Utils.DebugUtils;
+using Engine.Utils.MathUtils;
 using System;
 using Ulaid.Assets.BSP;
 using Ulaid.Assets.BSP.Lumps;
@@ -30,8 +29,8 @@ namespace Ulaid.Entities
             AddComponent(new TransformComponent(new Vector3(0, 300f, 0f),
                                                 new Vector3(270, 0, 0),
                                                 new Vector3(1, 1, 1) * bspScaleFactor));
-            AddComponent(new ShaderComponent(new Shader("Content/Shaders/Standard/main.frag", ShaderType.FragmentShader),
-                new Shader("Content/Shaders/Standard/main.vert", ShaderType.VertexShader)));
+            AddComponent(new ShaderComponent(new Shader("Content/Shaders/Standard/main.frag", Shader.Type.FragmentShader),
+                new Shader("Content/Shaders/Standard/main.vert", Shader.Type.VertexShader)));
 
             bspLoader = new BSPLoader("Content/Maps/gm_flatgrass.bsp");
             AddMeshAndMaterialComponents("level01");
@@ -39,11 +38,11 @@ namespace Ulaid.Entities
             var degToRad = 0.0174533f;
             var transform = GetComponent<TransformComponent>();
             // Add physics
-            physicsIndex = PhysicsManager.Instance.Simulation.Statics.Add(
-                new StaticDescription(transform.Position.ConvertToNumerics(), 
-                BepuUtilities.Quaternion.CreateFromYawPitchRoll(transform.RotationEuler.x * degToRad, transform.RotationEuler.y * degToRad, transform.RotationEuler.z * degToRad), 
-                new CollidableDescription(PhysicsManager.Instance.Simulation.Shapes.Add(physicsMesh), 0.1f)
-            ));
+            //physicsIndex = PhysicsManager.Instance.Simulation.Statics.Add(
+            //    new StaticDescription(transform.Position.ConvertToNumerics(), 
+            //    // BepuUtilities.Quaternion.CreateFromYawPitchRoll(transform.RotationEuler.x * degToRad, transform.RotationEuler.y * degToRad, transform.RotationEuler.z * degToRad), 
+            //    new CollidableDescription(PhysicsManager.Instance.Simulation.Shapes.Add(physicsMesh), 0.1f)
+            //));
         }
 
         private void GenerateBSPMesh()

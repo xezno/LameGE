@@ -1,11 +1,13 @@
-﻿using Engine.DebugUtils;
-using Fleck;
+﻿using Fleck;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
-using Engine.DebugUtils.Rcon;
+using Engine.ECS.Managers;
+using Engine.Utils.DebugUtils;
+using Engine.Utils.DebugUtils.Rcon;
+using Engine.Utils;
 
 namespace Engine.Managers
 {
@@ -23,14 +25,14 @@ namespace Engine.Managers
         #region Constructor
         public RconManager()
         {
-            // WARNING! DO NOT LOG IN HERE!
+            // WARNING! DO NOT LOGGING.LOG IN HERE!
 
-            if (!GameSettings.Default.rconEnabled)
+            if (!GameSettings.RconEnabled)
                 return;
 
             FleckLog.LogAction = CustomFleckLog;
 
-            var socketServer = new WebSocketServer($"ws://0.0.0.0:{GameSettings.Default.rconPort}")
+            var socketServer = new WebSocketServer($"ws://0.0.0.0:{GameSettings.RconPort}")
             {
                 SupportedSubProtocols = new[] { "ulaidRcon" },
                 ListenerSocket =
@@ -38,6 +40,8 @@ namespace Engine.Managers
                     NoDelay = true
                 }
             };
+
+            Logging.onDebugLog += SendDebugLog;
 
             socketServer.Start(InitConnection);
         }
@@ -138,7 +142,7 @@ namespace Engine.Managers
         private void HandleHandshake(RconPacket rconPacket)
         {
             Logging.Log("Received handshake from client.");
-            if (string.IsNullOrEmpty(GameSettings.Default.rconPassword))
+            if (string.IsNullOrEmpty(GameSettings.RconPassword))
             {
                 Logging.Log("Rcon authentication is disabled! Please enter a password in GameSettings if this is incorrect", Logging.Severity.Medium);
 
@@ -154,7 +158,7 @@ namespace Engine.Managers
 
         private void HandleAuthentication(RconPacket rconPacket)
         {
-            if (rconPacket.data["password"] == GameSettings.Default.rconPassword)
+            if (rconPacket.data["password"] == GameSettings.RconPassword)
             {
                 authenticated = true;
                 SendLogHistory();
