@@ -1,5 +1,4 @@
-﻿using Engine.Components;
-using Engine.Renderer.GL.Components;
+﻿using Engine.Renderer.GL.Components;
 using OpenGL;
 using System;
 

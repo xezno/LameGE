@@ -10,7 +10,7 @@ namespace Engine.Types
 
         public T Value
         {
-            get 
+            get
             {
                 switch (memberInfo.MemberType)
                 {
@@ -22,10 +22,10 @@ namespace Engine.Types
                             return (T)propertyInfo.GetValue(origin);
                         else
                             throw new NotImplementedException($"Property has no get method");
-                } 
+                }
                 throw new NotImplementedException($"Member type {memberInfo.MemberType} not implemented");
             }
-            set 
+            set
             {
                 switch (memberInfo.MemberType)
                 {

@@ -1,12 +1,10 @@
-﻿using BepuPhysics;
-using BepuPhysics.Collidables;
+﻿using BepuPhysics.Collidables;
 using Engine.Assets;
 using Engine.ECS.Entities;
 using Engine.Managers;
 using Engine.Renderer.GL.Components;
 using Engine.Renderer.GL.Render;
 using Engine.Utils.MathUtils;
-using OpenGL;
 
 namespace Ulaid.Entities
 {

@@ -12,7 +12,7 @@ namespace Engine.Renderer.GL
 
         public Renderer()
         {
-            
+
             debugCallback = DebugCallback;
         }
 

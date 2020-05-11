@@ -1,5 +1,6 @@
-﻿using Engine.Events;
+﻿using Engine.Assets;
 using Engine.ECS.Components;
+using Engine.Events;
 using Engine.Types;
 using Engine.Utils.Attributes;
 using ImGuiNET;
@@ -7,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Engine.Assets;
 
 namespace Engine.ECS.Entities
 {

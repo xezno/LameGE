@@ -1,6 +1,5 @@
 ﻿using Engine.Assets;
 using Engine.ECS.Entities;
-using Engine.Entities;
 using ImGuiNET;
 
 namespace Engine.Renderer.GL.Managers.ImGuiWindows.Editor

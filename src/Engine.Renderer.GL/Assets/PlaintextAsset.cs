@@ -1,11 +1,11 @@
-﻿using Engine.Utils.Attributes;
+﻿using Engine.Renderer.GL.Render;
+using Engine.Utils.Attributes;
+using Engine.Utils.DebugUtils;
 using Engine.Utils.MathUtils;
-using Engine.Renderer.GL.Render;
 using OpenGL;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Engine.Utils.DebugUtils;
 
 namespace Engine.Renderer.GL.Assets
 {
@@ -189,7 +189,7 @@ namespace Engine.Renderer.GL.Assets
                             }
                             else
                             {
-                                Logging.Log($"Unknown attribute type {field.FieldType.Name} on opcode {string.Join(" ", ((TextAssetOpcodeAttribute)attribute).opcodes)}.", 
+                                Logging.Log($"Unknown attribute type {field.FieldType.Name} on opcode {string.Join(" ", ((TextAssetOpcodeAttribute)attribute).opcodes)}.",
                                     Logging.Severity.High);
                             }
                         }

@@ -24,7 +24,8 @@ namespace Engine.Renderer.GL.Components
         /// <summary>
         /// The entity's rotation.
         /// </summary>
-        public Vector3 RotationEuler { 
+        public Vector3 RotationEuler
+        {
             get => rotationEuler;
             set => rotationEuler = value % 360f;
         }

@@ -1,11 +1,11 @@
-﻿using Engine.Utils.MathUtils;
-using Engine.ECS.Components;
+﻿using Engine.ECS.Components;
+using Engine.Renderer.GL.Render;
+using Engine.Utils.DebugUtils;
+using Engine.Utils.MathUtils;
 using ImGuiNET;
 using OpenGL;
 using System;
 using System.Collections.Generic;
-using Engine.Renderer.GL.Render;
-using Engine.Utils.DebugUtils;
 
 namespace Engine.Renderer.GL.Components
 {

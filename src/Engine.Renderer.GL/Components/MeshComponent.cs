@@ -1,5 +1,4 @@
-﻿using Engine.Components;
-using Engine.ECS.Components;
+﻿using Engine.ECS.Components;
 using Engine.ECS.Entities;
 using Engine.Renderer.GL.Managers;
 using Engine.Renderer.GL.Render;

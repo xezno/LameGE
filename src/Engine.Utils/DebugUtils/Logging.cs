@@ -32,7 +32,7 @@ namespace Engine.Utils.DebugUtils
         /// All previous logged strings from the current session for display within the <see cref="ImGuiManager"/> console.
         /// </summary>
         public static string pastLogsStringConsole; // TODO: replace with property
-        
+
         public delegate void DebugLogHandler(DateTime dateTime, StackTrace stackTrace, string logText, Severity severity);
         public static DebugLogHandler onDebugLog;
 

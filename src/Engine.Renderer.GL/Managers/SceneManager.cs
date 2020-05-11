@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using Engine.ECS.Managers;
+﻿using Engine.ECS.Managers;
 using Engine.Entities;
 using Engine.Renderer.GL.Entities;
 using Engine.Utils;
+using System.Collections.Generic;
 
 namespace Engine.Renderer.GL.Managers
 {

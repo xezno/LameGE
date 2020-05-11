@@ -1,8 +1,11 @@
-﻿using Engine.Events;
+﻿using Engine.ECS.Managers;
+using Engine.Events;
 using Engine.Managers;
-using Engine.Managers.Scripting;
-using Engine.Utils.MathUtils;
+using Engine.Renderer.GL.Managers;
+using Engine.Renderer.GL.Render;
 using Engine.Types;
+using Engine.Utils;
+using Engine.Utils.MathUtils;
 using Newtonsoft.Json;
 using OpenGL.CoreUI;
 using System;
@@ -10,10 +13,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Threading;
-using Engine.ECS.Managers;
-using Engine.Renderer.GL.Render;
-using Engine.Renderer.GL.Managers;
-using Engine.Utils;
 
 namespace Engine
 {

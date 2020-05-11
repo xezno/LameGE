@@ -1,6 +1,7 @@
-﻿using Engine.Utils.Attributes;
+﻿using Engine.ECS.Entities;
 using Engine.Events;
 using Engine.Types;
+using Engine.Utils.Attributes;
 using ImGuiNET;
 using OpenGL;
 using System;
@@ -9,7 +10,6 @@ using System.Linq;
 using System.Numerics;
 using System.Reflection;
 using Quaternion = Engine.Utils.MathUtils.Quaternion;
-using Engine.ECS.Entities;
 
 namespace Engine.ECS.Components
 {

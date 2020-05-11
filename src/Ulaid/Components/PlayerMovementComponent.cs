@@ -1,7 +1,5 @@
-﻿using Engine.Components;
-using Engine.ECS.Components;
+﻿using Engine.ECS.Components;
 using Engine.Events;
-using Engine.Managers;
 using Engine.Renderer.GL.Components;
 using Engine.Renderer.GL.Managers;
 using Engine.Utils.MathUtils;

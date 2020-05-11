@@ -1,5 +1,4 @@
-﻿using BepuPhysics;
-using BepuPhysics.Collidables;
+﻿using BepuPhysics.Collidables;
 using Engine.Assets;
 using Engine.ECS.Entities;
 using Engine.Managers;
@@ -34,7 +33,7 @@ namespace Ulaid.Entities
 
             bspLoader = new BSPLoader("Content/Maps/gm_flatgrass.bsp");
             AddMeshAndMaterialComponents("level01");
-            
+
             var degToRad = 0.0174533f;
             var transform = GetComponent<TransformComponent>();
             // Add physics
@@ -87,7 +86,7 @@ namespace Ulaid.Entities
                             continue;
                         secondPoint = vertPoint;
                     }
-                    
+
                     triCount++;
                 }
             }
@@ -185,7 +184,7 @@ namespace Ulaid.Entities
                         (uint)meshComponent.RenderMesh.uvCoords.Count - 1,
                         face.planeNumber
                     ));
-                    
+
                     // Triangle:
                     // rootPoint - firstPoint - secondPoint
                     triangles[triangleIndex++] = new Triangle(

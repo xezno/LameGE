@@ -14,7 +14,7 @@ namespace Engine.ECS.Managers
         public virtual IHasParent Parent { get; set; }
 
         public void RenderImGui() { }
-        
+
         /// <summary>
         /// A list of entities that the manager contains.
         /// </summary>
@@ -38,7 +38,7 @@ namespace Engine.ECS.Managers
 
         public static void CreateInstance()
         {
-            if (privateInstance == null) 
+            if (privateInstance == null)
                 privateInstance = Activator.CreateInstance<T>();
         }
 
