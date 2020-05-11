@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Engine.Assets;
 
 namespace Engine.ECS.Entities
 {
@@ -28,7 +29,7 @@ namespace Engine.ECS.Entities
             set => name = value;
         }
 
-        public virtual string IconGlyph { get; } = "?";
+        public virtual string IconGlyph { get; } = FontAwesome5.Box;
 
         public virtual List<string> Tags { get; set; } = new List<string>();
 
