@@ -1,13 +1,13 @@
-﻿using ECSEngine.Assets;
-using ECSEngine.DebugUtils;
-using ECSEngine.Managers;
-using ECSEngine.Managers.ImGuiWindows;
-using ECSEngine.Managers.Scripting;
+﻿using Engine.Assets;
+using Engine.DebugUtils;
+using Engine.Managers;
+using Engine.Managers.ImGuiWindows;
+using Engine.Managers.Scripting;
 using ImGuiNET;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace UlaidGame.Scripts
+namespace Ulaid.Scripts
 {
     class PackageHook
     {
