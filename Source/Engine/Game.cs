@@ -1,6 +1,7 @@
 ﻿using Engine.ECS.Managers;
 using Engine.Events;
 using Engine.Managers;
+using Engine.Managers.Scripting;
 using Engine.Renderer.GL.Managers;
 using Engine.Renderer.GL.Render;
 using Engine.Types;
@@ -244,7 +245,6 @@ namespace Engine
                     this));
 
             lastMousePos = mousePos;
-
 
             //if (MouseMode == MouseMode.Locked)
             //    nativeWindow.SetCursorPos(new Point(0, 0));

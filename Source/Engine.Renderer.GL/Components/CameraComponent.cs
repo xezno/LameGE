@@ -36,13 +36,13 @@ namespace Engine.Components
         {
             var transformComponent = GetComponent<TransformComponent>();
             viewMatrix = Matrix4x4f.Identity;
+            viewMatrix.RotateX(transformComponent.RotationEuler.x);
+            viewMatrix.RotateY(transformComponent.RotationEuler.y);
+            viewMatrix.RotateZ(transformComponent.RotationEuler.z);
             viewMatrix *= (Matrix4x4f.LookAtDirection(
                 new Vertex3f(transformComponent.Position.x, transformComponent.Position.y, transformComponent.Position.z),
                 new Vertex3f(0f, 0f, -1f),
                 new Vertex3f(0f, 1f, 0f)));
-            viewMatrix.RotateX(transformComponent.RotationEuler.x);
-            viewMatrix.RotateY(transformComponent.RotationEuler.y);
-            viewMatrix.RotateZ(transformComponent.RotationEuler.z);
         }
     }
 }

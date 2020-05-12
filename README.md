@@ -2,18 +2,34 @@
 
 This is a basic game engine created for personal practice and use; it uses the [entity-component-system (ECS) pattern](http://t-machine.org/index.php/2007/11/11/entity-systems-are-the-future-of-mmog-development-part-2/) wherever possible.
 
-## Prerequisites
+## Building
 
-### Required
+### Prerequisites
+
+#### Required
 
 - .NET Core 3.1
 - Visual Studio 2019
 - Windows
 
-### Recommendations
+#### Recommendations
 
 - Windows 10
 - A decent graphics card & processor
+
+### Instructions
+
+1. First, clone the repository recursively with `git clone --recursive https://github.com/xezno/engine`
+
+2. Next, run `git submodule update` to ensure that all submodules are up to date.
+
+3. Then, build OpenGL.Net:
+   
+   - Open the `Other/OpenGL.Net/OpenGL.Net_VC15.sln` file
+   
+   - Build the projects `OpenGL.Net.CoreUI_netcore3.1` and `OpenGL.Net.Math_netcore3.1`
+
+4. Once complete, open Source/Ulaid.sln and build the solution.
 
 ## Code Conventions
 
