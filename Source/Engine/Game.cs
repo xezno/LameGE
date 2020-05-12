@@ -100,11 +100,8 @@ namespace Engine
             nativeWindow.Resize += Resize;
             nativeWindow.Create(GameSettings.GamePosX, GameSettings.GamePosY, (uint)GameSettings.GameResolutionX + 16, (uint)GameSettings.GameResolutionY + 16, NativeWindowStyle.Caption);
 
-            // nativeWindow.SetCursorPos(new Point((int)(RenderSettings.Default.gamePosX + (RenderSettings.Default.gameResolutionX / 2)),
-            //  (int)(RenderSettings.Default.gamePosY + (RenderSettings.Default.gameResolutionY / 2))));
-
             nativeWindow.Fullscreen = GameSettings.Fullscreen;
-            // nativeWindow.Caption = FilterString(gameProperties.WindowTitle) ?? "ECSEngine Game";
+            nativeWindow.Caption = FilterString(gameProperties.WindowTitle) ?? "Engine Game";
 
             // TODO: get choice of monitor to use.
 
@@ -247,7 +244,8 @@ namespace Engine
             lastMousePos = mousePos;
 
             //if (MouseMode == MouseMode.Locked)
-            //    nativeWindow.SetCursorPos(new Point(0, 0));
+            //    nativeWindow.SetCursorPos(new Point((int)(GameSettings.GamePosX + (GameSettings.GameResolutionX / 2)),
+            //        (int)(GameSettings.GamePosY + (GameSettings.GameResolutionY / 2))));
         }
 
         private void MouseUp(object sender, NativeWindowMouseEventArgs e)
