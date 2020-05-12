@@ -1,8 +1,9 @@
 ﻿using Engine.Assets;
-using Engine.DebugUtils;
 using Engine.Managers;
-using Engine.Managers.ImGuiWindows;
 using Engine.Managers.Scripting;
+using Engine.Renderer.GL.Managers;
+using Engine.Renderer.GL.Managers.ImGuiWindows;
+using Engine.Utils.DebugUtils;
 using ImGuiNET;
 using System.Collections.Generic;
 using System.Linq;
