@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{BBBDB147-5B8C-4087-8F15-2431CBBD56C5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Engine.Utils</RootNamespace>
+    <AssemblyName>Engine.Utils</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Attributes\RangeAttribute.cs" />
+    <Compile Include="Attributes\RequiresAttribute.cs" />
+    <Compile Include="Attributes\TextAssetOpcodeAttribute.cs" />
+    <Compile Include="DebugUtils\DebugHistoryEntry.cs" />
+    <Compile Include="DebugUtils\DebugMember.cs" />
+    <Compile Include="DebugUtils\DebugMethod.cs" />
+    <Compile Include="DebugUtils\DebugResult.cs" />
+    <Compile Include="DebugUtils\DebugResultType.cs" />
+    <Compile Include="DebugUtils\DebugVariable.cs" />
+    <Compile Include="DebugUtils\Logging.cs" />
+    <Compile Include="DebugUtils\Rcon\RconPacket.cs" />
+    <Compile Include="DebugUtils\Rcon\RconPacketType.cs" />
+    <Compile Include="MathUtils\Levenshtein.cs" />
+    <Compile Include="MathUtils\Noise.cs" />
+    <Compile Include="MathUtils\Quaternion.cs" />
+    <Compile Include="MathUtils\Vector2.cs" />
+    <Compile Include="MathUtils\Vector3.cs" />
+    <Compile Include="MathUtils\Vector4.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

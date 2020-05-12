@@ -1,0 +1,3 @@
+[submodule "Other/OpenGL.Net"]
+	path = Other/OpenGL.Net
+	url = https://github.com/xezno/OpenGL.Net/
