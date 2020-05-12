@@ -19,12 +19,6 @@
     <ProjectReference Include="..\..\Source\Engine.Utils\Engine.Utils.csproj" />
     <ProjectReference Include="..\..\Source\Engine\Engine.csproj" />
     <ProjectReference Include="..\..\Source\Ulaid\Ulaid.csproj" />
-    <ProjectReference Include="..\..\src\Engine.ECS\Engine.ECS.csproj" />
-    <ProjectReference Include="..\..\src\Engine.Events\Engine.Events.csproj" />
-    <ProjectReference Include="..\..\src\Engine.Renderer.GL\Engine.Renderer.GL.csproj" />
-    <ProjectReference Include="..\..\src\Engine.Utils\Engine.Utils.csproj" />
-    <ProjectReference Include="..\..\src\Engine\Engine.csproj" />
-    <ProjectReference Include="..\..\src\Ulaid\Ulaid.csproj" />
   </ItemGroup>
 
 </Project>

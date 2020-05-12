@@ -1,6 +1,5 @@
 ﻿using Engine.Assets;
 using Engine.Managers;
-using Engine.Managers.Scripting;
 using Engine.Renderer.GL.Managers;
 using Engine.Renderer.GL.Managers.ImGuiWindows;
 using Engine.Utils.DebugUtils;
@@ -40,16 +39,16 @@ namespace Ulaid.Scripts
 
         private void DrawScriptsWindow()
         {
-            for (int i = 0; i < ScriptManager.Instance.ScriptList.Count; ++i)
-            {
-                var scriptName = ScriptManager.Instance.ScriptList.Keys.ToArray()[i];
-                ImGui.LabelText("##hidelabel", scriptName);
-                ImGui.SameLine();
-                if (ImGui.Button("Reload"))
-                {
-                    ScriptManager.Instance.ReloadScript(scriptName);
-                }
-            }
+            //for (int i = 0; i < ScriptManager.Instance.ScriptList.Count; ++i)
+            //{
+            //    var scriptName = ScriptManager.Instance.ScriptList.Keys.ToArray()[i];
+            //    ImGui.LabelText("##hidelabel", scriptName);
+            //    ImGui.SameLine();
+            //    if (ImGui.Button("Reload"))
+            //    {
+            //        ScriptManager.Instance.ReloadScript(scriptName);
+            //    }
+            //}
         }
 
         public void Draw()

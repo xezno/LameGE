@@ -1,7 +1,6 @@
 ﻿using Engine.ECS.Managers;
 using Engine.Events;
 using Engine.Managers;
-using Engine.Managers.Scripting;
 using Engine.Renderer.GL.Managers;
 using Engine.Renderer.GL.Render;
 using Engine.Types;
