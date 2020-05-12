@@ -1,6 +1,6 @@
 ﻿{
-	"gameResolutionX": 1280,
-	"gameResolutionY": 720,
+	"gameResolutionX": 1600,
+	"gameResolutionY": 900,
 	"vsyncEnabled": true,
 	"framerateLimit": 120,
 	"gamePosX": 128,

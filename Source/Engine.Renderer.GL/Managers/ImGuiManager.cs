@@ -116,7 +116,7 @@ namespace Engine.Renderer.GL.Managers
         {
             io.KeyMap[(int)ImGuiKey.Tab] = (int)KeyCode.Tab;
             io.KeyMap[(int)ImGuiKey.Enter] = (int)KeyCode.Return;
-            // io.KeyMap[(int)ImGuiKey.Backspace] = (int)KeyCode.Back;
+            io.KeyMap[(int)ImGuiKey.Backspace] = (int)KeyCode.Back;
             io.KeyMap[(int)ImGuiKey.LeftArrow] = (int)KeyCode.Left;
             io.KeyMap[(int)ImGuiKey.RightArrow] = (int)KeyCode.Right;
             io.KeyMap[(int)ImGuiKey.UpArrow] = (int)KeyCode.Up;
@@ -309,18 +309,18 @@ namespace Engine.Renderer.GL.Managers
                         c = '\t';
                         break;
                     case KeyCode.Decimal:
-                    //case KeyCode.Period:
-                    //    c = '.';
-                    //    break;
-                    //case KeyCode.Comma:
-                    //    c = ',';
-                    //    break;
-                    //case KeyCode.Plus:
-                    //    c = '+';
-                    //    break;
-                    //case KeyCode.Minus:
-                    //    c = '-';
-                    //    break;
+                    case KeyCode.Period:
+                        c = '.';
+                        break;
+                    case KeyCode.Comma:
+                        c = ',';
+                        break;
+                    case KeyCode.Plus:
+                        c = '+';
+                        break;
+                    case KeyCode.Minus:
+                        c = '-';
+                        break;
                     case KeyCode.Return:
                     case KeyCode.Right:
                     case KeyCode.Up:
