@@ -89,7 +89,7 @@ namespace Engine.Entities
             // declare a bool that allows us to detect when we need to
             // setup the texture.
 
-            // if (!readyToDraw) return;
+            if (!readyToDraw) return;
 
             Gl.Disable(EnableCap.DepthTest);
 
