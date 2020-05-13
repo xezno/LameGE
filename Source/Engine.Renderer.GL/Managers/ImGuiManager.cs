@@ -327,7 +327,7 @@ namespace Engine.Renderer.GL.Managers
                     case KeyCode.Down:
                     case KeyCode.Left:
                     case KeyCode.Delete:
-                    //case KeyCode.Back:
+                    case KeyCode.Back:
                     case KeyCode.Shift:
                     case KeyCode.Control:
                         // Ignore
