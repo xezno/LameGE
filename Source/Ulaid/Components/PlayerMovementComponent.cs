@@ -21,6 +21,7 @@ namespace Ulaid.Components
         public float mouseSensitivityMultiplier = 0.1f;
         public float rotationSensitivity = 3f;
         private TransformComponent transformComponent;
+        private bool lockRotation;
 
         public override void Update(float deltaTime)
         {
@@ -90,10 +91,16 @@ namespace Ulaid.Components
                     case KeyCode.Control:
                         currentInput.y = eventType == Event.KeyDown ? -1 : 0;
                         break;
+                    case KeyCode.F1:
+                        if (eventType == Event.KeyUp)
+                            lockRotation = !lockRotation;
+                        break;
                 }
             }
             else if (eventType == Event.MouseMove)
             {
+                if (lockRotation) 
+                    return;
                 MouseMoveEventArgs mouseEventArgs = (MouseMoveEventArgs)baseEventArgs;
                 currentRotation += new Vector3(mouseEventArgs.MouseDelta.y * -mouseSensitivityMultiplier,
                     mouseEventArgs.MouseDelta.x * -mouseSensitivityMultiplier,

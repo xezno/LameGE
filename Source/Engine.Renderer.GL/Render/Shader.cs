@@ -63,6 +63,11 @@ namespace Engine.Renderer.GL.Render
             Compile();
         }
 
+        public void Delete()
+        {
+            Gl.DeleteShader(GlShader);
+        }
+
         public void ReadSourceFromFile()
         {
             shaderSource = new string[1];

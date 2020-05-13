@@ -31,7 +31,7 @@ namespace Ulaid.Entities
             AddComponent(new ShaderComponent(new Shader("Content/Shaders/Standard/main.frag", Shader.Type.FragmentShader),
                 new Shader("Content/Shaders/Standard/main.vert", Shader.Type.VertexShader)));
 
-            bspLoader = new BSPLoader("Content/Maps/paranoia.bsp");
+            bspLoader = new BSPLoader("Content/Maps/gm_flatgrass.bsp");
             AddMeshAndMaterialComponents("level01");
 
             var degToRad = 0.0174533f;

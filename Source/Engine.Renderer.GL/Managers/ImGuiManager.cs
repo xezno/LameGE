@@ -29,6 +29,7 @@ namespace Engine.Renderer.GL.Managers
 
         private uint vbo, vao, ebo;
         private bool showEditor;
+        private bool lockCursor;
 
         public List<ImGuiMenu> Menus { get; } = new List<ImGuiMenu>()
         {
@@ -43,7 +44,8 @@ namespace Engine.Renderer.GL.Managers
                 new ScenePropertiesWindow(),
                 new ConsoleWindow(),
                 new PerformanceWindow(),
-                new TextureBrowserWindow()
+                new TextureBrowserWindow(),
+                new ShaderWindow()
             })
         };
 
@@ -361,6 +363,9 @@ namespace Engine.Renderer.GL.Managers
                                 break;
                             case KeyCode.F1:
                                 showEditor = !showEditor;
+                                break;
+                            case KeyCode.F2:
+                                lockCursor = !lockCursor;
                                 break;
                             default:
                                 io.AddInputCharacter(KeyCodeToChar(keyCode));

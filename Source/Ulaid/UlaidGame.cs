@@ -40,7 +40,7 @@ namespace Ulaid
                 new CefEntity()
                 {
                     Name = "CEF HUD Entity"
-                }
+                },
             };
 
             foreach (IEntity entity in entities)

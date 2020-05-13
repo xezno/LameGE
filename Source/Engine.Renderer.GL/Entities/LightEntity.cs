@@ -2,6 +2,7 @@
 using Engine.Components;
 using Engine.ECS.Entities;
 using Engine.Renderer.GL.Components;
+using Engine.Renderer.GL.Render;
 using Engine.Utils.MathUtils;
 
 namespace Engine.Entities
@@ -15,9 +16,14 @@ namespace Engine.Entities
 
         public LightEntity()
         {
-            // Add mesh component
-            transformComponent = new TransformComponent(new Vector3(0, 2f, 0f), Quaternion.identity, new Vector3(1, 1, 1));
+            transformComponent = new TransformComponent(new Vector3(0, 2f, 0f), Quaternion.identity, new Vector3(1, 1, 1) * 0.5f);
             AddComponent(transformComponent);
+
+            // Add mesh components for visualisation 
+            AddComponent(new ShaderComponent(new Shader("Content/Shaders/Unlit/main.frag", Shader.Type.FragmentShader),
+                new Shader("Content/Shaders/Unlit/main.vert", Shader.Type.VertexShader)));
+            AddComponent(new MaterialComponent(new Material($"Content/Materials/cube.mtl")));
+            AddComponent(new MeshComponent($"Content/Models/cube.obj"));
 
             // See values from http://wiki.ogre3d.org/-Point+Light+Attenuation
             lightComponent = new LightComponent(600, 0.007f, 0.0002f);

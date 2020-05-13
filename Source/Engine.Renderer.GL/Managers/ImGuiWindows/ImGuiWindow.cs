@@ -1,4 +1,5 @@
-﻿using ImGuiNET;
+﻿using Engine.Events;
+using ImGuiNET;
 using System.Numerics;
 
 namespace Engine.Renderer.GL.Managers.ImGuiWindows
@@ -19,5 +20,7 @@ namespace Engine.Renderer.GL.Managers.ImGuiWindows
             ImGui.GetBackgroundDrawList().AddText(
                 position, 0xFFFFFFFF, str);
         }
+        
+        public virtual void HandleEvent(Event eventType, IEventArgs baseEventArgs) { }
     }
 }

@@ -72,39 +72,20 @@ out vec4 fragColor;
 
 vec3 modelPos;
 vec3 cameraDirection;
-vec3 lightDirection;
-vec3 normalizedNormal;
 
 vec3 CalcAmbience()
 {
-    return material.ambientColor.xyz * 0.1;
-}
-
-vec3 CalcDiffuse()
-{
-    float diffuseStrength = max(dot(normalizedNormal, lightDirection), 0.0);
-    return vec3(diffuseStrength);
-}
-
-vec3 CalcSpecular()
-{
-    float specularStrength = 1;
-    float specularPower = 32;
-    vec3 viewDirection = normalize(cameraPos - outFragPos);
-    vec3 reflectDirection = reflect(-lightDirection, normalizedNormal);
-    float specularDirection = pow(max(dot(viewDirection, reflectDirection), 0.0), specularPower);
-    return specularStrength * specularDirection * material.specularColor.xyz;
+    return material.ambientColor.xyz;
 }
 
 vec3 CalcFullMix()
 {
-    return (CalcAmbience() + CalcSpecular() + CalcDiffuse()) * texture(material.diffuseTexture, outUvCoord).xyz;
+    return CalcAmbience() * texture(material.diffuseTexture, outUvCoord).xyz;
 }
 
 void main()
 {
-    normalizedNormal = normalize(outNormal);
-    lightDirection = normalize(light.pos - outFragPos);
+    cameraDirection = normalize(cameraPos - modelPos);
 
     fragColor = vec4(CalcFullMix(), 1.0 - material.transparency);
 }
