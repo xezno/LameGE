@@ -21,8 +21,8 @@ namespace Engine.Entities
     // TODO: Move to component, render to a texture and make a HudEntity instead
     public sealed class CefEntity : Entity<CefEntity>
     {
-        // private string cefFilePath = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/Content/UI/index.html";
-        private string cefFilePath = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/Content/UI/vue-rewrite/menus/dist/index.html";
+        private string cefFilePath = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/Content/UI/index.html";
+        // private string cefFilePath = $"localhost:5500";
 
         public override string IconGlyph { get; } = FontAwesome5.Wrench;
         private bool readyToDraw;
@@ -30,6 +30,8 @@ namespace Engine.Entities
 
         private int mouseX, mouseY;
         private RenderHandler renderHandler;
+
+        private Texture2D modifiedTexture;
 
         public CefEntity()
         {
@@ -79,6 +81,8 @@ namespace Engine.Entities
             };
 
             browser.LoadingStateChanged += handler;
+
+            modifiedTexture = new Texture2D(IntPtr.Zero, GameSettings.GameResolutionX, GameSettings.GameResolutionY, 32);
         }
 
         public override void Render()
@@ -97,6 +101,8 @@ namespace Engine.Entities
             base.Render();
             SetTextureData();
 
+            GetComponent<MaterialComponent>().materials[0].diffuseTexture = modifiedTexture;
+
             Gl.Enable(EnableCap.DepthTest);
         }
 
@@ -112,7 +118,7 @@ namespace Engine.Entities
 
         private void Paint(PaintElementType type, Rect dirtyRect, IntPtr buffer, int width, int height)
         {
-            Gl.BindTexture(TextureTarget.Texture2d, GetComponent<MaterialComponent>().materials[0].diffuseTexture.glTexture);
+            Gl.BindTexture(TextureTarget.Texture2d, modifiedTexture.glTexture);
 
             // Switched to width/height instead of dirtyRect.width/dirtyRect.height, may not work properly?
 

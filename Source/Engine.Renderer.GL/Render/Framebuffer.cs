@@ -11,6 +11,9 @@ namespace Engine.Renderer.GL.Render
 
         private readonly ShaderComponent shaderComponent;
         private readonly Mesh mesh = Primitives.Plane;
+        private float exposure = 0.75f;
+
+        public float Exposure { get => exposure; set => exposure = value; }
 
         public Framebuffer(int gameResX, int gameResY)
         {
@@ -48,6 +51,7 @@ namespace Engine.Renderer.GL.Render
             Gl.BindTexture(TextureTarget.Texture2d, colorTexture);
 
             shaderComponent.SetVariable("texture", 0);
+            shaderComponent.SetVariable("exposure", exposure);
 
             Gl.DrawArrays(PrimitiveType.Triangles, 0, mesh.ElementCount * sizeof(float));
 

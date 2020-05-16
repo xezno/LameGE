@@ -20,6 +20,7 @@ namespace Ulaid.Components
         public float maxSpeed = 10.0f;
         public float mouseSensitivityMultiplier = 0.1f;
         public float rotationSensitivity = 3f;
+        public float minVelocity = 0.05f;
         private TransformComponent transformComponent;
         private bool lockRotation;
 
@@ -52,6 +53,11 @@ namespace Ulaid.Components
                 Math.Max(Math.Min(velocity.y, maxSpeed), -maxSpeed),
                 Math.Max(Math.Min(velocity.z, maxSpeed), -maxSpeed)
             );
+            
+            if (velocity.Magnitude < minVelocity)
+            {
+                velocity = new Vector3(0, 0, 0);
+            }
         }
 
         public float EaseLerp(float a, float b, float t)

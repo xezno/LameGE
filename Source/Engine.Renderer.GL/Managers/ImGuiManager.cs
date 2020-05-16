@@ -166,12 +166,30 @@ namespace Engine.Renderer.GL.Managers
             ImGui.EndMainMenuBar();
             ImGui.PopStyleVar();
         }
+
+        private void DrawNotification()
+        {
+            var windowSize = new Vector2(250, 0);
+            var margin = new Vector2(16, 16);
+            ImGui.SetNextWindowSize(windowSize);
+            ImGui.Begin("Notification title");
+            ImGui.Text("Notification text");
+            ImGui.Text("Loading asset 420/840");
+            ImGui.ProgressBar(0.5f);
+            ImGui.End();
+            windowSize = ImGui.GetWindowPos();
+            ImGui.SetWindowPos("Notification title", new Vector2(
+                GameSettings.GameResolutionX - windowSize.X - margin.X,
+                GameSettings.GameResolutionY - windowSize.Y - margin.Y
+            ));
+        }
         #endregion
 
         public override void Run()
         {
 #if DEBUG
             ImGui.NewFrame();
+            DrawNotification();
 
             if (showEditor)
             {

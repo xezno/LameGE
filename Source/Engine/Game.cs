@@ -37,6 +37,7 @@ namespace Engine
 
         public IHasParent Parent { get; set; }
         public MouseMode MouseMode { get; set; } = MouseMode.Locked;
+        public Framebuffer MainFramebuffer { get => mainFramebuffer; private set => mainFramebuffer = value; }
         #endregion
 
         #region Methods

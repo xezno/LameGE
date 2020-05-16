@@ -77,7 +77,7 @@ vec3 normalizedNormal;
 
 vec3 CalcAmbience()
 {
-    return material.ambientColor.xyz * 0.1;
+    return material.ambientColor.xyz * 0.05;
 }
 
 vec3 CalcDiffuse()
@@ -88,12 +88,12 @@ vec3 CalcDiffuse()
 
 vec3 CalcSpecular()
 {
-    float specularStrength = 1;
-    float specularPower = 32;
+    float specularStrength = 0.5;
+    float specularPower = 16;
     vec3 viewDirection = normalize(cameraPos - outFragPos);
-    vec3 reflectDirection = reflect(-lightDirection, normalizedNormal);
-    float specularDirection = pow(max(dot(viewDirection, reflectDirection), 0.0), specularPower);
-    return specularStrength * specularDirection * material.specularColor.xyz;
+    vec3 halfwayDirection = normalize(lightDirection + cameraDirection);
+    float specularDirection = pow(max(dot(normalizedNormal, halfwayDirection), 0.0), specularPower);
+    return specularStrength * specularDirection * vec3(1.0);
 }
 
 vec3 CalcFullMix()

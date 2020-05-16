@@ -9,7 +9,7 @@ namespace Engine.Renderer.GL.Managers.ImGuiWindows.Editor
     {
         public override string Title { get; } = "Texture Browser";
         public override string IconGlyph { get; } = FontAwesome5.Square;
-        public override bool Render { get; set; };
+        public override bool Render { get; set; }
 
         private int selectedTextureUnit = 0;
 
