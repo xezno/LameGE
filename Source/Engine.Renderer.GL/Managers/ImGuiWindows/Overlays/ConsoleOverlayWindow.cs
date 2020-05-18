@@ -1,5 +1,6 @@
 ﻿using Engine.Assets;
 using Engine.Utils.DebugUtils;
+using ImGuiNET;
 using System.Numerics;
 
 namespace Engine.Renderer.GL.Managers.ImGuiWindows.Overlays
@@ -12,7 +13,7 @@ namespace Engine.Renderer.GL.Managers.ImGuiWindows.Overlays
 
         public override void Draw()
         {
-            DrawShadowLabel(Logging.PastLogsString, new Vector2(8, 8));
+            DrawShadowLabel(Logging.PastLogsString, ImGui.GetStyle().WindowPadding);
         }
     }
 }

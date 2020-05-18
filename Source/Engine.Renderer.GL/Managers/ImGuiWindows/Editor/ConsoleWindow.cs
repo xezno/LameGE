@@ -1,14 +1,15 @@
 ﻿using Engine.Assets;
+using Engine.Events;
 using Engine.Utils.DebugUtils;
 using ImGuiNET;
-using System;
+using OpenGL.CoreUI;
 using System.Numerics;
 
 namespace Engine.Renderer.GL.Managers.ImGuiWindows.Editor
 {
     class ConsoleWindow : ImGuiWindow
     {
-        public override bool Render { get; set; }
+        public override bool Render { get; set; } = true;
         public override string IconGlyph { get; } = FontAwesome5.Terminal;
         public override string Title { get; } = "Console";
 
@@ -18,7 +19,7 @@ namespace Engine.Renderer.GL.Managers.ImGuiWindows.Editor
         {
             ImGui.PushItemWidth(-1);
             ImGui.SetScrollHereY(1.0f);
-            ImGui.InputTextMultiline("Console", ref Logging.pastLogsStringConsole, UInt32.MaxValue, new Vector2(-1, -52), ImGuiInputTextFlags.ReadOnly);
+            ImGui.InputTextMultiline("Console", ref Logging.pastLogsStringConsole, uint.MaxValue, new Vector2(-1, -64), ImGuiInputTextFlags.ReadOnly);
             ImGui.PopItemWidth();
 
             if (ImGui.InputText("Filter", ref currentConsoleFilter, 256))
@@ -26,7 +27,21 @@ namespace Engine.Renderer.GL.Managers.ImGuiWindows.Editor
                 Logging.CalcLogStringByFilter(currentConsoleFilter);
             }
 
-            ImGui.InputText("Input", ref currentConsoleInput, 256);
+            ImGui.InputText("##hidelabel", ref currentConsoleInput, 256);
+            ImGui.SameLine();
+            ImGui.Button("Submit");
+        }
+
+        public override void HandleEvent(Event eventType, IEventArgs baseEventArgs)
+        {
+            // TODO: Event not ever fired
+            if (eventType == Event.KeyUp)
+            {
+                if (((KeyboardEventArgs)baseEventArgs).KeyboardKey == (int)KeyCode.F3)
+                {
+                    Render = !Render;
+                }
+            }
         }
     }
 }

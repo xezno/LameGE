@@ -103,7 +103,7 @@ namespace Engine.Managers
 
         private void OnMessage(string message)
         {
-            var rconPacket = Newtonsoft.Json.JsonConvert.DeserializeObject<RconPacket>(message);
+            var rconPacket = JsonConvert.DeserializeObject<RconPacket>(message);
 
             switch (rconPacket.type)
             {

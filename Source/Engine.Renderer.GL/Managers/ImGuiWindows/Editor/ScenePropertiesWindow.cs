@@ -6,7 +6,7 @@ namespace Engine.Renderer.GL.Managers.ImGuiWindows.Editor
 {
     class ScenePropertiesWindow : ImGuiWindow
     {
-        public override bool Render { get; set; }
+        public override bool Render { get; set; } = true;
         public override string IconGlyph { get; } = FontAwesome5.Sitemap;
         public override string Title { get; } = "Scene Properties";
 

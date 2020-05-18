@@ -32,10 +32,10 @@ namespace Ulaid
                 {
                     Name = "Generated BSP Mesh"
                 },
-                new TestCubeEntity()
-                {
-                    Name = "Physics Box"
-                },
+                //new TestCubeEntity()
+                //{
+                //    Name = "Physics Box"
+                //},
                 // TODO: fix this (anything that renders afterwards won't render at all?)
                 new CefEntity()
                 {
@@ -52,7 +52,7 @@ namespace Ulaid
         private void SetupCustomImGuiMenus()
         {
             ImGuiManager.Instance.Menus.Add(
-                new ImGuiMenu(FontAwesome5.Hammer, "Anvil", new List<IImGuiWindow>()
+                new ImGuiMenu(FontAwesome5.Hammer, "Anvil", new List<ImGuiWindow>()
                 {
                     new AnvilBrowserWindow()
                 })

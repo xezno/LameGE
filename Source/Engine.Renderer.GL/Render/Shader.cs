@@ -57,10 +57,13 @@ namespace Engine.Renderer.GL.Render
             ShaderType = TypeToGlShaderType(shaderType);
             FileName = path;
             GlShader = Gl.CreateShader(ShaderType);
+
+
             shaderSource = new string[0];
 
             ReadSourceFromFile();
             Compile();
+            Logging.Log($"Compiled shader {path} as {GlShader}");
         }
 
         public void Delete()

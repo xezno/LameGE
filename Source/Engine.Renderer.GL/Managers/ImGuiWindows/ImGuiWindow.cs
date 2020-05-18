@@ -4,7 +4,7 @@ using System.Numerics;
 
 namespace Engine.Renderer.GL.Managers.ImGuiWindows
 {
-    public abstract class ImGuiWindow : IImGuiWindow
+    public abstract class ImGuiWindow
     {
         public abstract bool Render { get; set; }
         public abstract string Title { get; }

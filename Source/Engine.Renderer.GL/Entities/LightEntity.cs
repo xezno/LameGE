@@ -37,6 +37,10 @@ namespace Engine.Entities
             shaderComponent.SetVariable("light.linear", lightComponent.linear);
             shaderComponent.SetVariable("light.quadratic", lightComponent.quadratic);
             shaderComponent.SetVariable("light.constant", lightComponent.constant);
+
+            lightComponent.shadowMap.BindTexture();
+            shaderComponent.SetVariable("shadowMap", 1);
+            shaderComponent.SetVariable("lightMatrix", lightComponent.lightMatrix);
         }
     }
 }

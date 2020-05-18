@@ -18,6 +18,10 @@ namespace Engine.Utils
         public int webPort;
         public float physTimeStep;
         public float updateTimeStep;
+
+        // TODO: cascades
+        public int shadowMapX;
+        public int shadowMapY;
     }
 
     public sealed class GameSettings
@@ -37,6 +41,8 @@ namespace Engine.Utils
         public static int WebPort { get => values.webPort; }
         public static float PhysTimeStep { get => values.physTimeStep; }
         public static float UpdateTimeStep { get => values.updateTimeStep; }
+        public static int ShadowMapX { get => values.shadowMapX; }
+        public static int ShadowMapY { get => values.shadowMapY; }
 
         public static void LoadValues()
         {

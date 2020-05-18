@@ -55,6 +55,7 @@ in vec3 outVertexPos;
 in vec2 outUvCoord;
 in vec3 outNormal;
 in vec3 outFragPos;
+in vec4 outFragPosLightSpace;
 
 uniform Material material;
 uniform Light light;
@@ -67,6 +68,8 @@ uniform vec3 cameraPos;
 
 uniform vec3 skyColor;
 uniform float fogNear;
+
+uniform sampler2D shadowMap;
 
 out vec4 fragColor;
 
@@ -96,9 +99,20 @@ vec3 CalcSpecular()
     return specularStrength * specularDirection * vec3(1.0);
 }
 
+float CalcShadow()
+{
+    vec3 projCoords = outFragPosLightSpace.xyz / outFragPosLightSpace.w;
+    projCoords = (projCoords * 0.5) + 0.5;
+    float closestDepth = texture(shadowMap, projCoords.xy).r;
+    float currentDepth = projCoords.z;
+    return (currentDepth > closestDepth) ? 1.0 : 0.0;
+}
+
 vec3 CalcFullMix()
 {
-    return (CalcAmbience() + CalcSpecular() + CalcDiffuse()) * texture(material.diffuseTexture, outUvCoord).xyz;
+    float shadow = CalcShadow();
+    vec3 fullMix = (CalcAmbience() + (1.0 - shadow) * (CalcSpecular() + CalcDiffuse())) * texture(material.diffuseTexture, outUvCoord).xyz;
+    return fullMix;
 }
 
 void main()

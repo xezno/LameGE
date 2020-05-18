@@ -1,4 +1,5 @@
 ﻿using Engine.Renderer.GL.Components;
+using Engine.Utils;
 using OpenGL;
 using System;
 
@@ -30,12 +31,13 @@ namespace Engine.Renderer.GL.Render
             //depthTexture = CreateTexture(InternalFormat.DepthStencil, PixelFormat.DepthStencil, PixelType.Int);
             //Gl.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, TextureTarget.Texture2d, depthTexture, 0);
 
-            depthTexture = CreateTexture(gameResX, gameResY, InternalFormat.DepthComponent, PixelFormat.DepthComponent, PixelType.Float);
-            Gl.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, TextureTarget.Texture2d, depthTexture, 0);
+            depthTexture = CreateTexture(gameResX, gameResY, InternalFormat.DepthStencil, PixelFormat.DepthStencil, (PixelType)34042 /* GL_UNSIGNED_INT_24_8 */);
+            Gl.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthStencilAttachment, TextureTarget.Texture2d, depthTexture, 0);
         }
 
-        public void PreRender()
+        public void Bind()
         {
+            Gl.Viewport(0, 0, GameSettings.GameResolutionX, GameSettings.GameResolutionY);
             Gl.BindFramebuffer(FramebufferTarget.Framebuffer, framebufferObject);
         }
 
@@ -48,9 +50,13 @@ namespace Engine.Renderer.GL.Render
 
             Gl.BindVertexArray(mesh.vao);
             Gl.BindBuffer(BufferTarget.ArrayBuffer, mesh.vbo);
+            Gl.ActiveTexture(TextureUnit.Texture0);
             Gl.BindTexture(TextureTarget.Texture2d, colorTexture);
+            Gl.ActiveTexture(TextureUnit.Texture1);
+            Gl.BindTexture(TextureTarget.Texture2d, depthTexture);
 
-            shaderComponent.SetVariable("texture", 0);
+            shaderComponent.SetVariable("colorTexture", 0);
+            shaderComponent.SetVariable("depthTexture", 1);
             shaderComponent.SetVariable("exposure", exposure);
 
             Gl.DrawArrays(PrimitiveType.Triangles, 0, mesh.ElementCount * sizeof(float));

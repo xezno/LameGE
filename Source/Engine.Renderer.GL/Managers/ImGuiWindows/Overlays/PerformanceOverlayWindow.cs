@@ -1,5 +1,6 @@
 ﻿using Engine.Assets;
 using Engine.Utils;
+using ImGuiNET;
 using System.Numerics;
 
 namespace Engine.Renderer.GL.Managers.ImGuiWindows.Overlays
@@ -12,12 +13,39 @@ namespace Engine.Renderer.GL.Managers.ImGuiWindows.Overlays
 
         public override void Draw()
         {
-            var debugText = FontAwesome5.Poop + " Engine\n" +
+            var debugText = FontAwesome5.AlignRight + FontAwesome5.Times + " Engine\n" +
                             "F1 for editor\n" +
-                            $"{RenderManager.Instance.LastFrameTime}ms\n" +
-                            $"{RenderManager.Instance.CalculatedFramerate}fps";
+                            "F2 for cursor lock toggle\n" +
+                            "F2 for console toggle";
 
-            DrawShadowLabel(debugText, new Vector2(GameSettings.GameResolutionX - 128, 8));
+            ImGui.Begin("perfOverlayGraphs##hidelabel", ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoInputs);
+
+            ImGui.PlotHistogram(
+                $"{RenderManager.Instance.LastFrameTime}ms",
+                ref RenderManager.Instance.FrametimeHistory[0],
+                RenderManager.Instance.FrametimeHistory.Length,
+                0,
+                "",
+                0
+            );
+
+            ImGui.PlotLines(
+                $"{RenderManager.Instance.CalculatedFramerate}fps",
+                ref RenderManager.Instance.FramerateHistory[0],
+                RenderManager.Instance.FramerateHistory.Length,
+                0,
+                "",
+                0
+            );
+
+            ImGui.End();
+
+            var labelPosition = new Vector2(GameSettings.GameResolutionX - 192, ImGui.GetStyle().WindowPadding.Y);
+            DrawShadowLabel(debugText, labelPosition);
+            var labelEnd = ImGui.CalcTextSize(debugText) + labelPosition;
+
+            ImGui.SetWindowSize("perfOverlayGraphs##hidelabel", new Vector2(0, 0));
+            ImGui.SetWindowPos("perfOverlayGraphs##hidelabel", new Vector2(labelPosition.X - ImGui.GetStyle().WindowPadding.X - ImGui.GetStyle().FramePadding.X, labelEnd.Y));
         }
     }
 }

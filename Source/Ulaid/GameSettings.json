@@ -7,9 +7,11 @@
 	"gamePosY": 45,
 	"fullscreen": false,
 	"rconPassword": null,
-	"rconEnabled": false,
+	"rconEnabled": true,
 	"rconPort": 42069,
 	"webPort": 42020,
 	"physTimeStep": 0.008,
-	"updateTimeStep": 0.004
+	"updateTimeStep": 0.004,
+	"shadowMapX": 1024,
+	"shadowMapY": 1024
 }

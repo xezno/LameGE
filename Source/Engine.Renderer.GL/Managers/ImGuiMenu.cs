@@ -8,9 +8,9 @@ namespace Engine.Managers
         public string Title { get; }
         public string IconGlyph { get; }
 
-        public List<IImGuiWindow> windows;
+        public List<ImGuiWindow> windows;
 
-        public ImGuiMenu(string iconGlyph, string title, List<IImGuiWindow> windows)
+        public ImGuiMenu(string iconGlyph, string title, List<ImGuiWindow> windows)
         {
             Title = title;
             IconGlyph = iconGlyph;

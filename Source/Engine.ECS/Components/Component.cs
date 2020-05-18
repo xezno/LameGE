@@ -83,6 +83,10 @@ namespace Engine.ECS.Components
             {
                 DrawImGuiVector3(memberInfo, reference);
             }
+            else if (type == typeof(Vertex3f))
+            {
+                DrawImguiVertex3f(memberInfo, reference);
+            }
             else if (type == typeof(Quaternion))
             {
                 DrawImGuiQuaternion(memberInfo, reference);
@@ -99,6 +103,13 @@ namespace Engine.ECS.Components
             {
                 ImGui.LabelText($"{memberInfo.Name}", $"{memberValue}");
             }
+        }
+
+        private void DrawImguiVertex3f(MemberInfo field, dynamic reference)
+        {
+            Vector3 value = new Vector3(reference.Value.x, reference.Value.y, reference.Value.z);
+            ImGui.DragFloat3(field.Name, ref value, 0.1f);
+            reference.Value = new Vertex3f(value.X, value.Y, value.Z);
         }
 
         private void DrawImGuiFloat(MemberInfo field, dynamic reference)
