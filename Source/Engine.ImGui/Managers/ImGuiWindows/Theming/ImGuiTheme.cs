@@ -7,7 +7,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text.RegularExpressions;
 
-namespace Engine.Renderer.GL.Managers.ImGuiWindows.Theming
+namespace Engine.Gui.Managers.ImGuiWindows.Theming
 {
     public class ImGuiThemeColors
     {

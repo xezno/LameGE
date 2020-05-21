@@ -1,5 +1,5 @@
 ﻿using Engine.Assets;
-using Engine.Renderer.GL.Managers.ImGuiWindows;
+using Engine.Gui.Managers.ImGuiWindows;
 using ImGuiNET;
 
 namespace Ulaid.Managers.ImGuiWindows.Addons

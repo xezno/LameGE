@@ -1,6 +1,6 @@
 ﻿using Engine.Assets;
 
-namespace Engine.Renderer.GL.Managers.ImGuiWindows.Editor
+namespace Engine.Gui.Managers.ImGuiWindows.Editor
 {
     class RenderSettingsWindow : ImGuiWindow
     {

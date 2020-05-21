@@ -1,13 +1,11 @@
 ﻿using Engine.Assets;
 using Engine.ECS.Managers;
 using Engine.Events;
-using Engine.Managers;
+using Engine.Gui.Managers.ImGuiWindows;
+using Engine.Gui.Managers.ImGuiWindows.Editor;
+using Engine.Gui.Managers.ImGuiWindows.Overlays;
+using Engine.Gui.Managers.ImGuiWindows.Theming;
 using Engine.Renderer.GL.Components;
-using Engine.Renderer.GL.Managers.ImGuiWindows;
-using Engine.Renderer.GL.Managers.ImGuiWindows.Editor;
-using Engine.Renderer.GL.Managers.ImGuiWindows.Overlays;
-using Engine.Renderer.GL.Managers.ImGuiWindows.Scripts;
-using Engine.Renderer.GL.Managers.ImGuiWindows.Theming;
 using Engine.Renderer.GL.Render;
 using Engine.Utils;
 using Engine.Utils.DebugUtils;
@@ -19,7 +17,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using Vector4 = Engine.Utils.MathUtils.Vector4;
 
-namespace Engine.Renderer.GL.Managers
+namespace Engine.Gui.Managers
 {
     public class ImGuiManager : Manager<ImGuiManager>
     {
@@ -46,23 +44,26 @@ namespace Engine.Renderer.GL.Managers
 
         public List<ImGuiMenu> Menus { get; } = new List<ImGuiMenu>()
         {
-            new ImGuiMenu(FontAwesome5.File, "File", new List<ImGuiWindow>()),
-            new ImGuiMenu(FontAwesome5.FileCode, "Scripts", new List<ImGuiWindow>()
+            new ImGuiMenu(FontAwesome5.File, "File", new List<ImGuiWindow>()
             {
-                new ScriptCompileWindow()
+                new CloseGameWindow()
             }),
-            new ImGuiMenu(FontAwesome5.Cogs, "Editor", new List<ImGuiWindow>()
+            //new ImGuiMenu(FontAwesome5.FileCode, "Scripts", new List<ImGuiWindow>()
+            //{
+            //    new ScriptCompileWindow()
+            //}),
+            new ImGuiMenu(FontAwesome5.Cubes, "Scene", new List<ImGuiWindow>()
             {
                 new PlaygroundWindow(),
-                new ScenePropertiesWindow(),
+                new ScenePropertiesWindow()
+            }),
+            new ImGuiMenu(FontAwesome5.Wrench, "Engine", new List<ImGuiWindow>()
+            {
+                new EngineConfigWindow(),
                 new ConsoleWindow(),
                 new PerformanceWindow(),
                 new TextureBrowserWindow(),
                 new ShaderWindow()
-            }),
-            new ImGuiMenu(FontAwesome5.Wrench, "Config", new List<ImGuiWindow>()
-            {
-                new EngineConfigWindow()
             })
         };
 
@@ -75,8 +76,10 @@ namespace Engine.Renderer.GL.Managers
         public ImGuiManager()
         {
             var imGuiContext = ImGui.CreateContext();
+
             if (ImGui.GetCurrentContext() == IntPtr.Zero)
                 ImGui.SetCurrentContext(imGuiContext);
+
             io = ImGui.GetIO();
 
             io.BackendFlags |= ImGuiBackendFlags.HasMouseCursors;
@@ -163,7 +166,6 @@ namespace Engine.Renderer.GL.Managers
         #endregion
 
         #region "GUI Elements"
-
         private void DrawMenuBar()
         {
             ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(4, 6));
@@ -207,7 +209,7 @@ namespace Engine.Renderer.GL.Managers
                     {
                         if (window.Render)
                         {
-                            ImGui.Begin($"{window.IconGlyph} {window.Title}");
+                            ImGui.Begin($"{window.IconGlyph} {window.Title}", window.Flags);
                             window.Draw();
                             ImGui.End();
                         }
@@ -223,8 +225,6 @@ namespace Engine.Renderer.GL.Managers
                         window.Draw();
                 }
             }
-
-            ImGui.ShowStyleEditor();
 
             ImGui.Render();
             RenderImGui(ImGui.GetDrawData());

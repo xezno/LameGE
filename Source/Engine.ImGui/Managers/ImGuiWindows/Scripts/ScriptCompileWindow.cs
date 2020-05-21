@@ -5,7 +5,7 @@ using System;
 using System.Diagnostics;
 using System.Numerics;
 
-namespace Engine.Renderer.GL.Managers.ImGuiWindows.Scripts
+namespace Engine.Gui.Managers.ImGuiWindows.Scripts
 {
     class ScriptCompileWindow : ImGuiWindow
     {

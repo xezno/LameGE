@@ -2,7 +2,7 @@
 using ImGuiNET;
 using System;
 
-namespace Engine.Renderer.GL.Managers.ImGuiWindows.Editor
+namespace Engine.Gui.Managers.ImGuiWindows.Editor
 {
     class PlaygroundWindow : ImGuiWindow
     {

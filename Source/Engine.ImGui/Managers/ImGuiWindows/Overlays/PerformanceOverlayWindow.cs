@@ -1,9 +1,10 @@
 ﻿using Engine.Assets;
+using Engine.Renderer.GL.Managers;
 using Engine.Utils;
 using ImGuiNET;
 using System.Numerics;
 
-namespace Engine.Renderer.GL.Managers.ImGuiWindows.Overlays
+namespace Engine.Gui.Managers.ImGuiWindows.Overlays
 {
     class PerformanceOverlayWindow : ImGuiWindow
     {
@@ -16,7 +17,7 @@ namespace Engine.Renderer.GL.Managers.ImGuiWindows.Overlays
             var debugText = FontAwesome5.AlignRight + FontAwesome5.Times + " Engine\n" +
                             "F1 for editor\n" +
                             "F2 for cursor lock toggle\n" +
-                            "F2 for console toggle";
+                            "F3 for console toggle";
 
             ImGui.Begin("perfOverlayGraphs##hidelabel", ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoInputs);
 

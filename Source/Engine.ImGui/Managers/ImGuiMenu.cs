@@ -1,7 +1,7 @@
-﻿using Engine.Renderer.GL.Managers.ImGuiWindows;
+﻿using Engine.Gui.Managers.ImGuiWindows;
 using System.Collections.Generic;
 
-namespace Engine.Managers
+namespace Engine.Gui.Managers
 {
     public class ImGuiMenu
     {

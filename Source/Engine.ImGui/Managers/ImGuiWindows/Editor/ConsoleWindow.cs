@@ -5,7 +5,7 @@ using ImGuiNET;
 using OpenGL.CoreUI;
 using System.Numerics;
 
-namespace Engine.Renderer.GL.Managers.ImGuiWindows.Editor
+namespace Engine.Gui.Managers.ImGuiWindows.Editor
 {
     class ConsoleWindow : ImGuiWindow
     {

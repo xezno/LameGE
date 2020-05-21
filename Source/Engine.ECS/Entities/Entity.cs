@@ -57,9 +57,6 @@ namespace Engine.ECS.Entities
         /// </summary>
         public virtual void RenderImGui()
         {
-            // Entity info
-            ImGui.Text($"{IconGlyph} {GetType().Name}");
-
             // TODO: Fix
             //ImGui.Checkbox("##hidelabel", ref enabled);
             //ImGui.SameLine();
@@ -68,6 +65,9 @@ namespace Engine.ECS.Entities
             ImGui.InputText("##hidelabel", ref nameVal, 256);
             if (nameVal != Name)
                 Name = nameVal;
+
+            // Entity info
+            ImGui.Text($"{IconGlyph} {GetType().Name}");
 
             ImGui.Separator();
 

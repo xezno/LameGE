@@ -1,8 +1,9 @@
 ﻿using Engine.Assets;
 using Engine.ECS.Entities;
+using Engine.Renderer.GL.Managers;
 using ImGuiNET;
 
-namespace Engine.Renderer.GL.Managers.ImGuiWindows.Editor
+namespace Engine.Gui.Managers.ImGuiWindows.Editor
 {
     class ScenePropertiesWindow : ImGuiWindow
     {

@@ -1,11 +1,12 @@
 ﻿using Engine.Assets;
-using Engine.Renderer.GL.Managers.ImGuiWindows.Theming;
+using Engine.Gui.Managers.ImGuiWindows.Theming;
+using Engine.Renderer.GL.Managers;
 using ImGuiNET;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Engine.Renderer.GL.Managers.ImGuiWindows.Editor
+namespace Engine.Gui.Managers.ImGuiWindows.Editor
 {
     class EngineConfigWindow : ImGuiWindow
     {
@@ -96,6 +97,10 @@ namespace Engine.Renderer.GL.Managers.ImGuiWindows.Editor
                 UnsetTheme();
                 UpdateTheme();
             }
+
+            var renderShadowMap = RenderManager.Instance.RenderShadowMap;
+            ImGui.Checkbox("Render shadow map", ref renderShadowMap);
+            RenderManager.Instance.RenderShadowMap = renderShadowMap;
         }
     }
 }

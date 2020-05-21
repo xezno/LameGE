@@ -30,6 +30,8 @@ namespace Engine.Renderer.GL.Managers
         public float[] FrametimeHistory { get; } = new float[FramesToCount];
         public float[] FramerateHistory { get; } = new float[FramesToCount];
 
+        public bool RenderShadowMap { get; set; }
+
         public RenderManager() 
         {
             renderer = new Renderer();
@@ -141,7 +143,9 @@ namespace Engine.Renderer.GL.Managers
             renderer.PrepareFramebufferRender();
             
             RenderScene(sceneCamera.ProjMatrix, sceneCamera.ViewMatrix, sceneCamera.Position);
-            mainLightComponent.shadowMap.Render();
+
+            if (RenderShadowMap)
+                mainLightComponent.shadowMap.Render();
 
             mainFramebuffer.Render();
             renderer.FinishRender();

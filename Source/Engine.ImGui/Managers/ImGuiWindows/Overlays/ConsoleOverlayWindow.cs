@@ -1,9 +1,8 @@
 ﻿using Engine.Assets;
 using Engine.Utils.DebugUtils;
 using ImGuiNET;
-using System.Numerics;
 
-namespace Engine.Renderer.GL.Managers.ImGuiWindows.Overlays
+namespace Engine.Gui.Managers.ImGuiWindows.Overlays
 {
     class ConsoleOverlayWindow : ImGuiWindow
     {

@@ -1,11 +1,8 @@
 ﻿using Engine.Assets;
-using Engine.Managers;
-using Engine.Renderer.GL.Managers;
-using Engine.Renderer.GL.Managers.ImGuiWindows;
+using Engine.Gui.Managers;
+using Engine.Gui.Managers.ImGuiWindows;
 using Engine.Utils.DebugUtils;
-using ImGuiNET;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Ulaid.Scripts
 {
@@ -14,7 +11,7 @@ namespace Ulaid.Scripts
         public void Run()
         {
             Logging.Log("Hello, world!");
-            ImGuiManager.Instance.Menus.Add(new ImGuiMenu(FontAwesome5.FileCode, "Custom", new List<IImGuiWindow>()
+            ImGuiManager.Instance.Menus.Add(new ImGuiMenu(FontAwesome5.FileCode, "Custom", new List<ImGuiWindow>()
             {
                 new HUDWindow()
             }));
@@ -29,11 +26,11 @@ namespace Ulaid.Scripts
         public int Shields { get; } = 100;
     }
 
-    class HUDWindow : IImGuiWindow
+    class HUDWindow : ImGuiWindow
     {
-        public bool Render { get; set; }
-        public string Title { get; } = "Scripts";
-        public string IconGlyph { get; } = FontAwesome5.FileCode;
+        public override bool Render { get; set; }
+        public override string Title { get; } = "Scripts";
+        public override string IconGlyph { get; } = FontAwesome5.FileCode;
 
         private Player Player { get; } = new Player();
 
@@ -51,7 +48,7 @@ namespace Ulaid.Scripts
             //}
         }
 
-        public void Draw()
+        public override void Draw()
         {
             DrawScriptsWindow();
         }

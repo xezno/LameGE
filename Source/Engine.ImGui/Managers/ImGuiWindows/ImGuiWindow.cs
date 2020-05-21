@@ -2,13 +2,14 @@
 using ImGuiNET;
 using System.Numerics;
 
-namespace Engine.Renderer.GL.Managers.ImGuiWindows
+namespace Engine.Gui.Managers.ImGuiWindows
 {
     public abstract class ImGuiWindow
     {
         public abstract bool Render { get; set; }
         public abstract string Title { get; }
         public abstract string IconGlyph { get; }
+        public virtual ImGuiWindowFlags Flags { get; }
         public abstract void Draw();
 
         protected void DrawShadowLabel(string str, Vector2 position)

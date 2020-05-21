@@ -1,13 +1,12 @@
 ﻿using Engine.ECS.Managers;
 using Engine.Events;
+using Engine.Gui.Managers;
 using Engine.Managers;
 using Engine.Renderer.GL.Managers;
-using Engine.Renderer.GL.Render;
 using Engine.Types;
 using Engine.Utils;
 using Engine.Utils.MathUtils;
 using Newtonsoft.Json;
-using OpenGL;
 using OpenGL.CoreUI;
 using System;
 using System.Collections.Generic;
@@ -155,7 +154,7 @@ namespace Engine
                         multiThreadedManager.Run();
 
                         // Only update once every frame. Prevents multi-frame updating, but might break physics somewhere down the line
-                        Thread.Sleep((int)(GameSettings.UpdateTimeStep * 1000f)); // TODO: Sync with framerate?
+                        Thread.Sleep((int)(GameSettings.UpdateTimeStep * 1000f));
                     }
                 }));
             }

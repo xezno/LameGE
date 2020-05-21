@@ -1,12 +1,12 @@
 ﻿using Engine.Assets;
 using Engine.Events;
 using Engine.Renderer.GL.Components;
+using Engine.Renderer.GL.Managers;
 using ImGuiNET;
-using System;
 using System.IO;
 using System.Reflection;
 
-namespace Engine.Renderer.GL.Managers.ImGuiWindows.Editor
+namespace Engine.Gui.Managers.ImGuiWindows.Editor
 {
     class ShaderWindow : ImGuiWindow
     {

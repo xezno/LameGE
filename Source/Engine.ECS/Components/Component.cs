@@ -37,7 +37,6 @@ namespace Engine.ECS.Components
         /// <param name="depth"></param>
         private void RenderImGuiMembers(int depth = 0)
         {
-            // TODO: refactor this so it doesnt use dynamic
             if (depth > 1) return; // Prevent any dumb stack overflow errors
 
             foreach (var field in GetType().GetFields())
@@ -52,6 +51,7 @@ namespace Engine.ECS.Components
 
         private void RenderImGuiMember(MemberInfo memberInfo, ref int depth)
         {
+            // TODO: refactor this so it doesnt use dynamic
             Type type = null;
             dynamic memberValue = null;
             switch (memberInfo.MemberType)

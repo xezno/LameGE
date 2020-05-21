@@ -23,7 +23,7 @@ namespace Engine.Entities
             AddComponent(new ShaderComponent(new Shader("Content/Shaders/Unlit/main.frag", Shader.Type.FragmentShader),
                 new Shader("Content/Shaders/Unlit/main.vert", Shader.Type.VertexShader)));
             AddComponent(new MaterialComponent(new Material($"Content/Materials/cube.mtl")));
-            AddComponent(new MeshComponent($"Content/Models/cube.obj"));
+            // AddComponent(new MeshComponent($"Content/Models/cube.obj"));
 
             // See values from http://wiki.ogre3d.org/-Point+Light+Attenuation
             lightComponent = new LightComponent(600, 0.007f, 0.0002f);
