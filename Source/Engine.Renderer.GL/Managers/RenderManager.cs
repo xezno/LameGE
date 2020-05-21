@@ -2,7 +2,6 @@
 using Engine.ECS.Entities;
 using Engine.ECS.Managers;
 using Engine.Renderer.GL.Components;
-using Engine.Renderer.GL.Entities;
 using Engine.Renderer.GL.Render;
 using Engine.Utils;
 using Engine.Utils.MathUtils;
@@ -32,12 +31,12 @@ namespace Engine.Renderer.GL.Managers
 
         public bool RenderShadowMap { get; set; }
 
-        public RenderManager() 
+        public RenderManager()
         {
             renderer = new Renderer();
             renderer.Init();
             mainFramebuffer = new Framebuffer(GameSettings.GameResolutionX, GameSettings.GameResolutionY);
-            shadowShaders = new ShaderComponent(new Shader("Content/Shaders/Depth/main.frag", Shader.Type.FragmentShader), 
+            shadowShaders = new ShaderComponent(new Shader("Content/Shaders/Depth/main.frag", Shader.Type.FragmentShader),
                 new Shader("Content/Shaders/Depth/main.vert", Shader.Type.VertexShader));
         }
 
@@ -67,7 +66,7 @@ namespace Engine.Renderer.GL.Managers
                         RenderMeshShadow(entity, lightComponent.lightMatrix);
                     }
                 }
-            }            
+            }
         }
 
         private void BindMatrices(ShaderComponent shaderComponent, Matrix4x4f projMatrix, Matrix4x4f viewMatrix)
@@ -93,7 +92,7 @@ namespace Engine.Renderer.GL.Managers
             Gl.BindVertexArray(0);
             Gl.BindBuffer(BufferTarget.ArrayBuffer, 0);
         }
-        
+
         public void RenderMesh(IEntity entity, Matrix4x4f projMatrix, Matrix4x4f viewMatrix, Vector3 cameraPosition)
         {
             var shaderComponent = entity.GetComponent<ShaderComponent>();
@@ -104,7 +103,7 @@ namespace Engine.Renderer.GL.Managers
 
             Gl.BindVertexArray(meshComponent.RenderMesh.vao);
             Gl.BindBuffer(BufferTarget.ArrayBuffer, meshComponent.RenderMesh.vbo);
-            
+
             BindMatrices(shaderComponent, projMatrix, viewMatrix);
 
             shaderComponent.SetVariable("cameraPos", cameraPosition);
@@ -132,7 +131,7 @@ namespace Engine.Renderer.GL.Managers
             // Render shadows
             var mainLightEntity = SceneManager.Instance.lights[0];
             var mainLightComponent = mainLightEntity.GetComponent<LightComponent>();
-            
+
             mainLightComponent.shadowMap.Bind();
             RenderLights(mainLightComponent);
             mainLightComponent.shadowMap.Unbind();
@@ -141,7 +140,7 @@ namespace Engine.Renderer.GL.Managers
             renderer.PrepareRender();
             mainFramebuffer.Bind();
             renderer.PrepareFramebufferRender();
-            
+
             RenderScene(sceneCamera.ProjMatrix, sceneCamera.ViewMatrix, sceneCamera.Position);
 
             if (RenderShadowMap)

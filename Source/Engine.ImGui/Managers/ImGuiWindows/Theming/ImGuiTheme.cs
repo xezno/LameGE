@@ -3,7 +3,6 @@ using ImGuiNET;
 using Newtonsoft.Json;
 using System;
 using System.IO;
-using System.Linq;
 using System.Numerics;
 using System.Text.RegularExpressions;
 
@@ -121,7 +120,7 @@ namespace Engine.Gui.Managers.ImGuiWindows.Theming
             var fileContents = File.ReadAllText(path);
             return JsonConvert.DeserializeObject<ImGuiTheme>(fileContents);
         }
-        
+
         private static Vector2 ParseVector2String(string str)
         {
             var vec2 = new Vector2();
@@ -153,7 +152,7 @@ namespace Engine.Gui.Managers.ImGuiWindows.Theming
             foreach (var property in Colors.GetType().GetProperties())
             {
                 var colorEnum = Enum.Parse<ImGuiCol>(property.Name);
-                
+
                 var propertyValue = (string)property.GetValue(Colors);
 
                 if (string.IsNullOrEmpty(propertyValue))

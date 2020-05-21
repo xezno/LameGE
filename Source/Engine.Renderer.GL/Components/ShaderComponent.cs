@@ -87,7 +87,7 @@ namespace Engine.Renderer.GL.Components
                 shader.ReadSourceFromFile();
                 shader.Compile();
                 AttachAndLink();
-            }            
+            }
         }
 
         /// <summary>

@@ -1,10 +1,6 @@
 ﻿using Engine.ECS.Components;
-using Engine.ECS.Entities;
-using Engine.Renderer.GL.Managers;
 using Engine.Renderer.GL.Render;
 using Engine.Utils.Attributes;
-using Engine.Utils.MathUtils;
-using OpenGL;
 
 namespace Engine.Renderer.GL.Components
 {

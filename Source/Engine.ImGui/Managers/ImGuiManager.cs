@@ -33,8 +33,8 @@ namespace Engine.Gui.Managers
 
         private ImGuiTheme theme;
         public ImGuiTheme Theme
-        { 
-            get => theme; 
+        {
+            get => theme;
             set
             {
                 value.SetTheme();
@@ -132,7 +132,7 @@ namespace Engine.Gui.Managers
 
                 ImGuiNative.ImFontConfig_destroy(faConfig);
             }
-            
+
             io.Fonts.Build();
 
             io.Fonts.GetTexDataAsRGBA32(out IntPtr pixels, out var width, out var height, out var bpp);

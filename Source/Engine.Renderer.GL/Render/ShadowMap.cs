@@ -9,7 +9,7 @@ namespace Engine.Renderer.GL.Render
     {
         uint depthMapTexture;
         uint depthMapFbo;
-        
+
         private readonly ShaderComponent shaderComponent;
         private readonly Mesh mesh = Primitives.Plane;
 

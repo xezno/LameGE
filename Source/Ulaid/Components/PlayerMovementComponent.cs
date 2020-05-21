@@ -53,7 +53,7 @@ namespace Ulaid.Components
                 Math.Max(Math.Min(velocity.y, maxSpeed), -maxSpeed),
                 Math.Max(Math.Min(velocity.z, maxSpeed), -maxSpeed)
             );
-            
+
             if (velocity.Magnitude < minVelocity)
             {
                 velocity = new Vector3(0, 0, 0);
@@ -105,7 +105,7 @@ namespace Ulaid.Components
             }
             else if (eventType == Event.MouseMove)
             {
-                if (lockRotation) 
+                if (lockRotation)
                     return;
                 MouseMoveEventArgs mouseEventArgs = (MouseMoveEventArgs)baseEventArgs;
                 currentRotation += new Vector3(mouseEventArgs.MouseDelta.y * -mouseSensitivityMultiplier,

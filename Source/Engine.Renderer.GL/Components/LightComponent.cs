@@ -23,11 +23,11 @@ namespace Engine.Components
         public Matrix4x4f projMatrix => Matrix4x4f.Ortho(-10.0f, 10.0f, -10.0f, 10.0f, nearPlane, farPlane);
         public Matrix4x4f viewMatrix
         {
-            get 
+            get
             {
                 var transformComponent = GetComponent<TransformComponent>();
-                return Matrix4x4f.LookAt(new Vertex3f(transformComponent.Position.x, transformComponent.Position.y, transformComponent.Position.z), 
-                    lookAt, 
+                return Matrix4x4f.LookAt(new Vertex3f(transformComponent.Position.x, transformComponent.Position.y, transformComponent.Position.z),
+                    lookAt,
                     new Vertex3f(0, 1, 0)
                 );
             }

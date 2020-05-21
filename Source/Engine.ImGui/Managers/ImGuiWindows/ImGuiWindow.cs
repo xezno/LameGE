@@ -21,7 +21,7 @@ namespace Engine.Gui.Managers.ImGuiWindows
             ImGui.GetBackgroundDrawList().AddText(
                 position, 0xFFFFFFFF, str);
         }
-        
+
         public virtual void HandleEvent(Event eventType, IEventArgs baseEventArgs) { }
     }
 }
