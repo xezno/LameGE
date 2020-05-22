@@ -46,6 +46,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Engine.ECS\Engine.ECS.csproj" />
     <ProjectReference Include="..\Engine.Events\Engine.Events.csproj" />
+    <ProjectReference Include="..\Engine.ImGui\Engine.Gui.csproj" />
     <ProjectReference Include="..\Engine.Renderer.GL\Engine.Renderer.GL.csproj" />
     <ProjectReference Include="..\Engine.Utils\Engine.Utils.csproj" />
   </ItemGroup>

@@ -12,7 +12,7 @@ namespace Engine.ECS.Entities
 
         List<IComponent> Components { get; }
         string IconGlyph { get; }
-        bool Enabled { get; set; }
+        bool Enabled { get; }
 
         /// <summary>
         /// Called when an event is triggered.

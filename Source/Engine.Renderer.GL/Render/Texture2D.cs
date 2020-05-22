@@ -132,11 +132,11 @@ namespace Engine.Renderer.GL.Render
         public void Bind()
         {
             Gl.ActiveTexture(textureUnit);
+            Gl.BindTexture(TextureTarget.Texture2d, glTexture);
             Gl.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureWrapS, repeatType);
             Gl.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureWrapT, repeatType);
             Gl.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureMagFilter, magFilter);
             Gl.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureMinFilter, minFilter);
-            Gl.BindTexture(TextureTarget.Texture2d, glTexture);
         }
 
         public override string ToString()

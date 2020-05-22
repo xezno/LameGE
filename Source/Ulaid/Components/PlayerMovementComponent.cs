@@ -20,7 +20,9 @@ namespace Ulaid.Components
         public float maxSpeed = 10.0f;
         public float mouseSensitivityMultiplier = 0.1f;
         public float rotationSensitivity = 3f;
+        public float minVelocity = 0.05f;
         private TransformComponent transformComponent;
+        private bool lockRotation;
 
         public override void Update(float deltaTime)
         {
@@ -51,6 +53,11 @@ namespace Ulaid.Components
                 Math.Max(Math.Min(velocity.y, maxSpeed), -maxSpeed),
                 Math.Max(Math.Min(velocity.z, maxSpeed), -maxSpeed)
             );
+
+            if (velocity.Magnitude < minVelocity)
+            {
+                velocity = new Vector3(0, 0, 0);
+            }
         }
 
         public float EaseLerp(float a, float b, float t)
@@ -90,10 +97,16 @@ namespace Ulaid.Components
                     case KeyCode.Control:
                         currentInput.y = eventType == Event.KeyDown ? -1 : 0;
                         break;
+                    case KeyCode.F1:
+                        if (eventType == Event.KeyUp)
+                            lockRotation = !lockRotation;
+                        break;
                 }
             }
             else if (eventType == Event.MouseMove)
             {
+                if (lockRotation)
+                    return;
                 MouseMoveEventArgs mouseEventArgs = (MouseMoveEventArgs)baseEventArgs;
                 currentRotation += new Vector3(mouseEventArgs.MouseDelta.y * -mouseSensitivityMultiplier,
                     mouseEventArgs.MouseDelta.x * -mouseSensitivityMultiplier,

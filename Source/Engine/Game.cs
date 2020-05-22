@@ -1,8 +1,8 @@
 ﻿using Engine.ECS.Managers;
 using Engine.Events;
+using Engine.Gui.Managers;
 using Engine.Managers;
 using Engine.Renderer.GL.Managers;
-using Engine.Renderer.GL.Render;
 using Engine.Types;
 using Engine.Utils;
 using Engine.Utils.MathUtils;
@@ -19,7 +19,6 @@ namespace Engine
     public class Game : IHasParent
     {
         #region Variables
-        private readonly Engine.Renderer.GL.Renderer renderer;
         private readonly string gamePropertyPath;
         private readonly List<Thread> threads = new List<Thread>();
 
@@ -31,8 +30,6 @@ namespace Engine
         private Vector2 lastMousePos;
         private bool ignoreSingleMouseInput;
 
-        private Framebuffer mainFramebuffer;
-
         public bool isRunning = true; // TODO: properly detect window close event (needs adding within nativewindow)
 
         public IHasParent Parent { get; set; }
@@ -43,7 +40,6 @@ namespace Engine
         public Game(string gamePropertyPath)
         {
             this.gamePropertyPath = gamePropertyPath;
-            this.renderer = new Engine.Renderer.GL.Renderer();
         }
 
         public void RenderImGui() { }
@@ -58,20 +54,8 @@ namespace Engine
 
         private void Render(object sender, NativeWindowEventArgs e)
         {
-            renderer.PrepareRender();
-            mainFramebuffer.PreRender();
-            renderer.PrepareFramebufferRender();
-
-            foreach (var manager in mainThreadManagers)
-            {
-                if (manager.GetType() != typeof(ImGuiManager))
-                    manager.Run();
-            }
-
-            mainFramebuffer.Render();
+            RenderManager.Instance.Run();
             ImGuiManager.Instance.Run();
-
-            renderer.FinishRender();
         }
         #endregion
 
@@ -95,6 +79,7 @@ namespace Engine
             nativeWindow.CursorVisible = true;
             nativeWindow.Animation = false; // Changing this to true makes input poll like once every 500ms. so don't change it
             nativeWindow.DepthBits = 24;
+
             nativeWindow.SwapInterval = 0;
             nativeWindow.Resize += Resize;
             nativeWindow.Create(GameSettings.GamePosX, GameSettings.GamePosY, (uint)GameSettings.GameResolutionX + 16, (uint)GameSettings.GameResolutionY + 16, NativeWindowStyle.Caption);
@@ -169,7 +154,7 @@ namespace Engine
                         multiThreadedManager.Run();
 
                         // Only update once every frame. Prevents multi-frame updating, but might break physics somewhere down the line
-                        Thread.Sleep((int)(GameSettings.UpdateTimeStep * 1000f)); // TODO: Sync with framerate?
+                        Thread.Sleep((int)(GameSettings.UpdateTimeStep * 1000f));
                     }
                 }));
             }
@@ -191,13 +176,9 @@ namespace Engine
         #region Event Handlers
         private void ContextCreated(object sender, NativeWindowEventArgs e)
         {
-            renderer.Init();
-
             InitSystems();
             InitScene();
             LoadContent();
-
-            mainFramebuffer = new Framebuffer(GameSettings.GameResolutionX, GameSettings.GameResolutionY);
 
             // Setup complete - broadcast the game started event
             EventManager.BroadcastEvent(Event.GameStart, new GenericEventArgs(this));

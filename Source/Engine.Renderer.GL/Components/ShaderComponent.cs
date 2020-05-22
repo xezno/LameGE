@@ -30,6 +30,8 @@ namespace Engine.Renderer.GL.Components
         private string currentShaderSource = "";
         private int currentShaderItem;
 
+        public bool ShadersDirty { get; set; }
+
         /// <summary>
         /// Construct a new ShaderComponent, attaching any of the shaders given.
         /// </summary>
@@ -67,7 +69,25 @@ namespace Engine.Renderer.GL.Components
         /// </summary>
         public void UseShader()
         {
+            if (ShadersDirty)
+            {
+                ReloadAll();
+                ShadersDirty = false;
+            }
             Gl.UseProgram(shaderProgram);
+        }
+
+        public void ReloadAll()
+        {
+            foreach (var shader in shaders)
+            {
+                shader.Delete();
+                CreateShader();
+
+                shader.ReadSourceFromFile();
+                shader.Compile();
+                AttachAndLink();
+            }
         }
 
         /// <summary>

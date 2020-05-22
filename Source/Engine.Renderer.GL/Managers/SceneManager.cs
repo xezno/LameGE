@@ -29,7 +29,7 @@ namespace Engine.Renderer.GL.Managers
             lights = new List<LightEntity>();
             var mainLight = new LightEntity()
             {
-                Name = "Test Light"
+                Name = "Spot Light"
             };
             lights.Add(mainLight);
             AddEntity(mainLight);

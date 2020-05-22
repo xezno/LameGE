@@ -22,6 +22,7 @@ namespace Engine.Entities
     public sealed class CefEntity : Entity<CefEntity>
     {
         private string cefFilePath = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/Content/UI/index.html";
+        // private string cefFilePath = $"localhost:5500";
 
         public override string IconGlyph { get; } = FontAwesome5.Wrench;
         private bool readyToDraw;
@@ -29,6 +30,8 @@ namespace Engine.Entities
 
         private int mouseX, mouseY;
         private RenderHandler renderHandler;
+
+        private Texture2D modifiedTexture;
 
         public CefEntity()
         {
@@ -45,7 +48,7 @@ namespace Engine.Entities
             // setup cef instance
             var browserSettings = new BrowserSettings
             {
-                WindowlessFrameRate = 75,
+                WindowlessFrameRate = 30, // 30 works best here as it prevents flickering, but this might be system dependant 
             };
 
             var cefSettings = new CefSettings();
@@ -56,7 +59,7 @@ namespace Engine.Entities
             var requestContext = new RequestContext(requestContextSettings);
             browser = new ChromiumWebBrowser(cefFilePath, browserSettings, requestContext);
             browser.Size = new Size(GameSettings.GameResolutionX, GameSettings.GameResolutionY);
-            browser.RenderHandler = new CEF.RenderHandler(browser);
+            browser.RenderHandler = new RenderHandler(browser);
             browser.BrowserInitialized += (sender, args) => { browser.Load(cefFilePath); };
             browser.LoadError += (sender, args) => Logging.Log($"Browser error {args.ErrorCode}");
 
@@ -78,6 +81,8 @@ namespace Engine.Entities
             };
 
             browser.LoadingStateChanged += handler;
+
+            modifiedTexture = new Texture2D(IntPtr.Zero, GameSettings.GameResolutionX, GameSettings.GameResolutionY, 32);
         }
 
         public override void Render()
@@ -88,12 +93,16 @@ namespace Engine.Entities
             // declare a bool that allows us to detect when we need to
             // setup the texture.
 
-            // if (!readyToDraw) return;
+            if (!readyToDraw) return;
 
             Gl.Disable(EnableCap.DepthTest);
-            SetTextureData();
+
             // draw to screen
             base.Render();
+            SetTextureData();
+
+            GetComponent<MaterialComponent>().materials[0].diffuseTexture = modifiedTexture;
+
             Gl.Enable(EnableCap.DepthTest);
         }
 
@@ -102,17 +111,25 @@ namespace Engine.Entities
             if (!renderHandler.NeedsPaint)
                 return;
 
+            // TODO: Wait until rendering frame, then set tex data, THEN render (currently can render between setting / unsetting tex data - BAD!)
             Paint(renderHandler.Type, renderHandler.DirtyRect, renderHandler.Buffer, renderHandler.Width, renderHandler.Height);
             renderHandler.NeedsPaint = false;
         }
 
         private void Paint(PaintElementType type, Rect dirtyRect, IntPtr buffer, int width, int height)
         {
-            Gl.BindTexture(TextureTarget.Texture2d, GetComponent<MaterialComponent>().materials[0].diffuseTexture.glTexture);
+            Gl.BindTexture(TextureTarget.Texture2d, modifiedTexture.glTexture);
 
             // Switched to width/height instead of dirtyRect.width/dirtyRect.height, may not work properly?
+
+            if (dirtyRect.X + width > GameSettings.GameResolutionX || dirtyRect.Y + height > GameSettings.GameResolutionY)
+            {
+                Gl.BindTexture(TextureTarget.Texture2d, 0);
+                return;
+            }
+
             Gl.TexSubImage2D(TextureTarget.Texture2d, 0, dirtyRect.X, dirtyRect.Y, width, height, PixelFormat.Bgra, PixelType.UnsignedByte, buffer);
-            Gl.GenerateMipmap(TextureTarget.Texture2d);
+            // Gl.GenerateMipmap(TextureTarget.Texture2d);
 
             Gl.BindTexture(TextureTarget.Texture2d, 0);
         }
@@ -128,13 +145,15 @@ namespace Engine.Entities
             {
                 var mouseEventArgs = (MouseButtonEventArgs)baseEventArgs;
                 var mouseButtonType = mouseEventArgs.MouseButton == 0 ? MouseButtonType.Left : MouseButtonType.Right;
-                browser.GetBrowserHost().SendMouseClickEvent(new MouseEvent(mouseX, mouseY, CefEventFlags.None), mouseButtonType, false, 0);
+                var eventFlags = mouseButtonType == MouseButtonType.Left ? CefEventFlags.LeftMouseButton : CefEventFlags.RightMouseButton;
+                browser.GetBrowserHost().SendMouseClickEvent(new MouseEvent(mouseX, mouseY, eventFlags), mouseButtonType, false, 0);
             }
             else if (eventType == Event.MouseButtonUp)
             {
                 var mouseEventArgs = (MouseButtonEventArgs)baseEventArgs;
                 var mouseButtonType = mouseEventArgs.MouseButton == 0 ? MouseButtonType.Left : MouseButtonType.Right;
-                browser.GetBrowserHost().SendMouseClickEvent(new MouseEvent(mouseX, mouseY, CefEventFlags.None), mouseButtonType, true, 0);
+                var eventFlags = mouseButtonType == MouseButtonType.Left ? CefEventFlags.LeftMouseButton : CefEventFlags.RightMouseButton;
+                browser.GetBrowserHost().SendMouseClickEvent(new MouseEvent(mouseX, mouseY, eventFlags), mouseButtonType, true, 0);
             }
             else if (eventType == Event.MouseMove)
             {

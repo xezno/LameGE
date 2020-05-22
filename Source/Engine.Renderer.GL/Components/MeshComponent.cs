@@ -1,10 +1,6 @@
 ﻿using Engine.ECS.Components;
-using Engine.ECS.Entities;
-using Engine.Renderer.GL.Managers;
 using Engine.Renderer.GL.Render;
 using Engine.Utils.Attributes;
-using Engine.Utils.MathUtils;
-using OpenGL;
 
 namespace Engine.Renderer.GL.Components
 {
@@ -53,37 +49,6 @@ namespace Engine.Renderer.GL.Components
         public MeshComponent()
         {
             RenderMesh = new Mesh();
-        }
-
-        /// <summary>
-        /// Draw the <see cref="Mesh"/> on-screen using the attached <see cref="ShaderComponent"/> and <see cref="MaterialComponent"/>.
-        /// </summary>
-        public override void Render()
-        {
-            shaderComponent = ((IEntity)Parent).GetComponent<ShaderComponent>();
-            transformComponent = ((IEntity)Parent).GetComponent<TransformComponent>();
-
-            shaderComponent.UseShader(); // TODO: Attach GetComponent function to IComponent
-
-            Gl.BindVertexArray(RenderMesh.vao);
-            Gl.BindBuffer(BufferTarget.ArrayBuffer, RenderMesh.vbo);
-
-            var camera = ((SceneManager)Parent.Parent).mainCamera;
-            shaderComponent.SetVariable("projMatrix", camera.ProjMatrix);
-            shaderComponent.SetVariable("viewMatrix", camera.ViewMatrix);
-            shaderComponent.SetVariable("cameraPos", camera.Position);
-            shaderComponent.SetVariable("modelMatrix", transformComponent.Matrix);
-            shaderComponent.SetVariable("fogNear", 0.02f);
-            shaderComponent.SetVariable("skyColor", new Vector3(100 / 255f, 149 / 255f, 237 / 255f)); // Cornflower blue
-
-            GetComponent<MaterialComponent>().BindAll(shaderComponent);
-
-            SceneManager.Instance.lights[0].Bind(shaderComponent);
-
-            Gl.DrawArrays(PrimitiveType.Triangles, 0, RenderMesh.ElementCount * sizeof(float));
-
-            Gl.BindVertexArray(0);
-            Gl.BindBuffer(BufferTarget.ArrayBuffer, 0);
         }
     }
 }

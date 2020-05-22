@@ -14,9 +14,9 @@ namespace Engine.ECS.Entities
     public class Entity<T> : IEntity
     {
         private string name;
+        private bool enabled = true;
 
-        public bool Enabled { get; set; } = true;
-
+        public bool Enabled { get => enabled; private set => enabled = value; }
         public virtual string Name
         {
             get
@@ -57,20 +57,17 @@ namespace Engine.ECS.Entities
         /// </summary>
         public virtual void RenderImGui()
         {
-            // Entity info
             // TODO: Fix
-            //var enabledVal = Enabled;
-            //ImGui.Checkbox("##hidelabel", ref enabledVal);
-            //if (Enabled != enabledVal)
-            //    Enabled = enabledVal;
-
-            ImGui.Text($"{IconGlyph} {GetType().Name}");
+            //ImGui.Checkbox("##hidelabel", ref enabled);
+            //ImGui.SameLine();
 
             var nameVal = Name;
-
             ImGui.InputText("##hidelabel", ref nameVal, 256);
             if (nameVal != Name)
                 Name = nameVal;
+
+            // Entity info
+            ImGui.Text($"{IconGlyph} {GetType().Name}");
 
             ImGui.Separator();
 
@@ -121,7 +118,7 @@ namespace Engine.ECS.Entities
         /// Add a component to an entity. This will also check for component dependencies.
         /// </summary>
         /// <param name="component">An instance of the desired component to add.</param>
-        public virtual void AddComponent(IComponent component) // TODO: Consider just using a property instead of this cos its 10x cooler
+        public virtual void AddComponent(IComponent component)
         {
             component.Parent = this;
             Components.Add(component);
