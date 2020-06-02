@@ -4,6 +4,10 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
+  
+  <PropertyGroup>
+    <RuntimeIdentifiers>win10-x64;debian.8-x64</RuntimeIdentifiers>
+  </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="ImGui.NET" Version="1.75.0" />
@@ -16,13 +20,13 @@
 
   <ItemGroup>
     <Reference Include="OpenGL.Net">
-      <HintPath>..\..\..\OpenGL.Net\OpenGL.Net.CoreUI\bin\net461\Debug\OpenGL.Net.dll</HintPath>
+      <HintPath>..\..\Other\OpenGL.Net\Source\OpenGL.Net.CoreUI\bin\netcore\Debug\netcoreapp3.1\OpenGL.Net.dll</HintPath>
     </Reference>
     <Reference Include="OpenGL.Net.CoreUI">
-      <HintPath>..\..\..\OpenGL.Net\OpenGL.Net.CoreUI\bin\net461\Debug\OpenGL.Net.CoreUI.dll</HintPath>
+      <HintPath>..\..\Other\OpenGL.Net\Source\OpenGL.Net.CoreUI\bin\netcore\Debug\netcoreapp3.1\OpenGL.Net.CoreUI.dll</HintPath>
     </Reference>
     <Reference Include="OpenGL.Net.Math">
-      <HintPath>..\..\Other\OpenGL.Net\OpenGL.Net\bin\netcore\Debug\netcoreapp3.1\OpenGL.Net.Math.dll</HintPath>
+      <HintPath>..\..\Other\OpenGL.Net\Source\OpenGL.Net\bin\netcore\Debug\netcoreapp3.1\OpenGL.Net.Math.dll</HintPath>
     </Reference>
   </ItemGroup>
 

@@ -8,6 +8,9 @@
     <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
   <PropertyGroup>
+    <RuntimeIdentifiers>win10-x64;debian.8-x64</RuntimeIdentifiers>
+  </PropertyGroup>
+  <PropertyGroup>
     <StartupObject>Ulaid.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
@@ -31,17 +34,6 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="OpenGL.Net">
-      <HintPath>..\..\..\OpenGL.Net\OpenGL.Net.CoreUI\bin\net461\Debug\OpenGL.Net.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenGL.Net.CoreUI">
-      <HintPath>..\..\..\OpenGL.Net\OpenGL.Net.CoreUI\bin\net461\Debug\OpenGL.Net.CoreUI.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenGL.Net.Math">
-      <HintPath>..\..\Other\OpenGL.Net\OpenGL.Net\bin\netcore\Debug\netcoreapp3.1\OpenGL.Net.Math.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <None Update="GameProperties.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -62,6 +54,17 @@
     </PackageReference>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="OpenGL.Net">
+      <HintPath>..\..\Other\OpenGL.Net\Source\OpenGL.Net.CoreUI\bin\netcore\Debug\netcoreapp3.1\OpenGL.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenGL.Net.CoreUI">
+      <HintPath>..\..\Other\OpenGL.Net\Source\OpenGL.Net.CoreUI\bin\netcore\Debug\netcoreapp3.1\OpenGL.Net.CoreUI.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenGL.Net.Math">
+      <HintPath>..\..\Other\OpenGL.Net\Source\OpenGL.Net\bin\netcore\Debug\netcoreapp3.1\OpenGL.Net.Math.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <PropertyGroup />
 </Project>
