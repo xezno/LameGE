@@ -47,6 +47,9 @@
     <Folder Include="Components\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Other\OpenGL.Net\Source\OpenGL.Net.CoreUI\OpenGL.Net.CoreUI.csproj" />
+    <ProjectReference Include="..\..\Other\OpenGL.Net\Source\OpenGL.Net\OpenGL.Net.csproj" />
+    <ProjectReference Include="..\..\Other\OpenGL.Net\Source\OpenGL.Net\OpenGL.Net.Math.csproj" />
     <ProjectReference Include="..\Engine.ECS\Engine.ECS.csproj" />
     <ProjectReference Include="..\Engine.Events\Engine.Events.csproj" />
     <ProjectReference Include="..\Engine.ImGui\Engine.Gui.csproj" />

@@ -22,6 +22,9 @@
     <PackageReference Include="System.Drawing.Common" Version="5.0.0-preview.3.20214.6" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Other\OpenGL.Net\Source\OpenGL.Net.CoreUI\OpenGL.Net.CoreUI.csproj" />
+    <ProjectReference Include="..\..\Other\OpenGL.Net\Source\OpenGL.Net\OpenGL.Net.csproj" />
+    <ProjectReference Include="..\..\Other\OpenGL.Net\Source\OpenGL.Net\OpenGL.Net.Math.csproj" />
     <ProjectReference Include="..\Engine.ECS\Engine.ECS.csproj" />
     <ProjectReference Include="..\Engine.Utils\Engine.Utils.csproj" />
   </ItemGroup>
