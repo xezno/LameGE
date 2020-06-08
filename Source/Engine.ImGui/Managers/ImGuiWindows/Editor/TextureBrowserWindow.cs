@@ -11,7 +11,7 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
         public override string IconGlyph { get; } = FontAwesome5.Square;
         public override bool Render { get; set; }
 
-        private int selectedTextureUnit = 0;
+        private int selectedTextureUnit;
 
         // this does not work
         public override void Draw()

@@ -5,6 +5,7 @@ namespace Engine.Utils
 {
     struct GameSettingsValues
     {
+        #pragma warning disable CS0649
         public int gameResolutionX;
         public int gameResolutionY;
         public bool vsyncEnabled;
@@ -22,6 +23,7 @@ namespace Engine.Utils
         // TODO: cascades
         public int shadowMapX;
         public int shadowMapY;
+        #pragma warning restore CS0649
     }
 
     public sealed class GameSettings

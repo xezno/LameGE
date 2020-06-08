@@ -21,11 +21,13 @@ namespace Engine.Gui.Managers
 {
     public class ImGuiManager : Manager<ImGuiManager>
     {
-        private const float ptToPx = 1.3281472327365f;
+        private const float PT_TO_PX = 1.3281472327365f;
+
         private Texture2D defaultFontTexture;
         private ShaderComponent shaderComponent;
         private Vector2 windowSize;
-        private ImGuiIOPtr io;
+
+        private readonly ImGuiIOPtr io;
 
         private uint vbo, vao, ebo;
         private bool showEditor;
@@ -109,7 +111,7 @@ namespace Engine.Gui.Managers
         private void InitFonts()
         {
             var glyphMinAdvanceX = 24;
-            var fontSizePixels = ptToPx * 12;
+            var fontSizePixels = PT_TO_PX * 12;
 
             // io.Fonts.AddFontDefault();
             unsafe
@@ -233,6 +235,7 @@ namespace Engine.Gui.Managers
 
         private void RenderImGui(ImDrawDataPtr drawData)
         {
+            // TODO: use abstract graphics impl
             Gl.BlendEquation(BlendEquationMode.FuncAdd);
             Gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             Gl.Disable(EnableCap.CullFace);

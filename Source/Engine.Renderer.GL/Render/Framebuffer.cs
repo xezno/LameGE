@@ -7,7 +7,7 @@ namespace Engine.Renderer.GL.Render
 {
     public class Framebuffer
     {
-        private readonly uint colorTexture, depthTexture, stencilTexture;
+        private readonly uint colorTexture, depthTexture;
         private readonly uint framebufferObject;
 
         private readonly ShaderComponent shaderComponent;
@@ -66,7 +66,7 @@ namespace Engine.Renderer.GL.Render
             Gl.BindTexture(TextureTarget.Texture2d, 0);
         }
 
-        public uint CreateTexture(int gameResX, int gameResY, InternalFormat internalFormat, PixelFormat pixelFormat, PixelType pixelType)
+        private uint CreateTexture(int gameResX, int gameResY, InternalFormat internalFormat, PixelFormat pixelFormat, PixelType pixelType)
         {
             var texture = Gl.GenTexture();
             Gl.BindTexture(TextureTarget.Texture2d, texture);

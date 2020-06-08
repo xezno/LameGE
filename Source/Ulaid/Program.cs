@@ -12,7 +12,7 @@ namespace Ulaid
         {
             GameInstance = new UlaidGame("GameProperties.json");
             GameInstance.Run();
-            while (GameInstance.isRunning) ;
+            while (GameInstance.isRunning) { }
             // Game has shutdown at this point
         }
     }

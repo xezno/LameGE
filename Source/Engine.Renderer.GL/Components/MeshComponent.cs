@@ -22,9 +22,6 @@ namespace Engine.Renderer.GL.Components
         /// </summary>
         public Mesh RenderMesh { get; }
 
-        private ShaderComponent shaderComponent;
-        private TransformComponent transformComponent;
-
         /// <summary>
         /// Construct an instance of MeshComponent, loading the mesh from the path specified.
         /// <para>REQUIRES:</para>
