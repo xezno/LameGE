@@ -17,7 +17,7 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
         private bool enableWatcher = true;
         private FileSystemWatcher watcher;
 
-        public ShaderWindow() : base()
+        public ShaderWindow()
         {
             watcher = new FileSystemWatcher();
             watcher.Path = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}\\Content";
@@ -26,7 +26,7 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
                                  | NotifyFilters.LastWrite
                                  | NotifyFilters.FileName
                                  | NotifyFilters.DirectoryName;
-            watcher.Changed += new FileSystemEventHandler(OnWatcherChanged);
+            watcher.Changed += OnWatcherChanged;
             watcher.IncludeSubdirectories = true;
             watcher.EnableRaisingEvents = enableWatcher;
         }

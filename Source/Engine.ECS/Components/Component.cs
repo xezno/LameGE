@@ -34,7 +34,7 @@ namespace Engine.ECS.Components
         /// <summary>
         /// Get all fields via reflection for use within ImGUI.
         /// </summary>
-        /// <param name="depth"></param>
+        /// <param name="depth">The depth of the current reflection.</param>
         private void RenderImGuiMembers(int depth = 0)
         {
             if (depth > 1) return; // Prevent any dumb stack overflow errors
@@ -49,11 +49,17 @@ namespace Engine.ECS.Components
             }
         }
 
+        /// <summary>
+        /// Handles the rendering of a Type's member through ImGui, allowing for prototyping.
+        /// </summary>
+        /// <param name="memberInfo"></param>
+        /// <param name="depth"></param>
+        /// <exception cref="NotImplementedException"></exception>
         private void RenderImGuiMember(MemberInfo memberInfo, ref int depth)
         {
             // TODO: refactor this so it doesnt use dynamic
-            Type type = null;
-            dynamic memberValue = null;
+            Type type;
+            dynamic memberValue;
             switch (memberInfo.MemberType)
             {
                 case MemberTypes.Field:
@@ -97,7 +103,7 @@ namespace Engine.ECS.Components
             }
             else if (type == typeof(List<>) || type.BaseType == typeof(Array))
             {
-                DrawImGuiArray(memberInfo, memberValue, depth);
+                DrawImGuiArray(memberValue, depth);
             }
             else
             {
@@ -119,7 +125,7 @@ namespace Engine.ECS.Components
             var max = float.MaxValue;
             var useSlider = false;
             var fieldAttributes = field.GetCustomAttributes(false);
-            foreach (var attrib in fieldAttributes.Where(o => o.GetType() == typeof(RangeAttribute)))
+            foreach (var attrib in fieldAttributes.Where(o => o is RangeAttribute))
             {
                 var rangeAttrib = (RangeAttribute)attrib;
                 min = rangeAttrib.Min;
@@ -162,7 +168,7 @@ namespace Engine.ECS.Components
             reference.Value = value;
         }
 
-        private void DrawImGuiArray(MemberInfo field, dynamic memberValue, int depth)
+        private void DrawImGuiArray(dynamic memberValue, int depth)
         {
             foreach (var element in memberValue)
             {

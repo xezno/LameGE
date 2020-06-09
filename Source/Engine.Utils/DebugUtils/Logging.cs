@@ -24,6 +24,11 @@ namespace Engine.Utils.DebugUtils
         private static int pastLogsStringLength = 5;
 
         /// <summary>
+        /// The number of lines to use for the <see cref="pastLogsStringConsole"/> value.
+        /// </summary>
+        private static int pastLogsStringConsoleLength = 40;
+
+        /// <summary>
         /// Should the <see cref="pastLogsStringConsole"/> use a filter?
         /// </summary>
         private static bool pastLogsStringConsoleUseFilter;
@@ -62,7 +67,9 @@ namespace Engine.Utils.DebugUtils
 
             if (!pastLogsStringConsoleUseFilter)
             {
-                pastLogsStringConsole = string.Join("\n", pastLogsArray, 0, pastLogsArray.Length);
+                var pastLogsConsoleStart = Math.Max(0, PastLogs.Count - pastLogsStringConsoleLength);
+                var pastLogsConsoleCount = Math.Min(PastLogs.Count, pastLogsStringConsoleLength);
+                pastLogsStringConsole = string.Join("\n", pastLogsArray, pastLogsConsoleStart, pastLogsConsoleCount);
             }
         }
 

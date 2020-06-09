@@ -13,7 +13,6 @@ namespace Ulaid.Entities
         public override string IconGlyph { get; } = FontAwesome5.LayerGroup;
 
         private Material mainMaterial;
-        private int physicsIndex;
 
         public TestCubeEntity()
         {
@@ -25,26 +24,9 @@ namespace Ulaid.Entities
                 new Shader("Content/Shaders/Standard/main.vert", Shader.Type.VertexShader)));
 
             AddMeshAndMaterialComponents("level01");
-
-            // Add physics
-            var box = new Box(1, 1, 1);
-            box.ComputeInertia(1.0f, out var inertia);
-            var boxIndex = PhysicsManager.Instance.Simulation.Shapes.Add(box);
-            //physicsIndex = PhysicsManager.Instance.Simulation.Bodies.Add(
-            //    BodyDescription.CreateDynamic(
-            //        GetComponent<TransformComponent>().Position.ConvertToNumerics(),
-            //        inertia,
-            //        new CollidableDescription(boxIndex, 0.1f),
-            //        new BodyActivityDescription(0.004f)
-            //    )
-            //);
         }
 
-        public override void Update(float deltaTime)
-        {
-            // GetComponent<TransformComponent>().Position = Vector3.ConvertFromNumerics(PhysicsManager.Instance.Simulation.Bodies.GetBodyReference(physicsIndex).Pose.Position);
-            // GetComponent<TransformComponent>().RotationEuler = Vector3.ConvertFromNumerics(PhysicsManager.Instance.Simulation.Bodies.GetBodyReference(physicsIndex).Pose.);
-        }
+        public override void Update(float deltaTime) { }
 
         private void AddMeshAndMaterialComponents(string path)
         {

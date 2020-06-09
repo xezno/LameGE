@@ -207,7 +207,7 @@ namespace Engine
             // TODO: Fix mouse positioning
             var mousePos = new Vector2(e.Location.X,
                 GameSettings.GameResolutionY - e.Location.Y -
-                (GameSettings.Fullscreen ? 0 : titlebarHeight) + 16);
+                (GameSettings.Fullscreen ? 0 : titlebarHeight + 16));
 
             var mouseDelta = lastMousePos - mousePos;
 

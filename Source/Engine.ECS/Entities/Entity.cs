@@ -14,9 +14,7 @@ namespace Engine.ECS.Entities
     public class Entity<T> : IEntity
     {
         private string name;
-        private bool enabled = true;
-
-        public bool Enabled { get => enabled; private set => enabled = value; }
+        public bool Enabled { get; private set; } = true;
         public virtual string Name
         {
             get

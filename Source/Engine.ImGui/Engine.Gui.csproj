@@ -4,6 +4,10 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <RuntimeIdentifiers>win10-x64;debian.8-x64</RuntimeIdentifiers>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
@@ -13,22 +17,23 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Other\OpenGL.Net\Source\OpenGL.Net.CoreUI\OpenGL.Net.CoreUI.csproj" />
+    <ProjectReference Include="..\..\Other\OpenGL.Net\Source\OpenGL.Net\OpenGL.Net.csproj" />
+    <ProjectReference Include="..\..\Other\OpenGL.Net\Source\OpenGL.Net\OpenGL.Net.Math.csproj" />
     <ProjectReference Include="..\Engine.ECS\Engine.ECS.csproj" />
     <ProjectReference Include="..\Engine.Events\Engine.Events.csproj" />
     <ProjectReference Include="..\Engine.Renderer.GL\Engine.Renderer.GL.csproj" />
     <ProjectReference Include="..\Engine.Utils\Engine.Utils.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <Reference Include="OpenGL.Net">
-      <HintPath>..\..\Other\OpenGL.Net\OpenGL.Net.CoreUI\bin\netcore\Debug\netcoreapp3.1\OpenGL.Net.dll</HintPath>
+      <HintPath>..\..\Other\OpenGL.Net\Source\OpenGL.Net.CoreUI\bin\netcore\Debug\netcoreapp3.1\OpenGL.Net.dll</HintPath>
     </Reference>
     <Reference Include="OpenGL.Net.CoreUI">
-      <HintPath>..\..\Other\OpenGL.Net\OpenGL.Net.CoreUI\bin\netcore\Debug\netcoreapp3.1\OpenGL.Net.CoreUI.dll</HintPath>
+      <HintPath>..\..\Other\OpenGL.Net\Source\OpenGL.Net.CoreUI\bin\netcore\Debug\netcoreapp3.1\OpenGL.Net.CoreUI.dll</HintPath>
     </Reference>
     <Reference Include="OpenGL.Net.Math">
-      <HintPath>..\..\Other\OpenGL.Net\OpenGL.Net\bin\netcore\Debug\netcoreapp3.1\OpenGL.Net.Math.dll</HintPath>
+      <HintPath>..\..\Other\OpenGL.Net\Source\OpenGL.Net\bin\netcore\Debug\netcoreapp3.1\OpenGL.Net.Math.dll</HintPath>
     </Reference>
   </ItemGroup>
-
 </Project>

@@ -28,6 +28,7 @@ namespace Engine.Events
         /// <summary>
         /// Construct a new instance of <see cref="MouseMoveEventArgs"/>; the <see cref="TimeSent"/> will be automatically set.
         /// </summary>
+        /// <param name="mouseDelta">The cursor's delta.</param>
         /// <param name="mousePosition">The cursor's new position relative to the window.</param>
         /// <param name="sender">The object triggering the event.</param>
         public MouseMoveEventArgs(Vector2 mouseDelta, Vector2 mousePosition, object sender)
