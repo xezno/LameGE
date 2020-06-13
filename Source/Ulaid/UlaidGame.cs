@@ -47,11 +47,6 @@ namespace Ulaid
                 SceneManager.Instance.AddEntity(entity);
 
             SetupCustomImGuiMenus();
-
-            ProtocolInfo.LoadVersions();
-
-            TestHandshake testHandshake = new TestHandshake("localhost", 25565);
-            testHandshake.Run();
         }
 
         private void SetupCustomImGuiMenus()
