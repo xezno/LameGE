@@ -205,9 +205,7 @@ namespace Engine
         private void MouseMove(object sender, NativeWindowMouseEventArgs e)
         {
             // TODO: Fix mouse positioning
-            var mousePos = new Vector2(e.Location.X,
-                GameSettings.GameResolutionY - e.Location.Y -
-                (GameSettings.Fullscreen ? 0 : titlebarHeight + 16));
+            var mousePos = new Vector2(e.Location.X, GameSettings.GameResolutionY - e.Location.Y - 5); // TODO: Fix this weird offset
 
             var mouseDelta = lastMousePos - mousePos;
 
