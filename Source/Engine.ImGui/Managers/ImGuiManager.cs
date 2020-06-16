@@ -299,6 +299,8 @@ namespace Engine.Gui.Managers
         {
             // TODO: correctly handle different locales and keyboard layouts
             // This is currently only written for ISO UK qwerty.
+
+            // TODO: Handle modifier keys
             var c = '\0';
             if (keyCode >= KeyCode.A && keyCode <= KeyCode.Z)
             {
@@ -351,6 +353,9 @@ namespace Engine.Gui.Managers
                         break;
                     case KeyCode.Minus:
                         c = '-';
+                        break;
+                    case KeyCode.OEM3:
+                        c = '@';
                         break;
                     case KeyCode.Return:
                     case KeyCode.Right:
