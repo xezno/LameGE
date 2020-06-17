@@ -1,5 +1,5 @@
-﻿using Engine.ECS.Managers;
-using Engine.Events;
+﻿using Engine.ECS.Notify;
+using Engine.ECS.Managers;
 using Engine.Gui.Managers;
 using Engine.Managers;
 using Engine.Renderer.GL.Managers;
@@ -128,7 +128,7 @@ namespace Engine
 
             foreach (var mainThreadManager in mainThreadManagers)
             {
-                EventManager.AddManager(mainThreadManager);
+                Broadcast.AddManager(mainThreadManager);
                 mainThreadManager.Parent = this;
             }
 
@@ -144,7 +144,7 @@ namespace Engine
 
             foreach (var multiThreadedManager in multiThreadedManagers)
             {
-                EventManager.AddManager(multiThreadedManager);
+                Broadcast.AddManager(multiThreadedManager);
                 multiThreadedManager.Parent = this;
 
                 threads.Add(new Thread(() =>
@@ -181,7 +181,7 @@ namespace Engine
             LoadContent();
 
             // Setup complete - broadcast the game started event
-            EventManager.BroadcastEvent(Event.GameStart, new GenericEventArgs(this));
+            Broadcast.Notify(NotifyType.GameStart, new GenericNotifyArgs(this));
             StartThreads();
         }
 
@@ -191,13 +191,13 @@ namespace Engine
 
             // renderer.SetViewportSize();
 
-            EventManager.BroadcastEvent(Event.WindowResized, new WindowResizeEventArgs(windowSize, this));
+            Broadcast.Notify(NotifyType.WindowResized, new WindowResizeNotifyArgs(windowSize, this));
         }
 
         // TODO: Fix mouse wheel
         private void MouseWheel(object sender, NativeWindowMouseEventArgs e)
         {
-            EventManager.BroadcastEvent(Event.MouseScroll, new MouseWheelEventArgs(e.WheelTicks, this));
+            Broadcast.Notify(NotifyType.MouseScroll, new MouseWheelNotifyArgs(e.WheelTicks, this));
             //Logging.Log($"Scrolled by {e.WheelTicks} ticks");
         }
 
@@ -215,8 +215,8 @@ namespace Engine
                 ignoreSingleMouseInput = false;
             }
 
-            EventManager.BroadcastEvent(Event.MouseMove,
-                new MouseMoveEventArgs(mouseDelta, mousePos,
+            Broadcast.Notify(NotifyType.MouseMove,
+                new MouseMoveNotifyArgs(mouseDelta, mousePos,
                     this));
 
             lastMousePos = mousePos;
@@ -233,7 +233,7 @@ namespace Engine
             else if ((e.Buttons & MouseButton.Middle) != 0) button = 1;
             else if ((e.Buttons & MouseButton.Right) != 0) button = 2;
 
-            EventManager.BroadcastEvent(Event.MouseButtonUp, new MouseButtonEventArgs(button, this));
+            Broadcast.Notify(NotifyType.MouseButtonUp, new MouseButtonNotifyArgs(button, this));
         }
 
         private void MouseDown(object sender, NativeWindowMouseEventArgs e)
@@ -243,12 +243,12 @@ namespace Engine
             else if ((e.Buttons & MouseButton.Middle) != 0) button = 1;
             else if ((e.Buttons & MouseButton.Right) != 0) button = 2;
 
-            EventManager.BroadcastEvent(Event.MouseButtonDown, new MouseButtonEventArgs(button, this));
+            Broadcast.Notify(NotifyType.MouseButtonDown, new MouseButtonNotifyArgs(button, this));
         }
 
-        private void KeyUp(object sender, NativeWindowKeyEventArgs e) => EventManager.BroadcastEvent(Event.KeyUp, new KeyboardEventArgs((int)e.Key, this));
+        private void KeyUp(object sender, NativeWindowKeyEventArgs e) => Broadcast.Notify(NotifyType.KeyUp, new KeyboardNotifyArgs((int)e.Key, this));
 
-        private void KeyDown(object sender, NativeWindowKeyEventArgs e) => EventManager.BroadcastEvent(Event.KeyDown, new KeyboardEventArgs((int)e.Key, this));
+        private void KeyDown(object sender, NativeWindowKeyEventArgs e) => Broadcast.Notify(NotifyType.KeyDown, new KeyboardNotifyArgs((int)e.Key, this));
 
         private void ContextDestroyed(object sender, NativeWindowEventArgs e)
         {

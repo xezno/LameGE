@@ -1,5 +1,5 @@
-﻿using Engine.ECS.Components;
-using Engine.Events;
+﻿using Engine.ECS.Notify;
+using Engine.ECS.Components;
 using Engine.Renderer.GL.Components;
 using Engine.Renderer.GL.Managers;
 using Engine.Utils.MathUtils;
@@ -71,48 +71,48 @@ namespace Ulaid.Components
             return new Vector3(EaseLerp(a.x, b.x, t), EaseLerp(a.y, b.y, t), EaseLerp(a.z, b.z, t));
         }
 
-        public override void HandleEvent(Event eventType, IEventArgs baseEventArgs)
+        public override void OnNotify(NotifyType eventType, INotifyArgs notifyArgs)
         {
-            if (eventType == Event.KeyDown || eventType == Event.KeyUp)
+            if (eventType == NotifyType.KeyDown || eventType == NotifyType.KeyUp)
             {
-                KeyboardEventArgs keyboardEventArgs = (KeyboardEventArgs)baseEventArgs;
+                KeyboardNotifyArgs keyboardEventArgs = (KeyboardNotifyArgs)notifyArgs;
 
                 switch ((KeyCode)keyboardEventArgs.KeyboardKey)
                 {
                     case KeyCode.W:
-                        currentInput.z = eventType == Event.KeyDown ? -1 : 0;
+                        currentInput.z = eventType == NotifyType.KeyDown ? -1 : 0;
                         break;
                     case KeyCode.A:
-                        currentInput.x = eventType == Event.KeyDown ? -1 : 0;
+                        currentInput.x = eventType == NotifyType.KeyDown ? -1 : 0;
                         break;
                     case KeyCode.S:
-                        currentInput.z = eventType == Event.KeyDown ? 1 : 0;
+                        currentInput.z = eventType == NotifyType.KeyDown ? 1 : 0;
                         break;
                     case KeyCode.D:
-                        currentInput.x = eventType == Event.KeyDown ? 1 : 0;
+                        currentInput.x = eventType == NotifyType.KeyDown ? 1 : 0;
                         break;
                     case KeyCode.Space:
-                        currentInput.y = eventType == Event.KeyDown ? 1 : 0;
+                        currentInput.y = eventType == NotifyType.KeyDown ? 1 : 0;
                         break;
                     case KeyCode.Control:
-                        currentInput.y = eventType == Event.KeyDown ? -1 : 0;
+                        currentInput.y = eventType == NotifyType.KeyDown ? -1 : 0;
                         break;
                     case KeyCode.F1:
-                        if (eventType == Event.KeyUp)
+                        if (eventType == NotifyType.KeyUp)
                             lockRotation = !lockRotation;
                         break;
                 }
             }
-            else if (eventType == Event.MouseMove)
+            else if (eventType == NotifyType.MouseMove)
             {
                 if (lockRotation)
                     return;
-                MouseMoveEventArgs mouseEventArgs = (MouseMoveEventArgs)baseEventArgs;
+                MouseMoveNotifyArgs mouseEventArgs = (MouseMoveNotifyArgs)notifyArgs;
                 currentRotation += new Vector3(mouseEventArgs.MouseDelta.y * -mouseSensitivityMultiplier,
                     mouseEventArgs.MouseDelta.x * -mouseSensitivityMultiplier,
                     0);
             }
-            else if (eventType == Event.GameStart)
+            else if (eventType == NotifyType.GameStart)
             {
                 transformComponent = GetComponent<TransformComponent>();
             }

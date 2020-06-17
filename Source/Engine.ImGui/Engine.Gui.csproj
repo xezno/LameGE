@@ -21,7 +21,6 @@
     <ProjectReference Include="..\..\Other\OpenGL.Net\Source\OpenGL.Net\OpenGL.Net.csproj" />
     <ProjectReference Include="..\..\Other\OpenGL.Net\Source\OpenGL.Net\OpenGL.Net.Math.csproj" />
     <ProjectReference Include="..\Engine.ECS\Engine.ECS.csproj" />
-    <ProjectReference Include="..\Engine.Events\Engine.Events.csproj" />
     <ProjectReference Include="..\Engine.Renderer.GL\Engine.Renderer.GL.csproj" />
     <ProjectReference Include="..\Engine.Utils\Engine.Utils.csproj" />
   </ItemGroup>

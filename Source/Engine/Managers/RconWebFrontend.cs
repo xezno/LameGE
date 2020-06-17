@@ -1,5 +1,5 @@
-﻿using Engine.ECS.Managers;
-using Engine.Events;
+﻿using Engine.ECS.Notify;
+using Engine.ECS.Managers;
 using Engine.Utils;
 using Engine.Utils.DebugUtils;
 using System.IO;
@@ -81,9 +81,9 @@ namespace Engine.Managers
             }
         }
 
-        public override void HandleEvent(Event eventType, IEventArgs eventArgs)
+        public override void OnNotify(NotifyType eventType, INotifyArgs notifyArgs)
         {
-            if (eventType != Event.GameEnd)
+            if (eventType != NotifyType.GameEnd)
                 return;
 
             shouldRun = false;

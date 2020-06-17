@@ -1,5 +1,5 @@
-﻿using Engine.ECS.Components;
-using Engine.Events;
+﻿using Engine.ECS.Notify;
+using Engine.ECS.Components;
 using Engine.Types;
 using System.Collections.Generic;
 
@@ -15,11 +15,11 @@ namespace Engine.ECS.Entities
         bool Enabled { get; }
 
         /// <summary>
-        /// Called when an event is triggered.
+        /// Called when an notification is broadcast.
         /// </summary>
-        /// <param name="eventType">The type of the event triggered.</param>
-        /// <param name="baseEventArgs">Any relevant information about the event.</param>
-        void HandleEvent(Event eventType, IEventArgs baseEventArgs);
+        /// <param name="notifyType">The type of the notification broadcast.</param>
+        /// <param name="notifyArgs">Any relevant information about the notification.</param>
+        void OnNotify(NotifyType notifyType, INotifyArgs notifyArgs);
 
         /// <summary>
         /// Called whenever the engine renders a single frame.

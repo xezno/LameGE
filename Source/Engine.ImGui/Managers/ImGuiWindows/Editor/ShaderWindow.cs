@@ -1,5 +1,5 @@
 ﻿using Engine.Assets;
-using Engine.Events;
+using Engine.ECS.Notify;
 using Engine.Renderer.GL.Components;
 using Engine.Renderer.GL.Managers;
 using ImGuiNET;
@@ -69,13 +69,13 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
             }
         }
 
-        public override void HandleEvent(Event eventType, IEventArgs baseEventArgs)
+        public override void OnNotify(NotifyType eventType, INotifyArgs notifyArgs)
         {
-            if (eventType == Event.GameEnd)
+            if (eventType == NotifyType.GameEnd)
             {
                 watcher.Dispose();
             }
-            base.HandleEvent(eventType, baseEventArgs);
+            base.OnNotify(eventType, notifyArgs);
         }
     }
 }
