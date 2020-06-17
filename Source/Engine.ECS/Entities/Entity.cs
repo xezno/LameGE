@@ -1,6 +1,6 @@
 ﻿using Engine.Assets;
+using Engine.ECS.Notify;
 using Engine.ECS.Components;
-using Engine.Events;
 using Engine.Types;
 using Engine.Utils.Attributes;
 using ImGuiNET;
@@ -145,11 +145,11 @@ namespace Engine.ECS.Entities
             return !(results.Count <= 0);
         }
 
-        public virtual void HandleEvent(Event eventType, IEventArgs baseEventArgs)
+        public virtual void OnNotify(NotifyType eventType, INotifyArgs notifyArgs)
         {
             foreach (var component in Components)
             {
-                component.HandleEvent(eventType, baseEventArgs);
+                component.OnNotify(eventType, notifyArgs);
             }
         }
 

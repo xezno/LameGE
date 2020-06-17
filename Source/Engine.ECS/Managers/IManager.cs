@@ -1,4 +1,4 @@
-﻿using Engine.Events;
+﻿using Engine.ECS.Notify;
 using Engine.Types;
 
 namespace Engine.ECS.Managers
@@ -6,11 +6,11 @@ namespace Engine.ECS.Managers
     public interface IManager : IHasParent
     {
         /// <summary>
-        /// Called when an event is triggered.
+        /// Called when an notification is broadcast.
         /// </summary>
-        /// <param name="eventType">The type of the event triggered.</param>
-        /// <param name="eventArgs">Any relevant information about the event.</param>
-        void HandleEvent(Event eventType, IEventArgs eventArgs);
+        /// <param name="notifyType">The type of the notification broadcast.</param>
+        /// <param name="notifyArgs">Any relevant information about the notification.</param>
+        void OnNotify(NotifyType notifyType, INotifyArgs notifyArgs);
 
         /// <summary>
         /// Called whenever the manager should run its typical process. (Usually called in game loop).

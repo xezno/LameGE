@@ -1,4 +1,4 @@
-﻿using Engine.Events;
+﻿using Engine.ECS.Notify;
 using ImGuiNET;
 using System.Numerics;
 
@@ -22,6 +22,6 @@ namespace Engine.Gui.Managers.ImGuiWindows
                 position, 0xFFFFFFFF, str);
         }
 
-        public virtual void HandleEvent(Event eventType, IEventArgs baseEventArgs) { }
+        public virtual void OnNotify(NotifyType eventType, INotifyArgs notifyArgs) { }
     }
 }

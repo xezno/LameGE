@@ -1,5 +1,5 @@
-﻿using Engine.ECS.Entities;
-using Engine.Events;
+﻿using Engine.ECS.Notify;
+using Engine.ECS.Entities;
 using Engine.Types;
 using System;
 using System.Collections.Generic;
@@ -43,15 +43,15 @@ namespace Engine.ECS.Managers
         }
 
         /// <summary>
-        /// Called when an event is triggered.
+        /// Called when an notification is broadcast.
         /// </summary>
-        /// <param name="eventType">The type of the event triggered.</param>
-        /// <param name="eventArgs">Any relevant information about the event.</param>
-        public virtual void HandleEvent(Event eventType, IEventArgs eventArgs)
+        /// <param name="notifyType">The type of the notification broadcast.</param>
+        /// <param name="notifyArgs">Any relevant information about the notification.</param>
+        public virtual void OnNotify(NotifyType notifyType, INotifyArgs notifyArgs)
         {
             foreach (var entity in Entities)
             {
-                entity.HandleEvent(eventType, eventArgs);
+                entity.OnNotify(notifyType, notifyArgs);
             }
         }
 

@@ -1,16 +1,16 @@
 ﻿using System;
 
-namespace Engine.Events
+namespace Engine.ECS.Notify
 {
-    public class MouseWheelEventArgs : IEventArgs
+    public class MouseWheelNotifyArgs : INotifyArgs
     {
         /// <summary>
-        /// The object triggering the event.
+        /// The object triggering the notification.
         /// </summary>
         public object Sender { get; set; }
 
         /// <summary>
-        /// The time at which the event was triggered.
+        /// The time at which the notification was broadcast.
         /// </summary>
         public DateTime TimeSent { get; set; }
 
@@ -20,11 +20,11 @@ namespace Engine.Events
         public int MouseScroll { get; }
 
         /// <summary>
-        /// Construct a new instance of <see cref="MouseWheelEventArgs"/>; the <see cref="TimeSent"/> will be automatically set.
+        /// Construct a new instance of <see cref="MouseWheelNotifyArgs"/>; the <see cref="TimeSent"/> will be automatically set.
         /// </summary>
         /// <param name="mouseScroll">The amount by which the mouse scroll wheel has been turned.</param>
-        /// <param name="sender">The object triggering the event.</param>
-        public MouseWheelEventArgs(int mouseScroll, object sender)
+        /// <param name="sender">The object triggering the notification.</param>
+        public MouseWheelNotifyArgs(int mouseScroll, object sender)
         {
             Sender = sender;
             TimeSent = DateTime.Now;

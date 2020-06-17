@@ -1,6 +1,6 @@
 ﻿using Engine.Assets;
+using Engine.ECS.Notify;
 using Engine.ECS.Managers;
-using Engine.Events;
 using Engine.Gui.Managers.ImGuiWindows;
 using Engine.Gui.Managers.ImGuiWindows.Editor;
 using Engine.Gui.Managers.ImGuiWindows.Overlays;
@@ -299,6 +299,8 @@ namespace Engine.Gui.Managers
         {
             // TODO: correctly handle different locales and keyboard layouts
             // This is currently only written for ISO UK qwerty.
+
+            // TODO: Handle modifier keys
             var c = '\0';
             if (keyCode >= KeyCode.A && keyCode <= KeyCode.Z)
             {
@@ -352,6 +354,9 @@ namespace Engine.Gui.Managers
                     case KeyCode.Minus:
                         c = '-';
                         break;
+                    case KeyCode.OEM3:
+                        c = '@';
+                        break;
                     case KeyCode.Return:
                     case KeyCode.Right:
                     case KeyCode.Up:
@@ -372,13 +377,13 @@ namespace Engine.Gui.Managers
             return c;
         }
 
-        public override void HandleEvent(Event eventType, IEventArgs eventArgs)
+        public override void OnNotify(NotifyType eventType, INotifyArgs notifyArgs)
         {
             switch (eventType)
             {
-                case Event.KeyDown:
+                case NotifyType.KeyDown:
                     {
-                        var keyboardEventArgs = (KeyboardEventArgs)eventArgs;
+                        var keyboardEventArgs = (KeyboardNotifyArgs)notifyArgs;
                         io.KeysDown[keyboardEventArgs.KeyboardKey] = true;
                         var keyCode = (KeyCode)keyboardEventArgs.KeyboardKey;
 
@@ -405,9 +410,9 @@ namespace Engine.Gui.Managers
                         }
                         break;
                     }
-                case Event.KeyUp:
+                case NotifyType.KeyUp:
                     {
-                        var keyboardEventArgs = (KeyboardEventArgs)eventArgs;
+                        var keyboardEventArgs = (KeyboardNotifyArgs)notifyArgs;
                         io.KeysDown[keyboardEventArgs.KeyboardKey] = false;
                         var keyCode = (KeyCode)keyboardEventArgs.KeyboardKey;
                         if (keyCode == KeyCode.Shift)
@@ -420,33 +425,33 @@ namespace Engine.Gui.Managers
                         }
                         break;
                     }
-                case Event.MouseMove:
+                case NotifyType.MouseMove:
                     {
-                        var mouseMoveEventArgs = (MouseMoveEventArgs)eventArgs;
+                        var mouseMoveEventArgs = (MouseMoveNotifyArgs)notifyArgs;
                         io.MousePos = new Vector2(mouseMoveEventArgs.MousePosition.x, mouseMoveEventArgs.MousePosition.y);
                         break;
                     }
-                case Event.MouseButtonDown:
+                case NotifyType.MouseButtonDown:
                     {
-                        var mouseButtonEventArgs = (MouseButtonEventArgs)eventArgs;
+                        var mouseButtonEventArgs = (MouseButtonNotifyArgs)notifyArgs;
                         io.MouseDown[mouseButtonEventArgs.MouseButton] = true;
                         break;
                     }
-                case Event.MouseButtonUp:
+                case NotifyType.MouseButtonUp:
                     {
-                        var mouseButtonEventArgs = (MouseButtonEventArgs)eventArgs;
+                        var mouseButtonEventArgs = (MouseButtonNotifyArgs)notifyArgs;
                         io.MouseDown[mouseButtonEventArgs.MouseButton] = false;
                         break;
                     }
-                case Event.MouseScroll:
+                case NotifyType.MouseScroll:
                     {
-                        var mouseWheelEventArgs = (MouseWheelEventArgs)eventArgs;
+                        var mouseWheelEventArgs = (MouseWheelNotifyArgs)notifyArgs;
                         io.MouseWheel += mouseWheelEventArgs.MouseScroll;
                         break;
                     }
-                case Event.WindowResized:
+                case NotifyType.WindowResized:
                     {
-                        var windowResizeEventArgs = (WindowResizeEventArgs)eventArgs;
+                        var windowResizeEventArgs = (WindowResizeNotifyArgs)notifyArgs;
                         windowSize = new Vector2(windowResizeEventArgs.WindowSize.x, windowResizeEventArgs.WindowSize.y);
                         break;
                     }

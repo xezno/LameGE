@@ -2,9 +2,9 @@
 using CefSharp.OffScreen;
 using CefSharp.Structs;
 using Engine.Assets;
+using Engine.ECS.Notify;
 using Engine.ECS.Entities;
 using Engine.Entities.CEF;
-using Engine.Events;
 using Engine.Renderer.GL.Components;
 using Engine.Renderer.GL.Render;
 using Engine.Utils;
@@ -134,36 +134,35 @@ namespace Engine.Entities
             Gl.BindTexture(TextureTarget.Texture2d, 0);
         }
 
-        public override void HandleEvent(Event eventType, IEventArgs baseEventArgs)
+        public override void OnNotify(NotifyType eventType, INotifyArgs notifyArgs)
         {
-            if (eventType == Event.GameEnd)
+            if (eventType == NotifyType.GameEnd)
             {
-                //browser.Dispose();
-                //requestContext.Dispose();
+                browser.Dispose();
             }
-            else if (eventType == Event.MouseButtonDown)
+            else if (eventType == NotifyType.MouseButtonDown)
             {
-                var mouseEventArgs = (MouseButtonEventArgs)baseEventArgs;
+                var mouseEventArgs = (MouseButtonNotifyArgs)notifyArgs;
                 var mouseButtonType = mouseEventArgs.MouseButton == 0 ? MouseButtonType.Left : MouseButtonType.Right;
                 var eventFlags = mouseButtonType == MouseButtonType.Left ? CefEventFlags.LeftMouseButton : CefEventFlags.RightMouseButton;
                 browser.GetBrowserHost().SendMouseClickEvent(new MouseEvent(mouseX, mouseY, eventFlags), mouseButtonType, false, 0);
             }
-            else if (eventType == Event.MouseButtonUp)
+            else if (eventType == NotifyType.MouseButtonUp)
             {
-                var mouseEventArgs = (MouseButtonEventArgs)baseEventArgs;
+                var mouseEventArgs = (MouseButtonNotifyArgs)notifyArgs;
                 var mouseButtonType = mouseEventArgs.MouseButton == 0 ? MouseButtonType.Left : MouseButtonType.Right;
                 var eventFlags = mouseButtonType == MouseButtonType.Left ? CefEventFlags.LeftMouseButton : CefEventFlags.RightMouseButton;
                 browser.GetBrowserHost().SendMouseClickEvent(new MouseEvent(mouseX, mouseY, eventFlags), mouseButtonType, true, 0);
             }
-            else if (eventType == Event.MouseMove)
+            else if (eventType == NotifyType.MouseMove)
             {
-                var mouseMoveEventArgs = (MouseMoveEventArgs)baseEventArgs;
+                var mouseMoveEventArgs = (MouseMoveNotifyArgs)notifyArgs;
                 mouseX = (int)mouseMoveEventArgs.MousePosition.x;
                 mouseY = (int)mouseMoveEventArgs.MousePosition.y;
                 browser.GetBrowserHost().SendMouseMoveEvent(new MouseEvent(mouseX, mouseY, CefEventFlags.None), false);
             }
 
-            base.HandleEvent(eventType, baseEventArgs);
+            base.OnNotify(eventType, notifyArgs);
         }
     }
 }

@@ -1,9 +1,9 @@
-﻿namespace Engine.Events
+﻿namespace Engine.ECS.Notify
 {
     /// <summary>
     /// An enumerator containing all possible events that may occur within a game instance.
     /// </summary>
-    public enum Event
+    public enum NotifyType
     {
         GameStart,
         GameEnd,
@@ -16,6 +16,7 @@
         MouseButtonDown,
         MouseScroll,
 
-        WindowResized
+        WindowResized,
+        CloseGame
     }
 }

@@ -1,17 +1,17 @@
 ﻿using Engine.Utils.MathUtils;
 using System;
 
-namespace Engine.Events
+namespace Engine.ECS.Notify
 {
-    public class MouseMoveEventArgs : IEventArgs
+    public class MouseMoveNotifyArgs : INotifyArgs
     {
         /// <summary>
-        /// The object triggering the event.
+        /// The object triggering the notification.
         /// </summary>
         public object Sender { get; set; }
 
         /// <summary>
-        /// The time at which the event was triggered.
+        /// The time at which the notification was broadcast.
         /// </summary>
         public DateTime TimeSent { get; set; }
 
@@ -26,12 +26,12 @@ namespace Engine.Events
         public Vector2 MouseDelta { get; }
 
         /// <summary>
-        /// Construct a new instance of <see cref="MouseMoveEventArgs"/>; the <see cref="TimeSent"/> will be automatically set.
+        /// Construct a new instance of <see cref="MouseMoveNotifyArgs"/>; the <see cref="TimeSent"/> will be automatically set.
         /// </summary>
         /// <param name="mouseDelta">The cursor's delta.</param>
         /// <param name="mousePosition">The cursor's new position relative to the window.</param>
-        /// <param name="sender">The object triggering the event.</param>
-        public MouseMoveEventArgs(Vector2 mouseDelta, Vector2 mousePosition, object sender)
+        /// <param name="sender">The object triggering the notification.</param>
+        public MouseMoveNotifyArgs(Vector2 mouseDelta, Vector2 mousePosition, object sender)
         {
             Sender = sender;
             TimeSent = DateTime.Now;

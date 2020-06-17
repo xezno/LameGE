@@ -1,5 +1,5 @@
 ﻿using Engine.Assets;
-using Engine.Events;
+using Engine.ECS.Notify;
 using Engine.Utils;
 using Engine.Utils.DebugUtils;
 using ImGuiNET;
@@ -20,7 +20,10 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
             ImGui.Text("Are you sure you want to quit?");
 
             if (ImGui.Button("Yes"))
+            {
+                Broadcast.Notify(NotifyType.CloseGame, null);
                 Logging.Log("Close game");
+            }
 
             ImGui.SameLine();
 
@@ -33,12 +36,12 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
             ImGui.SetWindowPos(windowPos);
         }
 
-        public override void HandleEvent(Event eventType, IEventArgs baseEventArgs)
+        public override void OnNotify(NotifyType eventType, INotifyArgs notifyArgs)
         {
             // TODO: Event not ever fired
-            if (eventType == Event.KeyUp)
+            if (eventType == NotifyType.KeyUp)
             {
-                if (((KeyboardEventArgs)baseEventArgs).KeyboardKey == (int)KeyCode.F3)
+                if (((KeyboardNotifyArgs)notifyArgs).KeyboardKey == (int)KeyCode.F3)
                 {
                     Render = !Render;
                 }
