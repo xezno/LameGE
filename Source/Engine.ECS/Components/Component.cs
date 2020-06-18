@@ -176,6 +176,11 @@ namespace Engine.ECS.Components
             }
         }
 
+        private ImGuiInputTextFlags GetFlags(dynamic reference)
+        {
+            return reference.CanGet ? ImGuiInputTextFlags.None : ImGuiInputTextFlags.ReadOnly;
+        }
+
         /// <summary>
         /// Called whenever the engine renders a single frame.
         /// </summary>

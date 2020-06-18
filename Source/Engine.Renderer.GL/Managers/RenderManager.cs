@@ -4,6 +4,7 @@ using Engine.ECS.Managers;
 using Engine.Renderer.GL.Components;
 using Engine.Renderer.GL.Render;
 using Engine.Utils;
+using Engine.Utils.DebugUtils;
 using Engine.Utils.MathUtils;
 using OpenGL;
 using System;
@@ -51,7 +52,9 @@ namespace Engine.Renderer.GL.Managers
                         RenderMesh(entity, projMatrix, viewMatrix, cameraPosition);
                     }
                 }
-                //entity.Render();
+
+                // "Legacy": render any entities with custom render code
+                entity.Render();
             }
         }
 
@@ -99,7 +102,7 @@ namespace Engine.Renderer.GL.Managers
             var transformComponent = entity.GetComponent<TransformComponent>();
             var meshComponent = entity.GetComponent<MeshComponent>();
 
-            shaderComponent.UseShader(); // TODO: Attach GetComponent function to IComponent
+            shaderComponent.UseShader();
 
             Gl.BindVertexArray(meshComponent.RenderMesh.vao);
             Gl.BindBuffer(BufferTarget.ArrayBuffer, meshComponent.RenderMesh.vbo);

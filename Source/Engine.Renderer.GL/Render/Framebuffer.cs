@@ -46,7 +46,7 @@ namespace Engine.Renderer.GL.Render
             Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
             // Draw to screen
 
-            shaderComponent.UseShader(); // TODO: Attach GetComponent function to IComponent
+            shaderComponent.UseShader();
 
             Gl.BindVertexArray(mesh.vao);
             Gl.BindBuffer(BufferTarget.ArrayBuffer, mesh.vbo);

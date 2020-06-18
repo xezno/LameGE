@@ -31,6 +31,7 @@ namespace Engine.Renderer.GL.Managers
             {
                 Name = "Spot Light"
             };
+
             lights.Add(mainLight);
             AddEntity(mainLight);
         }

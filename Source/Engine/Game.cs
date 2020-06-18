@@ -1,10 +1,11 @@
-﻿using Engine.ECS.Notify;
-using Engine.ECS.Managers;
+﻿using Engine.ECS.Managers;
+using Engine.ECS.Notify;
 using Engine.Gui.Managers;
 using Engine.Managers;
 using Engine.Renderer.GL.Managers;
 using Engine.Types;
 using Engine.Utils;
+using Engine.Utils.DebugUtils;
 using Engine.Utils.MathUtils;
 using Newtonsoft.Json;
 using OpenGL.CoreUI;
@@ -57,6 +58,12 @@ namespace Engine
             RenderManager.Instance.Run();
             ImGuiManager.Instance.Run();
         }
+
+        public void Close()
+        {
+            nativeWindow.Stop();
+            nativeWindow.Destroy();
+        }
         #endregion
 
         #region Initialization
@@ -75,6 +82,7 @@ namespace Engine
             nativeWindow.MouseWheel += MouseWheel;
             nativeWindow.MouseLeave += NativeWindowOnMouseLeave;
             nativeWindow.MouseEnter += NativeWindowOnMouseEnter;
+            nativeWindow.Close += Closing;
 
             nativeWindow.CursorVisible = true;
             nativeWindow.Animation = false; // Changing this to true makes input poll like once every 500ms. so don't change it
@@ -82,7 +90,7 @@ namespace Engine
 
             nativeWindow.SwapInterval = 0;
             nativeWindow.Resize += Resize;
-            nativeWindow.Create(GameSettings.GamePosX, GameSettings.GamePosY, (uint)GameSettings.GameResolutionX + 16, (uint)GameSettings.GameResolutionY + 16, NativeWindowStyle.Caption);
+            nativeWindow.Create(GameSettings.GamePosX, GameSettings.GamePosY, (uint)GameSettings.GameResolutionX + 16, (uint)GameSettings.GameResolutionY + 16, NativeWindowStyle.Caption | NativeWindowStyle.Border);
 
             nativeWindow.Fullscreen = GameSettings.Fullscreen;
             nativeWindow.Caption = FilterString(gameProperties.WindowTitle) ?? "Engine Game";
@@ -91,6 +99,14 @@ namespace Engine
 
             nativeWindow.Show();
             nativeWindow.Run();
+            nativeWindow.Destroy();
+        }
+
+        private void Closing(object sender, EventArgs e)
+        {
+            Logging.Log("Closing game...");
+            isRunning = false;
+            // Destroy all, then call Destroy
             nativeWindow.Destroy();
         }
 
@@ -119,7 +135,7 @@ namespace Engine
             gameProperties = JsonConvert.DeserializeObject<GameProperties>(streamReader.ReadToEnd());
         }
 
-        protected virtual void InitSystems()
+        protected virtual void InitManagers()
         {
             mainThreadManagers = new List<IManager> {
                 RenderManager.Instance,
@@ -176,7 +192,7 @@ namespace Engine
         #region Event Handlers
         private void ContextCreated(object sender, NativeWindowEventArgs e)
         {
-            InitSystems();
+            InitManagers();
             InitScene();
             LoadContent();
 
@@ -205,7 +221,7 @@ namespace Engine
         private void MouseMove(object sender, NativeWindowMouseEventArgs e)
         {
             // TODO: Fix mouse positioning
-            var mousePos = new Vector2(e.Location.X, GameSettings.GameResolutionY - e.Location.Y - 5); // TODO: Fix this weird offset
+            var mousePos = new Vector2(e.Location.X, e.Location.Y); // TODO: Fix this weird offset
 
             var mouseDelta = lastMousePos - mousePos;
 
@@ -253,6 +269,18 @@ namespace Engine
         private void ContextDestroyed(object sender, NativeWindowEventArgs e)
         {
             isRunning = false;
+        }
+
+        public virtual void OnNotify(NotifyType eventType, INotifyArgs notifyArgs)
+        {
+            switch (eventType)
+            {
+                case NotifyType.CloseGame:
+                    Close();
+                    break;
+                default:
+                    break;
+            }
         }
         #endregion
     }

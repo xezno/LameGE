@@ -18,7 +18,7 @@ using Size = System.Drawing.Size;
 
 namespace Engine.Entities
 {
-    // TODO: Move to component, render to a texture and make a HudEntity instead
+    // TODO: Move to component and make a HudEntity instead
     public sealed class CefEntity : Entity<CefEntity>
     {
         private string cefFilePath = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/Content/UI/index.html";
@@ -85,6 +85,7 @@ namespace Engine.Entities
             modifiedTexture = new Texture2D(IntPtr.Zero, GameSettings.GameResolutionX, GameSettings.GameResolutionY, 32);
         }
 
+        // TODO: Move this into rendermanager, or create a 2D render manager of some sort
         public override void Render()
         {
             // render cef offscreen & then blit to screen
@@ -111,7 +112,6 @@ namespace Engine.Entities
             if (!renderHandler.NeedsPaint)
                 return;
 
-            // TODO: Wait until rendering frame, then set tex data, THEN render (currently can render between setting / unsetting tex data - BAD!)
             Paint(renderHandler.Type, renderHandler.DirtyRect, renderHandler.Buffer, renderHandler.Width, renderHandler.Height);
             renderHandler.NeedsPaint = false;
         }
