@@ -169,6 +169,7 @@ namespace Engine.Renderer.GL.Managers
             var mainLightEntity = SceneManager.Instance.lights[0];
             var mainLightComponent = mainLightEntity.GetComponent<LightComponent>();
 
+            // Render scene from light (shadow map)
             mainLightComponent.shadowMap.Bind();
             RenderLights(mainLightComponent);
             mainLightComponent.shadowMap.Unbind();
@@ -180,14 +181,14 @@ namespace Engine.Renderer.GL.Managers
 
             RenderScene(sceneCamera.ProjMatrix, sceneCamera.ViewMatrix, sceneCamera.Position);
 
-            // Render shadow map
+            // Render shadow map to display
             if (RenderShadowMap)
                 mainLightComponent.shadowMap.Render();
-
-            mainFramebuffer.Render();
-
+            
             // Render hud
             RenderHud();
+
+            mainFramebuffer.Render();
 
             renderer.FinishRender();
 
