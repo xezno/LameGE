@@ -5,7 +5,7 @@ using Engine.Renderer.GL.Components;
 using Engine.Renderer.GL.Render;
 using Engine.Utils.MathUtils;
 
-namespace Engine.Entities
+namespace Engine.Renderer.GL.Entities
 {
     public sealed class LightEntity : Entity<LightEntity>
     {

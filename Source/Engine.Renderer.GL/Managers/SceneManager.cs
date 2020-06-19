@@ -1,5 +1,4 @@
 ﻿using Engine.ECS.Managers;
-using Engine.Entities;
 using Engine.Renderer.GL.Entities;
 using Engine.Utils;
 using System.Collections.Generic;

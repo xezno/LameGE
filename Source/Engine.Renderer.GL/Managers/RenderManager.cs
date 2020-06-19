@@ -2,9 +2,9 @@
 using Engine.ECS.Entities;
 using Engine.ECS.Managers;
 using Engine.Renderer.GL.Components;
+using Engine.Renderer.GL.Entities;
 using Engine.Renderer.GL.Render;
 using Engine.Utils;
-using Engine.Utils.DebugUtils;
 using Engine.Utils.MathUtils;
 using OpenGL;
 using System;
@@ -54,7 +54,7 @@ namespace Engine.Renderer.GL.Managers
                 }
 
                 // "Legacy": render any entities with custom render code
-                entity.Render();
+                // entity.Render();
             }
         }
 
@@ -67,6 +67,20 @@ namespace Engine.Renderer.GL.Managers
                     if (entity.HasComponent<MeshComponent>())
                     {
                         RenderMeshShadow(entity, lightComponent.lightMatrix);
+                    }
+                }
+            }
+        }
+
+        private void RenderHud()
+        {
+            foreach (var entity in SceneManager.Instance.Entities)
+            {
+                if (entity.Enabled && entity.GetType() == typeof(CefEntity))
+                {
+                    if (entity.HasComponent<MeshComponent>())
+                    {
+                        RenderCef((CefEntity)entity);
                     }
                 }
             }
@@ -124,6 +138,26 @@ namespace Engine.Renderer.GL.Managers
             Gl.BindBuffer(BufferTarget.ArrayBuffer, 0);
         }
 
+        public void RenderCef(CefEntity cefEntity)
+        {
+            // render cef offscreen & then blit to screen
+            // we need to set up texture on the main therad
+            // since that wont happen unless we call it here, we need to
+            // declare a bool that allows us to detect when we need to
+            // setup the texture.
+
+            if (!cefEntity.ReadyToDraw) return;
+
+            Gl.Disable(EnableCap.DepthTest);
+
+            // draw to screen
+            cefEntity.Render();
+
+            cefEntity.SetTextureData();
+
+            Gl.Enable(EnableCap.DepthTest);
+        }
+
         /// <summary>
         /// Render all the entities within the render manager.
         /// </summary>
@@ -146,10 +180,15 @@ namespace Engine.Renderer.GL.Managers
 
             RenderScene(sceneCamera.ProjMatrix, sceneCamera.ViewMatrix, sceneCamera.Position);
 
+            // Render shadow map
             if (RenderShadowMap)
                 mainLightComponent.shadowMap.Render();
 
             mainFramebuffer.Render();
+
+            // Render hud
+            RenderHud();
+
             renderer.FinishRender();
 
             LastFrameTime = (DateTime.Now - lastRender).Milliseconds;
