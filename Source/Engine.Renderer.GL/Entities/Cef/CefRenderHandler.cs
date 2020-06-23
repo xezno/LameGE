@@ -3,9 +3,9 @@ using CefSharp.OffScreen;
 using CefSharp.Structs;
 using System;
 
-namespace Engine.Entities.CEF
+namespace Engine.Renderer.GL.Entities.Cef
 {
-    class RenderHandler : DefaultRenderHandler, IDisposable
+    class CefRenderHandler : DefaultRenderHandler, IDisposable
     {
         public bool NeedsPaint { get; set; }
         public PaintElementType Type { get; set; }
@@ -14,7 +14,7 @@ namespace Engine.Entities.CEF
         public int Width { get; set; }
         public int Height { get; set; }
 
-        public RenderHandler(ChromiumWebBrowser browser) : base(browser) { }
+        public CefRenderHandler(ChromiumWebBrowser browser) : base(browser) { }
 
         public override void OnAcceleratedPaint(PaintElementType type, Rect dirtyRect, IntPtr sharedHandle)
         {

@@ -31,6 +31,8 @@ namespace Engine.Utils.MathUtils
             }
         }
 
+        public void Normalize() => this = Normalized;
+
         /// <summary>
         /// Construct a <see cref="Vector3"/> with three initial values.
         /// </summary>

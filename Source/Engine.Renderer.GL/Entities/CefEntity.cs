@@ -2,10 +2,10 @@
 using CefSharp.OffScreen;
 using CefSharp.Structs;
 using Engine.Assets;
-using Engine.ECS.Notify;
 using Engine.ECS.Entities;
-using Engine.Entities.CEF;
+using Engine.ECS.Notify;
 using Engine.Renderer.GL.Components;
+using Engine.Renderer.GL.Entities.Cef;
 using Engine.Renderer.GL.Render;
 using Engine.Utils;
 using Engine.Utils.DebugUtils;
@@ -16,20 +16,20 @@ using System.IO;
 using System.Reflection;
 using Size = System.Drawing.Size;
 
-namespace Engine.Entities
+namespace Engine.Renderer.GL.Entities
 {
-    // TODO: Move to component, render to a texture and make a HudEntity instead
+    // TODO: Move to component and make a HudEntity instead
     public sealed class CefEntity : Entity<CefEntity>
     {
         private string cefFilePath = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/Content/UI/index.html";
         // private string cefFilePath = $"localhost:5500";
 
         public override string IconGlyph { get; } = FontAwesome5.Wrench;
-        private bool readyToDraw;
+        public bool ReadyToDraw { get; private set; }
         private ChromiumWebBrowser browser;
 
         private int mouseX, mouseY;
-        private RenderHandler renderHandler;
+        private CefRenderHandler renderHandler;
 
         private Texture2D modifiedTexture;
 
@@ -53,17 +53,17 @@ namespace Engine.Entities
 
             var cefSettings = new CefSettings();
             cefSettings.SetOffScreenRenderingBestPerformanceArgs();
-            Cef.Initialize(cefSettings);
+            CefSharp.Cef.Initialize(cefSettings);
 
             var requestContextSettings = new RequestContextSettings();
             var requestContext = new RequestContext(requestContextSettings);
             browser = new ChromiumWebBrowser(cefFilePath, browserSettings, requestContext);
             browser.Size = new Size(GameSettings.GameResolutionX, GameSettings.GameResolutionY);
-            browser.RenderHandler = new RenderHandler(browser);
+            browser.RenderHandler = new CefRenderHandler(browser);
             browser.BrowserInitialized += (sender, args) => { browser.Load(cefFilePath); };
             browser.LoadError += (sender, args) => Logging.Log($"Browser error {args.ErrorCode}");
 
-            renderHandler = (RenderHandler)browser.RenderHandler;
+            renderHandler = (CefRenderHandler)browser.RenderHandler;
 
             byte[] emptyData = new byte[browser.Size.Width * browser.Size.Height * 4];
             GetComponent<MaterialComponent>().materials[0].diffuseTexture =
@@ -77,7 +77,7 @@ namespace Engine.Entities
                 browser.LoadingStateChanged -= handler;
 
                 // Logging.Logging.Log($"CEF has finished loading page {cefFilePath}");
-                readyToDraw = true;
+                ReadyToDraw = true;
             };
 
             browser.LoadingStateChanged += handler;
@@ -85,35 +85,15 @@ namespace Engine.Entities
             modifiedTexture = new Texture2D(IntPtr.Zero, GameSettings.GameResolutionX, GameSettings.GameResolutionY, 32);
         }
 
-        public override void Render()
-        {
-            // render cef offscreen & then blit to screen
-            // we need to set up texture on the main therad
-            // since that wont happen unless we call it here, we need to
-            // declare a bool that allows us to detect when we need to
-            // setup the texture.
-
-            if (!readyToDraw) return;
-
-            Gl.Disable(EnableCap.DepthTest);
-
-            // draw to screen
-            base.Render();
-            SetTextureData();
-
-            GetComponent<MaterialComponent>().materials[0].diffuseTexture = modifiedTexture;
-
-            Gl.Enable(EnableCap.DepthTest);
-        }
-
-        private void SetTextureData()
+        public void SetTextureData()
         {
             if (!renderHandler.NeedsPaint)
                 return;
 
-            // TODO: Wait until rendering frame, then set tex data, THEN render (currently can render between setting / unsetting tex data - BAD!)
             Paint(renderHandler.Type, renderHandler.DirtyRect, renderHandler.Buffer, renderHandler.Width, renderHandler.Height);
             renderHandler.NeedsPaint = false;
+            
+            GetComponent<MaterialComponent>().materials[0].diffuseTexture = modifiedTexture;
         }
 
         private void Paint(PaintElementType type, Rect dirtyRect, IntPtr buffer, int width, int height)

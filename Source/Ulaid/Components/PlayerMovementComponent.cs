@@ -10,53 +10,50 @@ namespace Ulaid.Components
 {
     class PlayerMovementComponent : Component<PlayerMovementComponent>
     {
-        // inb4 "why are these public" - it's for imgui
-        public Vector3 velocity;
-        public Vector3 currentDirection;
-        public Vector3 currentInput;
-        public Vector3 currentRotation;
-        public float acceleration = 0.125f;
-        public float deceleration = 0.0625f;
-        public float maxSpeed = 10.0f;
-        public float mouseSensitivityMultiplier = 0.1f;
-        public float rotationSensitivity = 3f;
-        public float minVelocity = 0.05f;
         private TransformComponent transformComponent;
         private bool lockRotation;
+        private Vector3 currentInput;
+        private Vector3 currentDirection;
+
+        public Vector3 Velocity { get; set; }
+        public Vector3 CurrentRotation { get; set; }
+        public float Acceleration { get; set; } = 0.125f;
+        public float Deceleration { get; set; } = 0.0625f;
+        public float MaxSpeed { get; set; } = 10.0f;
+        public float MouseSensitivityMultiplier { get; set; } = 0.1f;
+        public float RotationSensitivity { get; set; } = 3f;
+        public float MinVelocity { get; set; } = 0.05f;
 
         public override void Update(float deltaTime)
         {
-            transformComponent.Position += velocity * deltaTime;
+            transformComponent.Position += Velocity * deltaTime;
             SceneManager.Instance.mainCamera.Position = transformComponent.Position;
 
-            if (SceneManager.Instance.mainCamera.RotationEuler.x > 90)
-            {
-                // currentRotation.x = 90;
-            }
-            SceneManager.Instance.mainCamera.RotationEuler = currentRotation * rotationSensitivity;
-            transformComponent.RotationEuler = currentRotation * rotationSensitivity;
+            SceneManager.Instance.mainCamera.RotationEuler = CurrentRotation * RotationSensitivity;
+            transformComponent.RotationEuler = CurrentRotation * RotationSensitivity;
 
-            currentDirection = (transformComponent.Forward * currentInput.z) + (transformComponent.Right * currentInput.x);
-            currentDirection.y += currentInput.y;
+            var newDirection = (transformComponent.Forward * currentInput.z) + (transformComponent.Right * currentInput.x);
+            newDirection.y = currentDirection.y + currentInput.y;
+            newDirection.Normalize();
 
             currentDirection = currentDirection.Normalized;
 
-            velocity += currentDirection * acceleration;
-            velocity += new Vector3(
-                Math.Sign(velocity.x) * -deceleration,
-                Math.Sign(velocity.y) * -deceleration,
-                Math.Sign(velocity.z) * -deceleration
+            Velocity += currentDirection * Acceleration;
+            Velocity += new Vector3(
+                Math.Sign(Velocity.x) * -Deceleration,
+                Math.Sign(Velocity.y) * -Deceleration,
+                Math.Sign(Velocity.z) * -Deceleration
             );
 
-            velocity = new Vector3(
-                Math.Max(Math.Min(velocity.x, maxSpeed), -maxSpeed),
-                Math.Max(Math.Min(velocity.y, maxSpeed), -maxSpeed),
-                Math.Max(Math.Min(velocity.z, maxSpeed), -maxSpeed)
+            Velocity = new Vector3(
+                Math.Max(Math.Min(Velocity.x, MaxSpeed), -MaxSpeed),
+                Math.Max(Math.Min(Velocity.y, MaxSpeed), -MaxSpeed),
+                Math.Max(Math.Min(Velocity.z, MaxSpeed), -MaxSpeed)
             );
 
-            if (velocity.Magnitude < minVelocity)
+            if (Velocity.Magnitude < MinVelocity)
             {
-                velocity = new Vector3(0, 0, 0);
+                Velocity = new Vector3(0, 0, 0);
             }
         }
 
@@ -108,8 +105,8 @@ namespace Ulaid.Components
                 if (lockRotation)
                     return;
                 MouseMoveNotifyArgs mouseEventArgs = (MouseMoveNotifyArgs)notifyArgs;
-                currentRotation += new Vector3(mouseEventArgs.MouseDelta.y * -mouseSensitivityMultiplier,
-                    mouseEventArgs.MouseDelta.x * -mouseSensitivityMultiplier,
+                CurrentRotation += new Vector3(mouseEventArgs.MouseDelta.y * -MouseSensitivityMultiplier,
+                    mouseEventArgs.MouseDelta.x * -MouseSensitivityMultiplier,
                     0);
             }
             else if (eventType == NotifyType.GameStart)
