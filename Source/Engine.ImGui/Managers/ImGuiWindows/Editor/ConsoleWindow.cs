@@ -3,6 +3,7 @@ using Engine.ECS.Notify;
 using Engine.Utils.DebugUtils;
 using ImGuiNET;
 using OpenGL.CoreUI;
+using System.Linq;
 using System.Numerics;
 
 namespace Engine.Gui.Managers.ImGuiWindows.Editor
@@ -15,18 +16,59 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
 
         private string currentConsoleFilter = "", currentConsoleInput = "";
 
+        private int logLimit = 1024;
+
+        private bool scrollQueued = true;
+
+        public ConsoleWindow()
+        {
+            Logging.onDebugLog += (entry) =>
+            {
+                scrollQueued = true;
+            };
+        }
+
         public override void Draw()
         {
-            ImGui.PushItemWidth(-1);
-            ImGui.SetScrollHereY(1.0f);
-            ImGui.InputTextMultiline("Console", ref Logging.pastLogsStringConsole, uint.MaxValue, new Vector2(-1, -64), ImGuiInputTextFlags.ReadOnly);
-            ImGui.PopItemWidth();
+            ImGui.BeginChild("ConsoleInner", new Vector2(-1, -64));
 
-            if (ImGui.InputText("Filter", ref currentConsoleFilter, 256))
+            foreach (var logEntry in Logging.LogEntries.TakeLast(logLimit))
             {
-                Logging.CalcLogStringByFilter(currentConsoleFilter);
+                bool drawCurrentEntry = true;
+                
+                if (!string.IsNullOrWhiteSpace(currentConsoleFilter) && !GetFilterMatch(logEntry.ToString(), currentConsoleFilter))
+                {
+                    drawCurrentEntry = false;
+                }
+
+                if (!drawCurrentEntry)
+                {
+                    continue;
+                }
+
+                ImGui.TextWrapped(logEntry.ToString());
+
+                if (ImGui.IsItemHovered())
+                {
+                    ImGui.BeginTooltip();
+                    ImGui.Text("Stack Trace:");
+                    ImGui.Text(logEntry.stackTrace.ToString());
+                    ImGui.EndTooltip();
+                }
+
+                ImGui.Separator();
             }
 
+            // TODO: Scroll on new log (event)
+            if (scrollQueued)
+            {
+                ImGui.SetScrollHereY(1.0f);
+                scrollQueued = false;
+            }
+
+            ImGui.EndChild();
+            
+            ImGui.InputText("Filter", ref currentConsoleFilter, 256);
             ImGui.InputText("##hidelabel", ref currentConsoleInput, 256);
             ImGui.SameLine();
             ImGui.Button("Submit");
@@ -41,6 +83,25 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
                 {
                     Render = !Render;
                 }
+            }
+        }
+
+        // TODO: use fuzzy search
+        private static bool GetFilterMatch(string str, string filter)
+        {
+            if (filter.Contains(","))
+            {
+                foreach (var splitFilter in filter.Split(','))
+                {
+                    if (str.Contains(splitFilter))
+                        return true;
+                }
+
+                return false;
+            }
+            else
+            {
+                return str.Contains(filter);
             }
         }
     }

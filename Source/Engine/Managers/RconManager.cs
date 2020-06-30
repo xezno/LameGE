@@ -200,14 +200,14 @@ namespace Engine.Managers
 
         private void SendLogHistory(int offset = 0)
         {
-            var entries = new List<Dictionary<string, string>>();
+            var logEntries = new List<Dictionary<string, string>>();
             int count = 0;
             int maxChunkSize = 3;
             bool limitWasReached = false;
-            for (int i = offset; i < Logging.LogHistory.Count; ++i)
+            for (int i = offset; i < Logging.LogEntries.Count; ++i)
             {
-                var entry = Logging.LogHistory[i];
-                entries.Add(GetResultDictionary(entry.timestamp, entry.stackTrace, entry.str, entry.severity));
+                var logEntry = Logging.LogEntries[i];
+                logEntries.Add(GetResultDictionary(logEntry));
                 count++;
                 if (count >= maxChunkSize)
                 {
@@ -218,7 +218,7 @@ namespace Engine.Managers
 
             SendPacket(RconPacketType.LogHistory, new Dictionary<string, string>()
             {
-                { "entries", JsonConvert.SerializeObject(entries) }
+                { "entries", JsonConvert.SerializeObject(logEntries) }
             });
 
             if (limitWasReached)
@@ -256,23 +256,22 @@ namespace Engine.Managers
             }
         }
 
-        public void SendDebugLog(DateTime timestamp, StackTrace stackTrace, string log, Logging.Severity severity)
+        public void SendDebugLog(LogEntry logEntry)
         {
             if (connected && authenticated)
             {
-                SendPacket(RconPacketType.Response, GetResultDictionary(timestamp, stackTrace, log, severity));
+                SendPacket(RconPacketType.Response, GetResultDictionary(logEntry));
             }
         }
 
-        private Dictionary<string, string> GetResultDictionary(DateTime timestamp, StackTrace stackTrace, string log,
-            Logging.Severity severity)
+        private Dictionary<string, string> GetResultDictionary(LogEntry logEntry)
         {
             return new Dictionary<string, string>()
             {
-                {"timestamp", timestamp.ToString("T")},
-                {"stackTrace", stackTrace.ToString()},
-                {"str", log},
-                {"severity", severity.ToString().ToLower()}
+                {"timestamp", logEntry.timestamp.ToLongTimeString()},
+                {"stackTrace", logEntry.stackTrace.ToString()},
+                {"str", logEntry.str},
+                {"severity", logEntry.ToString().ToLower()}
             };
         }
         #endregion

@@ -6,39 +6,14 @@ namespace Engine.Utils.DebugUtils
 {
     public static class Logging
     {
-        /// <summary>
-        /// All previous logged strings from the current session.
-        /// </summary>
-        public static List<string> PastLogs { get; private set; } = new List<string>();
-
-        public static List<DebugHistoryEntry> LogHistory = new List<DebugHistoryEntry>();
+        public static List<LogEntry> LogEntries = new List<LogEntry>();
 
         /// <summary>
         /// A shortened copy of <see cref="PastLogs"/> available as a string.
         /// </summary>
         public static string PastLogsString { get; private set; }
 
-        /// <summary>
-        /// The number of lines to use for the <see cref="PastLogsString"/> value.
-        /// </summary>
-        private static int pastLogsStringLength = 5;
-
-        /// <summary>
-        /// The number of lines to use for the <see cref="pastLogsStringConsole"/> value.
-        /// </summary>
-        private static int pastLogsStringConsoleLength = 40;
-
-        /// <summary>
-        /// Should the <see cref="pastLogsStringConsole"/> use a filter?
-        /// </summary>
-        private static bool pastLogsStringConsoleUseFilter;
-
-        /// <summary>
-        /// All previous logged strings from the current session for display within the <see cref="ImGuiManager"/> console.
-        /// </summary>
-        public static string pastLogsStringConsole; // TODO: replace with property
-
-        public delegate void DebugLogHandler(DateTime dateTime, StackTrace stackTrace, string logText, Severity severity);
+        public delegate void DebugLogHandler(LogEntry logEntry);
         public static DebugLogHandler onDebugLog;
 
         /// <summary>
@@ -52,25 +27,14 @@ namespace Engine.Utils.DebugUtils
             Fatal
         }
 
-        private static void WriteLog(string str, StackTrace stackTrace, string logTextNoSeverity = "", Severity severity = Severity.Low)
+        private static void WriteLog(StackTrace stackTrace, string logString = "", Severity severity = Severity.Low)
         {
-            Console.WriteLine(str);
-            PastLogs.Add(str);
-            onDebugLog?.Invoke(DateTime.Now, stackTrace, logTextNoSeverity, severity);
-            LogHistory.Add(new DebugHistoryEntry(DateTime.Now, stackTrace, logTextNoSeverity, severity));
+            var logEntry = new LogEntry(DateTime.Now, stackTrace, logString, severity);
 
-            // We convert to string here for performance reasons (means we aren't potentially doing it multiple times per frame)
-            var pastLogsStart = Math.Max(0, PastLogs.Count - pastLogsStringLength);
-            var pastLogsCount = Math.Min(PastLogs.Count, pastLogsStringLength);
-            var pastLogsArray = PastLogs.ToArray();
-            PastLogsString = string.Join("\n", pastLogsArray, pastLogsStart, pastLogsCount);
+            Console.WriteLine(logEntry.ToString()); // TODO: Make engine stable enough that we don't need this anymore
 
-            if (!pastLogsStringConsoleUseFilter)
-            {
-                var pastLogsConsoleStart = Math.Max(0, PastLogs.Count - pastLogsStringConsoleLength);
-                var pastLogsConsoleCount = Math.Min(PastLogs.Count, pastLogsStringConsoleLength);
-                pastLogsStringConsole = string.Join("\n", pastLogsArray, pastLogsConsoleStart, pastLogsConsoleCount);
-            }
+            LogEntries.Add(logEntry);
+            onDebugLog?.Invoke(logEntry);
         }
 
         /// <summary>
@@ -83,7 +47,6 @@ namespace Engine.Utils.DebugUtils
             // Prepare method name & method class name
             var stackTrace = new StackTrace();
             var stackFrames = stackTrace.GetFrames();
-            var method = stackFrames?[1].GetMethod();
 
             /* BUG: Some functions (namely ogl's debug callback) run on a separate thread, so 
              * they mess with the console's foreground color before another thread has finished outputting.
@@ -105,53 +68,9 @@ namespace Engine.Utils.DebugUtils
                     break;
             }
 
-            var logText =
-                $"[{DateTime.Now:T}] {method?.ReflectedType?.Name}, {method?.Name} ({severity}): {str}";
+            var logTextNoSeverity = str;
 
-            var logTextNoSeverity =
-                $"[{method?.ReflectedType?.Name}] {str}";
-
-            WriteLog(logText, stackTrace, logTextNoSeverity, severity);
-        }
-
-        public static void CalcLogStringByFilter(string filter)
-        {
-            if (string.IsNullOrEmpty(filter))
-            {
-                pastLogsStringConsoleUseFilter = false;
-                return;
-            }
-
-            pastLogsStringConsoleUseFilter = true;
-
-            var filteredLogs = new List<string>();
-
-            foreach (var pastLog in PastLogs)
-            {
-                if (GetFilterMatch(pastLog, filter))
-                    filteredLogs.Add(pastLog);
-            }
-
-            pastLogsStringConsole = string.Join("\n", filteredLogs.ToArray(), 0, filteredLogs.Count);
-        }
-
-        // TODO: use fuzzy search
-        private static bool GetFilterMatch(string str, string filter)
-        {
-            if (filter.Contains(","))
-            {
-                foreach (var splitFilter in filter.Split(','))
-                {
-                    if (str.Contains(splitFilter))
-                        return true;
-                }
-
-                return false;
-            }
-            else
-            {
-                return str.Contains(filter);
-            }
+            WriteLog(stackTrace, logTextNoSeverity, severity);
         }
     }
 }

@@ -16,6 +16,8 @@ using System;
 using System.Collections.Generic;
 using System.Numerics;
 using Vector4 = Engine.Utils.MathUtils.Vector4;
+using Engine.Renderer.GL.Entities;
+using Engine.Renderer.GL.Managers;
 
 namespace Engine.Gui.Managers
 {

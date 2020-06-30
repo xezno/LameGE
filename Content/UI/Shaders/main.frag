@@ -67,19 +67,7 @@ uniform vec3 cameraPos;
 
 out vec4 fragColor;
 
-vec3 modelPos;
-
-vec3 normal;
-vec3 lightDirection;
-vec3 cameraDirection;
-
 void main() 
 {
-    lightDirection = normalize(light.pos - modelPos);
-
-    lightDirection = normalize(modelPos - light.pos);
-    cameraDirection = normalize(cameraPos - modelPos);
-    normal = normalize(outNormal);
-
     fragColor = texture(material.diffuseTexture, outUvCoord * vec2(1, -1));
 }

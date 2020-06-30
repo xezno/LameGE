@@ -1,6 +1,8 @@
 ﻿using Engine.Assets;
 using Engine.Utils.DebugUtils;
 using ImGuiNET;
+using System.Linq;
+using System.Numerics;
 
 namespace Engine.Gui.Managers.ImGuiWindows.Overlays
 {
@@ -10,9 +12,18 @@ namespace Engine.Gui.Managers.ImGuiWindows.Overlays
         public override string IconGlyph { get; } = FontAwesome5.Question;
         public override string Title { get; } = "Console Overlay";
 
+        private int logLimit = 5;
+
         public override void Draw()
         {
-            DrawShadowLabel(Logging.PastLogsString, ImGui.GetStyle().WindowPadding);
+            var currentOffset = new Vector2();
+
+            foreach (var logEntry in Logging.LogEntries.TakeLast(logLimit))
+            {
+                DrawShadowLabel(logEntry.ToString(), ImGui.GetStyle().WindowPadding + currentOffset);
+
+                currentOffset += new Vector2(0, ImGui.GetStyle().ItemSpacing.Y * 2);
+            }
         }
     }
 }
