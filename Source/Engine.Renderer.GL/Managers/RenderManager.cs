@@ -37,8 +37,8 @@ namespace Engine.Renderer.GL.Managers
             renderer = new Renderer();
             renderer.Init();
             mainFramebuffer = new Framebuffer(GameSettings.GameResolutionX, GameSettings.GameResolutionY);
-            shadowShaders = new ShaderComponent(new Shader("Content/Shaders/Depth/main.frag", Shader.Type.FragmentShader),
-                new Shader("Content/Shaders/Depth/main.vert", Shader.Type.VertexShader));
+            shadowShaders = new ShaderComponent(new Shader("Content/Shaders/Depth/depth.frag", Shader.Type.FragmentShader),
+                new Shader("Content/Shaders/Depth/depth.vert", Shader.Type.VertexShader));
         }
 
         private void RenderScene(Matrix4x4f projMatrix, Matrix4x4f viewMatrix, Vector3 cameraPosition)

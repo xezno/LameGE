@@ -25,8 +25,8 @@ namespace Ulaid.Entities
             AddComponent(new TransformComponent(new Vector3(0, 300f, 0f),
                                                 new Vector3(270, 0, 0),
                                                 new Vector3(1, 1, 1) * bspScaleFactor));
-            AddComponent(new ShaderComponent(new Shader("Content/Shaders/Standard/main.frag", Shader.Type.FragmentShader),
-                new Shader("Content/Shaders/Standard/main.vert", Shader.Type.VertexShader)));
+            AddComponent(new ShaderComponent(new Shader("Content/Shaders/Standard/standard.frag", Shader.Type.FragmentShader),
+                new Shader("Content/Shaders/Standard/standard.vert", Shader.Type.VertexShader)));
 
             bspLoader = new BSPLoader("Content/Maps/gm_flatgrass.bsp");
             AddMeshAndMaterialComponents("level01");

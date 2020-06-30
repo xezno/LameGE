@@ -31,8 +31,8 @@ namespace Engine.Renderer.GL.Render
             Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 
             shaderComponent = new ShaderComponent(
-                new Shader("Content/Shaders/Depth/Debug/main.frag", Shader.Type.FragmentShader),
-                new Shader("Content/Shaders/Depth/Debug/main.vert", Shader.Type.VertexShader));
+                new Shader("Content/Shaders/Depth/Debug/depth_debug.frag", Shader.Type.FragmentShader),
+                new Shader("Content/Shaders/Depth/Debug/depth_debug.vert", Shader.Type.VertexShader));
         }
 
         public void Bind()
