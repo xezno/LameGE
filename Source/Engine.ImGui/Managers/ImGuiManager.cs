@@ -74,6 +74,7 @@ namespace Engine.Gui.Managers
             new ConsoleOverlayWindow(),
             new PerformanceOverlayWindow()
         };
+        public ImFontPtr MonospacedFont { get; private set; }
 
         public ImGuiManager()
         {
@@ -113,7 +114,7 @@ namespace Engine.Gui.Managers
             var glyphMinAdvanceX = 24;
             var fontSizePixels = PT_TO_PX * 12;
 
-            // io.Fonts.AddFontDefault();
+            // Standard fonts
             unsafe
             {
                 var stdConfig = ImGuiNative.ImFontConfig_ImFontConfig();
@@ -133,6 +134,16 @@ namespace Engine.Gui.Managers
                 }
 
                 ImGuiNative.ImFontConfig_destroy(faConfig);
+            }
+
+            // Monospaced fonts
+            unsafe
+            {
+                var stdConfig = ImGuiNative.ImFontConfig_ImFontConfig();
+
+                MonospacedFont = io.Fonts.AddFontFromFileTTF("Content/Fonts/IBMPlexMono/IBMPlexMono-SemiBold.ttf", fontSizePixels, stdConfig).NativePtr;
+
+                ImGuiNative.ImFontConfig_destroy(stdConfig);
             }
 
             io.Fonts.Build();

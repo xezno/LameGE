@@ -33,6 +33,7 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
         {
             // ImGui.PushStyleColor(ImGuiCol.ChildBg, ImGui.GetStyle().Colors[(int)ImGuiCol.FrameBg]);
             ImGui.BeginChild("ConsoleInner", new Vector2(-1, -64));
+            ImGui.PushFont(ImGuiManager.Instance.MonospacedFont);
 
             foreach (var logEntry in Logging.LogEntries.TakeLast(logLimit))
             {
@@ -54,9 +55,13 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
 
                 if (ImGui.IsItemHovered())
                 {
+                    ImGui.SetNextWindowSize(new Vector2(650, -1));
+
                     ImGui.BeginTooltip();
+
                     ImGui.Text("Stack Trace:");
-                    ImGui.Text(logEntry.stackTrace.ToString());
+                    ImGui.TextWrapped(logEntry.stackTrace.ToString());
+
                     ImGui.EndTooltip();
                 }
 
@@ -69,13 +74,14 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
                 scrollQueued = false;
             }
             
+            ImGui.PopFont();
             ImGui.EndChild();
             // ImGui.PopStyleColor();
             
             ImGui.InputText("Filter", ref currentConsoleFilter, 256);
-            ImGui.InputText("##hidelabel", ref currentConsoleInput, 256);
-            ImGui.SameLine();
-            ImGui.Button("Submit");
+            // ImGui.InputText("##hidelabel", ref currentConsoleInput, 256); // TODO
+            // ImGui.SameLine();
+            // ImGui.Button("Submit");
         }
 
         public override void OnNotify(NotifyType eventType, INotifyArgs notifyArgs)
