@@ -1,6 +1,5 @@
 ﻿namespace Engine.Utils.MathUtils
 {
-    // TODO: this probably doesn't need to exist
     public struct Vector4
     {
         public float x;

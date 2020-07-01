@@ -57,7 +57,6 @@ namespace Engine.ECS.Components
         /// <exception cref="NotImplementedException"></exception>
         private void RenderImGuiMember(MemberInfo memberInfo, ref int depth)
         {
-            // TODO: refactor this so it doesnt use dynamic
             Type type;
             dynamic memberValue;
             switch (memberInfo.MemberType)

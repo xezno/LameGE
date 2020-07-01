@@ -106,8 +106,6 @@ namespace Engine
         {
             Logging.Log("Closing game...");
             isRunning = false;
-            // Destroy all, then call Destroy
-            nativeWindow.Destroy();
         }
 
         private void NativeWindowOnMouseEnter(object sender, NativeWindowMouseEventArgs e)

@@ -59,7 +59,6 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
                 ImGui.Separator();
             }
 
-            // TODO: Scroll on new log (event)
             if (scrollQueued)
             {
                 ImGui.SetScrollHereY(1.0f);

@@ -16,8 +16,6 @@ using System;
 using System.Collections.Generic;
 using System.Numerics;
 using Vector4 = Engine.Utils.MathUtils.Vector4;
-using Engine.Renderer.GL.Entities;
-using Engine.Renderer.GL.Managers;
 
 namespace Engine.Gui.Managers
 {
@@ -278,10 +276,10 @@ namespace Engine.Gui.Managers
                     var currentCommand = commandList.CmdBuffer[commandIndex];
 
                     var clipBounds = new Vector4(
-                        (currentCommand.ClipRect.X - clipOffset.X) * clipScale.X,
-                        (currentCommand.ClipRect.Y - clipOffset.Y) * clipScale.Y,
-                        (currentCommand.ClipRect.Z - clipOffset.X) * clipScale.X,
-                        (currentCommand.ClipRect.W - clipOffset.Y) * clipScale.Y
+                            (currentCommand.ClipRect.X - clipOffset.X) * clipScale.X,
+                            (currentCommand.ClipRect.Y - clipOffset.Y) * clipScale.Y,
+                            (currentCommand.ClipRect.Z - clipOffset.X) * clipScale.X,
+                            (currentCommand.ClipRect.W - clipOffset.Y) * clipScale.Y
                         );
                     Gl.Scissor((int)clipBounds.x, (int)(windowSize.Y - clipBounds.w), (int)(clipBounds.z - clipBounds.x), (int)(clipBounds.w - clipBounds.y));
                     defaultFontTexture.Bind();

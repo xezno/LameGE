@@ -21,7 +21,7 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
 
             if (ImGui.Button("Yes"))
             {
-                Broadcast.Notify(NotifyType.CloseGame, null);
+                Broadcast.Notify(NotifyType.CloseGame, null); // TODO: FIX?
                 Logging.Log("Close game");
             }
 
@@ -34,18 +34,6 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
             var windowSize = ImGui.GetWindowSize();
             var windowPos = (new Vector2(GameSettings.GameResolutionX, GameSettings.GameResolutionY) / 2f) - (windowSize / 2f);
             ImGui.SetWindowPos(windowPos);
-        }
-
-        public override void OnNotify(NotifyType eventType, INotifyArgs notifyArgs)
-        {
-            // TODO: Event not ever fired
-            if (eventType == NotifyType.KeyUp)
-            {
-                if (((KeyboardNotifyArgs)notifyArgs).KeyboardKey == (int)KeyCode.F3)
-                {
-                    Render = !Render;
-                }
-            }
         }
     }
 }

@@ -55,10 +55,10 @@ namespace Engine.Utils.DebugUtils
             switch (severity)
             {
                 case Severity.Fatal:
-                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
                     break;
                 case Severity.High:
-                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    Console.ForegroundColor = ConsoleColor.Red;
                     break;
                 case Severity.Low:
                     Console.ForegroundColor = ConsoleColor.DarkGray;

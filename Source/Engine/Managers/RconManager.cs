@@ -6,11 +6,11 @@ using Fleck;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Text;
 
 namespace Engine.Managers
 {
+    // TODO: either optimize this or scrap it
     // TODO: switch to more extensible (i.e. use class-based solution)
     public sealed class RconManager : Manager<RconManager>
     {
