@@ -52,25 +52,28 @@ namespace Engine.Utils.DebugUtils
              * they mess with the console's foreground color before another thread has finished outputting.
              * (pls fix) */
 
-            switch (severity)
-            {
-                case Severity.Fatal:
-                    Console.ForegroundColor = ConsoleColor.DarkRed;
-                    break;
-                case Severity.High:
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    break;
-                case Severity.Low:
-                    Console.ForegroundColor = ConsoleColor.DarkGray;
-                    break;
-                case Severity.Medium:
-                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                    break;
-            }
+            Console.ForegroundColor = SeverityToConsoleColor(severity);
 
             var logTextNoSeverity = str;
 
             WriteLog(stackTrace, logTextNoSeverity, severity);
+        }
+
+        public static ConsoleColor SeverityToConsoleColor(Severity severity)
+        {
+            switch (severity)
+            {
+                case Severity.Fatal:
+                    return ConsoleColor.DarkRed;
+                case Severity.High:
+                    return ConsoleColor.Red;
+                case Severity.Low:
+                    return ConsoleColor.DarkGray;
+                case Severity.Medium:
+                    return ConsoleColor.DarkYellow;
+            }
+
+            return ConsoleColor.DarkGray;
         }
     }
 }

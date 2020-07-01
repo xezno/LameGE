@@ -5,6 +5,7 @@ using ImGuiNET;
 using OpenGL.CoreUI;
 using System.Linq;
 using System.Numerics;
+using static Engine.Utils.DebugUtils.Logging;
 
 namespace Engine.Gui.Managers.ImGuiWindows.Editor
 {
@@ -30,6 +31,7 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
 
         public override void Draw()
         {
+            // ImGui.PushStyleColor(ImGuiCol.ChildBg, ImGui.GetStyle().Colors[(int)ImGuiCol.FrameBg]);
             ImGui.BeginChild("ConsoleInner", new Vector2(-1, -64));
 
             foreach (var logEntry in Logging.LogEntries.TakeLast(logLimit))
@@ -46,7 +48,9 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
                     continue;
                 }
 
+                ImGui.PushStyleColor(ImGuiCol.Text, SeverityToColor(logEntry.severity));
                 ImGui.TextWrapped(logEntry.ToString());
+                ImGui.PopStyleColor();
 
                 if (ImGui.IsItemHovered())
                 {
@@ -64,8 +68,9 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
                 ImGui.SetScrollHereY(1.0f);
                 scrollQueued = false;
             }
-
+            
             ImGui.EndChild();
+            // ImGui.PopStyleColor();
             
             ImGui.InputText("Filter", ref currentConsoleFilter, 256);
             ImGui.InputText("##hidelabel", ref currentConsoleInput, 256);
@@ -102,6 +107,23 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
             {
                 return str.Contains(filter);
             }
+        }
+
+        public static Vector4 SeverityToColor(Severity severity)
+        {
+            switch (severity)
+            {
+                case Severity.Fatal:
+                    return new Vector4(255f / 255f, 0, 0, 1);
+                case Severity.High:
+                    return new Vector4(255f / 255f, 94f / 255f, 94f / 255f, 1);
+                case Severity.Low:
+                    return new Vector4(67f / 255f, 255f / 255f, 83f / 255f, 1);
+                case Severity.Medium:
+                    return new Vector4(255f / 255f, 200f / 255f, 0, 1);
+            }
+            
+            return new Vector4(67f / 255f, 255f / 255f, 83f / 255f, 1);
         }
     }
 }
