@@ -6,7 +6,7 @@ using System.Numerics;
 
 namespace Engine.Gui.Managers.ImGuiWindows.Overlays
 {
-    class ConsoleOverlayWindow : ImGuiWindow
+    class UnfocusedConsoleWindow : ImGuiWindow
     {
         public override bool Render { get; set; } = true;
         public override string IconGlyph { get; } = FontAwesome5.Question;
@@ -17,13 +17,15 @@ namespace Engine.Gui.Managers.ImGuiWindows.Overlays
         public override void Draw()
         {
             var currentOffset = new Vector2();
-
+            
+            ImGui.PushFont(ImGuiManager.Instance.MonospacedFont);
             foreach (var logEntry in Logging.LogEntries.TakeLast(logLimit))
             {
                 DrawShadowLabel(logEntry.ToString(), ImGui.GetStyle().WindowPadding + currentOffset);
 
-                currentOffset += new Vector2(0, ImGui.GetStyle().ItemSpacing.Y * 2);
+                currentOffset += new Vector2(0, ImGui.GetStyle().ItemSpacing.Y + 12); // TODO: match line height???
             }
+            ImGui.PopFont();
         }
     }
 }

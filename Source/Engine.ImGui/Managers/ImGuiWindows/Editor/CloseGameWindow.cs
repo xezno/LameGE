@@ -13,7 +13,7 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
         public override bool Render { get; set; }
         public override string IconGlyph { get; } = FontAwesome5.WindowClose;
         public override string Title { get; } = "Quit";
-        public override ImGuiWindowFlags Flags { get; } = ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoDecoration; // TODO: Look at flags
+        public override ImGuiWindowFlags Flags { get; } = ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoDecoration;
 
         public override void Draw()
         {

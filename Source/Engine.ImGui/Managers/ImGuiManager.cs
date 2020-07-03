@@ -62,7 +62,6 @@ namespace Engine.Gui.Managers
             new ImGuiMenu(FontAwesome5.Wrench, "Engine", new List<ImGuiWindow>()
             {
                 new EngineConfigWindow(),
-                new ConsoleWindow(),
                 new PerformanceWindow(),
                 new TextureBrowserWindow(),
                 new ShaderWindow()
@@ -71,7 +70,8 @@ namespace Engine.Gui.Managers
 
         public List<ImGuiWindow> Overlays { get; } = new List<ImGuiWindow>()
         {
-            new ConsoleOverlayWindow(),
+            new UnfocusedConsoleWindow(),
+            new FocusedConsoleWindow(),
             new PerformanceOverlayWindow()
         };
         public ImFontPtr MonospacedFont { get; private set; }

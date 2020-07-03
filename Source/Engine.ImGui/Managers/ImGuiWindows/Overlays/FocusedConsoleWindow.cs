@@ -1,19 +1,20 @@
 ﻿using Engine.Assets;
 using Engine.ECS.Notify;
+using Engine.Utils;
 using Engine.Utils.DebugUtils;
 using ImGuiNET;
 using OpenGL.CoreUI;
 using System.Linq;
 using System.Numerics;
-using static Engine.Utils.DebugUtils.Logging;
 
 namespace Engine.Gui.Managers.ImGuiWindows.Editor
 {
-    class ConsoleWindow : ImGuiWindow
+    class FocusedConsoleWindow : ImGuiWindow
     {
-        public override bool Render { get; set; } = true;
+        public override bool Render { get; set; }
         public override string IconGlyph { get; } = FontAwesome5.Terminal;
         public override string Title { get; } = "Console";
+        public override ImGuiWindowFlags Flags { get; } = ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoDecoration; // TODO: Look at flags
 
         private string currentConsoleFilter = "", currentConsoleInput = "";
 
@@ -21,7 +22,7 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
 
         private bool scrollQueued = true;
 
-        public ConsoleWindow()
+        public FocusedConsoleWindow()
         {
             Logging.onDebugLog += (entry) =>
             {
@@ -31,8 +32,9 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
 
         public override void Draw()
         {
+            ImGui.Begin("Console", Flags);
             // ImGui.PushStyleColor(ImGuiCol.ChildBg, ImGui.GetStyle().Colors[(int)ImGuiCol.FrameBg]);
-            ImGui.BeginChild("ConsoleInner", new Vector2(-1, -64));
+            ImGui.BeginChild("ConsoleInner", new Vector2(-1, -16));
             ImGui.PushFont(ImGuiManager.Instance.MonospacedFont);
 
             foreach (var logEntry in Logging.LogEntries.TakeLast(logLimit))
@@ -82,6 +84,11 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
             // ImGui.InputText("##hidelabel", ref currentConsoleInput, 256); // TODO
             // ImGui.SameLine();
             // ImGui.Button("Submit");
+
+            ImGui.SetWindowPos(new Vector2(0, 0));
+            ImGui.SetWindowSize(new Vector2(GameSettings.GameResolutionX, GameSettings.GameResolutionY / 2f));
+            
+            ImGui.End();
         }
 
         public override void OnNotify(NotifyType eventType, INotifyArgs notifyArgs)
@@ -115,17 +122,17 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
             }
         }
 
-        public static Vector4 SeverityToColor(Severity severity)
+        public static Vector4 SeverityToColor(Logging.Severity severity)
         {
             switch (severity)
             {
-                case Severity.Fatal:
+                case Logging.Severity.Fatal:
                     return new Vector4(255f / 255f, 0, 0, 1);
-                case Severity.High:
+                case Logging.Severity.High:
                     return new Vector4(255f / 255f, 94f / 255f, 94f / 255f, 1);
-                case Severity.Low:
+                case Logging.Severity.Low:
                     return new Vector4(67f / 255f, 255f / 255f, 83f / 255f, 1);
-                case Severity.Medium:
+                case Logging.Severity.Medium:
                     return new Vector4(255f / 255f, 200f / 255f, 0, 1);
             }
             
