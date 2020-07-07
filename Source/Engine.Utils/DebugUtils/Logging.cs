@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Engine.Utils.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
 
 namespace Engine.Utils.DebugUtils
 {
@@ -46,7 +49,6 @@ namespace Engine.Utils.DebugUtils
         {
             // Prepare method name & method class name
             var stackTrace = new StackTrace();
-            var stackFrames = stackTrace.GetFrames();
 
             /* BUG: Some functions (namely ogl's debug callback) run on a separate thread, so 
              * they mess with the console's foreground color before another thread has finished outputting.

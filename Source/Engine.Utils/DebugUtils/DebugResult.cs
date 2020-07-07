@@ -1,16 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using System;
 
 namespace Engine.Utils.DebugUtils
 {
-    public class DebugResult
+    public struct DebugResult
     {
-        public DebugResultType Type { get; set; }
-        public Dictionary<string, string> Values { get; set; }
+        public DebugResultStatus Status { get; set; }
+        public Tuple<Type, object>[] Values { get; set; }
 
-        public DebugResult(DebugResultType type, Dictionary<string, string> values)
+        public DebugResult(DebugResultStatus status, params Tuple<Type, object>[] values)
         {
-            Type = type;
+            Status = status;
             Values = values;
+        }
+
+        public DebugResult(DebugResultStatus status)
+        {
+            Status = status;
+            Values = null;
         }
     }
 }

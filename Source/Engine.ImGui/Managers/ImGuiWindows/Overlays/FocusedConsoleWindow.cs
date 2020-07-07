@@ -34,7 +34,7 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
         {
             ImGui.Begin("Console", Flags);
             // ImGui.PushStyleColor(ImGuiCol.ChildBg, ImGui.GetStyle().Colors[(int)ImGuiCol.FrameBg]);
-            ImGui.BeginChild("ConsoleInner", new Vector2(-1, -16));
+            ImGui.BeginChild("ConsoleInner", new Vector2(-1, -64));
             ImGui.PushFont(ImGuiManager.Instance.MonospacedFont);
 
             foreach (var logEntry in Logging.LogEntries.TakeLast(logLimit))
@@ -57,7 +57,7 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
 
                 if (ImGui.IsItemHovered())
                 {
-                    ImGui.SetNextWindowSize(new Vector2(650, -1));
+                    ImGui.SetNextWindowSize(new Vector2(GameSettings.GameResolutionX / 2f, -1));
 
                     ImGui.BeginTooltip();
 
@@ -81,9 +81,13 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
             // ImGui.PopStyleColor();
             
             ImGui.InputText("Filter", ref currentConsoleFilter, 256);
-            // ImGui.InputText("##hidelabel", ref currentConsoleInput, 256); // TODO
-            // ImGui.SameLine();
-            // ImGui.Button("Submit");
+            if (ImGui.InputText("##hidelabel", ref currentConsoleInput, 256))
+            {
+                Logging.Log("InputText fired");
+            }
+
+            ImGui.SameLine();
+            ImGui.Button("Submit");
 
             ImGui.SetWindowPos(new Vector2(0, 0));
             ImGui.SetWindowSize(new Vector2(GameSettings.GameResolutionX, GameSettings.GameResolutionY / 2f));

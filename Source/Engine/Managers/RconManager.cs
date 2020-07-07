@@ -11,6 +11,7 @@ using System.Text;
 namespace Engine.Managers
 {
     // TODO: either optimize this or scrap it
+    //          - protobufs?
     // TODO: switch to more extensible (i.e. use class-based solution)
     public sealed class RconManager : Manager<RconManager>
     {
@@ -18,8 +19,6 @@ namespace Engine.Managers
         private bool connected;
         private bool authenticated;
         private IWebSocketConnection localSocket;
-
-        private List<DebugMember> debugCommands = new List<DebugMember>();
         #endregion
 
         #region Constructor
@@ -44,18 +43,6 @@ namespace Engine.Managers
             Logging.onDebugLog += SendDebugLog;
 
             socketServer.Start(InitConnection);
-        }
-        #endregion
-
-        #region Command Registry
-        public void RegisterCommand<T>(string name, string description, Func<T> getter, Action<T> setter)
-        {
-            debugCommands.Add(new DebugVariable<T>(name, description, getter, setter));
-        }
-
-        public void RegisterCommand(string name, string description, Func<string> method)
-        {
-            debugCommands.Add(new DebugMethod<string>(name, description, method));
         }
         #endregion
 
@@ -146,13 +133,15 @@ namespace Engine.Managers
             {
                 Logging.Log("Rcon authentication is disabled! Please enter a password in GameSettings if this is incorrect", Logging.Severity.Medium);
 
-                if (localSocket.ConnectionInfo.ClientIpAddress != "127.0.0.1")
+                if (localSocket.ConnectionInfo.ClientIpAddress == "127.0.0.1")
                 {
-                    Logging.Log("Rcon connection attempt from non-local machine was blocked.", Logging.Severity.Medium);
+                    authenticated = true;
+                }
+                else
+                {
+                    Logging.Log("Unauthorized rcon connection attempt from non-local machine was blocked; set a password", Logging.Severity.Medium);
                     return;
                 }
-
-                authenticated = true;
             }
         }
 
@@ -229,19 +218,7 @@ namespace Engine.Managers
 
         private void SendSuggestions(string input)
         {
-            List<DebugMember> suggestions = new List<DebugMember>();
-            int count = 0;
-            foreach (var command in debugCommands)
-            {
-                if (command.MatchSuggestion(input))
-                {
-                    suggestions.Add(command);
-                    count++;
-                }
-
-                if (count > 5)
-                    break;
-            }
+            var suggestions = CommandRegistry.GiveSuggestions(input);
 
             if (suggestions.Count == 0)
             {
@@ -273,21 +250,6 @@ namespace Engine.Managers
                 {"str", logEntry.str},
                 {"severity", logEntry.ToString().ToLower()}
             };
-        }
-        #endregion
-
-        #region Debug commands
-
-        public string Find(string str)
-        {
-            List<DebugMember> suggestions = new List<DebugMember>();
-            foreach (var command in debugCommands)
-            {
-                if (command.MatchSuggestion(str))
-                    suggestions.Add(command);
-            }
-
-            return JsonConvert.SerializeObject(suggestions);
         }
         #endregion
     }

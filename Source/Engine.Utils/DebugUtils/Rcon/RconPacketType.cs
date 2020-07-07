@@ -1,5 +1,6 @@
 ﻿namespace Engine.Utils.DebugUtils.Rcon
 {
+    // TODO: Protocol spec
     public enum RconPacketType
     {
         Handshake,

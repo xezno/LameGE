@@ -2,7 +2,12 @@
 
 namespace Engine.Utils.DebugUtils
 {
-    public class DebugMethod<T> : DebugMember
+    public abstract class DebugMethod : DebugMember
+    {
+        public abstract void Invoke();
+    }
+
+    public class DebugMethod<T> : DebugMethod
     {
         private Func<T> method;
 
@@ -12,5 +17,7 @@ namespace Engine.Utils.DebugUtils
             this.description = description;
             this.method = method;
         }
+
+        public override void Invoke() => method.Invoke();
     }
 }
