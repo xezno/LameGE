@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Engine.Renderer.GL.Render
 {
-    // TODO: Move from obj/mtl to glTF
+    // TODO: Move from obj/mtl to any format that doesnt suck
 
     /// <summary>
     /// A mesh that can be drawn on-screen in 3D space.

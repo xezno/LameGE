@@ -1,16 +1,25 @@
-﻿using Engine.ECS.Notify;
+﻿using Engine.ECS.Managers;
+using Engine.ECS.Notify;
+using Engine.Types;
 using ImGuiNET;
 using System.Numerics;
 
 namespace Engine.Gui.Managers.ImGuiWindows
 {
-    public abstract class ImGuiWindow
+    public abstract class ImGuiWindow : IManager
     {
         public abstract bool Render { get; set; }
         public abstract string Title { get; }
         public abstract string IconGlyph { get; }
         public virtual ImGuiWindowFlags Flags { get; }
+        public IHasParent Parent { get => ImGuiManager.Instance; set { } } // HACK
+
         public abstract void Draw();
+
+        public ImGuiWindow()
+        {
+            Broadcast.AddManager(this);
+        }
 
         protected void DrawShadowLabel(string str, Vector2 position)
         {
@@ -23,5 +32,9 @@ namespace Engine.Gui.Managers.ImGuiWindows
         }
 
         public virtual void OnNotify(NotifyType eventType, INotifyArgs notifyArgs) { }
+
+        public void Run() { }
+
+        public void RenderImGui() { }
     }
 }

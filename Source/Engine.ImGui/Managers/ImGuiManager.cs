@@ -62,7 +62,6 @@ namespace Engine.Gui.Managers
             new ImGuiMenu(FontAwesome5.Wrench, "Engine", new List<ImGuiWindow>()
             {
                 new EngineConfigWindow(),
-                new ConsoleWindow(),
                 new PerformanceWindow(),
                 new TextureBrowserWindow(),
                 new ShaderWindow()
@@ -71,9 +70,11 @@ namespace Engine.Gui.Managers
 
         public List<ImGuiWindow> Overlays { get; } = new List<ImGuiWindow>()
         {
-            new ConsoleOverlayWindow(),
+            new UnfocusedConsoleWindow(),
+            new FocusedConsoleWindow(),
             new PerformanceOverlayWindow()
         };
+        public ImFontPtr MonospacedFont { get; private set; }
 
         public ImGuiManager()
         {
@@ -113,7 +114,7 @@ namespace Engine.Gui.Managers
             var glyphMinAdvanceX = 24;
             var fontSizePixels = PT_TO_PX * 12;
 
-            // io.Fonts.AddFontDefault();
+            // Standard fonts
             unsafe
             {
                 var stdConfig = ImGuiNative.ImFontConfig_ImFontConfig();
@@ -133,6 +134,16 @@ namespace Engine.Gui.Managers
                 }
 
                 ImGuiNative.ImFontConfig_destroy(faConfig);
+            }
+
+            // Monospaced fonts
+            unsafe
+            {
+                var stdConfig = ImGuiNative.ImFontConfig_ImFontConfig();
+
+                MonospacedFont = io.Fonts.AddFontFromFileTTF("Content/Fonts/IBMPlexMono/IBMPlexMono-SemiBold.ttf", fontSizePixels, stdConfig).NativePtr;
+
+                ImGuiNative.ImFontConfig_destroy(stdConfig);
             }
 
             io.Fonts.Build();
@@ -276,10 +287,10 @@ namespace Engine.Gui.Managers
                     var currentCommand = commandList.CmdBuffer[commandIndex];
 
                     var clipBounds = new Vector4(
-                        (currentCommand.ClipRect.X - clipOffset.X) * clipScale.X,
-                        (currentCommand.ClipRect.Y - clipOffset.Y) * clipScale.Y,
-                        (currentCommand.ClipRect.Z - clipOffset.X) * clipScale.X,
-                        (currentCommand.ClipRect.W - clipOffset.Y) * clipScale.Y
+                            (currentCommand.ClipRect.X - clipOffset.X) * clipScale.X,
+                            (currentCommand.ClipRect.Y - clipOffset.Y) * clipScale.Y,
+                            (currentCommand.ClipRect.Z - clipOffset.X) * clipScale.X,
+                            (currentCommand.ClipRect.W - clipOffset.Y) * clipScale.Y
                         );
                     Gl.Scissor((int)clipBounds.x, (int)(windowSize.Y - clipBounds.w), (int)(clipBounds.z - clipBounds.x), (int)(clipBounds.w - clipBounds.y));
                     defaultFontTexture.Bind();

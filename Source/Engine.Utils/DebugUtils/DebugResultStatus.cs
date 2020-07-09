@@ -1,6 +1,6 @@
 ﻿namespace Engine.Utils.DebugUtils
 {
-    public enum DebugResultType
+    public enum DebugResultStatus
     {
         Success,
 

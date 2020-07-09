@@ -20,8 +20,8 @@ namespace Engine.Renderer.GL.Entities
             AddComponent(transformComponent);
 
             // Add mesh components for visualisation 
-            AddComponent(new ShaderComponent(new Shader("Content/Shaders/Unlit/main.frag", Shader.Type.FragmentShader),
-                new Shader("Content/Shaders/Unlit/main.vert", Shader.Type.VertexShader)));
+            AddComponent(new ShaderComponent(new Shader("Content/Shaders/Unlit/unlit.frag", Shader.Type.FragmentShader),
+                new Shader("Content/Shaders/Unlit/unlit.vert", Shader.Type.VertexShader)));
             AddComponent(new MaterialComponent(new Material($"Content/Materials/cube.mtl")));
             // AddComponent(new MeshComponent($"Content/Models/cube.obj"));
 

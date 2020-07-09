@@ -19,8 +19,8 @@ namespace Engine.Renderer.GL.Render
         public Framebuffer(int gameResX, int gameResY)
         {
             shaderComponent = new ShaderComponent(
-                new Shader("Content/Shaders/Framebuffer/main.frag", Shader.Type.FragmentShader),
-                new Shader("Content/Shaders/Framebuffer/main.vert", Shader.Type.VertexShader));
+                new Shader("Content/Shaders/Framebuffer/framebuffer.frag", Shader.Type.FragmentShader),
+                new Shader("Content/Shaders/Framebuffer/framebuffer.vert", Shader.Type.VertexShader));
 
             framebufferObject = Gl.GenFramebuffer();
             Gl.BindFramebuffer(FramebufferTarget.Framebuffer, framebufferObject);

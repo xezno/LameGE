@@ -20,8 +20,8 @@ namespace Ulaid.Entities
                                                 new Vector3(270, 0, 0),
                                                 new Vector3(1, 1, 1)));
 
-            AddComponent(new ShaderComponent(new Shader("Content/Shaders/Standard/main.frag", Shader.Type.FragmentShader),
-                new Shader("Content/Shaders/Standard/main.vert", Shader.Type.VertexShader)));
+            AddComponent(new ShaderComponent(new Shader("Content/Shaders/Standard/standard.frag", Shader.Type.FragmentShader),
+                new Shader("Content/Shaders/Standard/standard.vert", Shader.Type.VertexShader)));
 
             AddMeshAndMaterialComponents("level01");
         }

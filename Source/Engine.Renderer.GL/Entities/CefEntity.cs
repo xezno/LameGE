@@ -33,10 +33,12 @@ namespace Engine.Renderer.GL.Entities
 
         private Texture2D modifiedTexture;
 
+        // TODO: Prevent tonemapping from occurring while rendering
+
         public CefEntity()
         {
-            AddComponent(new ShaderComponent(new Shader("Content/UI/Shaders/main.frag", Shader.Type.FragmentShader),
-                new Shader("Content/UI/Shaders/main.vert", Shader.Type.VertexShader)));
+            AddComponent(new ShaderComponent(new Shader("Content/UI/Shaders/ui.frag", Shader.Type.FragmentShader),
+                new Shader("Content/UI/Shaders/ui.vert", Shader.Type.VertexShader)));
             AddComponent(new TransformComponent(new Vector3(0, 0, 0), new Vector3(0, 0, 0), new Vector3(1, 1, 1)));
             AddComponent(new MaterialComponent(new Material("Content/UI/plane.mtl")));
             AddComponent(new MeshComponent(Primitives.Plane));

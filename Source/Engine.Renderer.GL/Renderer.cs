@@ -50,16 +50,33 @@ namespace Engine.Renderer.GL
 
         private void DebugCallback(DebugSource source, DebugType type, uint id, DebugSeverity severity, int length, IntPtr message, IntPtr userParam)
         {
-            if (severity >= DebugSeverity.DebugSeverityMedium)
-                Logging.Log($"OpenGL Error {id}: {Marshal.PtrToStringAnsi(message, length)}", Logging.Severity.Fatal);
+            var logSeverity = Logging.Severity.Low;
+            switch (severity)
+            {
+                case DebugSeverity.DebugSeverityNotification:
+                    return; // Ignore
+                case DebugSeverity.DebugSeverityLow:
+                    logSeverity = Logging.Severity.Low;
+                    break;
+                case DebugSeverity.DebugSeverityMedium:
+                    logSeverity = Logging.Severity.Medium;
+                    break;
+                case DebugSeverity.DebugSeverityHigh:
+                    logSeverity = Logging.Severity.High;
+                    break;
+                case DebugSeverity.DontCare:
+                    logSeverity = Logging.Severity.Low;
+                    break;
+            }
+                Logging.Log($"OpenGL Error {id}: {Marshal.PtrToStringAnsi(message, length)}", logSeverity);
         }
 
         private void CheckHardwareCompatibility()
         {
             var requiredExtensions = new[] { "GL_ARB_spirv_extensions" };
             var existingExtensions = new List<String>();
-
             var extensionCount = 0;
+
             Gl.GetInteger(GetPName.NumExtensions, out extensionCount);
 
             for (int i = 0; i < extensionCount; ++i)

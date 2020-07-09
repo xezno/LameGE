@@ -16,8 +16,8 @@ namespace Ulaid.Entities
                 new Vector3(0, 0, 0),
                 new Vector3(1, 1, 1));
             AddComponent(transform);
-            AddComponent(new ShaderComponent(new Shader("Content/Shaders/Skybox/main.frag", Shader.Type.FragmentShader),
-                new Shader("Content/Shaders/Skybox/main.vert", Shader.Type.VertexShader)));
+            AddComponent(new ShaderComponent(new Shader("Content/Shaders/Skybox/skybox.frag", Shader.Type.FragmentShader),
+                new Shader("Content/Shaders/Skybox/skybox.vert", Shader.Type.VertexShader)));
             AddMeshAndMaterialComponents("Skybox");
         }
 

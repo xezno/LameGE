@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Engine.Utils.Attributes;
+using System;
 
 namespace Engine.Utils.MathUtils
 {
@@ -10,6 +11,8 @@ namespace Engine.Utils.MathUtils
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns>The difference between the two <see cref="string"/>s</returns>
+        /// 
+        [ConsoleFunction("CalcLevenshteinDistance")]
         public static int CalcDistance(string a, string b)
         {
             int aLen = a.Length, bLen = b.Length;

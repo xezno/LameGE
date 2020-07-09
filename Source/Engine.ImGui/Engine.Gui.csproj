@@ -24,4 +24,8 @@
     <ProjectReference Include="..\Engine.Renderer.GL\Engine.Renderer.GL.csproj" />
     <ProjectReference Include="..\Engine.Utils\Engine.Utils.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Managers\ImGuiWindows\Scripts\" />
+  </ItemGroup>
 </Project>

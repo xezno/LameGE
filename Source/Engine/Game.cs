@@ -23,13 +23,12 @@ namespace Engine
         private readonly string gamePropertyPath;
         private readonly List<Thread> threads = new List<Thread>();
 
-        private int titlebarHeight = 18;
         private List<IManager> mainThreadManagers = new List<IManager>();
         private GameProperties gameProperties;
 
         protected NativeWindow nativeWindow;
         private Vector2 lastMousePos;
-        private bool ignoreSingleMouseInput;
+        private bool ignoreSingleMouseDelta;
 
         public bool isRunning = true; // TODO: properly detect window close event (needs adding within nativewindow)
 
@@ -106,18 +105,16 @@ namespace Engine
         {
             Logging.Log("Closing game...");
             isRunning = false;
-            // Destroy all, then call Destroy
-            nativeWindow.Destroy();
         }
 
         private void NativeWindowOnMouseEnter(object sender, NativeWindowMouseEventArgs e)
         {
-            ignoreSingleMouseInput = true;
+            ignoreSingleMouseDelta = true;
         }
 
         private void NativeWindowOnMouseLeave(object sender, NativeWindowEventArgs e)
         {
-            ignoreSingleMouseInput = true;
+            ignoreSingleMouseDelta = true;
         }
 
         private string FilterString(string str)
@@ -214,7 +211,7 @@ namespace Engine
         private void MouseWheel(object sender, NativeWindowMouseEventArgs e)
         {
             Broadcast.Notify(NotifyType.MouseScroll, new MouseWheelNotifyArgs(e.WheelTicks, this));
-            //Logging.Log($"Scrolled by {e.WheelTicks} ticks");
+            Logging.Log($"Scrolled by {e.WheelTicks} ticks");
         }
 
         private void MouseMove(object sender, NativeWindowMouseEventArgs e)
@@ -223,15 +220,13 @@ namespace Engine
 
             var mouseDelta = lastMousePos - mousePos;
 
-            if (ignoreSingleMouseInput)
+            if (ignoreSingleMouseDelta)
             {
                 mouseDelta = new Vector2(0, 0);
-                ignoreSingleMouseInput = false;
+                ignoreSingleMouseDelta = false;
             }
 
-            Broadcast.Notify(NotifyType.MouseMove,
-                new MouseMoveNotifyArgs(mouseDelta, mousePos,
-                    this));
+            Broadcast.Notify(NotifyType.MouseMove, new MouseMoveNotifyArgs(mouseDelta, mousePos, this));
 
             lastMousePos = mousePos;
 
