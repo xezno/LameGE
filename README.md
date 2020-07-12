@@ -66,4 +66,4 @@ As previously mentioned, this engine is a free-time project and I have no step-b
 
 ## License
 
-Engine is licensed under the MPL-2.0 license; a copy of this license is available at [Docs/LICENSE.md](https://github.com/xezno/engine/blob/master/Docs/LICENSE.md).
+Engine is licensed under the MPL-2.0 license; a copy of this license is available at [Docs/LICENSE.md](https://github.com/xezno/Engine/blob/main/Docs/LICENSE.md).
