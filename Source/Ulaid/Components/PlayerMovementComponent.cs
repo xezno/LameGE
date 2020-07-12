@@ -94,6 +94,7 @@ namespace Ulaid.Components
                     case KeyCode.Control:
                         currentInput.y = eventType == NotifyType.KeyDown ? -1 : 0;
                         break;
+                    case KeyCode.F3:
                     case KeyCode.F1:
                         if (eventType == NotifyType.KeyUp)
                             lockRotation = !lockRotation;

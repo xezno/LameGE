@@ -104,13 +104,13 @@ namespace Engine.Renderer.GL.Components
             if (variableLocation < 0)
             {
                 errorLog.Add(variableName);
-                Logging.Log($"Tried to set value for variable {variableName} that does not exist on shader program {shaderProgram}.", Logging.Severity.High);
+                Logging.Log($"Tried to set value for variable {variableName} that does not exist on shader program {shaderProgram}.", Logging.Severity.Low);
                 return; // We can't continue, because the variable doesn't exist
             }
 
             if (variableValue == null)
             {
-                Logging.Log($"Tried to set value for variable {variableName}, but null value was given.", Logging.Severity.High);
+                Logging.Log($"Tried to set value for variable {variableName}, but null value was given.", Logging.Severity.Low);
                 return; // We can't continue, because the variable has no value
             }
 
@@ -143,7 +143,7 @@ namespace Engine.Renderer.GL.Components
             else if (!errorLog.Contains(variableName))
             {
                 errorLog.Add(variableName);
-                Logging.Log($"I don't know how to handle {variableValue.GetType().Name} yet :(", Logging.Severity.Medium);
+                Logging.Log($"I don't know how to handle {variableValue.GetType().Name} yet :(", Logging.Severity.High);
             }
         }
 

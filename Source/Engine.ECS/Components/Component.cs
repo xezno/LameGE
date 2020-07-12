@@ -90,7 +90,7 @@ namespace Engine.ECS.Components
             }
             else if (type == typeof(Vertex3f))
             {
-                DrawImguiVertex3f(memberInfo, reference);
+                DrawImGuiVertex3f(memberInfo, reference);
             }
             else if (type == typeof(Quaternion))
             {
@@ -110,20 +110,20 @@ namespace Engine.ECS.Components
             }
         }
 
-        private void DrawImguiVertex3f(MemberInfo field, dynamic reference)
+        private void DrawImGuiVertex3f(MemberInfo member, dynamic reference)
         {
             Vector3 value = new Vector3(reference.Value.x, reference.Value.y, reference.Value.z);
-            ImGui.DragFloat3(field.Name, ref value, 0.1f);
+            ImGui.DragFloat3(member.Name, ref value, 0.1f);
             reference.Value = new Vertex3f(value.X, value.Y, value.Z);
         }
 
-        private void DrawImGuiFloat(MemberInfo field, dynamic reference)
+        private void DrawImGuiFloat(MemberInfo member, dynamic reference)
         {
             float value = reference.Value;
             var min = float.MinValue;
             var max = float.MaxValue;
             var useSlider = false;
-            var fieldAttributes = field.GetCustomAttributes(false);
+            var fieldAttributes = member.GetCustomAttributes(false);
             foreach (var attrib in fieldAttributes.Where(o => o is RangeAttribute))
             {
                 var rangeAttrib = (RangeAttribute)attrib;
@@ -133,30 +133,30 @@ namespace Engine.ECS.Components
             }
 
             if (useSlider)
-                ImGui.SliderFloat($"{field.Name}", ref value, min, max);
+                ImGui.SliderFloat($"{member.Name}", ref value, min, max);
             else
-                ImGui.InputFloat($"{field.Name}", ref value);
+                ImGui.InputFloat($"{member.Name}", ref value);
             reference.Value = value;
         }
 
-        private void DrawImGuiColor(MemberInfo field, dynamic reference)
+        private void DrawImGuiColor(MemberInfo member, dynamic reference)
         {
             var value = new Vector3(reference.Value.r / 255f, reference.Value.g / 255f, reference.Value.b / 255f);
-            ImGui.ColorEdit3($"{field.Name}", ref value);
+            ImGui.ColorEdit3($"{member.Name}", ref value);
             reference.Value = new ColorRGB24((byte)(value.X * 255f), (byte)(value.Y * 255f), (byte)(value.Z * 255f));
         }
 
-        private void DrawImGuiVector3(MemberInfo field, dynamic reference)
+        private void DrawImGuiVector3(MemberInfo member, dynamic reference)
         {
             Vector3 value = reference.Value.ConvertToNumerics();
-            ImGui.DragFloat3(field.Name, ref value, 0.1f);
+            ImGui.DragFloat3(member.Name, ref value, 0.1f);
             reference.Value = Utils.MathUtils.Vector3.ConvertFromNumerics(value);
         }
 
-        private void DrawImGuiQuaternion(MemberInfo field, dynamic reference)
+        private void DrawImGuiQuaternion(MemberInfo member, dynamic reference)
         {
             Vector3 value = reference.Value.ToEulerAngles().ConvertToNumerics();
-            ImGui.DragFloat3(field.Name, ref value, 0.1f);
+            ImGui.DragFloat3(member.Name, ref value, 0.1f);
             reference.Value = Quaternion.FromEulerAngles(Utils.MathUtils.Vector3.ConvertFromNumerics(value));
         }
 
