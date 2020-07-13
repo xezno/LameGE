@@ -1,5 +1,5 @@
-﻿using Engine.ECS.Notify;
-using Engine.ECS.Entities;
+﻿using Engine.ECS.Entities;
+using Engine.ECS.Observer;
 using Engine.Types;
 using Engine.Utils.Attributes;
 using ImGuiNET;
@@ -73,9 +73,9 @@ namespace Engine.ECS.Components
                     throw new NotImplementedException($"Member type {memberInfo.MemberType} not implemented");
             }
 
-            // this works but is, like, the worst solution ever
             var referenceType = typeof(ReflectionRef<>).MakeGenericType(type);
-            var reference = (dynamic /* alarm bells right here */)Activator.CreateInstance(referenceType, memberInfo, this);
+            var reference = Activator.CreateInstance(referenceType, memberInfo, this);
+
             if (type == typeof(float))
             {
                 DrawImGuiFloat(memberInfo, reference);
@@ -110,16 +110,17 @@ namespace Engine.ECS.Components
             }
         }
 
-        private void DrawImGuiVertex3f(MemberInfo member, dynamic reference)
+        private void DrawImGuiVertex3f(MemberInfo member, object reference)
         {
-            Vector3 value = new Vector3(reference.Value.x, reference.Value.y, reference.Value.z);
+            var tmpReference = reference as ReflectionRef<Vertex3f>;
+            Vector3 value = new Vector3(tmpReference.Value.x, tmpReference.Value.y, tmpReference.Value.z);
             ImGui.DragFloat3(member.Name, ref value, 0.1f);
-            reference.Value = new Vertex3f(value.X, value.Y, value.Z);
+            (reference as ReflectionRef<Vertex3f>).Value = new Vertex3f(value.X, value.Y, value.Z);
         }
 
-        private void DrawImGuiFloat(MemberInfo member, dynamic reference)
+        public void DrawImGuiFloat(MemberInfo member, object reference)
         {
-            float value = reference.Value;
+            float value = (reference as ReflectionRef<float>).Value;
             var min = float.MinValue;
             var max = float.MaxValue;
             var useSlider = false;
@@ -136,49 +137,48 @@ namespace Engine.ECS.Components
                 ImGui.SliderFloat($"{member.Name}", ref value, min, max);
             else
                 ImGui.InputFloat($"{member.Name}", ref value);
-            reference.Value = value;
+            (reference as ReflectionRef<float>).Value = value;
         }
 
-        private void DrawImGuiColor(MemberInfo member, dynamic reference)
+        private void DrawImGuiColor(MemberInfo member, object reference)
         {
-            var value = new Vector3(reference.Value.r / 255f, reference.Value.g / 255f, reference.Value.b / 255f);
+            var tmpReference = reference as ReflectionRef<ColorRGB24>;
+            var value = new Vector3(tmpReference.Value.r / 255f, tmpReference.Value.g / 255f, tmpReference.Value.b / 255f);
             ImGui.ColorEdit3($"{member.Name}", ref value);
-            reference.Value = new ColorRGB24((byte)(value.X * 255f), (byte)(value.Y * 255f), (byte)(value.Z * 255f));
+            (reference as ReflectionRef<ColorRGB24>).Value = new ColorRGB24((byte)(value.X * 255f), (byte)(value.Y * 255f), (byte)(value.Z * 255f));
         }
 
-        private void DrawImGuiVector3(MemberInfo member, dynamic reference)
+        public void DrawImGuiVector3(MemberInfo member, object reference)
         {
-            Vector3 value = reference.Value.ConvertToNumerics();
+            Vector3 value = (reference as ReflectionRef<Utils.MathUtils.Vector3>).Value.ConvertToNumerics();
             ImGui.DragFloat3(member.Name, ref value, 0.1f);
-            reference.Value = Utils.MathUtils.Vector3.ConvertFromNumerics(value);
+            (reference as ReflectionRef<Utils.MathUtils.Vector3>).Value = Utils.MathUtils.Vector3.ConvertFromNumerics(value);
         }
 
-        private void DrawImGuiQuaternion(MemberInfo member, dynamic reference)
+        private void DrawImGuiQuaternion(MemberInfo member, object reference)
         {
-            Vector3 value = reference.Value.ToEulerAngles().ConvertToNumerics();
+            Vector3 value = (reference as ReflectionRef<Quaternion>).Value.ToEulerAngles().ConvertToNumerics();
             ImGui.DragFloat3(member.Name, ref value, 0.1f);
-            reference.Value = Quaternion.FromEulerAngles(Utils.MathUtils.Vector3.ConvertFromNumerics(value));
+            (reference as ReflectionRef<Quaternion>).Value = Quaternion.FromEulerAngles(Utils.MathUtils.Vector3.ConvertFromNumerics(value));
         }
 
-        private void DrawImGuiInt(MemberInfo field, dynamic reference)
+        private void DrawImGuiInt(MemberInfo field, object reference)
         {
-            int value = reference.Value;
+            int value = (reference as ReflectionRef<int>).Value;
             ImGui.DragInt($"{field.Name}", ref value);
-            reference.Value = value;
+            (reference as ReflectionRef<int>).Value = value;
         }
 
-        private void DrawImGuiArray(dynamic memberValue, int depth)
+        public void DrawImGuiArray(dynamic memberValue, int depth)
         {
+            // TODO: what??
             foreach (var element in memberValue)
             {
                 RenderImGuiMembers(depth + 1);
             }
         }
 
-        private ImGuiInputTextFlags GetFlags(dynamic reference)
-        {
-            return reference.CanGet ? ImGuiInputTextFlags.None : ImGuiInputTextFlags.ReadOnly;
-        }
+        private ImGuiInputTextFlags GetFlags(dynamic reference) => reference.CanGet ? ImGuiInputTextFlags.None : ImGuiInputTextFlags.ReadOnly;
 
         /// <summary>
         /// Called whenever the engine renders a single frame.

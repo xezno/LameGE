@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Engine.ECS.Notify
+namespace Engine.ECS.Observer
 {
     /// <summary>
     /// An interface from which all notification arguments must derive.

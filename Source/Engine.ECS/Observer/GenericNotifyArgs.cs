@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Engine.ECS.Notify
+namespace Engine.ECS.Observer
 {
     /// <summary>
     /// Generic notification arguments for use when specific parameters are not required.

@@ -1,4 +1,4 @@
-﻿using Engine.ECS.Notify;
+﻿using Engine.ECS.Observer;
 using Engine.ECS.Components;
 using Engine.Renderer.GL.Components;
 using Engine.Renderer.GL.Managers;
@@ -13,7 +13,9 @@ namespace Ulaid.Components
         private TransformComponent transformComponent;
         private bool lockRotation;
         private Vector3 currentInput;
-        private Vector3 currentDirection;
+
+        public Vector3 CurrentInput { get => currentInput; set => currentInput = value; }
+        public Vector3 CurrentDirection { get; set; }
 
         public Vector3 Velocity { get; set; }
         public Vector3 CurrentRotation { get; set; }
@@ -32,13 +34,13 @@ namespace Ulaid.Components
             SceneManager.Instance.mainCamera.RotationEuler = CurrentRotation * RotationSensitivity;
             transformComponent.RotationEuler = CurrentRotation * RotationSensitivity;
 
-            var newDirection = (transformComponent.Forward * currentInput.z) + (transformComponent.Right * currentInput.x);
-            newDirection.y = currentDirection.y + currentInput.y;
+            var newDirection = (transformComponent.Forward * CurrentInput.z) + (transformComponent.Right * CurrentInput.x);
+            newDirection.y = CurrentDirection.y + CurrentInput.y;
             newDirection.Normalize();
 
-            currentDirection = currentDirection.Normalized;
+            CurrentDirection = CurrentDirection.Normalized;
 
-            Velocity += currentDirection * Acceleration;
+            Velocity += CurrentDirection * Acceleration;
             Velocity += new Vector3(
                 Math.Sign(Velocity.x) * -Deceleration,
                 Math.Sign(Velocity.y) * -Deceleration,
@@ -77,22 +79,22 @@ namespace Ulaid.Components
                 switch ((KeyCode)keyboardEventArgs.KeyboardKey)
                 {
                     case KeyCode.W:
-                        currentInput.z = eventType == NotifyType.KeyDown ? -1 : 0;
+                        currentInput.z += eventType == NotifyType.KeyDown ? -1 : 0;
                         break;
                     case KeyCode.A:
-                        currentInput.x = eventType == NotifyType.KeyDown ? -1 : 0;
+                        currentInput.x += eventType == NotifyType.KeyDown ? -1 : 0;
                         break;
                     case KeyCode.S:
-                        currentInput.z = eventType == NotifyType.KeyDown ? 1 : 0;
+                        currentInput.z += eventType == NotifyType.KeyDown ? 1 : 0;
                         break;
                     case KeyCode.D:
-                        currentInput.x = eventType == NotifyType.KeyDown ? 1 : 0;
+                        currentInput.x += eventType == NotifyType.KeyDown ? 1 : 0;
                         break;
                     case KeyCode.Space:
-                        currentInput.y = eventType == NotifyType.KeyDown ? 1 : 0;
+                        currentInput.y += eventType == NotifyType.KeyDown ? 1 : 0;
                         break;
                     case KeyCode.Control:
-                        currentInput.y = eventType == NotifyType.KeyDown ? -1 : 0;
+                        currentInput.y += eventType == NotifyType.KeyDown ? -1 : 0;
                         break;
                     case KeyCode.F3:
                     case KeyCode.F1:
@@ -105,6 +107,7 @@ namespace Ulaid.Components
             {
                 if (lockRotation)
                     return;
+
                 MouseMoveNotifyArgs mouseEventArgs = (MouseMoveNotifyArgs)notifyArgs;
                 CurrentRotation += new Vector3(mouseEventArgs.MouseDelta.y * -MouseSensitivityMultiplier,
                     mouseEventArgs.MouseDelta.x * -MouseSensitivityMultiplier,

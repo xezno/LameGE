@@ -1,5 +1,5 @@
 ﻿using Engine.ECS.Managers;
-using Engine.ECS.Notify;
+using Engine.ECS.Observer;
 using Engine.Types;
 using ImGuiNET;
 using System.Numerics;

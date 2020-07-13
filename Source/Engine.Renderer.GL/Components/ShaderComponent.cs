@@ -19,7 +19,7 @@ namespace Engine.Renderer.GL.Components
         /// <summary>
         /// A list of variables that have already thrown errors; used to prevent the console from becoming too densely populated with shader errors.
         /// </summary>
-        private readonly List<string> errorLog;
+        private readonly List<string> unknownVariableErrorList;
 
         /// <summary>
         /// A list of the shaders attached to this ShaderComponent.
@@ -32,6 +32,22 @@ namespace Engine.Renderer.GL.Components
 
         public bool ShadersDirty { get; set; }
 
+        private string ShaderName 
+        {
+            get {
+                string tmpShaderName = "";
+                for (int i = 0; i < shaders.Length; i++)
+                {
+                    Shader shader = shaders[i];
+                    tmpShaderName += $"{shader.FileName}";
+
+                    if (i != shaders.Length - 1)
+                        tmpShaderName += ", ";
+                }
+                return tmpShaderName;
+            }
+        }
+
         /// <summary>
         /// Construct a new ShaderComponent, attaching any of the shaders given.
         /// </summary>
@@ -39,7 +55,7 @@ namespace Engine.Renderer.GL.Components
         public ShaderComponent(params Shader[] shaders)
         {
             this.shaders = shaders;
-            errorLog = new List<string>();
+            unknownVariableErrorList = new List<string>();
 
             CreateShader();
             AttachAndLink();
@@ -61,7 +77,7 @@ namespace Engine.Renderer.GL.Components
             }
             Gl.LinkProgram(shaderProgram);
 
-            errorLog.Clear();
+            unknownVariableErrorList.Clear();
         }
 
         /// <summary>
@@ -99,18 +115,18 @@ namespace Engine.Renderer.GL.Components
         {
             var variableLocation = Gl.GetUniformLocation(shaderProgram, variableName);
 
-            if (errorLog.Contains(variableName)) return; // Skip if there's been an issue previously
+            if (unknownVariableErrorList.Contains(variableName)) return; // Skip if there's been an issue previously
 
             if (variableLocation < 0)
             {
-                errorLog.Add(variableName);
-                Logging.Log($"Tried to set value for variable {variableName} that does not exist on shader program {shaderProgram}.", Logging.Severity.Low);
+                unknownVariableErrorList.Add(variableName);
+                Logging.Log($"Tried to set value for variable {variableName} that does not exist. (Program {shaderProgram}, shaders {ShaderName}).", Logging.Severity.Low);
                 return; // We can't continue, because the variable doesn't exist
             }
 
             if (variableValue == null)
             {
-                Logging.Log($"Tried to set value for variable {variableName}, but null value was given.", Logging.Severity.Low);
+                Logging.Log($"Tried to set value for variable {variableName}, but null value was given. (Program {shaderProgram}, shaders {ShaderName}).", Logging.Severity.Low);
                 return; // We can't continue, because the variable has no value
             }
 
@@ -140,9 +156,9 @@ namespace Engine.Renderer.GL.Components
                 // textureUnit - (first texture unit #)
                 Gl.ProgramUniform1(shaderProgram, variableLocation, texture.textureUnit - TextureUnit.Texture0);
             }
-            else if (!errorLog.Contains(variableName))
+            else if (!unknownVariableErrorList.Contains(variableName))
             {
-                errorLog.Add(variableName);
+                unknownVariableErrorList.Add(variableName);
                 Logging.Log($"I don't know how to handle {variableValue.GetType().Name} yet :(", Logging.Severity.High);
             }
         }

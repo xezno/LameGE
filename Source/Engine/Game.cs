@@ -1,5 +1,5 @@
 ﻿using Engine.ECS.Managers;
-using Engine.ECS.Notify;
+using Engine.ECS.Observer;
 using Engine.Gui.Managers;
 using Engine.Managers;
 using Engine.Renderer.GL.Managers;

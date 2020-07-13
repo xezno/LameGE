@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Engine.ECS.Notify
+namespace Engine.ECS.Observer
 {
-    public class MouseButtonNotifyArgs : INotifyArgs
+    public class KeyboardNotifyArgs : INotifyArgs
     {
         /// <summary>
         /// The object triggering the notification.
@@ -15,20 +15,20 @@ namespace Engine.ECS.Notify
         public DateTime TimeSent { get; set; }
 
         /// <summary>
-        /// The mouse button relevant to the event.
+        /// The keyboard key relevant to the notification.
         /// </summary>
-        public int MouseButton { get; }
+        public int KeyboardKey { get; }
 
         /// <summary>
-        /// Construct a new instance of <see cref="MouseButtonNotifyArgs"/>; the <see cref="TimeSent"/> will be automatically set.
+        /// Construct a new instance of <see cref="MouseWheelNotifyArgs"/>; the <see cref="TimeSent"/> will be automatically set.
         /// </summary>
-        /// <param name="mouseButton">The mouse button relevant to the notification.</param>
+        /// <param name="keyboardKey">The keyboard key relevant to the notification.</param>
         /// <param name="sender">The object triggering the notification.</param>
-        public MouseButtonNotifyArgs(int mouseButton, object sender)
+        public KeyboardNotifyArgs(int keyboardKey, object sender)
         {
             Sender = sender;
             TimeSent = DateTime.Now;
-            MouseButton = mouseButton;
+            KeyboardKey = keyboardKey;
         }
     }
 }

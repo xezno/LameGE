@@ -1,9 +1,8 @@
-﻿using Engine.Utils.MathUtils;
-using System;
+﻿using System;
 
-namespace Engine.ECS.Notify
+namespace Engine.ECS.Observer
 {
-    public class WindowResizeNotifyArgs : INotifyArgs
+    public class MouseButtonNotifyArgs : INotifyArgs
     {
         /// <summary>
         /// The object triggering the notification.
@@ -16,20 +15,20 @@ namespace Engine.ECS.Notify
         public DateTime TimeSent { get; set; }
 
         /// <summary>
-        /// The window's new size.
+        /// The mouse button relevant to the event.
         /// </summary>
-        public Vector2 WindowSize { get; }
+        public int MouseButton { get; }
 
         /// <summary>
-        /// Construct a new instance of <see cref="WindowResizeNotifyArgs"/>; the <see cref="TimeSent"/> will be automatically set.
+        /// Construct a new instance of <see cref="MouseButtonNotifyArgs"/>; the <see cref="TimeSent"/> will be automatically set.
         /// </summary>
-        /// <param name="windowSize">The window's new size.</param>
+        /// <param name="mouseButton">The mouse button relevant to the notification.</param>
         /// <param name="sender">The object triggering the notification.</param>
-        public WindowResizeNotifyArgs(Vector2 windowSize, object sender)
+        public MouseButtonNotifyArgs(int mouseButton, object sender)
         {
             Sender = sender;
             TimeSent = DateTime.Now;
-            WindowSize = windowSize;
+            MouseButton = mouseButton;
         }
     }
 }

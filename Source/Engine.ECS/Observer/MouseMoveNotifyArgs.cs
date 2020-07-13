@@ -1,7 +1,7 @@
 ﻿using Engine.Utils.MathUtils;
 using System;
 
-namespace Engine.ECS.Notify
+namespace Engine.ECS.Observer
 {
     public class MouseMoveNotifyArgs : INotifyArgs
     {

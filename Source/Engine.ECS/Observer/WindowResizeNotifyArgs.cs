@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Engine.Utils.MathUtils;
+using System;
 
-namespace Engine.ECS.Notify
+namespace Engine.ECS.Observer
 {
-    public class MouseWheelNotifyArgs : INotifyArgs
+    public class WindowResizeNotifyArgs : INotifyArgs
     {
         /// <summary>
         /// The object triggering the notification.
@@ -15,20 +16,20 @@ namespace Engine.ECS.Notify
         public DateTime TimeSent { get; set; }
 
         /// <summary>
-        /// The amount by which the mouse scroll wheel has been turned.
+        /// The window's new size.
         /// </summary>
-        public int MouseScroll { get; }
+        public Vector2 WindowSize { get; }
 
         /// <summary>
-        /// Construct a new instance of <see cref="MouseWheelNotifyArgs"/>; the <see cref="TimeSent"/> will be automatically set.
+        /// Construct a new instance of <see cref="WindowResizeNotifyArgs"/>; the <see cref="TimeSent"/> will be automatically set.
         /// </summary>
-        /// <param name="mouseScroll">The amount by which the mouse scroll wheel has been turned.</param>
+        /// <param name="windowSize">The window's new size.</param>
         /// <param name="sender">The object triggering the notification.</param>
-        public MouseWheelNotifyArgs(int mouseScroll, object sender)
+        public WindowResizeNotifyArgs(Vector2 windowSize, object sender)
         {
             Sender = sender;
             TimeSent = DateTime.Now;
-            MouseScroll = mouseScroll;
+            WindowSize = windowSize;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Engine.ECS.Notify;
+﻿using Engine.ECS.Observer;
 using Engine.Types;
 
 namespace Engine.ECS.Components

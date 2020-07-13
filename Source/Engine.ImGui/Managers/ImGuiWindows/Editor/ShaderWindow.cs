@@ -1,5 +1,5 @@
 ﻿using Engine.Assets;
-using Engine.ECS.Notify;
+using Engine.ECS.Observer;
 using Engine.Renderer.GL.Components;
 using Engine.Renderer.GL.Managers;
 using ImGuiNET;

@@ -1,5 +1,5 @@
 ﻿using Engine.Assets;
-using Engine.ECS.Notify;
+using Engine.ECS.Observer;
 using Engine.ECS.Managers;
 using Engine.Gui.Managers.ImGuiWindows;
 using Engine.Gui.Managers.ImGuiWindows.Editor;
