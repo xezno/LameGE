@@ -89,7 +89,7 @@ namespace Engine
 
             nativeWindow.SwapInterval = 0;
             nativeWindow.Resize += Resize;
-            nativeWindow.Create(GameSettings.GamePosX, GameSettings.GamePosY, (uint)GameSettings.GameResolutionX + 16, (uint)GameSettings.GameResolutionY + 16, NativeWindowStyle.Caption | NativeWindowStyle.Border);
+            nativeWindow.Create(GameSettings.GamePosX, GameSettings.GamePosY, (uint)GameSettings.GameResolutionX + 16, (uint)GameSettings.GameResolutionY + 16, NativeWindowStyles.Caption | NativeWindowStyles.Border);
 
             nativeWindow.Fullscreen = GameSettings.Fullscreen;
             nativeWindow.Caption = FilterString(gameProperties.WindowTitle) ?? "Engine Game";

@@ -30,8 +30,14 @@ namespace Engine.Renderer.GL.Components
         private string currentShaderSource = "";
         private int currentShaderItem;
 
+        /// <summary>
+        /// Marking as 'true' will reload all contained <see cref="Shader"/>s next frame.
+        /// </summary>
         public bool ShadersDirty { get; set; }
 
+        /// <summary>
+        /// A friendly name for the shader component, containing the filenames for each contained <see cref="Shader"/>, useful for logging purposes.
+        /// </summary>
         private string ShaderName 
         {
             get {
@@ -93,6 +99,9 @@ namespace Engine.Renderer.GL.Components
             Gl.UseProgram(shaderProgram);
         }
 
+        /// <summary>
+        /// Delete all shaders and re-compile from based on the contents of their source files.
+        /// </summary>
         public void ReloadAll()
         {
             foreach (var shader in shaders)

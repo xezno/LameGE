@@ -110,6 +110,11 @@ namespace Engine.ECS.Components
             }
         }
 
+        /// <summary>
+        /// Queues a DragFloat3 ImGui component for the Vertex3f parameter given.
+        /// </summary>
+        /// <param name="member"></param>
+        /// <param name="reference"></param>
         private void DrawImGuiVertex3f(MemberInfo member, object reference)
         {
             var tmpReference = reference as ReflectionRef<Vertex3f>;
