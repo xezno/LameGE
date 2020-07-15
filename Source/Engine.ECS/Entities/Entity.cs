@@ -13,8 +13,9 @@ namespace Engine.ECS.Entities
 {
     public class Entity<T> : IEntity
     {
-        private string name;
         public bool Enabled { get; private set; } = true;
+
+        private string name;
         public virtual string Name
         {
             get
@@ -139,17 +140,22 @@ namespace Engine.ECS.Entities
             return (T1)results.First();
         }
 
+        /// <summary>
+        /// Check whether this entity has the component of type T1.
+        /// </summary>
+        /// <typeparam name="T1">The type of the component to check for.</typeparam>
+        /// <returns></returns>
         public bool HasComponent<T1>()
         {
             var results = Components.FindAll(t => { return t.GetType() == typeof(T1); });
-            return !(results.Count <= 0);
+            return results.Count > 0;
         }
 
-        public virtual void OnNotify(NotifyType eventType, INotifyArgs notifyArgs)
+        public virtual void OnNotify(NotifyType notifyType, INotifyArgs notifyArgs)
         {
             foreach (var component in Components)
             {
-                component.OnNotify(eventType, notifyArgs);
+                component.OnNotify(notifyType, notifyArgs);
             }
         }
 

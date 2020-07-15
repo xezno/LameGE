@@ -36,9 +36,9 @@ namespace Ulaid.Components
 
             var newDirection = (transformComponent.Forward * CurrentInput.z) + (transformComponent.Right * CurrentInput.x);
             newDirection.y = CurrentDirection.y + CurrentInput.y;
-            newDirection.Normalize();
+            // newDirection.Normalize();
 
-            CurrentDirection = CurrentDirection.Normalized;
+            CurrentDirection = newDirection.Normalized;
 
             Velocity += CurrentDirection * Acceleration;
             Velocity += new Vector3(
@@ -79,22 +79,22 @@ namespace Ulaid.Components
                 switch ((KeyCode)keyboardEventArgs.KeyboardKey)
                 {
                     case KeyCode.W:
-                        currentInput.z += eventType == NotifyType.KeyDown ? -1 : 0;
+                        currentInput.z = eventType == NotifyType.KeyDown ? -1 : 0;
                         break;
                     case KeyCode.A:
-                        currentInput.x += eventType == NotifyType.KeyDown ? -1 : 0;
+                        currentInput.x = eventType == NotifyType.KeyDown ? -1 : 0;
                         break;
                     case KeyCode.S:
-                        currentInput.z += eventType == NotifyType.KeyDown ? 1 : 0;
+                        currentInput.z = eventType == NotifyType.KeyDown ? 1 : 0;
                         break;
                     case KeyCode.D:
-                        currentInput.x += eventType == NotifyType.KeyDown ? 1 : 0;
+                        currentInput.x = eventType == NotifyType.KeyDown ? 1 : 0;
                         break;
                     case KeyCode.Space:
-                        currentInput.y += eventType == NotifyType.KeyDown ? 1 : 0;
+                        currentInput.y = eventType == NotifyType.KeyDown ? 1 : 0;
                         break;
                     case KeyCode.Control:
-                        currentInput.y += eventType == NotifyType.KeyDown ? -1 : 0;
+                        currentInput.y = eventType == NotifyType.KeyDown ? -1 : 0;
                         break;
                     case KeyCode.F3:
                     case KeyCode.F1:

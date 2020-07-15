@@ -5,13 +5,14 @@ namespace Engine.Utils
 {
     struct GameSettingsValues
     {
-        #pragma warning disable CS0649
+        #pragma warning disable CS0649 // Field is never assigned to, and will always have its default value 'null'
         public int gameResolutionX;
         public int gameResolutionY;
         public bool vsyncEnabled;
         public int framerateLimit;
         public int gamePosX;
         public int gamePosY;
+        public int monitor;
         public bool fullscreen;
         public string rconPassword;
         public bool rconEnabled;
@@ -36,6 +37,7 @@ namespace Engine.Utils
         public static int FramerateLimit { get => values.framerateLimit; }
         public static int GamePosX { get => values.gamePosX; }
         public static int GamePosY { get => values.gamePosY; }
+        public static int Monitor { get => values.monitor; }
         public static bool Fullscreen { get => values.fullscreen; }
         public static string RconPassword { get => values.rconPassword; }
         public static bool RconEnabled { get => values.rconEnabled; }
