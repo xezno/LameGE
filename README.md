@@ -10,7 +10,7 @@ This is a basic game engine created for personal practice and use; it uses the [
         - [Recommendations](#recommendations)
     - [Instructions](#instructions)
 - [Code Conventions](#code-conventions)
-- [Cross-Platform Compatibility](#cross-platform-compatibility)
+- [Platform support](#platform-support)
 - [Support](#support)
 - [Roadmap](#roadmap)
 - [License](#license)
@@ -48,9 +48,21 @@ The following project-specific naming conventions are used:
 - Classes ending in `Component` derive from the `Component<T>` base class, and are much similar to a component found within a typical ECS project.
 - Classes ending in `Manager` derive from the `Manager<T>` base class; unlike their name, they are similar to a system found within a typical ECS project - this name was chosen to prevent any confusion with the `System` namespace within .NET.
 
-## Cross-Platform Compatibility
+## Platform support
 
-Cross-platform compatibility is currently untested, and Windows 10 is currently the only supported platform; therefore, your mileage may vary when attempting to run the project on a non-Windows operating system. In the somewhat distant future, however, this should change.
+Currently, platform support is as follows:
+
+|Platform   |Supported? |
+|-----------|-----------|
+|Windows    |Yes        |
+|Linux      |Planned*   |
+|Android    |Planned*   |
+|macOS      |No         |
+|iOS        |No         |
+
+Support for macOS and iOS is not currently planned due to their use of the Metal API versus Engine's use of the OpenGL API.
+
+(* = Untested, may work as-is.)
 
 ## Support
 
