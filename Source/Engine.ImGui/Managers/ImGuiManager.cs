@@ -48,6 +48,7 @@ namespace Engine.Gui.Managers
         {
             new ImGuiMenu(FontAwesome5.File, "File", new List<ImGuiWindow>()
             {
+                new SaveSettingsWindow(),
                 new CloseGameWindow()
             }),
             //new ImGuiMenu(FontAwesome5.FileCode, "Scripts", new List<ImGuiWindow>()
@@ -64,7 +65,8 @@ namespace Engine.Gui.Managers
                 new EngineConfigWindow(),
                 new PerformanceWindow(),
                 new TextureBrowserWindow(),
-                new ShaderWindow()
+                new ShaderWindow(),
+                new InputWindow()
             })
         };
 
@@ -90,8 +92,10 @@ namespace Engine.Gui.Managers
 
             ImGui.StyleColorsDark();
 
-            // Set theme - TODO: NEEDS MOVING
-            Theme = ImGuiTheme.LoadFromFile("Content/Themes/modern.json");
+            // Set default theme from game settings
+            Theme = ImGuiTheme.LoadFromFile($"Content/Themes/{GameSettings.EditorTheme}.json");
+            // TODO: Check if theme doesn't exist, set a default
+            // TODO: Move code to somewhere that makes more sense?
 
             InitFonts();
             InitKeymap();
