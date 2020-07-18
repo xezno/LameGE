@@ -34,9 +34,8 @@ namespace Ulaid.Components
             SceneManager.Instance.mainCamera.RotationEuler = CurrentRotation * RotationSensitivity;
             transformComponent.RotationEuler = CurrentRotation * RotationSensitivity;
 
-            var newDirection = (transformComponent.Forward * CurrentInput.z) + (transformComponent.Right * CurrentInput.x);
-            newDirection.y = CurrentDirection.y + CurrentInput.y;
-            // newDirection.Normalize();
+            var newDirection = (transformComponent.Forward * CurrentInput.z) + (transformComponent.Right * CurrentInput.x) + (transformComponent.Up * CurrentInput.y);
+            newDirection.Normalize();
 
             CurrentDirection = newDirection.Normalized;
 

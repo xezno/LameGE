@@ -31,6 +31,7 @@ namespace Engine.Renderer.GL.Managers
         public float[] FramerateHistory { get; } = new float[FramesToCount];
 
         public bool RenderShadowMap { get; set; }
+        public bool Paused { get; set; }
 
         public RenderManager()
         {
@@ -192,21 +193,25 @@ namespace Engine.Renderer.GL.Managers
             RenderCef();
 
             LastFrameTime = (DateTime.Now - lastRender).Milliseconds;
-            FrametimeHistory[currentFrametimeIndex++] = LastFrameTime;
 
-            if (currentFrametimeIndex == FrametimeHistory.Length)
+            if (!Paused)
             {
-                currentFrametimeIndex--;
-                for (var i = 0; i < FrametimeHistory.Length; ++i)
-                    FrametimeHistory[i] = FrametimeHistory[(i + 1) % FrametimeHistory.Length];
-            }
+                FrametimeHistory[currentFrametimeIndex++] = LastFrameTime;
 
-            FramerateHistory[currentFramerateIndex++] = CalculatedFramerate;
-            if (currentFramerateIndex == FramerateHistory.Length)
-            {
-                currentFramerateIndex--;
-                for (var i = 0; i < FramerateHistory.Length; ++i)
-                    FramerateHistory[i] = FramerateHistory[(i + 1) % FramerateHistory.Length];
+                if (currentFrametimeIndex == FrametimeHistory.Length)
+                {
+                    currentFrametimeIndex--;
+                    for (var i = 0; i < FrametimeHistory.Length; ++i)
+                        FrametimeHistory[i] = FrametimeHistory[(i + 1) % FrametimeHistory.Length];
+                }
+
+                FramerateHistory[currentFramerateIndex++] = CalculatedFramerate;
+                if (currentFramerateIndex == FramerateHistory.Length)
+                {
+                    currentFramerateIndex--;
+                    for (var i = 0; i < FramerateHistory.Length; ++i)
+                        FramerateHistory[i] = FramerateHistory[(i + 1) % FramerateHistory.Length];
+                }
             }
 
             lastRender = DateTime.Now;
