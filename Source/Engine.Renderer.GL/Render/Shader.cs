@@ -58,7 +58,6 @@ namespace Engine.Renderer.GL.Render
             FileName = path;
             GlShader = Gl.CreateShader(ShaderType);
 
-
             shaderSource = new string[0];
 
             ReadSourceFromFile();

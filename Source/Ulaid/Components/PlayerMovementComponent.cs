@@ -71,50 +71,56 @@ namespace Ulaid.Components
 
         public override void OnNotify(NotifyType eventType, INotifyArgs notifyArgs)
         {
-            if (eventType == NotifyType.KeyDown || eventType == NotifyType.KeyUp)
+            switch (eventType)
             {
-                KeyboardNotifyArgs keyboardEventArgs = (KeyboardNotifyArgs)notifyArgs;
-
-                switch ((KeyCode)keyboardEventArgs.KeyboardKey)
+                case NotifyType.KeyDown:
+                case NotifyType.KeyUp:
                 {
-                    case KeyCode.W:
-                        currentInput.z = eventType == NotifyType.KeyDown ? -1 : 0;
-                        break;
-                    case KeyCode.A:
-                        currentInput.x = eventType == NotifyType.KeyDown ? -1 : 0;
-                        break;
-                    case KeyCode.S:
-                        currentInput.z = eventType == NotifyType.KeyDown ? 1 : 0;
-                        break;
-                    case KeyCode.D:
-                        currentInput.x = eventType == NotifyType.KeyDown ? 1 : 0;
-                        break;
-                    case KeyCode.Space:
-                        currentInput.y = eventType == NotifyType.KeyDown ? 1 : 0;
-                        break;
-                    case KeyCode.Control:
-                        currentInput.y = eventType == NotifyType.KeyDown ? -1 : 0;
-                        break;
-                    case KeyCode.F3:
-                    case KeyCode.F1:
-                        if (eventType == NotifyType.KeyUp)
-                            lockRotation = !lockRotation;
-                        break;
-                }
-            }
-            else if (eventType == NotifyType.MouseMove)
-            {
-                if (lockRotation)
-                    return;
+                    KeyboardNotifyArgs keyboardEventArgs = (KeyboardNotifyArgs)notifyArgs;
 
-                MouseMoveNotifyArgs mouseEventArgs = (MouseMoveNotifyArgs)notifyArgs;
-                CurrentRotation += new Vector3(mouseEventArgs.MouseDelta.y * -MouseSensitivityMultiplier,
-                    mouseEventArgs.MouseDelta.x * -MouseSensitivityMultiplier,
-                    0);
-            }
-            else if (eventType == NotifyType.GameStart)
-            {
-                transformComponent = GetComponent<TransformComponent>();
+                    switch ((KeyCode)keyboardEventArgs.KeyboardKey)
+                    {
+                        case KeyCode.W:
+                            currentInput.z = eventType == NotifyType.KeyDown ? -1 : 0;
+                            break;
+                        case KeyCode.A:
+                            currentInput.x = eventType == NotifyType.KeyDown ? -1 : 0;
+                            break;
+                        case KeyCode.S:
+                            currentInput.z = eventType == NotifyType.KeyDown ? 1 : 0;
+                            break;
+                        case KeyCode.D:
+                            currentInput.x = eventType == NotifyType.KeyDown ? 1 : 0;
+                            break;
+                        case KeyCode.Space:
+                            currentInput.y = eventType == NotifyType.KeyDown ? 1 : 0;
+                            break;
+                        case KeyCode.Control:
+                            currentInput.y = eventType == NotifyType.KeyDown ? -1 : 0;
+                            break;
+                        case KeyCode.F3:
+                        case KeyCode.F1:
+                            if (eventType == NotifyType.KeyUp)
+                                lockRotation = !lockRotation;
+                            break;
+                    }
+
+                    break;
+                }
+                case NotifyType.MouseMove:
+                {
+                    if (lockRotation)
+                        return;
+
+                    MouseMoveNotifyArgs mouseEventArgs = (MouseMoveNotifyArgs)notifyArgs;
+                    CurrentRotation += new Vector3(mouseEventArgs.MouseDelta.y * -MouseSensitivityMultiplier,
+                        mouseEventArgs.MouseDelta.x * -MouseSensitivityMultiplier,
+                        0);
+                    break;
+                }
+                case NotifyType.GameStart:
+                    transformComponent = GetComponent<TransformComponent>();
+                    break;
             }
         }
     }
