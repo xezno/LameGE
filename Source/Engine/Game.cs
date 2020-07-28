@@ -211,7 +211,6 @@ namespace Engine
         private void MouseWheel(object sender, NativeWindowMouseEventArgs e)
         {
             Broadcast.Notify(NotifyType.MouseScroll, new MouseWheelNotifyArgs(e.WheelTicks, this));
-            Logging.Log($"Scrolled by {e.WheelTicks} ticks");
         }
 
         private void MouseMove(object sender, NativeWindowMouseEventArgs e)

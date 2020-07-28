@@ -13,6 +13,8 @@ namespace Engine.Renderer.GL.Entities
     /// </summary>
     public sealed class CameraEntity : Entity<CameraEntity>
     {
+        // TODO: ECS - Move these to component?
+
         public override string IconGlyph { get; } = FontAwesome5.Camera;
 
         /// <summary>

@@ -43,5 +43,19 @@ namespace Engine.Components
 
             shadowMap = new ShadowMap(GameSettings.ShadowMapX, GameSettings.ShadowMapY);
         }
+
+        public void Bind(ShaderComponent shaderComponent)
+        {
+            var transformComponent = GetComponent<TransformComponent>();
+            shaderComponent.SetVariable("light.pos", transformComponent.Position);
+            shaderComponent.SetVariable("light.range", range);
+            shaderComponent.SetVariable("light.linear", linear);
+            shaderComponent.SetVariable("light.quadratic", quadratic);
+            shaderComponent.SetVariable("light.constant", constant);
+
+            shadowMap.BindTexture();
+            shaderComponent.SetVariable("shadowMap", 1);
+            shaderComponent.SetVariable("lightMatrix", lightMatrix);
+        }
     }
 }

@@ -29,18 +29,5 @@ namespace Engine.Renderer.GL.Entities
             lightComponent = new LightComponent(600, 0.007f, 0.0002f);
             AddComponent(lightComponent);
         }
-
-        public void Bind(ShaderComponent shaderComponent)
-        {
-            shaderComponent.SetVariable("light.pos", transformComponent.Position);
-            shaderComponent.SetVariable("light.range", lightComponent.range);
-            shaderComponent.SetVariable("light.linear", lightComponent.linear);
-            shaderComponent.SetVariable("light.quadratic", lightComponent.quadratic);
-            shaderComponent.SetVariable("light.constant", lightComponent.constant);
-
-            lightComponent.shadowMap.BindTexture();
-            shaderComponent.SetVariable("shadowMap", 1);
-            shaderComponent.SetVariable("lightMatrix", lightComponent.lightMatrix);
-        }
     }
 }

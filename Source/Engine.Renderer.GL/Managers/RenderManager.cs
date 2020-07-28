@@ -20,7 +20,7 @@ namespace Engine.Renderer.GL.Managers
 
         private Framebuffer mainFramebuffer;
 
-        private const int FramesToCount = 120;
+        private const int FramesToCount = 480;
         private readonly Renderer renderer;
 
         private ShaderComponent shadowShaders;
@@ -73,7 +73,7 @@ namespace Engine.Renderer.GL.Managers
             }
         }
 
-        public void RenderCefEntity(CefEntity cefEntity)
+        public void RenderCefComponent(CefComponent cefComponent)
         {
             // render cef offscreen & then blit to screen
             // we need to set up texture on the main therad
@@ -81,14 +81,14 @@ namespace Engine.Renderer.GL.Managers
             // declare a bool that allows us to detect when we need to
             // setup the texture.
 
-            if (!cefEntity.ReadyToDraw) return;
+            if (!cefComponent.ReadyToDraw) return;
 
             Gl.Disable(EnableCap.DepthTest);
 
             // draw to screen
-            cefEntity.Render();
+            cefComponent.Render();
 
-            cefEntity.SetTextureData();
+            cefComponent.SetTextureData();
 
             Gl.Enable(EnableCap.DepthTest);
         }
@@ -97,12 +97,9 @@ namespace Engine.Renderer.GL.Managers
         {
             foreach (var entity in SceneManager.Instance.Entities)
             {
-                if (entity.Enabled && entity.GetType() == typeof(CefEntity))
+                if (entity.Enabled && entity.HasComponent<CefComponent>())
                 {
-                    if (entity.HasComponent<MeshComponent>())
-                    {
-                        RenderCefEntity((CefEntity)entity);
-                    }
+                    RenderCefComponent(entity.GetComponent<CefComponent>());
                 }
             }
         }
@@ -151,7 +148,7 @@ namespace Engine.Renderer.GL.Managers
 
             entity.GetComponent<MaterialComponent>().BindAll(shaderComponent);
 
-            SceneManager.Instance.lights[0].Bind(shaderComponent);
+            SceneManager.Instance.lights[0].GetComponent<LightComponent>().Bind(shaderComponent);
 
             Gl.DrawArrays(PrimitiveType.Triangles, 0, meshComponent.RenderMesh.ElementCount * sizeof(float));
 

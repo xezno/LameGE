@@ -13,6 +13,8 @@ namespace Engine.ECS.Entities
 {
     public class Entity<T> : IEntity
     {
+        public Guid ID { get; } = Guid.NewGuid();
+
         public bool Enabled { get; private set; } = true;
 
         private string name;
@@ -56,17 +58,19 @@ namespace Engine.ECS.Entities
         /// </summary>
         public virtual void RenderImGui()
         {
-            // TODO: Fix
-            //ImGui.Checkbox("##hidelabel", ref enabled);
-            //ImGui.SameLine();
+            bool enabled = Enabled;
+            ImGui.Checkbox("##hidelabel#enabled", ref enabled);
+            Enabled = enabled;
+
+            ImGui.SameLine();
 
             var nameVal = Name;
-            ImGui.InputText("##hidelabel", ref nameVal, 256);
-            if (nameVal != Name)
-                Name = nameVal;
+            ImGui.InputText("##hidelabel#name", ref nameVal, 256);
+            Name = nameVal;
 
             // Entity info
             ImGui.Text($"{IconGlyph} {GetType().Name}");
+            ImGui.Text($"({ID})");
 
             ImGui.Separator();
 
@@ -151,6 +155,7 @@ namespace Engine.ECS.Entities
             return results.Count > 0;
         }
 
+        // TODO: Consider removal
         public virtual void OnNotify(NotifyType notifyType, INotifyArgs notifyArgs)
         {
             foreach (var component in Components)
@@ -159,7 +164,8 @@ namespace Engine.ECS.Entities
             }
         }
 
-        public virtual void Render()
+        // TODO: Consider removal
+        public void Render()
         {
             foreach (var component in Components)
             {
@@ -167,7 +173,8 @@ namespace Engine.ECS.Entities
             }
         }
 
-        public virtual void Update(float deltaTime)
+        // TODO: Consider removal
+        public void Update(float deltaTime)
         {
             foreach (var component in Components)
             {
