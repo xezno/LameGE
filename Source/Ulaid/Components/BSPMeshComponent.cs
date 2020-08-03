@@ -1,5 +1,6 @@
 ﻿using Engine.ECS.Components;
 using Engine.ECS.Entities;
+using Engine.ECS.Observer;
 using Engine.Renderer.GL.Components;
 using Engine.Renderer.GL.Render;
 using Engine.Utils.DebugUtils;
@@ -19,7 +20,6 @@ namespace Ulaid.Components
         public BSPMeshComponent(string bspFileName)
         {
             bspLoader = new BSPLoader(bspFileName);
-            GenerateBSPMesh();
         }
 
         private void GenerateBSPMesh()
@@ -178,6 +178,18 @@ namespace Ulaid.Components
             vCoord = 1.0f - vCoord; // Flip for opengl
 
             return new Vector2(uCoord, vCoord) / 1000.0f;
+        }
+
+        public override void OnNotify(NotifyType notifyType, INotifyArgs notifyArgs)
+        {
+            base.OnNotify(notifyType, notifyArgs);
+            // TODO: please no
+            switch (notifyType)
+            {
+                case NotifyType.GameStart:
+                    GenerateBSPMesh();
+                    break;
+            }
         }
     }
 }

@@ -104,30 +104,41 @@ namespace Engine.Renderer.GL.Components
 
         public override void OnNotify(NotifyType eventType, INotifyArgs notifyArgs)
         {
-            if (eventType == NotifyType.GameEnd)
+            switch (eventType)
             {
-                browser.Dispose();
-            }
-            else if (eventType == NotifyType.MouseButtonDown)
-            {
-                var mouseEventArgs = (MouseButtonNotifyArgs)notifyArgs;
-                var mouseButtonType = mouseEventArgs.MouseButton == 0 ? MouseButtonType.Left : MouseButtonType.Right;
-                var eventFlags = mouseButtonType == MouseButtonType.Left ? CefEventFlags.LeftMouseButton : CefEventFlags.RightMouseButton;
-                browser.GetBrowserHost().SendMouseClickEvent(new MouseEvent(mouseX, mouseY, eventFlags), mouseButtonType, false, 0);
-            }
-            else if (eventType == NotifyType.MouseButtonUp)
-            {
-                var mouseEventArgs = (MouseButtonNotifyArgs)notifyArgs;
-                var mouseButtonType = mouseEventArgs.MouseButton == 0 ? MouseButtonType.Left : MouseButtonType.Right;
-                var eventFlags = mouseButtonType == MouseButtonType.Left ? CefEventFlags.LeftMouseButton : CefEventFlags.RightMouseButton;
-                browser.GetBrowserHost().SendMouseClickEvent(new MouseEvent(mouseX, mouseY, eventFlags), mouseButtonType, true, 0);
-            }
-            else if (eventType == NotifyType.MouseMove)
-            {
-                var mouseMoveEventArgs = (MouseMoveNotifyArgs)notifyArgs;
-                mouseX = (int)mouseMoveEventArgs.MousePosition.x;
-                mouseY = (int)mouseMoveEventArgs.MousePosition.y;
-                browser.GetBrowserHost().SendMouseMoveEvent(new MouseEvent(mouseX, mouseY, CefEventFlags.None), false);
+                case NotifyType.GameEnd:
+                    browser.Dispose();
+                    break;
+                // TODO: please no
+                case NotifyType.GameStart:
+                    InitBrowser();
+                    break;
+                case NotifyType.MouseButtonDown:
+                    {
+                        var mouseEventArgs = (MouseButtonNotifyArgs)notifyArgs;
+                        var mouseButtonType = mouseEventArgs.MouseButton == 0 ? MouseButtonType.Left : MouseButtonType.Right;
+                        var eventFlags = mouseButtonType == MouseButtonType.Left ? CefEventFlags.LeftMouseButton : CefEventFlags.RightMouseButton;
+                        browser.GetBrowserHost().SendMouseClickEvent(new MouseEvent(mouseX, mouseY, eventFlags), mouseButtonType, false, 0);
+                        break;
+                    }
+
+                case NotifyType.MouseButtonUp:
+                    {
+                        var mouseEventArgs = (MouseButtonNotifyArgs)notifyArgs;
+                        var mouseButtonType = mouseEventArgs.MouseButton == 0 ? MouseButtonType.Left : MouseButtonType.Right;
+                        var eventFlags = mouseButtonType == MouseButtonType.Left ? CefEventFlags.LeftMouseButton : CefEventFlags.RightMouseButton;
+                        browser.GetBrowserHost().SendMouseClickEvent(new MouseEvent(mouseX, mouseY, eventFlags), mouseButtonType, true, 0);
+                        break;
+                    }
+
+                case NotifyType.MouseMove:
+                    {
+                        var mouseMoveEventArgs = (MouseMoveNotifyArgs)notifyArgs;
+                        mouseX = (int)mouseMoveEventArgs.MousePosition.x;
+                        mouseY = (int)mouseMoveEventArgs.MousePosition.y;
+                        browser.GetBrowserHost().SendMouseMoveEvent(new MouseEvent(mouseX, mouseY, CefEventFlags.None), false);
+                        break;
+                    }
             }
 
             base.OnNotify(eventType, notifyArgs);

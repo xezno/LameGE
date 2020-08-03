@@ -3,6 +3,8 @@ using Engine.ECS.Entities;
 using Engine.Renderer.GL.Components;
 using Engine.Renderer.GL.Render;
 using Engine.Utils.MathUtils;
+using System.IO;
+using System.Reflection;
 
 namespace Engine.Renderer.GL.Entities
 {
@@ -18,9 +20,8 @@ namespace Engine.Renderer.GL.Entities
             AddComponent(new TransformComponent(new Vector3(0, 0, 0), new Vector3(0, 0, 0), new Vector3(1, 1, 1)));
             AddComponent(new MaterialComponent(new Material("Content/UI/plane.mtl")));
 
-            // TODO: Fix
-            //AddComponent(new MeshComponent(Primitives.Plane));
-            //AddComponent(new CefComponent($"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/Content/UI/index.html"));
+            AddComponent(new MeshComponent(Primitives.Plane));
+            AddComponent(new CefComponent($"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/Content/UI/index.html"));
         }
     }
 }

@@ -158,7 +158,10 @@ namespace Engine.ECS.Entities
         // TODO: Consider removal
         public virtual void OnNotify(NotifyType notifyType, INotifyArgs notifyArgs)
         {
-            foreach (var component in Components)
+            var tmpComponentsCopy = new IComponent[Components.Count];
+            Components.CopyTo(tmpComponentsCopy); // Allow component list to be changed mid-notify if necessary
+
+            foreach (var component in tmpComponentsCopy)
             {
                 component.OnNotify(notifyType, notifyArgs);
             }
