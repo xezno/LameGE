@@ -162,6 +162,8 @@ namespace Engine.Renderer.GL.Managers
         public override void Run()
         {
             var sceneCamera = SceneManager.Instance.mainCamera;
+            var sceneCameraComponent = sceneCamera.GetComponent<CameraComponent>();
+            var sceneCameraTransform = sceneCamera.GetComponent<TransformComponent>();
 
             // Render shadows
             var mainLightEntity = SceneManager.Instance.lights[0];
@@ -177,7 +179,7 @@ namespace Engine.Renderer.GL.Managers
             mainFramebuffer.Bind();
             renderer.PrepareFramebufferRender();
 
-            RenderScene(sceneCamera.ProjMatrix, sceneCamera.ViewMatrix, sceneCamera.Position);
+            RenderScene(sceneCameraComponent.projMatrix, sceneCameraComponent.viewMatrix, sceneCameraTransform.Position);
 
             // Render shadow map to display
             if (RenderShadowMap)

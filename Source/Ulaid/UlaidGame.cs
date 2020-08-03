@@ -38,7 +38,7 @@ namespace Ulaid
                 //    Name = "Physics Box"
                 //},
                 // TODO: fix this (anything that renders afterwards won't render at all?)
-                new CefEntity()
+                new HudEntity()
                 {
                     Name = "CEF HUD Entity"
                 },

@@ -10,7 +10,10 @@ namespace Engine.Entities
         public override void Update(float deltaTime)
         {
             var transform = GetComponent<TransformComponent>();
-            transform.Position = SceneManager.Instance.mainCamera.Position; // big brain probably
+            var sceneCamera = SceneManager.Instance.mainCamera;
+            var sceneCameraTransform = sceneCamera.GetComponent<TransformComponent>();
+
+            transform.Position = sceneCameraTransform.Position; // big brain probably
         }
     }
 }

@@ -28,10 +28,13 @@ namespace Ulaid.Components
 
         public override void Update(float deltaTime)
         {
-            transformComponent.Position += Velocity * deltaTime;
-            SceneManager.Instance.mainCamera.Position = transformComponent.Position;
+            var sceneCamera = SceneManager.Instance.mainCamera;
+            var sceneCameraTransform = sceneCamera.GetComponent<TransformComponent>();
 
-            SceneManager.Instance.mainCamera.RotationEuler = CurrentRotation * RotationSensitivity;
+            transformComponent.Position += Velocity * deltaTime;
+            sceneCameraTransform.Position = transformComponent.Position;
+
+            sceneCameraTransform.RotationEuler = CurrentRotation * RotationSensitivity;
             transformComponent.RotationEuler = CurrentRotation * RotationSensitivity;
 
             var newDirection = (transformComponent.Forward * CurrentInput.z) + (transformComponent.Right * CurrentInput.x) + (transformComponent.Up * CurrentInput.y);

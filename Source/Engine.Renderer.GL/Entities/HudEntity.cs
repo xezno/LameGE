@@ -8,12 +8,11 @@ using System.Reflection;
 
 namespace Engine.Renderer.GL.Entities
 {
-    // TODO: ECS - Rename to HudEntity
-    public sealed class CefEntity : Entity<CefEntity>
+    public sealed class HudEntity : Entity<HudEntity>
     {
         public override string IconGlyph { get; } = FontAwesome5.Wrench;
 
-        public CefEntity()
+        public HudEntity()
         {
             AddComponent(new ShaderComponent(new Shader("Content/UI/Shaders/ui.frag", Shader.Type.FragmentShader),
                 new Shader("Content/UI/Shaders/ui.vert", Shader.Type.VertexShader)));
