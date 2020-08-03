@@ -62,7 +62,6 @@ namespace Engine.Renderer.GL.Render
 
             ReadSourceFromFile();
             Compile();
-            Logging.Log($"Compiled shader {path} as {GlShader}");
         }
 
         public void Delete()
@@ -98,7 +97,7 @@ namespace Engine.Renderer.GL.Render
 
             if (isCompiled)
             {
-                Logging.Log($"Compiled shader {FileName} successfully");
+                Logging.Log($"Compiled shader {FileName} successfully as {GlShader}");
             }
             else
             {

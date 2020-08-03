@@ -14,7 +14,7 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
         public override string IconGlyph { get; } = FontAwesome5.Adjust;
         public override string Title { get; } = "Shaders";
 
-        private bool enableWatcher = true;
+        private bool enableWatcher = false; // DISABLED! there's a race condition where OnWatcherChanged will be fired before the engine has properly finished initializing
         private FileSystemWatcher watcher;
 
         public ShaderWindow()

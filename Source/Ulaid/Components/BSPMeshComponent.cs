@@ -1,4 +1,5 @@
 ﻿using Engine.ECS.Components;
+using Engine.ECS.Entities;
 using Engine.Renderer.GL.Components;
 using Engine.Renderer.GL.Render;
 using Engine.Utils.DebugUtils;
@@ -18,6 +19,7 @@ namespace Ulaid.Components
         public BSPMeshComponent(string bspFileName)
         {
             bspLoader = new BSPLoader(bspFileName);
+            GenerateBSPMesh();
         }
 
         private void GenerateBSPMesh()
@@ -71,7 +73,8 @@ namespace Ulaid.Components
             // setup vertices
             foreach (var vertex in vertexLump.Contents)
             {
-                meshComponent.RenderMesh.vertices.Add(vertex);
+                // Multiply by bsp scale factor here, so that we don't have to fuck around with transform scale
+                meshComponent.RenderMesh.vertices.Add(vertex * bspScaleFactor);
             }
 
             // setup uv coords
@@ -161,8 +164,8 @@ namespace Ulaid.Components
 
             meshComponent.RenderMesh.GenerateBuffers();
 
-            // TODO: Derive from MeshComponent
-            // Entity.AddComponent(meshComponent);
+            // TODO: Derive from MeshComponent instead
+            ((IEntity)Parent).AddComponent(meshComponent);
         }
 
         private Vector2 GetUVCoords(TexInfo texInfo, Vector3 coords)
