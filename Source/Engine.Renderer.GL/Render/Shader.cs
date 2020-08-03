@@ -58,12 +58,10 @@ namespace Engine.Renderer.GL.Render
             FileName = path;
             GlShader = Gl.CreateShader(ShaderType);
 
-
             shaderSource = new string[0];
 
             ReadSourceFromFile();
             Compile();
-            Logging.Log($"Compiled shader {path} as {GlShader}");
         }
 
         public void Delete()
@@ -99,7 +97,7 @@ namespace Engine.Renderer.GL.Render
 
             if (isCompiled)
             {
-                Logging.Log($"Compiled shader {FileName} successfully");
+                Logging.Log($"Compiled shader {FileName} successfully as {GlShader}");
             }
             else
             {

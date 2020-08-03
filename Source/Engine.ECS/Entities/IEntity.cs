@@ -45,5 +45,11 @@ namespace Engine.ECS.Entities
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         bool HasComponent<T>();
+
+        /// <summary>
+        /// Add a component to an entity. This will also check for component dependencies.
+        /// </summary>
+        /// <param name="component">An instance of the desired component to add.</param>
+        void AddComponent(IComponent component);
     }
 }

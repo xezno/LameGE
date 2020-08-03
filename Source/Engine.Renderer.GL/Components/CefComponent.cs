@@ -1,30 +1,21 @@
 ﻿using CefSharp;
 using CefSharp.OffScreen;
 using CefSharp.Structs;
-using Engine.Assets;
-using Engine.ECS.Entities;
+using Engine.ECS.Components;
 using Engine.ECS.Observer;
-using Engine.Renderer.GL.Components;
 using Engine.Renderer.GL.Entities.Cef;
 using Engine.Renderer.GL.Render;
 using Engine.Utils;
 using Engine.Utils.DebugUtils;
-using Engine.Utils.MathUtils;
 using OpenGL;
 using System;
-using System.IO;
-using System.Reflection;
-using Size = System.Drawing.Size;
 
-namespace Engine.Renderer.GL.Entities
+namespace Engine.Renderer.GL.Components
 {
-    // TODO: Move to component and make a HudEntity instead
-    public sealed class CefEntity : Entity<CefEntity>
+    public class CefComponent : Component<CefComponent>
     {
-        private string cefFilePath = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/Content/UI/index.html";
-        // private string cefFilePath = $"localhost:5500";
+        private string cefFilePath = $"";
 
-        public override string IconGlyph { get; } = FontAwesome5.Wrench;
         public bool ReadyToDraw { get; private set; }
         private ChromiumWebBrowser browser;
 
@@ -35,16 +26,11 @@ namespace Engine.Renderer.GL.Entities
 
         // TODO: Prevent tonemapping from occurring while rendering
 
-        public CefEntity()
+        public CefComponent(string cefFilePath)
         {
-            AddComponent(new ShaderComponent(new Shader("Content/UI/Shaders/ui.frag", Shader.Type.FragmentShader),
-                new Shader("Content/UI/Shaders/ui.vert", Shader.Type.VertexShader)));
-            AddComponent(new TransformComponent(new Vector3(0, 0, 0), new Vector3(0, 0, 0), new Vector3(1, 1, 1)));
-            AddComponent(new MaterialComponent(new Material("Content/UI/plane.mtl")));
-            AddComponent(new MeshComponent(Primitives.Plane));
-            InitBrowser();
+            this.cefFilePath = cefFilePath;
         }
-
+        
         void InitBrowser()
         {
             // setup cef instance
@@ -60,7 +46,7 @@ namespace Engine.Renderer.GL.Entities
             var requestContextSettings = new RequestContextSettings();
             var requestContext = new RequestContext(requestContextSettings);
             browser = new ChromiumWebBrowser(cefFilePath, browserSettings, requestContext);
-            browser.Size = new Size(GameSettings.GameResolutionX, GameSettings.GameResolutionY);
+            browser.Size = new System.Drawing.Size(GameSettings.GameResolutionX, GameSettings.GameResolutionY);
             browser.RenderHandler = new CefRenderHandler(browser);
             browser.BrowserInitialized += (sender, args) => { browser.Load(cefFilePath); };
             browser.LoadError += (sender, args) => Logging.Log($"Browser error {args.ErrorCode}");
@@ -78,7 +64,7 @@ namespace Engine.Renderer.GL.Entities
 
                 browser.LoadingStateChanged -= handler;
 
-                // Logging.Logging.Log($"CEF has finished loading page {cefFilePath}");
+                Logging.Log($"CEF has finished loading page {cefFilePath}");
                 ReadyToDraw = true;
             };
 
@@ -118,30 +104,41 @@ namespace Engine.Renderer.GL.Entities
 
         public override void OnNotify(NotifyType eventType, INotifyArgs notifyArgs)
         {
-            if (eventType == NotifyType.GameEnd)
+            switch (eventType)
             {
-                browser.Dispose();
-            }
-            else if (eventType == NotifyType.MouseButtonDown)
-            {
-                var mouseEventArgs = (MouseButtonNotifyArgs)notifyArgs;
-                var mouseButtonType = mouseEventArgs.MouseButton == 0 ? MouseButtonType.Left : MouseButtonType.Right;
-                var eventFlags = mouseButtonType == MouseButtonType.Left ? CefEventFlags.LeftMouseButton : CefEventFlags.RightMouseButton;
-                browser.GetBrowserHost().SendMouseClickEvent(new MouseEvent(mouseX, mouseY, eventFlags), mouseButtonType, false, 0);
-            }
-            else if (eventType == NotifyType.MouseButtonUp)
-            {
-                var mouseEventArgs = (MouseButtonNotifyArgs)notifyArgs;
-                var mouseButtonType = mouseEventArgs.MouseButton == 0 ? MouseButtonType.Left : MouseButtonType.Right;
-                var eventFlags = mouseButtonType == MouseButtonType.Left ? CefEventFlags.LeftMouseButton : CefEventFlags.RightMouseButton;
-                browser.GetBrowserHost().SendMouseClickEvent(new MouseEvent(mouseX, mouseY, eventFlags), mouseButtonType, true, 0);
-            }
-            else if (eventType == NotifyType.MouseMove)
-            {
-                var mouseMoveEventArgs = (MouseMoveNotifyArgs)notifyArgs;
-                mouseX = (int)mouseMoveEventArgs.MousePosition.x;
-                mouseY = (int)mouseMoveEventArgs.MousePosition.y;
-                browser.GetBrowserHost().SendMouseMoveEvent(new MouseEvent(mouseX, mouseY, CefEventFlags.None), false);
+                case NotifyType.GameEnd:
+                    browser.Dispose();
+                    break;
+                // TODO: please no
+                case NotifyType.GameStart:
+                    InitBrowser();
+                    break;
+                case NotifyType.MouseButtonDown:
+                    {
+                        var mouseEventArgs = (MouseButtonNotifyArgs)notifyArgs;
+                        var mouseButtonType = mouseEventArgs.MouseButton == 0 ? MouseButtonType.Left : MouseButtonType.Right;
+                        var eventFlags = mouseButtonType == MouseButtonType.Left ? CefEventFlags.LeftMouseButton : CefEventFlags.RightMouseButton;
+                        browser.GetBrowserHost().SendMouseClickEvent(new MouseEvent(mouseX, mouseY, eventFlags), mouseButtonType, false, 0);
+                        break;
+                    }
+
+                case NotifyType.MouseButtonUp:
+                    {
+                        var mouseEventArgs = (MouseButtonNotifyArgs)notifyArgs;
+                        var mouseButtonType = mouseEventArgs.MouseButton == 0 ? MouseButtonType.Left : MouseButtonType.Right;
+                        var eventFlags = mouseButtonType == MouseButtonType.Left ? CefEventFlags.LeftMouseButton : CefEventFlags.RightMouseButton;
+                        browser.GetBrowserHost().SendMouseClickEvent(new MouseEvent(mouseX, mouseY, eventFlags), mouseButtonType, true, 0);
+                        break;
+                    }
+
+                case NotifyType.MouseMove:
+                    {
+                        var mouseMoveEventArgs = (MouseMoveNotifyArgs)notifyArgs;
+                        mouseX = (int)mouseMoveEventArgs.MousePosition.x;
+                        mouseY = (int)mouseMoveEventArgs.MousePosition.y;
+                        browser.GetBrowserHost().SendMouseMoveEvent(new MouseEvent(mouseX, mouseY, CefEventFlags.None), false);
+                        break;
+                    }
             }
 
             base.OnNotify(eventType, notifyArgs);

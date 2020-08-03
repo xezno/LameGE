@@ -1,21 +1,17 @@
 ﻿using Engine.Assets;
 using ImGuiNET;
-using System;
 
 namespace Engine.Gui.Managers.ImGuiWindows.Editor
 {
     public sealed class InputWindow : ImGuiWindow
     {
         public override bool Render { get; set; }
-
         public override string Title => "Input Manager";
-
         public override string IconGlyph => FontAwesome5.Gamepad;
 
         public override void Draw()
         {
             ImGui.Text("Input Manager");
-
 
             // Action Maps
             ImGui.Columns(3, "inputColumns", true);
