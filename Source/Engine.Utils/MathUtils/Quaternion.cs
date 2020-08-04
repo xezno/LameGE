@@ -37,12 +37,12 @@ namespace Engine.Utils.MathUtils
                 halfCosX * halfCosY * halfSinZ - halfSinX * halfSinY * halfCosZ);
         }
 
-        public Vector3 ToEulerAngles()
+        public Vector3d ToEulerAngles()
         {
-            return new Vector3(
-                (float)Math.Atan2(2 * ((w * x) + (y * z)), 1 - 2 * ((x * x) + (y * y))),
-                (float)Math.Asin(2 * ((w * y) - (z * x))),
-                (float)Math.Atan2(2 * ((w * z) + (x * y)), 1 - 2 * ((y * y) + (z * z)))
+            return new Vector3d(
+                Math.Atan2(2 * ((w * x) + (y * z)), 1 - 2 * ((x * x) + (y * y))),
+                Math.Asin(2 * ((w * y) - (z * x))),
+                Math.Atan2(2 * ((w * z) + (x * y)), 1 - 2 * ((y * y) + (z * z)))
             );
         }
     }

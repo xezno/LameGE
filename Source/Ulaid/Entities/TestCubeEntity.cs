@@ -14,9 +14,9 @@ namespace Ulaid.Entities
 
         public TestCubeEntity()
         {
-            AddComponent(new TransformComponent(new Vector3(0, 0, 0f),
-                                                new Vector3(270, 0, 0),
-                                                new Vector3(1, 1, 1)));
+            AddComponent(new TransformComponent(new Vector3d(0, 0, 0f),
+                                                new Vector3d(270, 0, 0),
+                                                new Vector3d(1, 1, 1)));
 
             AddComponent(new ShaderComponent(new Shader("Content/Shaders/Standard/standard.frag", Shader.Type.FragmentShader),
                 new Shader("Content/Shaders/Standard/standard.vert", Shader.Type.VertexShader)));

@@ -17,8 +17,8 @@ namespace Ulaid.Components
         public Vector3 CurrentInput { get => currentInput; set => currentInput = value; }
         public Vector3 CurrentDirection { get; set; }
 
-        public Vector3 Velocity { get; set; }
-        public Vector3 CurrentRotation { get; set; }
+        public Vector3d Velocity { get; set; }
+        public Vector3d CurrentRotation { get; set; }
         public float Acceleration { get; set; } = 0.125f;
         public float Deceleration { get; set; } = 0.0625f;
         public float MaxSpeed { get; set; } = 10.0f;
@@ -42,14 +42,14 @@ namespace Ulaid.Components
 
             CurrentDirection = newDirection.Normalized;
 
-            Velocity += CurrentDirection * Acceleration;
-            Velocity += new Vector3(
+            Velocity += CurrentDirection.ToVector3d() * Acceleration;
+            Velocity += new Vector3d(
                 Math.Sign(Velocity.x) * -Deceleration,
                 Math.Sign(Velocity.y) * -Deceleration,
                 Math.Sign(Velocity.z) * -Deceleration
             );
 
-            Velocity = new Vector3(
+            Velocity = new Vector3d(
                 Math.Max(Math.Min(Velocity.x, MaxSpeed), -MaxSpeed),
                 Math.Max(Math.Min(Velocity.y, MaxSpeed), -MaxSpeed),
                 Math.Max(Math.Min(Velocity.z, MaxSpeed), -MaxSpeed)
@@ -57,7 +57,7 @@ namespace Ulaid.Components
 
             if (Velocity.Magnitude < MinVelocity)
             {
-                Velocity = new Vector3(0, 0, 0);
+                Velocity = new Vector3d(0, 0, 0);
             }
         }
 
@@ -116,7 +116,7 @@ namespace Ulaid.Components
                         return;
 
                     MouseMoveNotifyArgs mouseEventArgs = (MouseMoveNotifyArgs)notifyArgs;
-                    CurrentRotation += new Vector3(mouseEventArgs.MouseDelta.y * -MouseSensitivityMultiplier,
+                    CurrentRotation += new Vector3d(mouseEventArgs.MouseDelta.y * -MouseSensitivityMultiplier,
                         mouseEventArgs.MouseDelta.x * -MouseSensitivityMultiplier,
                         0);
                     break;

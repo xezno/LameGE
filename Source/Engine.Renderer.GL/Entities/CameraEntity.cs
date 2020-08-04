@@ -20,7 +20,7 @@ namespace Engine.Renderer.GL.Entities
         /// </summary>
         public CameraEntity(int gameResX, int gameResY)
         {
-            AddComponent(new TransformComponent(new Vector3(0, 2f, 0f), Quaternion.identity, new Vector3(1, 1, 1)));
+            AddComponent(new TransformComponent(new Vector3d(0, 2f, 0f), Quaternion.identity, new Vector3d(1, 1, 1)));
             AddComponent(new CameraComponent());
         }
     }

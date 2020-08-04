@@ -16,7 +16,7 @@ namespace Engine.Renderer.GL.Entities
 
         public LightEntity()
         {
-            transformComponent = new TransformComponent(new Vector3(0, 2f, 0f), Quaternion.identity, new Vector3(1, 1, 1) * 0.5f);
+            transformComponent = new TransformComponent(new Vector3d(0, 2f, 0f), Quaternion.identity, new Vector3d(1, 1, 1) * 0.5f);
             AddComponent(transformComponent);
 
             // Add mesh components for visualisation 
