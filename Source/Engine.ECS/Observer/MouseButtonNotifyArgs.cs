@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Engine.ECS.Notify
+namespace Engine.ECS.Observer
 {
-    public class MouseWheelNotifyArgs : INotifyArgs
+    public class MouseButtonNotifyArgs : INotifyArgs
     {
         /// <summary>
         /// The object triggering the notification.
@@ -15,20 +15,20 @@ namespace Engine.ECS.Notify
         public DateTime TimeSent { get; set; }
 
         /// <summary>
-        /// The amount by which the mouse scroll wheel has been turned.
+        /// The mouse button relevant to the event.
         /// </summary>
-        public int MouseScroll { get; }
+        public int MouseButton { get; }
 
         /// <summary>
-        /// Construct a new instance of <see cref="MouseWheelNotifyArgs"/>; the <see cref="TimeSent"/> will be automatically set.
+        /// Construct a new instance of <see cref="MouseButtonNotifyArgs"/>; the <see cref="TimeSent"/> will be automatically set.
         /// </summary>
-        /// <param name="mouseScroll">The amount by which the mouse scroll wheel has been turned.</param>
+        /// <param name="mouseButton">The mouse button relevant to the notification.</param>
         /// <param name="sender">The object triggering the notification.</param>
-        public MouseWheelNotifyArgs(int mouseScroll, object sender)
+        public MouseButtonNotifyArgs(int mouseButton, object sender)
         {
             Sender = sender;
             TimeSent = DateTime.Now;
-            MouseScroll = mouseScroll;
+            MouseButton = mouseButton;
         }
     }
 }

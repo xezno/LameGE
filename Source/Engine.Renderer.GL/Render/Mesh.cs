@@ -22,13 +22,13 @@ namespace Engine.Renderer.GL.Render
         public int ElementCount => faceElements.Count;
 
         [TextAssetOpcode("v")]
-        public List<Vector3> vertices = new List<Vector3>();
+        public List<Vector3f> vertices = new List<Vector3f>();
 
         [TextAssetOpcode("vn")]
-        public List<Vector3> normals = new List<Vector3>();
+        public List<Vector3f> normals = new List<Vector3f>();
 
         [TextAssetOpcode("vt")]
-        public List<Vector2> uvCoords = new List<Vector2>();
+        public List<Vector2f> uvCoords = new List<Vector2f>();
 
         [TextAssetOpcode("f")]
         public List<MeshFaceElement> faceElements = new List<MeshFaceElement>();

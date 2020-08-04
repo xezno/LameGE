@@ -1,7 +1,7 @@
 ﻿using Engine.ECS.Managers;
 using System.Collections.Generic;
 
-namespace Engine.ECS.Notify
+namespace Engine.ECS.Observer
 {
     public static class Broadcast
     {

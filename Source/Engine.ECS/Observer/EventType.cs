@@ -1,4 +1,4 @@
-﻿namespace Engine.ECS.Notify
+﻿namespace Engine.ECS.Observer
 {
     /// <summary>
     /// An enumerator containing all possible events that may occur within a game instance.

@@ -21,7 +21,7 @@ namespace Engine.Utils.MathUtils
 
         public static Quaternion identity = new Quaternion(0, 0, 0, 1);
 
-        public static Quaternion FromEulerAngles(Vector3 eulerAngles)
+        public static Quaternion FromEulerAngles(Vector3f eulerAngles)
         {
             var degToRad = 0.0174533f;
             var halfCosX = (float)Math.Cos(eulerAngles.x * degToRad) / 2.0f;
@@ -37,12 +37,12 @@ namespace Engine.Utils.MathUtils
                 halfCosX * halfCosY * halfSinZ - halfSinX * halfSinY * halfCosZ);
         }
 
-        public Vector3 ToEulerAngles()
+        public Vector3d ToEulerAngles()
         {
-            return new Vector3(
-                (float)Math.Atan2(2 * ((w * x) + (y * z)), 1 - 2 * ((x * x) + (y * y))),
-                (float)Math.Asin(2 * ((w * y) - (z * x))),
-                (float)Math.Atan2(2 * ((w * z) + (x * y)), 1 - 2 * ((y * y) + (z * z)))
+            return new Vector3d(
+                Math.Atan2(2 * ((w * x) + (y * z)), 1 - 2 * ((x * x) + (y * y))),
+                Math.Asin(2 * ((w * y) - (z * x))),
+                Math.Atan2(2 * ((w * z) + (x * y)), 1 - 2 * ((y * y) + (z * z)))
             );
         }
     }

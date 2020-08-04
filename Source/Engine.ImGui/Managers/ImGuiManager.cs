@@ -1,5 +1,5 @@
 ﻿using Engine.Assets;
-using Engine.ECS.Notify;
+using Engine.ECS.Observer;
 using Engine.ECS.Managers;
 using Engine.Gui.Managers.ImGuiWindows;
 using Engine.Gui.Managers.ImGuiWindows.Editor;
@@ -15,7 +15,7 @@ using OpenGL.CoreUI;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
-using Vector4 = Engine.Utils.MathUtils.Vector4;
+using Vector4f = Engine.Utils.MathUtils.Vector4f;
 
 namespace Engine.Gui.Managers
 {
@@ -48,6 +48,7 @@ namespace Engine.Gui.Managers
         {
             new ImGuiMenu(FontAwesome5.File, "File", new List<ImGuiWindow>()
             {
+                new SaveSettingsWindow(),
                 new CloseGameWindow()
             }),
             //new ImGuiMenu(FontAwesome5.FileCode, "Scripts", new List<ImGuiWindow>()
@@ -64,7 +65,8 @@ namespace Engine.Gui.Managers
                 new EngineConfigWindow(),
                 new PerformanceWindow(),
                 new TextureBrowserWindow(),
-                new ShaderWindow()
+                new ShaderWindow(),
+                new InputWindow()
             })
         };
 
@@ -90,8 +92,10 @@ namespace Engine.Gui.Managers
 
             ImGui.StyleColorsDark();
 
-            // Set theme - TODO: NEEDS MOVING
-            Theme = ImGuiTheme.LoadFromFile("Content/Themes/modern.json");
+            // Set default theme from game settings
+            Theme = ImGuiTheme.LoadFromFile($"Content/Themes/{GameSettings.EditorTheme}.json");
+            // TODO: Check if theme doesn't exist, set a default
+            // TODO: Move code to somewhere that makes more sense?
 
             InitFonts();
             InitKeymap();
@@ -286,7 +290,7 @@ namespace Engine.Gui.Managers
                 {
                     var currentCommand = commandList.CmdBuffer[commandIndex];
 
-                    var clipBounds = new Vector4(
+                    var clipBounds = new Vector4f(
                             (currentCommand.ClipRect.X - clipOffset.X) * clipScale.X,
                             (currentCommand.ClipRect.Y - clipOffset.Y) * clipScale.Y,
                             (currentCommand.ClipRect.Z - clipOffset.X) * clipScale.X,

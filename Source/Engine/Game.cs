@@ -1,5 +1,5 @@
 ﻿using Engine.ECS.Managers;
-using Engine.ECS.Notify;
+using Engine.ECS.Observer;
 using Engine.Gui.Managers;
 using Engine.Managers;
 using Engine.Renderer.GL.Managers;
@@ -27,7 +27,7 @@ namespace Engine
         private GameProperties gameProperties;
 
         protected NativeWindow nativeWindow;
-        private Vector2 lastMousePos;
+        private Vector2f lastMousePos;
         private bool ignoreSingleMouseDelta;
 
         public bool isRunning = true; // TODO: properly detect window close event (needs adding within nativewindow)
@@ -89,7 +89,7 @@ namespace Engine
 
             nativeWindow.SwapInterval = 0;
             nativeWindow.Resize += Resize;
-            nativeWindow.Create(GameSettings.GamePosX, GameSettings.GamePosY, (uint)GameSettings.GameResolutionX + 16, (uint)GameSettings.GameResolutionY + 16, NativeWindowStyle.Caption | NativeWindowStyle.Border);
+            nativeWindow.Create(GameSettings.GamePosX, GameSettings.GamePosY, (uint)GameSettings.GameResolutionX + 16, (uint)GameSettings.GameResolutionY + 16, NativeWindowStyles.Caption | NativeWindowStyles.Border);
 
             nativeWindow.Fullscreen = GameSettings.Fullscreen;
             nativeWindow.Caption = FilterString(gameProperties.WindowTitle) ?? "Engine Game";
@@ -200,7 +200,7 @@ namespace Engine
 
         private void Resize(object sender, EventArgs e)
         {
-            var windowSize = new Vector2(nativeWindow.ClientSize.Width, nativeWindow.ClientSize.Height);
+            var windowSize = new Vector2f(nativeWindow.ClientSize.Width, nativeWindow.ClientSize.Height);
 
             // renderer.SetViewportSize();
 
@@ -211,18 +211,17 @@ namespace Engine
         private void MouseWheel(object sender, NativeWindowMouseEventArgs e)
         {
             Broadcast.Notify(NotifyType.MouseScroll, new MouseWheelNotifyArgs(e.WheelTicks, this));
-            Logging.Log($"Scrolled by {e.WheelTicks} ticks");
         }
 
         private void MouseMove(object sender, NativeWindowMouseEventArgs e)
         {
-            var mousePos = new Vector2(e.Location.X, e.Location.Y);
+            var mousePos = new Vector2f(e.Location.X, e.Location.Y);
 
             var mouseDelta = lastMousePos - mousePos;
 
             if (ignoreSingleMouseDelta)
             {
-                mouseDelta = new Vector2(0, 0);
+                mouseDelta = new Vector2f(0, 0);
                 ignoreSingleMouseDelta = false;
             }
 

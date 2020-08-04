@@ -66,6 +66,10 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
             );
 
             ImGui.LabelText($"{AverageFramerate}fps", "Average framerate");
+
+            bool paused = RenderManager.Instance.Paused;
+            ImGui.Checkbox("Pause", ref paused);
+            RenderManager.Instance.Paused = paused;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Ulaid.Entities
 
         public PlayerEntity()
         {
-            AddComponent(new TransformComponent(new Vector3(0, 0, 15f), Quaternion.identity, new Vector3(1, 1, 1)));
+            AddComponent(new TransformComponent(new Vector3d(0, 0, 15f), Quaternion.identity, new Vector3d(1, 1, 1)));
             AddComponent(new PlayerMovementComponent());
         }
     }

@@ -26,8 +26,8 @@ namespace Engine.Renderer.GL.Render
 
             Gl.BindFramebuffer(FramebufferTarget.Framebuffer, depthMapFbo);
             Gl.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, TextureTarget.Texture2d, depthMapTexture, 0);
-            Gl.DrawBuffer(0);
-            Gl.ReadBuffer(0);
+            // Gl.DrawBuffer(0);
+            // Gl.ReadBuffer(0);
             Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 
             shaderComponent = new ShaderComponent(

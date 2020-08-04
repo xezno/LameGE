@@ -58,15 +58,15 @@ namespace Engine.Renderer.GL.Render
         {
             for (int i = 0; i < vertices.Length; i += 3)
             {
-                mesh.vertices.Add(new Vector3(vertices[i], vertices[i + 1], vertices[i + 2]));
+                mesh.vertices.Add(new Vector3f(vertices[i], vertices[i + 1], vertices[i + 2]));
             }
             for (int i = 0; i < uvCoords.Length; i += 2)
             {
-                mesh.uvCoords.Add(new Vector2(uvCoords[i], uvCoords[i + 1]));
+                mesh.uvCoords.Add(new Vector2f(uvCoords[i], uvCoords[i + 1]));
             }
             for (int i = 0; i < normals.Length; i += 3)
             {
-                mesh.normals.Add(new Vector3(normals[i], normals[i + 1], normals[i + 2]));
+                mesh.normals.Add(new Vector3f(normals[i], normals[i + 1], normals[i + 2]));
             }
 
             foreach (var meshFaceElement in meshFaceElements)

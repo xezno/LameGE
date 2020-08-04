@@ -25,8 +25,9 @@ namespace Engine.Components
         {
             get
             {
+                // TODO: Better double->float conversion
                 var transformComponent = GetComponent<TransformComponent>();
-                return Matrix4x4f.LookAt(new Vertex3f(transformComponent.Position.x, transformComponent.Position.y, transformComponent.Position.z),
+                return Matrix4x4f.LookAt(new Vertex3f((float)transformComponent.Position.x, (float)transformComponent.Position.y, (float)transformComponent.Position.z),
                     lookAt,
                     new Vertex3f(0, 1, 0)
                 );
@@ -42,6 +43,20 @@ namespace Engine.Components
             this.quadratic = quadratic;
 
             shadowMap = new ShadowMap(GameSettings.ShadowMapX, GameSettings.ShadowMapY);
+        }
+
+        public void Bind(ShaderComponent shaderComponent)
+        {
+            var transformComponent = GetComponent<TransformComponent>();
+            shaderComponent.SetVariable("light.pos", transformComponent.Position);
+            shaderComponent.SetVariable("light.range", range);
+            shaderComponent.SetVariable("light.linear", linear);
+            shaderComponent.SetVariable("light.quadratic", quadratic);
+            shaderComponent.SetVariable("light.constant", constant);
+
+            shadowMap.BindTexture();
+            shaderComponent.SetVariable("shadowMap", 1);
+            shaderComponent.SetVariable("lightMatrix", lightMatrix);
         }
     }
 }

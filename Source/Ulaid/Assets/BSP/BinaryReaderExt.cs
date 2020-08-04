@@ -5,9 +5,9 @@ namespace Ulaid.Assets.BSP
 {
     public static class BinaryReaderExt
     {
-        public static Vector3 ReadVector3(this BinaryReader binaryReader)
+        public static Vector3f ReadVector3(this BinaryReader binaryReader)
         {
-            return new Vector3(binaryReader.ReadSingle(), binaryReader.ReadSingle(),
+            return new Vector3f(binaryReader.ReadSingle(), binaryReader.ReadSingle(),
                 binaryReader.ReadSingle());
         }
     }

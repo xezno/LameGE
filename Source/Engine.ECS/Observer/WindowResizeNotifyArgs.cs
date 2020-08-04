@@ -1,7 +1,7 @@
 ﻿using Engine.Utils.MathUtils;
 using System;
 
-namespace Engine.ECS.Notify
+namespace Engine.ECS.Observer
 {
     public class WindowResizeNotifyArgs : INotifyArgs
     {
@@ -18,14 +18,14 @@ namespace Engine.ECS.Notify
         /// <summary>
         /// The window's new size.
         /// </summary>
-        public Vector2 WindowSize { get; }
+        public Vector2f WindowSize { get; }
 
         /// <summary>
         /// Construct a new instance of <see cref="WindowResizeNotifyArgs"/>; the <see cref="TimeSent"/> will be automatically set.
         /// </summary>
         /// <param name="windowSize">The window's new size.</param>
         /// <param name="sender">The object triggering the notification.</param>
-        public WindowResizeNotifyArgs(Vector2 windowSize, object sender)
+        public WindowResizeNotifyArgs(Vector2f windowSize, object sender)
         {
             Sender = sender;
             TimeSent = DateTime.Now;
