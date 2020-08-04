@@ -42,7 +42,7 @@ namespace Engine.Renderer.GL.Managers
                 new Shader("Content/Shaders/Depth/depth.vert", Shader.Type.VertexShader));
         }
 
-        private void RenderScene(Matrix4x4f projMatrix, Matrix4x4f viewMatrix, Vector3 cameraPosition)
+        private void RenderScene(Matrix4x4f projMatrix, Matrix4x4f viewMatrix, Vector3d cameraPosition)
         {
             foreach (var entity in SceneManager.Instance.Entities)
             {
@@ -128,7 +128,7 @@ namespace Engine.Renderer.GL.Managers
             Gl.BindBuffer(BufferTarget.ArrayBuffer, 0);
         }
 
-        public void RenderMesh(IEntity entity, Matrix4x4f projMatrix, Matrix4x4f viewMatrix, Vector3 cameraPosition)
+        public void RenderMesh(IEntity entity, Matrix4x4f projMatrix, Matrix4x4f viewMatrix, Vector3d cameraPosition)
         {
             var shaderComponent = entity.GetComponent<ShaderComponent>();
             var transformComponent = entity.GetComponent<TransformComponent>();
@@ -141,7 +141,7 @@ namespace Engine.Renderer.GL.Managers
 
             BindMatrices(shaderComponent, projMatrix, viewMatrix);
 
-            shaderComponent.SetVariable("cameraPos", cameraPosition);
+            shaderComponent.SetVariable("cameraPos", cameraPosition.ToVector3());
             shaderComponent.SetVariable("modelMatrix", transformComponent.Matrix);
             shaderComponent.SetVariable("fogNear", 0.02f);
             shaderComponent.SetVariable("skyColor", new Vector3(100 / 255f, 149 / 255f, 237 / 255f)); // Cornflower blue

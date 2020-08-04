@@ -25,8 +25,9 @@ namespace Engine.Components
         {
             get
             {
+                // TODO: Better double->float conversion
                 var transformComponent = GetComponent<TransformComponent>();
-                return Matrix4x4f.LookAt(new Vertex3f(transformComponent.Position.x, transformComponent.Position.y, transformComponent.Position.z),
+                return Matrix4x4f.LookAt(new Vertex3f((float)transformComponent.Position.x, (float)transformComponent.Position.y, (float)transformComponent.Position.z),
                     lookAt,
                     new Vertex3f(0, 1, 0)
                 );
