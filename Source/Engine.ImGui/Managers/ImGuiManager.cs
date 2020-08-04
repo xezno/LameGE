@@ -15,7 +15,7 @@ using OpenGL.CoreUI;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
-using Vector4 = Engine.Utils.MathUtils.Vector4;
+using Vector4f = Engine.Utils.MathUtils.Vector4f;
 
 namespace Engine.Gui.Managers
 {
@@ -290,7 +290,7 @@ namespace Engine.Gui.Managers
                 {
                     var currentCommand = commandList.CmdBuffer[commandIndex];
 
-                    var clipBounds = new Vector4(
+                    var clipBounds = new Vector4f(
                             (currentCommand.ClipRect.X - clipOffset.X) * clipScale.X,
                             (currentCommand.ClipRect.Y - clipOffset.Y) * clipScale.Y,
                             (currentCommand.ClipRect.Z - clipOffset.X) * clipScale.X,

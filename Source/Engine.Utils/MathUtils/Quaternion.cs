@@ -21,7 +21,7 @@ namespace Engine.Utils.MathUtils
 
         public static Quaternion identity = new Quaternion(0, 0, 0, 1);
 
-        public static Quaternion FromEulerAngles(Vector3 eulerAngles)
+        public static Quaternion FromEulerAngles(Vector3f eulerAngles)
         {
             var degToRad = 0.0174533f;
             var halfCosX = (float)Math.Cos(eulerAngles.x * degToRad) / 2.0f;

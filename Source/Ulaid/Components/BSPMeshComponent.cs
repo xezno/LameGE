@@ -25,7 +25,7 @@ namespace Ulaid.Components
         private void GenerateBSPMesh()
         {
             var meshComponent = new MeshComponent();
-            var vertexLump = (Lump<Vector3>)bspLoader.Lumps[(int)BspLumpType.LumpVertexes];
+            var vertexLump = (Lump<Vector3f>)bspLoader.Lumps[(int)BspLumpType.LumpVertexes];
             var planeLump = (Lump<Plane>)bspLoader.Lumps[(int)BspLumpType.LumpPlanes];
             var edgeLump = (Lump<Edge>)bspLoader.Lumps[(int)BspLumpType.LumpEdges];
             var surfEdgeLump = (Lump<int>)bspLoader.Lumps[(int)BspLumpType.LumpSurfEdges];
@@ -168,7 +168,7 @@ namespace Ulaid.Components
             ((IEntity)Parent).AddComponent(meshComponent);
         }
 
-        private Vector2 GetUVCoords(TexInfo texInfo, Vector3 coords)
+        private Vector2f GetUVCoords(TexInfo texInfo, Vector3f coords)
         {
             var uCoord = texInfo.textureVecs[0, 0] * coords.x + texInfo.textureVecs[0, 1] * coords.y + texInfo.textureVecs[0, 2] * coords.z +
                              texInfo.textureVecs[0, 3];
@@ -177,7 +177,7 @@ namespace Ulaid.Components
 
             vCoord = 1.0f - vCoord; // Flip for opengl
 
-            return new Vector2(uCoord, vCoord) / 1000.0f;
+            return new Vector2f(uCoord, vCoord) / 1000.0f;
         }
 
         public override void OnNotify(NotifyType notifyType, INotifyArgs notifyArgs)

@@ -54,39 +54,39 @@ namespace Engine.Renderer.GL.Components
 
         private bool MatrixInvertible => Math.Abs(Matrix.Determinant) > 1e-6f;
 
-        public Vector3 Forward
+        public Vector3f Forward
         {
             get
             {
                 if (!MatrixInvertible)
-                    return Vector3.forward;
+                    return Vector3f.forward;
 
                 var inverseColumn = Matrix.Inverse.Column2;
-                return new Vector3(inverseColumn.x, inverseColumn.y, inverseColumn.z).Normalized;
+                return new Vector3f(inverseColumn.x, inverseColumn.y, inverseColumn.z).Normalized;
             }
         }
 
-        public Vector3 Up
+        public Vector3f Up
         {
             get
             {
                 if (!MatrixInvertible)
-                    return Vector3.up;
+                    return Vector3f.up;
 
                 var inverseColumn = Matrix.Inverse.Column1;
-                return new Vector3(inverseColumn.x, inverseColumn.y, inverseColumn.z).Normalized;
+                return new Vector3f(inverseColumn.x, inverseColumn.y, inverseColumn.z).Normalized;
             }
         }
 
-        public Vector3 Right
+        public Vector3f Right
         {
             get
             {
                 if (!MatrixInvertible)
-                    return Vector3.right;
+                    return Vector3f.right;
 
                 var inverseColumn = Matrix.Inverse.Column0;
-                return new Vector3(inverseColumn.x, inverseColumn.y, inverseColumn.z).Normalized;
+                return new Vector3f(inverseColumn.x, inverseColumn.y, inverseColumn.z).Normalized;
             }
         }
 

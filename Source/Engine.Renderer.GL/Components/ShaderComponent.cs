@@ -151,7 +151,7 @@ namespace Engine.Renderer.GL.Components
             {
                 Gl.ProgramUniformMatrix4f(shaderProgram, variableLocation, 1, false, matrix);
             }
-            else if (variableValue is Vector3 vector)
+            else if (variableValue is Vector3f vector)
             {
                 Gl.ProgramUniform3(shaderProgram, variableLocation, vector.x, vector.y, vector.z);
             }

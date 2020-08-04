@@ -84,7 +84,7 @@ namespace Engine.ECS.Components
             {
                 DrawImGuiColor(memberInfo, reference);
             }
-            else if (type == typeof(Utils.MathUtils.Vector3))
+            else if (type == typeof(Utils.MathUtils.Vector3f))
             {
                 DrawImGuiVector3(memberInfo, reference);
             }
@@ -155,16 +155,16 @@ namespace Engine.ECS.Components
 
         public void DrawImGuiVector3(MemberInfo member, object reference)
         {
-            Vector3 value = (reference as ReflectionRef<Utils.MathUtils.Vector3>).Value.ConvertToNumerics();
+            Vector3 value = (reference as ReflectionRef<Utils.MathUtils.Vector3f>).Value.ConvertToNumerics();
             ImGui.DragFloat3(member.Name, ref value, 0.1f);
-            (reference as ReflectionRef<Utils.MathUtils.Vector3>).Value = Utils.MathUtils.Vector3.ConvertFromNumerics(value);
+            (reference as ReflectionRef<Utils.MathUtils.Vector3f>).Value = Utils.MathUtils.Vector3f.ConvertFromNumerics(value);
         }
 
         private void DrawImGuiQuaternion(MemberInfo member, object reference)
         {
             Vector3 value = (reference as ReflectionRef<Quaternion>).Value.ToEulerAngles().ConvertToNumerics();
             ImGui.DragFloat3(member.Name, ref value, 0.1f);
-            (reference as ReflectionRef<Quaternion>).Value = Quaternion.FromEulerAngles(Utils.MathUtils.Vector3.ConvertFromNumerics(value));
+            (reference as ReflectionRef<Quaternion>).Value = Quaternion.FromEulerAngles(Utils.MathUtils.Vector3f.ConvertFromNumerics(value));
         }
 
         private void DrawImGuiInt(MemberInfo field, object reference)

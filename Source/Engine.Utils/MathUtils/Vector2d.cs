@@ -13,7 +13,7 @@
         public double y;
 
         /// <summary>
-        /// Construct a <see cref="Vector2"/> with three initial values.
+        /// Construct a <see cref="Vector2f"/> with three initial values.
         /// </summary>
         /// <param name="x">The initial x coordinate</param>
         /// <param name="y">The initial y coordinate</param>

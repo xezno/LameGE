@@ -144,7 +144,7 @@ namespace Engine.Renderer.GL.Managers
             shaderComponent.SetVariable("cameraPos", cameraPosition.ToVector3());
             shaderComponent.SetVariable("modelMatrix", transformComponent.Matrix);
             shaderComponent.SetVariable("fogNear", 0.02f);
-            shaderComponent.SetVariable("skyColor", new Vector3(100 / 255f, 149 / 255f, 237 / 255f)); // Cornflower blue
+            shaderComponent.SetVariable("skyColor", new Vector3f(100 / 255f, 149 / 255f, 237 / 255f)); // Cornflower blue
 
             entity.GetComponent<MaterialComponent>().BindAll(shaderComponent);
 

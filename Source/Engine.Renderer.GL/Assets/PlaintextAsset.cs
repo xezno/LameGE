@@ -75,12 +75,12 @@ namespace Engine.Renderer.GL.Assets
         /// <param name="str">The string to parse.</param>
         /// <param name="startIndex">The number of words to ignore before parsing the string.</param>
         /// <returns>Either: 0 if the string was unable to be parsed correctly, or the Vector2 parsed from the string.</returns>
-        private Vector2 ParseVector2(string str, int startIndex = 0)
+        private Vector2f ParseVector2(string str, int startIndex = 0)
         {
             var strSplit = str.Split(' ');
             var x = ParseFloat(strSplit[startIndex]);
             var y = ParseFloat(strSplit[startIndex + 1]);
-            return new Vector2(x, y);
+            return new Vector2f(x, y);
         }
 
 
@@ -90,13 +90,13 @@ namespace Engine.Renderer.GL.Assets
         /// <param name="str">The string to parse.</param>
         /// <param name="startIndex">The number of words to ignore before parsing the string.</param>
         /// <returns>Either: 0 if the string was unable to be parsed correctly, or the Vector3 parsed from the string.</returns>
-        private Vector3 ParseVector3(string str, int startIndex = 0)
+        private Vector3f ParseVector3(string str, int startIndex = 0)
         {
             var strSplit = str.Split(' ');
             var x = ParseFloat(strSplit[startIndex]);
             var y = ParseFloat(strSplit[startIndex + 1]);
             var z = ParseFloat(strSplit[startIndex + 2]);
-            return new Vector3(x, y, z);
+            return new Vector3f(x, y, z);
         }
 
         /// <summary>
@@ -138,11 +138,11 @@ namespace Engine.Renderer.GL.Assets
                                 var color = new ColorRGB24((byte)(r * 255), (byte)(g * 255), (byte)(b * 255));
                                 field.SetValue(this, color);
                             }
-                            else if (field.FieldType == typeof(Vector2))
+                            else if (field.FieldType == typeof(Vector2f))
                             {
                                 field.SetValue(this, ParseVector2(line, 1));
                             }
-                            else if (field.FieldType == typeof(Vector3))
+                            else if (field.FieldType == typeof(Vector3f))
                             {
                                 field.SetValue(this, ParseVector3(line, 1));
                             }
@@ -157,19 +157,19 @@ namespace Engine.Renderer.GL.Assets
                             {
                                 field.SetValue(this, ParseInt(lineSplit[1]));
                             }
-                            else if (field.FieldType == typeof(List<Vector3>))
+                            else if (field.FieldType == typeof(List<Vector3f>))
                             {
                                 if (field.GetValue(this) == null)
-                                    field.SetValue(this, new List<Vector3>());
+                                    field.SetValue(this, new List<Vector3f>());
 
-                                ((List<Vector3>)field.GetValue(this)).Add(ParseVector3(line, 1));
+                                ((List<Vector3f>)field.GetValue(this)).Add(ParseVector3(line, 1));
                             }
-                            else if (field.FieldType == typeof(List<Vector2>))
+                            else if (field.FieldType == typeof(List<Vector2f>))
                             {
                                 if (field.GetValue(this) == null)
-                                    field.SetValue(this, new List<Vector2>());
+                                    field.SetValue(this, new List<Vector2f>());
 
-                                ((List<Vector2>)field.GetValue(this)).Add(ParseVector2(line, 1));
+                                ((List<Vector2f>)field.GetValue(this)).Add(ParseVector2(line, 1));
                             }
                             else if (field.FieldType == typeof(List<MeshFaceElement>))
                             {

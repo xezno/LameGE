@@ -12,10 +12,10 @@ namespace Ulaid.Components
     {
         private TransformComponent transformComponent;
         private bool lockRotation;
-        private Vector3 currentInput;
+        private Vector3f currentInput;
 
-        public Vector3 CurrentInput { get => currentInput; set => currentInput = value; }
-        public Vector3 CurrentDirection { get; set; }
+        public Vector3f CurrentInput { get => currentInput; set => currentInput = value; }
+        public Vector3f CurrentDirection { get; set; }
 
         public Vector3d Velocity { get; set; }
         public Vector3d CurrentRotation { get; set; }
@@ -67,9 +67,9 @@ namespace Ulaid.Components
             return (1.0f - t) * a + t * b;
         }
 
-        public Vector3 EaseLerpVector3(Vector3 a, Vector3 b, float t)
+        public Vector3f EaseLerpVector3(Vector3f a, Vector3f b, float t)
         {
-            return new Vector3(EaseLerp(a.x, b.x, t), EaseLerp(a.y, b.y, t), EaseLerp(a.z, b.z, t));
+            return new Vector3f(EaseLerp(a.x, b.x, t), EaseLerp(a.y, b.y, t), EaseLerp(a.z, b.z, t));
         }
 
         public override void OnNotify(NotifyType eventType, INotifyArgs notifyArgs)

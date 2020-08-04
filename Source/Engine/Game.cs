@@ -27,7 +27,7 @@ namespace Engine
         private GameProperties gameProperties;
 
         protected NativeWindow nativeWindow;
-        private Vector2 lastMousePos;
+        private Vector2f lastMousePos;
         private bool ignoreSingleMouseDelta;
 
         public bool isRunning = true; // TODO: properly detect window close event (needs adding within nativewindow)
@@ -200,7 +200,7 @@ namespace Engine
 
         private void Resize(object sender, EventArgs e)
         {
-            var windowSize = new Vector2(nativeWindow.ClientSize.Width, nativeWindow.ClientSize.Height);
+            var windowSize = new Vector2f(nativeWindow.ClientSize.Width, nativeWindow.ClientSize.Height);
 
             // renderer.SetViewportSize();
 
@@ -215,13 +215,13 @@ namespace Engine
 
         private void MouseMove(object sender, NativeWindowMouseEventArgs e)
         {
-            var mousePos = new Vector2(e.Location.X, e.Location.Y);
+            var mousePos = new Vector2f(e.Location.X, e.Location.Y);
 
             var mouseDelta = lastMousePos - mousePos;
 
             if (ignoreSingleMouseDelta)
             {
-                mouseDelta = new Vector2(0, 0);
+                mouseDelta = new Vector2f(0, 0);
                 ignoreSingleMouseDelta = false;
             }
 

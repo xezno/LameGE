@@ -196,10 +196,10 @@ namespace Ulaid.Assets.BSP
             return planeLump;
         }
 
-        private Lump<Vector3> ReadVertexesLump(BSPLumpInfo lump, BinaryReader binaryReader)
+        private Lump<Vector3f> ReadVertexesLump(BSPLumpInfo lump, BinaryReader binaryReader)
         {
             var vertexCount = lump.length / 12; // Vertices are 12 bytes long (3 float)
-            var vertexLump = new Lump<Vector3>();
+            var vertexLump = new Lump<Vector3f>();
             Logging.Log($"Vertex lump size: {vertexCount}");
 
             for (int i = 0; i < vertexCount; ++i)
