@@ -1,6 +1,6 @@
 ﻿using Engine.Assets;
-using Engine.ECS.Notify;
 using Engine.ECS.Components;
+using Engine.ECS.Observer;
 using Engine.Types;
 using Engine.Utils.Attributes;
 using ImGuiNET;
@@ -13,8 +13,11 @@ namespace Engine.ECS.Entities
 {
     public class Entity<T> : IEntity
     {
-        private string name;
+        public Guid ID { get; } = Guid.NewGuid();
+
         public bool Enabled { get; private set; } = true;
+
+        private string name;
         public virtual string Name
         {
             get
@@ -55,17 +58,19 @@ namespace Engine.ECS.Entities
         /// </summary>
         public virtual void RenderImGui()
         {
-            // TODO: Fix
-            //ImGui.Checkbox("##hidelabel", ref enabled);
-            //ImGui.SameLine();
+            bool enabled = Enabled;
+            ImGui.Checkbox("##hidelabel#enabled", ref enabled);
+            Enabled = enabled;
+
+            ImGui.SameLine();
 
             var nameVal = Name;
-            ImGui.InputText("##hidelabel", ref nameVal, 256);
-            if (nameVal != Name)
-                Name = nameVal;
+            ImGui.InputText("##hidelabel#name", ref nameVal, 256);
+            Name = nameVal;
 
             // Entity info
             ImGui.Text($"{IconGlyph} {GetType().Name}");
+            ImGui.Text($"({ID})");
 
             ImGui.Separator();
 
@@ -139,21 +144,31 @@ namespace Engine.ECS.Entities
             return (T1)results.First();
         }
 
+        /// <summary>
+        /// Check whether this entity has the component of type T1.
+        /// </summary>
+        /// <typeparam name="T1">The type of the component to check for.</typeparam>
+        /// <returns></returns>
         public bool HasComponent<T1>()
         {
             var results = Components.FindAll(t => { return t.GetType() == typeof(T1); });
-            return !(results.Count <= 0);
+            return results.Count > 0;
         }
 
-        public virtual void OnNotify(NotifyType eventType, INotifyArgs notifyArgs)
+        // TODO: Consider removal
+        public virtual void OnNotify(NotifyType notifyType, INotifyArgs notifyArgs)
         {
-            foreach (var component in Components)
+            var tmpComponentsCopy = new IComponent[Components.Count];
+            Components.CopyTo(tmpComponentsCopy); // Allow component list to be changed mid-notify if necessary
+
+            foreach (var component in tmpComponentsCopy)
             {
-                component.OnNotify(eventType, notifyArgs);
+                component.OnNotify(notifyType, notifyArgs);
             }
         }
 
-        public virtual void Render()
+        // TODO: Consider removal
+        public void Render()
         {
             foreach (var component in Components)
             {
@@ -161,7 +176,8 @@ namespace Engine.ECS.Entities
             }
         }
 
-        public virtual void Update(float deltaTime)
+        // TODO: Consider removal
+        public void Update(float deltaTime)
         {
             foreach (var component in Components)
             {

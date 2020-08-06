@@ -4,7 +4,7 @@ namespace Engine.Utils.MathUtils
 {
     public static class Noise
     {
-        private static Vector2[,] gradientValues = new Vector2[512, 512];
+        private static Vector2f[,] gradientValues = new Vector2f[512, 512];
 
         private static float Lerp(float a, float b, float t) => (1.0f - t) * a + (t * b);
 
@@ -27,7 +27,7 @@ namespace Engine.Utils.MathUtils
             {
                 for (var y = 0; y < gradientValues.GetLength(1); y++)
                 {
-                    gradientValues[x, y] = new Vector2(
+                    gradientValues[x, y] = new Vector2f(
                         ((float)random.NextDouble() * 2) - 1,
                         ((float)random.NextDouble() * 2) - 1
                         );

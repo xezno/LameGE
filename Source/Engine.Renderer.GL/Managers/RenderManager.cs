@@ -20,7 +20,7 @@ namespace Engine.Renderer.GL.Managers
 
         private Framebuffer mainFramebuffer;
 
-        private const int FramesToCount = 120;
+        private const int FramesToCount = 480;
         private readonly Renderer renderer;
 
         private ShaderComponent shadowShaders;
@@ -31,6 +31,7 @@ namespace Engine.Renderer.GL.Managers
         public float[] FramerateHistory { get; } = new float[FramesToCount];
 
         public bool RenderShadowMap { get; set; }
+        public bool Paused { get; set; }
 
         public RenderManager()
         {
@@ -41,7 +42,7 @@ namespace Engine.Renderer.GL.Managers
                 new Shader("Content/Shaders/Depth/depth.vert", Shader.Type.VertexShader));
         }
 
-        private void RenderScene(Matrix4x4f projMatrix, Matrix4x4f viewMatrix, Vector3 cameraPosition)
+        private void RenderScene(Matrix4x4f projMatrix, Matrix4x4f viewMatrix, Vector3d cameraPosition)
         {
             foreach (var entity in SceneManager.Instance.Entities)
             {
@@ -72,7 +73,7 @@ namespace Engine.Renderer.GL.Managers
             }
         }
 
-        public void RenderCefEntity(CefEntity cefEntity)
+        public void RenderCefComponent(CefComponent cefComponent)
         {
             // render cef offscreen & then blit to screen
             // we need to set up texture on the main therad
@@ -80,14 +81,14 @@ namespace Engine.Renderer.GL.Managers
             // declare a bool that allows us to detect when we need to
             // setup the texture.
 
-            if (!cefEntity.ReadyToDraw) return;
+            if (!cefComponent.ReadyToDraw) return;
 
             Gl.Disable(EnableCap.DepthTest);
 
             // draw to screen
-            cefEntity.Render();
+            cefComponent.Render();
 
-            cefEntity.SetTextureData();
+            cefComponent.SetTextureData();
 
             Gl.Enable(EnableCap.DepthTest);
         }
@@ -96,12 +97,9 @@ namespace Engine.Renderer.GL.Managers
         {
             foreach (var entity in SceneManager.Instance.Entities)
             {
-                if (entity.Enabled && entity.GetType() == typeof(CefEntity))
+                if (entity.Enabled && entity.HasComponent<CefComponent>())
                 {
-                    if (entity.HasComponent<MeshComponent>())
-                    {
-                        RenderCefEntity((CefEntity)entity);
-                    }
+                    RenderCefComponent(entity.GetComponent<CefComponent>());
                 }
             }
         }
@@ -130,7 +128,7 @@ namespace Engine.Renderer.GL.Managers
             Gl.BindBuffer(BufferTarget.ArrayBuffer, 0);
         }
 
-        public void RenderMesh(IEntity entity, Matrix4x4f projMatrix, Matrix4x4f viewMatrix, Vector3 cameraPosition)
+        public void RenderMesh(IEntity entity, Matrix4x4f projMatrix, Matrix4x4f viewMatrix, Vector3d cameraPosition)
         {
             var shaderComponent = entity.GetComponent<ShaderComponent>();
             var transformComponent = entity.GetComponent<TransformComponent>();
@@ -143,14 +141,14 @@ namespace Engine.Renderer.GL.Managers
 
             BindMatrices(shaderComponent, projMatrix, viewMatrix);
 
-            shaderComponent.SetVariable("cameraPos", cameraPosition);
+            shaderComponent.SetVariable("cameraPos", cameraPosition.ToVector3());
             shaderComponent.SetVariable("modelMatrix", transformComponent.Matrix);
             shaderComponent.SetVariable("fogNear", 0.02f);
-            shaderComponent.SetVariable("skyColor", new Vector3(100 / 255f, 149 / 255f, 237 / 255f)); // Cornflower blue
+            shaderComponent.SetVariable("skyColor", new Vector3f(100 / 255f, 149 / 255f, 237 / 255f)); // Cornflower blue
 
             entity.GetComponent<MaterialComponent>().BindAll(shaderComponent);
 
-            SceneManager.Instance.lights[0].Bind(shaderComponent);
+            SceneManager.Instance.lights[0].GetComponent<LightComponent>().Bind(shaderComponent);
 
             Gl.DrawArrays(PrimitiveType.Triangles, 0, meshComponent.RenderMesh.ElementCount * sizeof(float));
 
@@ -164,6 +162,8 @@ namespace Engine.Renderer.GL.Managers
         public override void Run()
         {
             var sceneCamera = SceneManager.Instance.mainCamera;
+            var sceneCameraComponent = sceneCamera.GetComponent<CameraComponent>();
+            var sceneCameraTransform = sceneCamera.GetComponent<TransformComponent>();
 
             // Render shadows
             var mainLightEntity = SceneManager.Instance.lights[0];
@@ -179,7 +179,7 @@ namespace Engine.Renderer.GL.Managers
             mainFramebuffer.Bind();
             renderer.PrepareFramebufferRender();
 
-            RenderScene(sceneCamera.ProjMatrix, sceneCamera.ViewMatrix, sceneCamera.Position);
+            RenderScene(sceneCameraComponent.projMatrix, sceneCameraComponent.viewMatrix, sceneCameraTransform.Position);
 
             // Render shadow map to display
             if (RenderShadowMap)
@@ -192,21 +192,25 @@ namespace Engine.Renderer.GL.Managers
             RenderCef();
 
             LastFrameTime = (DateTime.Now - lastRender).Milliseconds;
-            FrametimeHistory[currentFrametimeIndex++] = LastFrameTime;
 
-            if (currentFrametimeIndex == FrametimeHistory.Length)
+            if (!Paused)
             {
-                currentFrametimeIndex--;
-                for (var i = 0; i < FrametimeHistory.Length; ++i)
-                    FrametimeHistory[i] = FrametimeHistory[(i + 1) % FrametimeHistory.Length];
-            }
+                FrametimeHistory[currentFrametimeIndex++] = LastFrameTime;
 
-            FramerateHistory[currentFramerateIndex++] = CalculatedFramerate;
-            if (currentFramerateIndex == FramerateHistory.Length)
-            {
-                currentFramerateIndex--;
-                for (var i = 0; i < FramerateHistory.Length; ++i)
-                    FramerateHistory[i] = FramerateHistory[(i + 1) % FramerateHistory.Length];
+                if (currentFrametimeIndex == FrametimeHistory.Length)
+                {
+                    currentFrametimeIndex--;
+                    for (var i = 0; i < FrametimeHistory.Length; ++i)
+                        FrametimeHistory[i] = FrametimeHistory[(i + 1) % FrametimeHistory.Length];
+                }
+
+                FramerateHistory[currentFramerateIndex++] = CalculatedFramerate;
+                if (currentFramerateIndex == FramerateHistory.Length)
+                {
+                    currentFramerateIndex--;
+                    for (var i = 0; i < FramerateHistory.Length; ++i)
+                        FramerateHistory[i] = FramerateHistory[(i + 1) % FramerateHistory.Length];
+                }
             }
 
             lastRender = DateTime.Now;

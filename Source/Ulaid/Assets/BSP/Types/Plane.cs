@@ -4,7 +4,7 @@ namespace Ulaid.Assets.BSP.Types
 {
     class Plane
     {
-        public Vector3 normal;
+        public Vector3f normal;
         public float dist;
         public int type;
     }

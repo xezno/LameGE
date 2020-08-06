@@ -44,9 +44,6 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="Components\" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\Other\OpenGL.Net\Source\OpenGL.Net.CoreUI\OpenGL.Net.CoreUI.csproj" />
     <ProjectReference Include="..\..\Other\OpenGL.Net\Source\OpenGL.Net\OpenGL.Net.csproj" />
     <ProjectReference Include="..\..\Other\OpenGL.Net\Source\OpenGL.Net\OpenGL.Net.Math.csproj" />

@@ -1,5 +1,5 @@
-﻿using Engine.ECS.Notify;
-using Engine.ECS.Entities;
+﻿using Engine.ECS.Entities;
+using Engine.ECS.Observer;
 using Engine.Types;
 using System;
 using System.Collections.Generic;
