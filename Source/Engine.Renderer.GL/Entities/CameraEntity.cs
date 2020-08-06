@@ -21,7 +21,11 @@ namespace Engine.Renderer.GL.Entities
         public CameraEntity(int gameResX, int gameResY)
         {
             AddComponent(new TransformComponent(new Vector3d(0, 2f, 0f), Quaternion.identity, new Vector3d(1, 1, 1)));
-            AddComponent(new CameraComponent());
+            AddComponent(new CameraComponent() {
+                // Test props
+                FieldOfView = 110f,
+                Resolution = new Vector2f(640, 480)
+            });
         }
     }
 }

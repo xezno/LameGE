@@ -41,9 +41,13 @@ namespace Engine.Renderer.GL.Render
             Gl.BindFramebuffer(FramebufferTarget.Framebuffer, framebufferObject);
         }
 
-        public void Render()
+        public void Unbind()
         {
             Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+        }
+
+        public void Render()
+        {
             // Draw to screen
 
             shaderComponent.UseShader();
