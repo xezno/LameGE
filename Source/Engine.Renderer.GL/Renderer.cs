@@ -26,7 +26,6 @@ namespace Engine.Renderer.GL
             Gl.Enable(EnableCap.Blend);
             Gl.Enable(EnableCap.CullFace);
             Gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-            Gl.ClipControl(ClipControlOrigin.LowerLeft, ClipControlDepth.ZeroToOne);
 
             Gl.DebugMessageCallback(debugCallback, IntPtr.Zero);
         }

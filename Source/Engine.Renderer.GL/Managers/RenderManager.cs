@@ -156,10 +156,12 @@ namespace Engine.Renderer.GL.Managers
         /// </summary>
         public override void Run()
         {
+            Gl.ClipControl(ClipControlOrigin.LowerLeft, ClipControlDepth.ZeroToOne);
             Gl.Enable(EnableCap.DepthTest);
             Gl.DepthFunc(DepthFunction.Greater);
             RenderLighting();
             RenderCameras();
+            Gl.ClipControl(ClipControlOrigin.LowerLeft, ClipControlDepth.NegativeOneToOne);
             Gl.DepthFunc(DepthFunction.Less);
             Gl.Disable(EnableCap.DepthTest);
             
