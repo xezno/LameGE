@@ -57,7 +57,7 @@ namespace Engine.Gui.Managers
             //}),
             new ImGuiMenu(FontAwesome5.Cubes, "Scene", new List<ImGuiWindow>()
             {
-                new PlaygroundWindow(),
+                new ViewportWindow(),
                 new ScenePropertiesWindow()
             }),
             new ImGuiMenu(FontAwesome5.Wrench, "Engine", new List<ImGuiWindow>()
@@ -297,7 +297,11 @@ namespace Engine.Gui.Managers
                             (currentCommand.ClipRect.W - clipOffset.Y) * clipScale.Y
                         );
                     Gl.Scissor((int)clipBounds.x, (int)(windowSize.Y - clipBounds.w), (int)(clipBounds.z - clipBounds.x), (int)(clipBounds.w - clipBounds.y));
-                    defaultFontTexture.Bind();
+
+                    if ((uint)currentCommand.TextureId == 1)
+                        defaultFontTexture.Bind();
+                    else
+                        Gl.BindTexture(TextureTarget.Texture2d, (uint)currentCommand.TextureId);
                     Gl.DrawElementsBaseVertex(PrimitiveType.Triangles, (int)currentCommand.ElemCount, DrawElementsType.UnsignedShort, (IntPtr)(indexOffset * 2), 0);
 
                     indexOffset += (int)currentCommand.ElemCount;

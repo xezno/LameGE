@@ -15,12 +15,29 @@ namespace Engine.Components
     [Requires(typeof(TransformComponent))]
     public class CameraComponent : Component<CameraComponent>
     {
-        [Range(0, 180)] public float FieldOfView { get; set; } = 90f;
-        public float NearPlane { get; set; } = 0.1f;
-        public float FarPlane { get; set; } = 2500f;
+        private float fieldOfView = 90f;
+        [Range(0, 180)] 
+        public float FieldOfView
+        {
+            get { return fieldOfView; }
+            set { fieldOfView = value; CreateProjection(); }
+        }
+
+        private float nearPlane = 0.1f;
+        public float NearPlane
+        {
+            get { return nearPlane; }
+            set { nearPlane = value; CreateProjection(); }
+        }
 
         // TODO: Vector2 integer-only?
-        public Vector2f Resolution { get; set; } = new Vector2f(GameSettings.GameResolutionX, GameSettings.GameResolutionY);
+        private Vector2f resolution = new Vector2f(GameSettings.GameResolutionX, GameSettings.GameResolutionY);
+
+        public Vector2f Resolution
+        {
+            get { return resolution; }
+            set { resolution = value; CreateProjection(); CreateFramebuffer(); }
+        }
 
         private Matrix4x4f viewMatrix;
         public Matrix4x4f ViewMatrix { get => viewMatrix; set => viewMatrix = value; }
@@ -35,10 +52,19 @@ namespace Engine.Components
         /// </summary>
         public CameraComponent()
         {
+            CreateProjection();
+            CreateFramebuffer();
+        }
+
+        private void CreateProjection()
+        {
             ProjMatrix = CreateInfReversedZProj(FieldOfView,
                 Resolution.x / Resolution.y,
                 NearPlane);
+        }
 
+        private void CreateFramebuffer()
+        {
             Framebuffer = new Framebuffer((int)Resolution.x, (int)Resolution.y);
         }
 

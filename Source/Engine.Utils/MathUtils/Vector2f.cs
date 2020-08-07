@@ -54,5 +54,15 @@
         {
             return $"{x}, {y}";
         }
+
+        public static Vector2f ConvertFromNumerics(System.Numerics.Vector2 numericsVector2)
+        {
+            return new Vector2f(numericsVector2.X, numericsVector2.Y);
+        }
+
+        public System.Numerics.Vector2 ConvertToNumerics()
+        {
+            return new System.Numerics.Vector2(x, y);
+        }
     }
 }

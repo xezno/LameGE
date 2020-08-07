@@ -21,7 +21,7 @@ namespace Engine.Renderer.GL.Managers
         private const int FramesToCount = 480;
         private readonly Renderer renderer;
 
-        private ShaderComponent shadowShaders;
+        private ShaderComponent shadowShaders; // TODO: move these to lightcomponent?
         private float framerateLimitAsMs = 1000f / GameSettings.FramerateLimit;
 
         public float LastFrameTime { get; private set; }
