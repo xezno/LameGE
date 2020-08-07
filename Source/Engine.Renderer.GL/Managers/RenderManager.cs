@@ -51,9 +51,6 @@ namespace Engine.Renderer.GL.Managers
                         RenderMesh(entity, projMatrix, viewMatrix, cameraPosition);
                     }
                 }
-
-                // "Legacy": render any entities with custom render code
-                // entity.Render();
             }
         }
 
@@ -159,17 +156,12 @@ namespace Engine.Renderer.GL.Managers
         /// </summary>
         public override void Run()
         {
-            // Render lighting
-            foreach (var lightEntity in SceneManager.Instance.Lights)
-            {
-                RenderAsLight(lightEntity);
-            }
-
-            // Render scene
-            foreach (var cameraEntity in SceneManager.Instance.Cameras)
-            {
-                RenderAsCamera(cameraEntity);
-            }
+            Gl.Enable(EnableCap.DepthTest);
+            Gl.DepthFunc(DepthFunction.Greater);
+            RenderLighting();
+            RenderCameras();
+            Gl.DepthFunc(DepthFunction.Less);
+            Gl.Disable(EnableCap.DepthTest);
             
             SceneManager.Instance.MainCamera.GetComponent<CameraComponent>().Framebuffer.Render();
             
@@ -181,6 +173,25 @@ namespace Engine.Renderer.GL.Managers
             
             RenderCef();
             CollectPerformanceData();
+        }
+
+        public void RenderLighting()
+        {
+            // Render lighting
+            foreach (var lightEntity in SceneManager.Instance.Lights)
+            {
+                RenderAsLight(lightEntity);
+            }
+
+        }
+
+        public void RenderCameras()
+        {
+            // Render scene
+            foreach (var cameraEntity in SceneManager.Instance.Cameras)
+            {
+                RenderAsCamera(cameraEntity);
+            }
         }
 
         public void RenderAsLight(LightEntity lightEntity)

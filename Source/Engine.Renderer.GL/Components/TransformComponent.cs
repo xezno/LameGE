@@ -52,7 +52,7 @@ namespace Engine.Renderer.GL.Components
             }
         }
 
-        private bool MatrixInvertible => Math.Abs(Matrix.Determinant) > 1e-6f;
+        private bool MatrixInvertible => Math.Abs(Matrix.Determinant) > 1e-6f; // accounts for float rounding errors
 
         public Vector3f Forward
         {
@@ -90,6 +90,10 @@ namespace Engine.Renderer.GL.Components
             }
         }
 
+        /// <summary>
+        /// The transform that this transform is a child of within the scene hierarchy.
+        /// </summary>
+        public TransformComponent? ParentTransform { get; set; }
 
         /// <summary>
         /// Construct a new TransformComponent with the parameters specified.

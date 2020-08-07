@@ -25,8 +25,8 @@ namespace Engine.Renderer.GL
             Gl.ReadBuffer(ReadBufferMode.Back);
             Gl.Enable(EnableCap.Blend);
             Gl.Enable(EnableCap.CullFace);
-            Gl.Enable(EnableCap.DepthTest);
             Gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+            Gl.ClipControl(ClipControlOrigin.LowerLeft, ClipControlDepth.ZeroToOne);
 
             Gl.DebugMessageCallback(debugCallback, IntPtr.Zero);
         }
@@ -44,6 +44,7 @@ namespace Engine.Renderer.GL
         /// </summary>
         public void PrepareFramebufferRender()
         {
+            Gl.ClearDepth(0.0f);
             Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit); // Clear fb
         }
 

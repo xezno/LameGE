@@ -121,4 +121,6 @@ void main()
     lightDirection = normalize(light.pos - outFragPos);
 
     fragColor = vec4(CalcFullMix(), 1.0 - material.transparency);
+
+    // fragColor = vec4(vec3(modelPos.z), 1.0);
 }

@@ -5,6 +5,7 @@ using Engine.Utils;
 using Engine.Utils.Attributes;
 using Engine.Utils.MathUtils;
 using OpenGL;
+using System;
 
 namespace Engine.Components
 {
@@ -34,12 +35,20 @@ namespace Engine.Components
         /// </summary>
         public CameraComponent()
         {
-            ProjMatrix = Matrix4x4f.Perspective(FieldOfView,
+            ProjMatrix = CreateInfReversedZProj(FieldOfView,
                 Resolution.x / Resolution.y,
-                NearPlane,
-                FarPlane);
+                NearPlane);
 
             Framebuffer = new Framebuffer((int)Resolution.x, (int)Resolution.y);
+        }
+
+        private Matrix4x4f CreateInfReversedZProj(float fov, float aspectRatio, float nearPlane)
+        {
+            float f = 1.0f / (float)Math.Tan(Angle.ToRadians(fov) / 2.0f);
+            return new Matrix4x4f(f / aspectRatio, 0f, 0f, 0f,
+                0f, f, 0f, 0f,
+                0f, 0f, 0f, -1f,
+                0f, 0f, nearPlane, 0f);
         }
 
         /// <summary>
