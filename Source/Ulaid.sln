@@ -33,16 +33,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenGL.Net.CoreUI", "..\Oth
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenGL.Net.WinForms", "..\Other\OpenGL.Net\Source\OpenGL.Net.WinForms\OpenGL.Net.WinForms.csproj", "{2CF60D4C-7B5E-41A2-9FC3-6C1EA39B0876}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Editor", "Editor", "{8C25EBEC-5DA9-4866-8AF8-549ABB85C904}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Editor", "Editor\Editor.csproj", "{2013F064-95F3-432A-BCEE-AE50D8AE0EE0}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{74BACC8A-0E72-46E0-88A0-B2A3D43B80B3}"
 EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		..\Other\OpenGL.Net\Source\Khronos.Net\Khronos.Net.projitems*{032cf8ed-7cb5-4717-b763-42e7da7ee27f}*SharedItemsImports = 5
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
@@ -138,14 +131,6 @@ Global
 		{2CF60D4C-7B5E-41A2-9FC3-6C1EA39B0876}.Release|x64.Build.0 = Release|x64
 		{2CF60D4C-7B5E-41A2-9FC3-6C1EA39B0876}.Release|x86.ActiveCfg = Release|x86
 		{2CF60D4C-7B5E-41A2-9FC3-6C1EA39B0876}.Release|x86.Build.0 = Release|x86
-		{2013F064-95F3-432A-BCEE-AE50D8AE0EE0}.Debug|x64.ActiveCfg = Debug|x64
-		{2013F064-95F3-432A-BCEE-AE50D8AE0EE0}.Debug|x64.Build.0 = Debug|x64
-		{2013F064-95F3-432A-BCEE-AE50D8AE0EE0}.Debug|x86.ActiveCfg = Debug|x86
-		{2013F064-95F3-432A-BCEE-AE50D8AE0EE0}.Debug|x86.Build.0 = Debug|x86
-		{2013F064-95F3-432A-BCEE-AE50D8AE0EE0}.Release|x64.ActiveCfg = Release|x64
-		{2013F064-95F3-432A-BCEE-AE50D8AE0EE0}.Release|x64.Build.0 = Release|x64
-		{2013F064-95F3-432A-BCEE-AE50D8AE0EE0}.Release|x86.ActiveCfg = Release|x86
-		{2013F064-95F3-432A-BCEE-AE50D8AE0EE0}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -163,7 +148,6 @@ Global
 		{1F294DF9-4DD8-4AA4-84C3-BA43A287AB73} = {F9EC5DD9-8FC3-4AAB-A435-95FD0C888F3E}
 		{0860AEF3-0D83-4A6F-812E-DF5CB10877E0} = {F9EC5DD9-8FC3-4AAB-A435-95FD0C888F3E}
 		{2CF60D4C-7B5E-41A2-9FC3-6C1EA39B0876} = {F9EC5DD9-8FC3-4AAB-A435-95FD0C888F3E}
-		{2013F064-95F3-432A-BCEE-AE50D8AE0EE0} = {8C25EBEC-5DA9-4866-8AF8-549ABB85C904}
 		{74BACC8A-0E72-46E0-88A0-B2A3D43B80B3} = {22706AA2-FC20-46A2-A815-DFB033A41904}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
