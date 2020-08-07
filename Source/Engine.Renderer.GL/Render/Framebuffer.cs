@@ -85,8 +85,8 @@ namespace Engine.Renderer.GL.Render
                 gameResX, gameResY, 0,
                 pixelFormat, pixelType, IntPtr.Zero);
 
-            Gl.TexParameter(TextureTarget.Texture2d, TextureParameterName.TextureMinFilter, Gl.LINEAR);
-            Gl.TexParameter(TextureTarget.Texture2d, TextureParameterName.TextureMagFilter, Gl.LINEAR);
+            Gl.TexParameter(TextureTarget.Texture2d, TextureParameterName.TextureMinFilter, Gl.NEAREST);
+            Gl.TexParameter(TextureTarget.Texture2d, TextureParameterName.TextureMagFilter, Gl.NEAREST);
             Gl.BindTexture(TextureTarget.Texture2d, 0);
             return texture;
         }
