@@ -16,7 +16,7 @@ namespace Engine.Renderer.GL.Render
 
         public float Exposure { get => exposure; set => exposure = value; }
 
-        public Framebuffer(int gameResX, int gameResY)
+        public Framebuffer(int resolutionX, int resolutionY)
         {
             shaderComponent = new ShaderComponent(
                 new Shader("Content/Shaders/Framebuffer/framebuffer.frag", Shader.Type.FragmentShader),
@@ -25,14 +25,14 @@ namespace Engine.Renderer.GL.Render
             framebufferObject = Gl.GenFramebuffer();
             Gl.BindFramebuffer(FramebufferTarget.Framebuffer, framebufferObject);
 
-            colorTexture = CreateTexture(gameResX, gameResY, InternalFormat.Rgba32f, PixelFormat.Rgba, PixelType.Float);
+            colorTexture = CreateTexture(resolutionX, resolutionY, InternalFormat.Rgba32f, PixelFormat.Rgba, PixelType.Float);
             Gl.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2d, colorTexture, 0);
 
-            //depthTexture = CreateTexture(InternalFormat.DepthStencil, PixelFormat.DepthStencil, PixelType.Int);
-            //Gl.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, TextureTarget.Texture2d, depthTexture, 0);
+            depthTexture = CreateTexture(resolutionX, resolutionY, InternalFormat.DepthStencil, PixelFormat.DepthComponent, PixelType.Float);
+            Gl.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, TextureTarget.Texture2d, depthTexture, 0);
 
-            depthTexture = CreateTexture(gameResX, gameResY, InternalFormat.DepthStencil, PixelFormat.DepthStencil, (PixelType)34042 /* GL_UNSIGNED_INT_24_8 */);
-            Gl.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthStencilAttachment, TextureTarget.Texture2d, depthTexture, 0);
+            //depthTexture = CreateTexture(resolutionX, resolutionY, InternalFormat.DepthStencil, PixelFormat.DepthStencil, (PixelType)34042 /* GL_UNSIGNED_INT_24_8 */);
+            //Gl.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthStencilAttachment, TextureTarget.Texture2d, depthTexture, 0);
         }
 
         public void Bind()
@@ -41,9 +41,13 @@ namespace Engine.Renderer.GL.Render
             Gl.BindFramebuffer(FramebufferTarget.Framebuffer, framebufferObject);
         }
 
-        public void Render()
+        public void Unbind()
         {
             Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+        }
+
+        public void Render()
+        {
             // Draw to screen
 
             shaderComponent.UseShader();

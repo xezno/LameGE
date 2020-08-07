@@ -2,7 +2,7 @@
 
 namespace Engine.Utils.Attributes
 {
-    [AttributeUsage(AttributeTargets.Field)]
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
     public sealed class RangeAttribute : Attribute
     {
         public float Min { get; } // inclusive

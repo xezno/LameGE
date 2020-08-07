@@ -28,7 +28,7 @@ namespace Ulaid.Components
 
         public override void Update(float deltaTime)
         {
-            var sceneCamera = SceneManager.Instance.mainCamera;
+            var sceneCamera = SceneManager.Instance.MainCamera;
             var sceneCameraTransform = sceneCamera.GetComponent<TransformComponent>();
 
             transformComponent.Position += Velocity * deltaTime;

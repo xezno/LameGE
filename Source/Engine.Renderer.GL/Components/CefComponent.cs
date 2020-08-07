@@ -16,6 +16,16 @@ namespace Engine.Renderer.GL.Components
     {
         private string cefFilePath = $"";
 
+        public string CefFilePath
+        {
+            get => cefFilePath;
+            set
+            {
+                cefFilePath = value;
+                browser.Load(cefFilePath);
+            }
+        }
+
         public bool ReadyToDraw { get; private set; }
         private ChromiumWebBrowser browser;
 
@@ -36,12 +46,12 @@ namespace Engine.Renderer.GL.Components
             // setup cef instance
             var browserSettings = new BrowserSettings
             {
-                WindowlessFrameRate = 30, // 30 works best here as it prevents flickering, but this might be system dependant 
+                WindowlessFrameRate = 30, // 30 works best here as it prevents flickering, but this might be system dependant - TODO: needs experimentation
             };
 
             var cefSettings = new CefSettings();
             cefSettings.SetOffScreenRenderingBestPerformanceArgs();
-            CefSharp.Cef.Initialize(cefSettings);
+            Cef.Initialize(cefSettings);
 
             var requestContextSettings = new RequestContextSettings();
             var requestContext = new RequestContext(requestContextSettings);

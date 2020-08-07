@@ -1,8 +1,11 @@
 ﻿using Engine.ECS.Components;
 using Engine.Renderer.GL.Components;
+using Engine.Renderer.GL.Render;
 using Engine.Utils;
 using Engine.Utils.Attributes;
+using Engine.Utils.MathUtils;
 using OpenGL;
+using System;
 
 namespace Engine.Components
 {
@@ -12,21 +15,40 @@ namespace Engine.Components
     [Requires(typeof(TransformComponent))]
     public class CameraComponent : Component<CameraComponent>
     {
-        public Matrix4x4f viewMatrix, projMatrix;
-        [Range(0, 180)]
-        public float fieldOfView = 90.0f,
-            nearPlane = 0.1f,
-            farPlane = 2500f;
+        [Range(0, 180)] public float FieldOfView { get; set; } = 90f;
+        public float NearPlane { get; set; } = 0.1f;
+        public float FarPlane { get; set; } = 2500f;
+
+        // TODO: Vector2 integer-only?
+        public Vector2f Resolution { get; set; } = new Vector2f(GameSettings.GameResolutionX, GameSettings.GameResolutionY);
+
+        private Matrix4x4f viewMatrix;
+        public Matrix4x4f ViewMatrix { get => viewMatrix; set => viewMatrix = value; }
+
+        private Matrix4x4f projMatrix;
+        public Matrix4x4f ProjMatrix { get => projMatrix; set => projMatrix = value; }
+
+        public Framebuffer Framebuffer { get; set; }
 
         /// <summary>
         /// Construct an instance of CameraComponent, setting up the projection matrix in the process.
         /// </summary>
         public CameraComponent()
         {
-            projMatrix = Matrix4x4f.Perspective(fieldOfView,
-                GameSettings.GameResolutionX / (float)GameSettings.GameResolutionY,
-                nearPlane,
-                farPlane);
+            ProjMatrix = CreateInfReversedZProj(FieldOfView,
+                Resolution.x / Resolution.y,
+                NearPlane);
+
+            Framebuffer = new Framebuffer((int)Resolution.x, (int)Resolution.y);
+        }
+
+        private Matrix4x4f CreateInfReversedZProj(float fov, float aspectRatio, float nearPlane)
+        {
+            float f = 1.0f / (float)Math.Tan(Angle.ToRadians(fov) / 2.0f);
+            return new Matrix4x4f(f / aspectRatio, 0f, 0f, 0f,
+                0f, f, 0f, 0f,
+                0f, 0f, 0f, -1f,
+                0f, 0f, nearPlane, 0f);
         }
 
         /// <summary>

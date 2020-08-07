@@ -78,6 +78,9 @@
       <Version>4.7.1</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Components\" />
+  </ItemGroup>
   <PropertyGroup />
   <PropertyGroup />
 </Project>

@@ -18,12 +18,11 @@ namespace Engine.Renderer.GL.Managers
         private int currentFrametimeIndex;
         private int currentFramerateIndex;
 
-        private Framebuffer mainFramebuffer;
-
         private const int FramesToCount = 480;
         private readonly Renderer renderer;
 
         private ShaderComponent shadowShaders;
+        private float framerateLimitAsMs = 1000f / GameSettings.FramerateLimit;
 
         public float LastFrameTime { get; private set; }
         public int CalculatedFramerate => (int)(1000f / Math.Max(LastFrameTime, 0.001f));
@@ -37,7 +36,6 @@ namespace Engine.Renderer.GL.Managers
         {
             renderer = new Renderer();
             renderer.Init();
-            mainFramebuffer = new Framebuffer(GameSettings.GameResolutionX, GameSettings.GameResolutionY);
             shadowShaders = new ShaderComponent(new Shader("Content/Shaders/Depth/depth.frag", Shader.Type.FragmentShader),
                 new Shader("Content/Shaders/Depth/depth.vert", Shader.Type.VertexShader));
         }
@@ -53,9 +51,6 @@ namespace Engine.Renderer.GL.Managers
                         RenderMesh(entity, projMatrix, viewMatrix, cameraPosition);
                     }
                 }
-
-                // "Legacy": render any entities with custom render code
-                // entity.Render();
             }
         }
 
@@ -148,7 +143,7 @@ namespace Engine.Renderer.GL.Managers
 
             entity.GetComponent<MaterialComponent>().BindAll(shaderComponent);
 
-            SceneManager.Instance.lights[0].GetComponent<LightComponent>().Bind(shaderComponent);
+            SceneManager.Instance.Lights[0].GetComponent<LightComponent>().Bind(shaderComponent);
 
             Gl.DrawArrays(PrimitiveType.Triangles, 0, meshComponent.RenderMesh.ElementCount * sizeof(float));
 
@@ -161,36 +156,71 @@ namespace Engine.Renderer.GL.Managers
         /// </summary>
         public override void Run()
         {
-            var sceneCamera = SceneManager.Instance.mainCamera;
-            var sceneCameraComponent = sceneCamera.GetComponent<CameraComponent>();
-            var sceneCameraTransform = sceneCamera.GetComponent<TransformComponent>();
-
-            // Render shadows
-            var mainLightEntity = SceneManager.Instance.lights[0];
-            var mainLightComponent = mainLightEntity.GetComponent<LightComponent>();
-
-            // Render scene from light (shadow map)
-            mainLightComponent.shadowMap.Bind();
-            RenderLights(mainLightComponent);
-            mainLightComponent.shadowMap.Unbind();
-
-            // Render scene
-            renderer.PrepareRender();
-            mainFramebuffer.Bind();
-            renderer.PrepareFramebufferRender();
-
-            RenderScene(sceneCameraComponent.projMatrix, sceneCameraComponent.viewMatrix, sceneCameraTransform.Position);
-
-            // Render shadow map to display
+            Gl.ClipControl(ClipControlOrigin.LowerLeft, ClipControlDepth.ZeroToOne);
+            Gl.Enable(EnableCap.DepthTest);
+            Gl.DepthFunc(DepthFunction.Greater);
+            RenderLighting();
+            RenderCameras();
+            Gl.ClipControl(ClipControlOrigin.LowerLeft, ClipControlDepth.NegativeOneToOne);
+            Gl.DepthFunc(DepthFunction.Less);
+            Gl.Disable(EnableCap.DepthTest);
+            
+            SceneManager.Instance.MainCamera.GetComponent<CameraComponent>().Framebuffer.Render();
+            
+            // DEBUG: Render shadow map to display
             if (RenderShadowMap)
-                mainLightComponent.shadowMap.Render();
-
-            mainFramebuffer.Render();
+                SceneManager.Instance.Lights[0].GetComponent<LightComponent>().shadowMap.Render();
 
             renderer.FinishRender();
             
             RenderCef();
+            CollectPerformanceData();
+        }
 
+        public void RenderLighting()
+        {
+            // Render lighting
+            foreach (var lightEntity in SceneManager.Instance.Lights)
+            {
+                RenderAsLight(lightEntity);
+            }
+
+        }
+
+        public void RenderCameras()
+        {
+            // Render scene
+            foreach (var cameraEntity in SceneManager.Instance.Cameras)
+            {
+                RenderAsCamera(cameraEntity);
+            }
+        }
+
+        public void RenderAsLight(LightEntity lightEntity)
+        {
+            // Render scene from light (shadow map)        
+            var lightComponent = lightEntity.GetComponent<LightComponent>();
+
+            lightComponent.shadowMap.Bind();
+            RenderLights(lightComponent);
+            lightComponent.shadowMap.Unbind();
+        }
+
+        public void RenderAsCamera(CameraEntity cameraEntity)
+        {
+            var cameraComponent = cameraEntity.GetComponent<CameraComponent>();
+
+            renderer.PrepareRender();
+            cameraComponent.Framebuffer.Bind();
+            renderer.PrepareFramebufferRender();
+
+            RenderScene(cameraComponent.ProjMatrix, cameraComponent.ViewMatrix, cameraEntity.GetComponent<TransformComponent>().Position);
+
+            cameraComponent.Framebuffer.Unbind();
+        }
+
+        public void CollectPerformanceData()
+        {
             LastFrameTime = (DateTime.Now - lastRender).Milliseconds;
 
             if (!Paused)
@@ -214,11 +244,12 @@ namespace Engine.Renderer.GL.Managers
             }
 
             lastRender = DateTime.Now;
-            // Are we rendering too fast?
-            if (LastFrameTime < (1000f / GameSettings.FramerateLimit) && GameSettings.FramerateLimit > 0)
+
+            // Slow down rendering if it's going past the framerate limit
+            if (LastFrameTime < framerateLimitAsMs && GameSettings.FramerateLimit > 0)
             {
-                // TODO: is there anything more elegant for this?
-                Thread.Sleep((int)Math.Ceiling((1000f / GameSettings.FramerateLimit) - LastFrameTime));
+                var nextFrameDelay = (int)Math.Ceiling(framerateLimitAsMs - LastFrameTime);
+                Thread.Sleep(nextFrameDelay);
             }
         }
     }
