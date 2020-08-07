@@ -96,6 +96,10 @@ namespace Engine.ECS.Components
             {
                 DrawImGuiVector3(memberInfo, reference);
             }
+            else if (type == typeof(Utils.MathUtils.Vector3d))
+            {
+                DrawImGuiVector3d(memberInfo, reference);
+            }
             else if (type == typeof(Vertex3f))
             {
                 DrawImGuiVertex3f(memberInfo, reference);
@@ -174,6 +178,13 @@ namespace Engine.ECS.Components
             Vector3 value = (reference as ReflectionRef<Utils.MathUtils.Vector3f>).Value.ConvertToNumerics();
             ImGui.DragFloat3(member.Name, ref value, 0.1f);
             (reference as ReflectionRef<Utils.MathUtils.Vector3f>).Value = Utils.MathUtils.Vector3f.ConvertFromNumerics(value);
+        }
+
+        public void DrawImGuiVector3d(MemberInfo member, object reference)
+        {
+            Vector3 value = (reference as ReflectionRef<Utils.MathUtils.Vector3d>).Value.ConvertToNumerics();
+            ImGui.DragFloat3(member.Name, ref value, 0.1f);
+            (reference as ReflectionRef<Utils.MathUtils.Vector3d>).Value = Utils.MathUtils.Vector3d.ConvertFromNumerics(value);
         }
 
         public void DrawImGuiVector2(MemberInfo member, object reference)

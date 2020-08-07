@@ -1,5 +1,6 @@
 ﻿using Engine.Assets;
 using Engine.Components;
+using Engine.Renderer.GL.Entities;
 using Engine.Renderer.GL.Managers;
 using ImGuiNET;
 using System;
@@ -14,14 +15,25 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
 
         public override void Draw()
         {
+            ImGui.Columns(2);
+            foreach (CameraEntity camera in SceneManager.Instance.Cameras)
+            {
+                DrawCamera(camera);
+                ImGui.NextColumn();
+            }
+            ImGui.Columns(1);
+        }
+
+        private void DrawCamera(CameraEntity cameraEntity)
+        {
             var windowWidth = ImGui.GetWindowSize().X;
-            var camera = SceneManager.Instance.MainCamera.GetComponent<CameraComponent>();
+            var camera = cameraEntity.GetComponent<CameraComponent>();
             var ratio = camera.Resolution.y / camera.Resolution.x;
             var image = camera.Framebuffer.ColorTexture;
+            var cameraScale = 0.5f;
 
-            ImGui.TextUnformatted("Scene");
-            ImGui.Image((IntPtr)image, new System.Numerics.Vector2(windowWidth, windowWidth * ratio), new System.Numerics.Vector2(0, 1), new System.Numerics.Vector2(1, 0));
-
+            ImGui.TextUnformatted(cameraEntity.Name);
+            ImGui.Image((IntPtr)image, new System.Numerics.Vector2(windowWidth, windowWidth * ratio) * cameraScale, new System.Numerics.Vector2(0, 1), new System.Numerics.Vector2(1, 0));
         }
     }
 }

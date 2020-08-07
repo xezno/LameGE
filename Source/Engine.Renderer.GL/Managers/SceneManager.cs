@@ -49,6 +49,20 @@ namespace Engine.Renderer.GL.Managers
                 new CameraEntity(GameSettings.GameResolutionX,GameSettings.GameResolutionY)
                 {
                     Name = "Main Camera"
+                },
+
+                // Level editing cameras
+                new CameraEntity(GameSettings.GameResolutionX,GameSettings.GameResolutionY)
+                {
+                    Name = "Camera 2"
+                },
+                new CameraEntity(GameSettings.GameResolutionX,GameSettings.GameResolutionY)
+                {
+                    Name = "Camera 3"
+                },
+                new CameraEntity(GameSettings.GameResolutionX,GameSettings.GameResolutionY)
+                {
+                    Name = "Camera 4"
                 }
             );
 
