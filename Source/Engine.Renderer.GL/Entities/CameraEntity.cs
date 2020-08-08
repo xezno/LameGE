@@ -18,13 +18,12 @@ namespace Engine.Renderer.GL.Entities
         /// <summary>
         /// Constructs the camera entity with a transform component and a camera component.
         /// </summary>
-        public CameraEntity(int gameResX, int gameResY)
+        public CameraEntity(int resolutionX, int resolutionY)
         {
             AddComponent(new TransformComponent(new Vector3d(0, 2f, 0f), Quaternion.identity, new Vector3d(1, 1, 1)));
             AddComponent(new CameraComponent() {
-                // Test props
-                FieldOfView = 110f,
-                Resolution = new Vector2f(640, 480)
+                FieldOfView = 90f,
+                Resolution = new Vector2f(resolutionX, resolutionY)
             });
         }
     }
