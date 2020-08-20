@@ -1,5 +1,5 @@
 ﻿{
-  "gameName": "Ulaid Sandbox Game",
-  "gameNameShort": "Ulaid Sandbox",
-  "windowTitle": "Ulaid Game {Version}"
+  "gameName": "Example Game",
+  "gameNameShort": "Example",
+  "windowTitle": "Example Game {Version}"
 }

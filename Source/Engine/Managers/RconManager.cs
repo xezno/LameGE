@@ -33,7 +33,7 @@ namespace Engine.Managers
 
             var socketServer = new WebSocketServer($"ws://0.0.0.0:{GameSettings.RconPort}")
             {
-                SupportedSubProtocols = new[] { "ulaidRcon" },
+                SupportedSubProtocols = new[] { "engineRcon" },
                 ListenerSocket =
                 {
                     NoDelay = true

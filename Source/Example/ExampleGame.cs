@@ -12,9 +12,9 @@ using Example.Managers.ImGuiWindows.Addons;
 
 namespace Example
 {
-    internal sealed class UlaidGame : Game
+    internal sealed class ExampleGame : Game
     {
-        public UlaidGame(string gamePropertyPath) : base(gamePropertyPath) { }
+        public ExampleGame(string gamePropertyPath) : base(gamePropertyPath) { }
 
         protected override void InitScene()
         {
