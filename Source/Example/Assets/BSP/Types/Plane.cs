@@ -1,6 +1,6 @@
 ﻿using Engine.Utils.MathUtils;
 
-namespace Ulaid.Assets.BSP.Types
+namespace Example.Assets.BSP.Types
 {
     class Plane
     {

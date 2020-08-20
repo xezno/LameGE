@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Ulaid.Assets.BSP.Lumps
+namespace Example.Assets.BSP.Lumps
 {
     public class Lump { }
 

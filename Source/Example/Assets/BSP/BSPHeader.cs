@@ -1,4 +1,4 @@
-﻿namespace Ulaid.Assets.BSP
+﻿namespace Example.Assets.BSP
 {
     struct BSPHeader
     {

@@ -1,4 +1,4 @@
-﻿namespace Ulaid.Assets.BSP.Types
+﻿namespace Example.Assets.BSP.Types
 {
     class TexInfo
     {

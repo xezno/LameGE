@@ -2,7 +2,7 @@
 using System;
 #endif
 
-namespace Ulaid
+namespace Example
 {
     class Program
     {

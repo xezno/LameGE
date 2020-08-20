@@ -3,9 +3,9 @@ using Engine.ECS.Entities;
 using Engine.Renderer.GL.Components;
 using Engine.Renderer.GL.Render;
 using Engine.Utils.MathUtils;
-using Ulaid.Components;
+using Example.Components;
 
-namespace Ulaid.Entities
+namespace Example.Entities
 {
     public sealed class LevelModelEntity : Entity<LevelModelEntity>
     {

@@ -7,10 +7,10 @@ using Engine.Gui.Managers.ImGuiWindows;
 using Engine.Renderer.GL.Entities;
 using Engine.Renderer.GL.Managers;
 using System.Collections.Generic;
-using Ulaid.Entities;
-using Ulaid.Managers.ImGuiWindows.Addons;
+using Example.Entities;
+using Example.Managers.ImGuiWindows.Addons;
 
-namespace Ulaid
+namespace Example
 {
     internal sealed class UlaidGame : Game
     {

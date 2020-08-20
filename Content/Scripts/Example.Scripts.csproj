@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>UlaidGame.Scripts</RootNamespace>
-    <AssemblyName>UlaidGame.Scripts</AssemblyName>
+    <RootNamespace>Example.Scripts</RootNamespace>
+    <AssemblyName>Example.Scripts</AssemblyName>
     <OutputType>Library</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Platforms>x86;x64</Platforms>
@@ -17,7 +17,7 @@
     <ProjectReference Include="..\..\Source\Engine.Renderer.GL\Engine.Renderer.GL.csproj" />
     <ProjectReference Include="..\..\Source\Engine.Utils\Engine.Utils.csproj" />
     <ProjectReference Include="..\..\Source\Engine\Engine.csproj" />
-    <ProjectReference Include="..\..\Source\Ulaid\Ulaid.csproj" />
+    <ProjectReference Include="..\..\Source\Ulaid\Example.csproj" />
   </ItemGroup>
 
 </Project>

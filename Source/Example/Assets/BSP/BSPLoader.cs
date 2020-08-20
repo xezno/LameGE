@@ -2,10 +2,10 @@
 using Engine.Utils.MathUtils;
 using System.IO;
 using System.Linq;
-using Ulaid.Assets.BSP.Lumps;
-using Ulaid.Assets.BSP.Types;
+using Example.Assets.BSP.Lumps;
+using Example.Assets.BSP.Types;
 
-namespace Ulaid.Assets.BSP
+namespace Example.Assets.BSP
 {
     class BSPLoader
     {

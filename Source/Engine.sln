@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Engine", "Engine", "{22706AA2-FC20-46A2-A815-DFB033A41904}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ulaid", "Ulaid", "{F69B6183-A7C5-4355-AEDC-2E68BCEBF607}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Example", "Example", "{F69B6183-A7C5-4355-AEDC-2E68BCEBF607}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Engine", "Engine\Engine.csproj", "{F8F75D86-567B-4C1C-BA2E-0EA7C94ACC34}"
 EndProject
@@ -15,9 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Engine.Renderer.GL", "Engin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Engine.Utils", "Engine.Utils\Engine.Utils.csproj", "{EBD21A19-EA7E-4C01-A06B-8F0820EE8D2B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ulaid", "Ulaid\Ulaid.csproj", "{D7BFF0A5-BEC2-4140-9611-36E2E53AE538}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example", "Example\Example.csproj", "{D7BFF0A5-BEC2-4140-9611-36E2E53AE538}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ulaid.Scripts", "..\Content\Scripts\Ulaid.Scripts.csproj", "{D3C03BCA-3B69-48AA-A626-44C926C90F55}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example.Scripts", "..\Content\Scripts\Example.Scripts.csproj", "{D3C03BCA-3B69-48AA-A626-44C926C90F55}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Engine.Gui", "Engine.ImGui\Engine.Gui.csproj", "{6A3810E9-33C7-4236-B2D5-46C7EBCFF346}"
 EndProject

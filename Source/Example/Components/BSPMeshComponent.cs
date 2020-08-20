@@ -6,11 +6,11 @@ using Engine.Renderer.GL.Render;
 using Engine.Utils.DebugUtils;
 using Engine.Utils.MathUtils;
 using System;
-using Ulaid.Assets.BSP;
-using Ulaid.Assets.BSP.Lumps;
-using Ulaid.Assets.BSP.Types;
+using Example.Assets.BSP;
+using Example.Assets.BSP.Lumps;
+using Example.Assets.BSP.Types;
 
-namespace Ulaid.Components
+namespace Example.Components
 {
     public class BSPMeshComponent : Component<BSPMeshComponent>
     {

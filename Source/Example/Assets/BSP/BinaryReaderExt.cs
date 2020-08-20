@@ -1,7 +1,7 @@
 ﻿using Engine.Utils.MathUtils;
 using System.IO;
 
-namespace Ulaid.Assets.BSP
+namespace Example.Assets.BSP
 {
     public static class BinaryReaderExt
     {

@@ -2,7 +2,7 @@
 using Engine.Gui.Managers.ImGuiWindows;
 using ImGuiNET;
 
-namespace Ulaid.Managers.ImGuiWindows.Addons
+namespace Example.Managers.ImGuiWindows.Addons
 {
     class AnvilBrowserWindow : ImGuiWindow
     {

@@ -4,7 +4,7 @@ using Engine.Renderer.GL.Components;
 using Engine.Renderer.GL.Render;
 using Engine.Utils.MathUtils;
 
-namespace Ulaid.Entities
+namespace Example.Entities
 {
     public sealed class TestCubeEntity : Entity<LevelModelEntity>
     {

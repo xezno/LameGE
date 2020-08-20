@@ -6,7 +6,7 @@ using Engine.Utils.MathUtils;
 using OpenGL.CoreUI;
 using System;
 
-namespace Ulaid.Components
+namespace Example.Components
 {
     class PlayerMovementComponent : Component<PlayerMovementComponent>
     {

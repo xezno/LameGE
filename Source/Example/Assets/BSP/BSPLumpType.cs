@@ -1,4 +1,4 @@
-﻿namespace Ulaid.Assets.BSP
+﻿namespace Example.Assets.BSP
 {
     /// <summary>
     /// BSP Lump Types from Source 2009(+?)
