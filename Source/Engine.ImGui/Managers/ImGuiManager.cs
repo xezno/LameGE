@@ -44,6 +44,7 @@ namespace Engine.Gui.Managers
             }
         }
 
+        // TODO: Move over to an attributes-based system for menuing & overlays
         public List<ImGuiMenu> Menus { get; } = new List<ImGuiMenu>()
         {
             new ImGuiMenu(FontAwesome5.File, "File", new List<ImGuiWindow>()
@@ -66,7 +67,8 @@ namespace Engine.Gui.Managers
                 new PerformanceWindow(),
                 new TextureBrowserWindow(),
                 new ShaderWindow(),
-                new InputWindow()
+                new InputWindow(),
+                new RenderSettingsWindow()
             })
         };
 
