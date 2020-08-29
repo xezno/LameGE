@@ -252,7 +252,7 @@ namespace Engine.Gui.Managers
 
         private void RenderImGui(ImDrawDataPtr drawData)
         {
-            // TODO: use abstract graphics impl
+            // TODO: use abstract graphics implementation
             Gl.BlendEquation(BlendEquationMode.FuncAdd);
             Gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             Gl.Disable(EnableCap.CullFace);

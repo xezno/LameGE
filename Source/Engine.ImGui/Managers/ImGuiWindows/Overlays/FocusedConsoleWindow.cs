@@ -97,7 +97,6 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
 
         public override void OnNotify(NotifyType eventType, INotifyArgs notifyArgs)
         {
-            // TODO: Event not ever fired
             if (eventType == NotifyType.KeyUp)
             {
                 if (((KeyboardNotifyArgs)notifyArgs).KeyboardKey == (int)KeyCode.F3)

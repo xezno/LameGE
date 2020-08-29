@@ -207,7 +207,6 @@ namespace Engine
             Broadcast.Notify(NotifyType.WindowResized, new WindowResizeNotifyArgs(windowSize, this));
         }
 
-        // TODO: Fix mouse wheel
         private void MouseWheel(object sender, NativeWindowMouseEventArgs e)
         {
             Broadcast.Notify(NotifyType.MouseScroll, new MouseWheelNotifyArgs(e.WheelTicks, this));
