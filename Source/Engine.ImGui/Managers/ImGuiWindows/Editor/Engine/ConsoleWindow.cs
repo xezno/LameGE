@@ -14,7 +14,6 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor.Engine
         public override bool Render { get; set; }
         public override string IconGlyph { get; } = FontAwesome5.Terminal;
         public override string Title { get; } = "Console";
-        public override ImGuiWindowFlags Flags { get; } = ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoDecoration; // TODO: Look at flags
 
         private string currentConsoleFilter = "", currentConsoleInput = "";
 
@@ -32,7 +31,6 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor.Engine
 
         public override void Draw()
         {
-            ImGui.Begin("Console", Flags);
             // ImGui.PushStyleColor(ImGuiCol.ChildBg, ImGui.GetStyle().Colors[(int)ImGuiCol.FrameBg]);
             ImGui.BeginChild("ConsoleInner", new Vector2(-1, -64));
             ImGui.PushFont(ImGuiManager.Instance.MonospacedFont);
@@ -75,11 +73,6 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor.Engine
 
             ImGui.SameLine();
             ImGui.Button("Submit");
-
-            ImGui.SetWindowPos(new Vector2(0, 0));
-            ImGui.SetWindowSize(new Vector2(GameSettings.GameResolutionX, GameSettings.GameResolutionY));
-            
-            ImGui.End();
         }
 
         public override void OnNotify(NotifyType eventType, INotifyArgs notifyArgs)
