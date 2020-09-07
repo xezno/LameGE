@@ -7,14 +7,14 @@ using OpenGL.CoreUI;
 using System.Linq;
 using System.Numerics;
 
-namespace Engine.Gui.Managers.ImGuiWindows.Editor
+namespace Engine.Gui.Managers.ImGuiWindows.Editor.Engine
 {
-    class FocusedConsoleWindow : ImGuiWindow
+    class ConsoleWindow : ImGuiWindow
     {
         public override bool Render { get; set; }
         public override string IconGlyph { get; } = FontAwesome5.Terminal;
         public override string Title { get; } = "Console";
-        public override ImGuiWindowFlags Flags { get; } = ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoDecoration; // TODO: Look at flags
+        public override ImGuiWindowFlags Flags { get; } = ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoDecoration; // TODO: Look at flags
 
         private string currentConsoleFilter = "", currentConsoleInput = "";
 
@@ -22,7 +22,7 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
 
         private bool scrollQueued = true;
 
-        public FocusedConsoleWindow()
+        public ConsoleWindow()
         {
             Logging.onDebugLog += (entry) =>
             {
@@ -38,18 +38,9 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
             ImGui.PushFont(ImGuiManager.Instance.MonospacedFont);
 
             foreach (var logEntry in Logging.LogEntries.TakeLast(logLimit))
-            {
-                bool drawCurrentEntry = true;
-                
-                if (!string.IsNullOrWhiteSpace(currentConsoleFilter) && !GetFilterMatch(logEntry.ToString(), currentConsoleFilter))
-                {
-                    drawCurrentEntry = false;
-                }
-
-                if (!drawCurrentEntry)
-                {
+            {                
+                if (!string.IsNullOrWhiteSpace(currentConsoleFilter) && !GetFilterMatch(logEntry, currentConsoleFilter))
                     continue;
-                }
 
                 ImGui.PushStyleColor(ImGuiCol.Text, SeverityToColor(logEntry.severity));
                 ImGui.TextWrapped(logEntry.ToString());
@@ -81,16 +72,12 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
             // ImGui.PopStyleColor();
             
             ImGui.InputText("Filter", ref currentConsoleFilter, 256);
-            if (ImGui.InputText("##hidelabel", ref currentConsoleInput, 256))
-            {
-                Logging.Log("InputText fired");
-            }
 
             ImGui.SameLine();
             ImGui.Button("Submit");
 
             ImGui.SetWindowPos(new Vector2(0, 0));
-            ImGui.SetWindowSize(new Vector2(GameSettings.GameResolutionX, GameSettings.GameResolutionY / 2f));
+            ImGui.SetWindowSize(new Vector2(GameSettings.GameResolutionX, GameSettings.GameResolutionY));
             
             ImGui.End();
         }
@@ -100,20 +87,23 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
             if (eventType == NotifyType.KeyUp)
             {
                 if (((KeyboardNotifyArgs)notifyArgs).KeyboardKey == (int)KeyCode.F3)
-                {
                     Render = !Render;
-                }
             }
         }
 
+        private static bool GetLogEntryStringMatch(LogEntry logEntry, string str)
+        {
+            return logEntry.str.Contains(str) || logEntry.stackTrace.ToString().Contains(str);
+        }
+
         // TODO: use fuzzy search
-        private static bool GetFilterMatch(string str, string filter)
+        private static bool GetFilterMatch(LogEntry logEntry, string filter)
         {
             if (filter.Contains(","))
             {
                 foreach (var splitFilter in filter.Split(','))
                 {
-                    if (str.Contains(splitFilter))
+                    if (GetLogEntryStringMatch(logEntry, splitFilter))
                         return true;
                 }
 
@@ -121,7 +111,7 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
             }
             else
             {
-                return str.Contains(filter);
+                return GetLogEntryStringMatch(logEntry, filter);
             }
         }
 

@@ -8,9 +8,9 @@
   <PropertyGroup>
     <RuntimeIdentifiers>win10-x64;debian.8-x64</RuntimeIdentifiers>
   </PropertyGroup>
-
+  
   <ItemGroup>
-    <PackageReference Include="ImGui.NET" Version="1.75.0" />
+    <PackageReference Include="ImGui.NET" Version="1.78.0" />
   </ItemGroup>
 
   <ItemGroup>

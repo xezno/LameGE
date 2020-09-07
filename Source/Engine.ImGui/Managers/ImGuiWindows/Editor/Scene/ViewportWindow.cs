@@ -13,27 +13,27 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
         public override string IconGlyph { get; } = FontAwesome5.Play;
         public override string Title { get; } = "Viewport";
 
+        // TODO: Communicate with scene hierarchy, get selected scene camera
+
         public override void Draw()
         {
-            ImGui.Columns(2);
-            foreach (CameraEntity camera in SceneManager.Instance.Cameras)
-            {
-                DrawCamera(camera);
-                ImGui.NextColumn();
-            }
-            ImGui.Columns(1);
+            DrawCamera(SceneManager.Instance.MainCamera);
         }
 
         private void DrawCamera(CameraEntity cameraEntity)
         {
             var windowWidth = ImGui.GetWindowSize().X;
+            var windowHeight = ImGui.GetWindowSize().Y;
             var camera = cameraEntity.GetComponent<CameraComponent>();
+
             var ratio = camera.Resolution.y / camera.Resolution.x;
             var image = camera.Framebuffer.ColorTexture;
-            var cameraScale = 0.5f;
+            var cameraScale = 1.0f;
 
-            ImGui.TextUnformatted(cameraEntity.Name);
             ImGui.Image((IntPtr)image, new System.Numerics.Vector2(windowWidth, windowWidth * ratio) * cameraScale, new System.Numerics.Vector2(0, 1), new System.Numerics.Vector2(1, 0));
+
+            // TODO: Fix memory leak
+            // camera.Resolution = new Utils.MathUtils.Vector2f(windowWidth, windowHeight);
         }
     }
 }

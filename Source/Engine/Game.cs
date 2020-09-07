@@ -92,7 +92,7 @@ namespace Engine
             nativeWindow.Create(GameSettings.GamePosX, GameSettings.GamePosY, (uint)GameSettings.GameResolutionX + 16, (uint)GameSettings.GameResolutionY + 16, NativeWindowStyles.Caption | NativeWindowStyles.Border);
 
             nativeWindow.Fullscreen = GameSettings.Fullscreen;
-            nativeWindow.Caption = FilterString(gameProperties.WindowTitle) ?? "Engine Game";
+            nativeWindow.Caption = FormatWindowTitle(gameProperties.WindowTitle) ?? "Engine Game";
 
             // TODO: get choice of monitor to use.
 
@@ -117,7 +117,7 @@ namespace Engine
             ignoreSingleMouseDelta = true;
         }
 
-        private string FilterString(string str)
+        private string FormatWindowTitle(string str)
         {
             var version = Assembly.GetEntryAssembly()?.GetName().Version;
             str = str.Replace("{Version}", version?.ToString())

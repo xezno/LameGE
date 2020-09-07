@@ -40,6 +40,8 @@ namespace Engine.Renderer.GL.Render
             //depthTexture = CreateTexture(resolutionX, resolutionY, InternalFormat.DepthStencil, PixelFormat.DepthStencil, (PixelType)34042 /* GL_UNSIGNED_INT_24_8 */);
             //Gl.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthStencilAttachment, TextureTarget.Texture2d, depthTexture, 0);
             resolution = new Vector2f(resolutionX, resolutionY);
+
+            Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
         }
 
         public void Bind()
@@ -63,11 +65,11 @@ namespace Engine.Renderer.GL.Render
             Gl.BindBuffer(BufferTarget.ArrayBuffer, mesh.vbo);
             Gl.ActiveTexture(TextureUnit.Texture0);
             Gl.BindTexture(TextureTarget.Texture2d, ColorTexture);
-            Gl.ActiveTexture(TextureUnit.Texture1);
-            Gl.BindTexture(TextureTarget.Texture2d, DepthTexture);
+            //Gl.ActiveTexture(TextureUnit.Texture1);
+            //Gl.BindTexture(TextureTarget.Texture2d, DepthTexture);
 
             shaderComponent.SetVariable("colorTexture", 0);
-            shaderComponent.SetVariable("depthTexture", 1);
+            //shaderComponent.SetVariable("depthTexture", 1);
             shaderComponent.SetVariable("exposure", exposure);
 
             Gl.DrawArrays(PrimitiveType.Triangles, 0, mesh.ElementCount * sizeof(float));

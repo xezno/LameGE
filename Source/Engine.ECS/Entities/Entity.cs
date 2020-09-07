@@ -13,7 +13,7 @@ namespace Engine.ECS.Entities
 {
     public class Entity<T> : IEntity
     {
-        public Guid ID { get; } = Guid.NewGuid();
+        public Guid Id { get; } = Guid.NewGuid();
 
         public bool Enabled { get; private set; } = true;
 
@@ -70,7 +70,7 @@ namespace Engine.ECS.Entities
 
             // Entity info
             ImGui.Text($"{IconGlyph} {GetType().Name}");
-            ImGui.Text($"({ID})");
+            ImGui.Text($"({Id})");
 
             ImGui.Separator();
 

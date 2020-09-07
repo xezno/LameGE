@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Numerics;
 using Vector4f = Engine.Utils.MathUtils.Vector4f;
+using Engine.Gui.Managers.ImGuiWindows.Editor.Engine;
 
 namespace Engine.Gui.Managers
 {
@@ -50,7 +51,8 @@ namespace Engine.Gui.Managers
             new ImGuiMenu(FontAwesome5.File, "File", new List<ImGuiWindow>()
             {
                 new SaveSettingsWindow(),
-                new CloseGameWindow()
+                new CloseGameWindow(),
+                new DockSpaceWindow()
             }),
             //new ImGuiMenu(FontAwesome5.FileCode, "Scripts", new List<ImGuiWindow>()
             //{
@@ -68,14 +70,14 @@ namespace Engine.Gui.Managers
                 new TextureBrowserWindow(),
                 new ShaderWindow(),
                 new InputWindow(),
-                new RenderSettingsWindow()
+                new RenderSettingsWindow(),
+                new ConsoleWindow()
             })
         };
 
         public List<ImGuiWindow> Overlays { get; } = new List<ImGuiWindow>()
         {
             new UnfocusedConsoleWindow(),
-            new FocusedConsoleWindow(),
             new PerformanceOverlayWindow()
         };
         public ImFontPtr MonospacedFont { get; private set; }
@@ -91,6 +93,7 @@ namespace Engine.Gui.Managers
 
             io.BackendFlags |= ImGuiBackendFlags.HasMouseCursors;
             io.ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
+            io.ConfigFlags |= ImGuiConfigFlags.DockingEnable;
 
             ImGui.StyleColorsDark();
 
@@ -156,7 +159,7 @@ namespace Engine.Gui.Managers
 
             io.Fonts.GetTexDataAsRGBA32(out IntPtr pixels, out var width, out var height, out var bpp);
             io.Fonts.SetTexID((IntPtr)1);
-            defaultFontTexture = new Texture2D(pixels, width, height, bpp);
+            defaultFontTexture = new Texture2D("ImGUI Font Texture", pixels, width, height, bpp);
             io.Fonts.ClearTexData();
         }
 
