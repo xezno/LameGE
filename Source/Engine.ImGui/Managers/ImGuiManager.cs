@@ -5,11 +5,10 @@ using Engine.Gui.Managers.ImGuiWindows;
 using Engine.Gui.Managers.ImGuiWindows.Editor;
 using Engine.Gui.Managers.ImGuiWindows.Overlays;
 using Engine.Gui.Managers.ImGuiWindows.Theming;
-using Engine.Renderer.GL.Components;
-using Engine.Renderer.GL.Render;
 using Engine.Utils;
 using Engine.Utils.DebugUtils;
 using ImGuiNET;
+using Quincy;
 using OpenGL;
 using OpenGL.CoreUI;
 using System;
@@ -17,6 +16,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using Vector4f = Engine.Utils.MathUtils.Vector4f;
 using Engine.Gui.Managers.ImGuiWindows.Editor.Engine;
+using Quincy.Components;
 
 namespace Engine.Gui.Managers
 {
@@ -24,7 +24,7 @@ namespace Engine.Gui.Managers
     {
         private const float PT_TO_PX = 1.3281472327365f;
 
-        private Texture2D defaultFontTexture;
+        private Texture defaultFontTexture;
         private ShaderComponent shaderComponent;
         private Vector2 windowSize;
 
@@ -110,8 +110,7 @@ namespace Engine.Gui.Managers
         #region "Initialization"
         private void InitGl()
         {
-            shaderComponent = new ShaderComponent(new Shader("Content/Shaders/ImGUI/imgui.frag", Shader.Type.FragmentShader),
-                new Shader("Content/Shaders/ImGUI/imgui.vert", Shader.Type.VertexShader));
+            shaderComponent = new ShaderComponent("Content/Shaders/ImGUI/imgui.frag", "Content/Shaders/ImGUI/imgui.vert");
 
             vao = Gl.GenVertexArray();
             vbo = Gl.GenBuffer();
@@ -159,7 +158,7 @@ namespace Engine.Gui.Managers
 
             io.Fonts.GetTexDataAsRGBA32(out IntPtr pixels, out var width, out var height, out var bpp);
             io.Fonts.SetTexID((IntPtr)1);
-            defaultFontTexture = new Texture2D("ImGUI Font Texture", pixels, width, height, bpp);
+            // defaultFontTexture = new Texture("ImGUI Font Texture", pixels, width, height, bpp);
             io.Fonts.ClearTexData();
         }
 
@@ -265,9 +264,9 @@ namespace Engine.Gui.Managers
             io.DisplaySize = new Vector2(GameSettings.GameResolutionX, GameSettings.GameResolutionY);
             var projectionMatrix = Matrix4x4f.Ortho2D(0f, io.DisplaySize.X, io.DisplaySize.Y, 0.0f);
 
-            shaderComponent.UseShader();
-            shaderComponent.SetVariable("albedoTexture", 0);
-            shaderComponent.SetVariable("projection", projectionMatrix);
+            shaderComponent.Use();
+            shaderComponent.SetInt("albedoTexture", 0);
+            shaderComponent.SetMatrix("projection", projectionMatrix);
 
             Gl.BindVertexArray(vao);
             Gl.BindBuffer(BufferTarget.ArrayBuffer, vbo);

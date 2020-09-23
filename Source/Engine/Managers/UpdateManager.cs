@@ -1,5 +1,5 @@
 ﻿using Engine.ECS.Managers;
-using Engine.Renderer.GL.Managers;
+using Quincy.Managers;
 using System;
 using System.Threading;
 

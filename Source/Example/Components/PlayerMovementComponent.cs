@@ -1,10 +1,10 @@
 ﻿using Engine.ECS.Observer;
 using Engine.ECS.Components;
-using Engine.Renderer.GL.Components;
-using Engine.Renderer.GL.Managers;
 using Engine.Utils.MathUtils;
 using OpenGL.CoreUI;
 using System;
+using Quincy.Components;
+using Quincy.Managers;
 
 namespace Example.Components
 {

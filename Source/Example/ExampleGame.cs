@@ -4,11 +4,10 @@ using Engine.ECS.Entities;
 using Engine.Entities;
 using Engine.Gui.Managers;
 using Engine.Gui.Managers.ImGuiWindows;
-using Engine.Renderer.GL.Entities;
-using Engine.Renderer.GL.Managers;
 using System.Collections.Generic;
 using Example.Entities;
 using Example.Managers.ImGuiWindows.Addons;
+using Quincy.Managers;
 
 namespace Example
 {
@@ -21,27 +20,23 @@ namespace Example
             base.InitScene();
             var entities = new List<IEntity>
             {
-                new PlayerEntity()
-                {
-                    Name = "Player"
-                },
-                new SkyboxEntity()
-                {
-                    Name = "Skybox"
-                },
-                new LevelModelEntity()
-                {
-                    Name = "Generated BSP Mesh"
-                },
+                //new PlayerEntity()
+                //{
+                //    Name = "Player"
+                //},
+                //new SkyboxEntity()
+                //{
+                //    Name = "Skybox"
+                //},
+                //new LevelModelEntity()
+                //{
+                //    Name = "Generated BSP Mesh"
+                //},
                 //new TestCubeEntity()
                 //{
                 //    Name = "Physics Box"
                 //},
                 // TODO: fix this (anything that renders afterwards won't render at all?)
-                new HudEntity()
-                {
-                    Name = "CEF HUD Entity"
-                },
             };
 
             foreach (IEntity entity in entities)
