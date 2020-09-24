@@ -158,7 +158,7 @@ namespace Engine.Gui.Managers
 
             io.Fonts.GetTexDataAsRGBA32(out IntPtr pixels, out var width, out var height, out var bpp);
             io.Fonts.SetTexID((IntPtr)1);
-            // defaultFontTexture = new Texture("ImGUI Font Texture", pixels, width, height, bpp);
+            defaultFontTexture = Texture.LoadFromPtr(pixels, width, height, bpp, "texture_gui");
             io.Fonts.ClearTexData();
         }
 

@@ -228,10 +228,10 @@ void main() {
     
     fragColor = vec4(color, albedoSrc.w);
 
-    float facing = GetFacing(0.5, vs_out.tangentCamPos, N);
-    vec4 holo = texture(holoMap, vec2(facing, 0));
+    // float facing = GetFacing(0.5, vs_out.tangentCamPos, N);
+    // vec4 holo = texture(holoMap, vec2(facing, 0));
 
-    fragColor = mix(fragColor, fragColor * holo, metallic);
+    // fragColor = mix(fragColor, fragColor * holo, metallic);
     // fragColor = holo;
 
     // Debug

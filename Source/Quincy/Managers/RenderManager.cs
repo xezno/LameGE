@@ -39,6 +39,8 @@ namespace Quincy.Managers
         {
             renderer.RenderToShadowMap();
             renderer.RenderToScreen();
+
+            CollectPerformanceData();
         }
 
         public void CollectPerformanceData()

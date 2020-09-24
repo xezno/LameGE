@@ -1,11 +1,10 @@
 ﻿using OpenGL;
+using Quincy.Managers;
 
 namespace Quincy
 {
     public class QuincyRenderer
     {
-        private Scene scene;
-
         public QuincyRenderer() { }
 
         public void ContextCreated()
@@ -16,19 +15,18 @@ namespace Quincy
             Gl.Enable(EnableCap.FramebufferSrgb);
             Gl.Enable((EnableCap)Gl.TEXTURE_CUBE_MAP_SEAMLESS);
             Gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-            scene = new Scene();
         }
 
         public void RenderImGui() { }
 
         public void RenderToScreen()
         {
-            scene.Render();
+            SceneManager.Instance.Render();
         }
 
         public void RenderToShadowMap()
         {
-            scene.RenderShadows();
+            SceneManager.Instance.RenderShadows();
         }
     }
 }

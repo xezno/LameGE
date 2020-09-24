@@ -8,6 +8,9 @@
 //using Example.Assets.BSP.Lumps;
 //using Example.Assets.BSP.Types;
 //using Quincy.Components;
+//using Quincy;
+//using OpenGL;
+//using System.Collections.Generic;
 
 //namespace Example.Components
 //{
@@ -30,6 +33,8 @@
 //            var surfEdgeLump = (Lump<int>)bspLoader.Lumps[(int)BspLumpType.LumpSurfEdges];
 //            var faceLump = (Lump<Face>)bspLoader.Lumps[(int)BspLumpType.LumpFaces];
 //            var texInfoLump = (Lump<TexInfo>)bspLoader.Lumps[(int)BspLumpType.LumpTexInfo];
+
+//            var meshVertices = new List<Vertex>();
 
 //            int triCount = 0;
 //            foreach (var face in faceLump.Contents)
@@ -72,8 +77,7 @@
 //            // setup vertices
 //            foreach (var vertex in vertexLump.Contents)
 //            {
-//                // Multiply by bsp scale factor here, so that we don't have to fuck around with transform scale
-//                modelComponent.RenderMesh.vertices.Add(vertex * bspScaleFactor);
+//                modelComponent.Meshes.vertices.Add(vertex);
 //            }
 
 //            // setup uv coords
@@ -160,6 +164,9 @@
 //                    ));
 //                }
 //            }
+
+//            var mesh = new Mesh(vertices, indices, textures, Matrix4x4f.Identity);
+//            // TODO: Scale by bspScaleFactor
 
 //            modelComponent.RenderMesh.GenerateBuffers();
 

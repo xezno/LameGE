@@ -20,14 +20,10 @@ namespace Example
             base.InitScene();
             var entities = new List<IEntity>
             {
-                //new PlayerEntity()
-                //{
-                //    Name = "Player"
-                //},
-                //new SkyboxEntity()
-                //{
-                //    Name = "Skybox"
-                //},
+                new PlayerEntity()
+                {
+                    Name = "Player"
+                },
                 //new LevelModelEntity()
                 //{
                 //    Name = "Generated BSP Mesh"
@@ -36,6 +32,14 @@ namespace Example
                 //{
                 //    Name = "Physics Box"
                 //},
+                new ModelEntity($"Content/Models/rainier/scene.gltf", new Engine.Utils.MathUtils.Vector3d(0.1f, 0.1f, 0.1f))
+                {
+                    Name = "Rainier"
+                },
+                new ModelEntity($"Content/Models/mcrn_tachi/scene.gltf", new Engine.Utils.MathUtils.Vector3d(0.1f, 0.1f, 0.1f))
+                {
+                    Name = "MCRN Tachi"
+                }
                 // TODO: fix this (anything that renders afterwards won't render at all?)
             };
 

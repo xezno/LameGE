@@ -6,22 +6,22 @@ using System.Collections.Generic;
 
 namespace Quincy
 {
-    internal class Mesh
+    public class Mesh
     {
         public List<Vertex> Vertices { get; set; }
         public List<uint> Indices { get; set; }
         public List<Texture> Textures { get; set; }
 
+        private Matrix4x4f localModelMatrix;
+
         private uint vao, vbo, ebo;
 
-        public Matrix4x4f ModelMatrix;
-
-        public Mesh(List<Vertex> vertices, List<uint> indices, List<Texture> textures, Matrix4x4f modelMatrix)
+        public Mesh(List<Vertex> vertices, List<uint> indices, List<Texture> textures, Matrix4x4f oglTransform)
         {
             Vertices = vertices;
             Indices = indices;
             Textures = textures;
-            ModelMatrix = modelMatrix;
+            localModelMatrix = oglTransform;
 
             SetupMesh();
         }
@@ -85,7 +85,7 @@ namespace Quincy
             Gl.BindVertexArray(0);
         }
 
-        public void Draw(CameraEntity camera, ShaderComponent shader, LightEntity light, (Cubemap, Cubemap, Cubemap) pbrCubemaps, Texture brdfLut)
+        public void Draw(CameraEntity camera, ShaderComponent shader, LightEntity light, (Cubemap, Cubemap, Cubemap) pbrCubemaps, Texture brdfLut, Matrix4x4f modelMatrix)
         {
             Dictionary<string, uint> counts = new Dictionary<string, uint>();
             List<string> expected = new List<string>() { "texture_diffuse", "texture_emissive", "texture_unknown", "texture_normal" };
@@ -124,7 +124,7 @@ namespace Quincy
 
             shader.SetMatrix("projectionMatrix", cameraComponent.ProjMatrix);
             shader.SetMatrix("viewMatrix", cameraComponent.ViewMatrix);
-            shader.SetMatrix("modelMatrix", ModelMatrix);
+            shader.SetMatrix("modelMatrix", modelMatrix * localModelMatrix);
 
             shader.SetVector3d("camPos", camera.GetComponent<TransformComponent>().Position);
             shader.SetVector3d("lightPos", lightComponent.Position);
@@ -155,26 +155,19 @@ namespace Quincy
             Gl.BindVertexArray(0);
         }
 
-        public void DrawShadows(LightComponent light, ShaderComponent depthShader)
+        public void DrawShadows(LightComponent light, ShaderComponent depthShader, Matrix4x4f modelMatrix)
         {
             depthShader.Use();
 
             depthShader.SetMatrix("projectionMatrix", light.ProjMatrix);
             depthShader.SetMatrix("viewMatrix", light.ViewMatrix);
-            depthShader.SetMatrix("modelMatrix", ModelMatrix);
+            depthShader.SetMatrix("modelMatrix", modelMatrix * localModelMatrix);
 
             Gl.ActiveTexture(TextureUnit.Texture0);
 
             Gl.BindVertexArray(vao);
             Gl.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
             Gl.BindVertexArray(0);
-        }
-
-        public void Update(float deltaTime)
-        {
-            ModelMatrix = Matrix4x4f.Identity;
-            var scale = Constants.scale;
-            ModelMatrix.Scale(scale, scale, scale);
         }
     }
 }

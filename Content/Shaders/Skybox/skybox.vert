@@ -17,5 +17,5 @@ out VS_OUT {
 void main()
 {
     vs_out.worldPos = position;
-    gl_Position = projMatrix * viewMatrix * modelMatrix * vec4(position, 1.0);
+    gl_Position = projMatrix * mat4(mat3(viewMatrix)) * modelMatrix * vec4(position, 1.0);
 }

@@ -14,8 +14,11 @@ namespace Quincy.Components
     [Requires(typeof(TransformComponent))]
     public class ModelComponent : Component<ModelComponent>
     {
-        private List<Mesh> meshes = new List<Mesh>();
         private string directory;
+
+        public List<Mesh> Meshes { get; set; } = new List<Mesh>();
+
+        public ModelComponent() { }
 
         public ModelComponent(string path)
         {
@@ -24,25 +27,27 @@ namespace Quincy.Components
 
         public void Draw(CameraEntity camera, ShaderComponent shader, LightEntity light, (Cubemap, Cubemap, Cubemap) pbrCubemaps, Texture brdfLut)
         {
-            foreach (var mesh in meshes)
+            var matrix = GetComponent<TransformComponent>().Matrix;
+            foreach (var mesh in Meshes)
             {
-                mesh.Draw(camera, shader, light, pbrCubemaps, brdfLut);
+                mesh.Draw(camera, shader, light, pbrCubemaps, brdfLut, matrix);
             }
         }
 
         public void DrawShadows(LightComponent light, ShaderComponent shader)
         {
-            foreach (var mesh in meshes)
+            var matrix = GetComponent<TransformComponent>().Matrix;
+            foreach (var mesh in Meshes)
             {
-                mesh.DrawShadows(light, shader);
+                mesh.DrawShadows(light, shader, matrix);
             }
         }
 
-        public void Update(float deltaTime)
+        public override void Update(float deltaTime)
         {
-            foreach (var mesh in meshes)
+            foreach (var mesh in Meshes)
             {
-                mesh.Update(deltaTime);
+                // mesh.Update(deltaTime);
             }
         }
 
@@ -76,7 +81,7 @@ namespace Quincy.Components
             for (int i = 0; i < node.MeshCount; ++i)
             {
                 var mesh = scene.Meshes[node.MeshIndices[i]];
-                meshes.Add(ProcessMesh(mesh, scene, node.Transform));
+                Meshes.Add(ProcessMesh(mesh, scene, node.Transform));
             }
 
             foreach (var child in node.Children)

@@ -10,6 +10,8 @@ namespace Quincy.Components
     [Requires(typeof(TransformComponent))]
     public class CameraComponent : Component<CameraComponent>
     {
+        public Framebuffer Framebuffer { get; private set; }
+
         [Range(0, 180)] public float FieldOfView { get; set; } = 90f;
         public float NearPlane { get; set; } = 0.1f;
         public float FarPlane { get; set; } = 2500f;
@@ -27,6 +29,7 @@ namespace Quincy.Components
             ProjMatrix = CreateInfReversedZProj(FieldOfView,
                 Resolution.x / Resolution.y,
                 NearPlane);
+            Framebuffer = new Framebuffer();
         }
 
         private Matrix4x4f CreateInfReversedZProj(float fov, float aspectRatio, float nearPlane)

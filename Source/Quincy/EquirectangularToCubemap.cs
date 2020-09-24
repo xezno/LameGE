@@ -1,4 +1,5 @@
-﻿using OpenGL;
+﻿using Engine.Utils;
+using OpenGL;
 using Quincy.Components;
 using Quincy.Primitives;
 using System;
@@ -50,7 +51,7 @@ namespace Quincy
 
             var colorTexture = Gl.GenTexture();
             Gl.BindTexture(TextureTarget.Texture2d, colorTexture);
-            Gl.TexImage2D(TextureTarget.Texture2d, 0, InternalFormat.Srgb, Constants.renderWidth, Constants.renderHeight, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
+            Gl.TexImage2D(TextureTarget.Texture2d, 0, InternalFormat.Srgb, GameSettings.GameResolutionX, GameSettings.GameResolutionY, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
 
             Gl.TexParameter(TextureTarget.Texture2d, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.NearestMipmapNearest);
             Gl.TexParameter(TextureTarget.Texture2d, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);

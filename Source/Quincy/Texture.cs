@@ -127,6 +127,10 @@ namespace Quincy
             {
                 internalFormat = InternalFormat.SrgbAlpha;
             }
+            //else if (typeName == "texture_gui")
+            //{
+            //    internalFormat = InternalFormat.Rgba;
+            //}
 
             Gl.TexImage2D(TextureTarget.Texture2d, 0, internalFormat, width, height, 0, imageFormat, PixelType.UnsignedByte, pixels);
             Gl.GenerateMipmap(TextureTarget.Texture2d);
@@ -148,7 +152,7 @@ namespace Quincy
         }
     }
 
-    internal class TextureContainer
+    public class TextureContainer
     {
         public static List<Texture> Textures { get; } = new List<Texture>();
     }
