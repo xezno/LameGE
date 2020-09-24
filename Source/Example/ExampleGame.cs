@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using Example.Entities;
 using Example.Managers.ImGuiWindows.Addons;
 using Quincy.Managers;
+using Engine.Utils.MathUtils;
 
 namespace Example
 {
@@ -17,6 +18,8 @@ namespace Example
 
         protected override void InitScene()
         {
+            var modelScaleFactor = 0.0125f;
+            var modelScale = new Vector3d(modelScaleFactor, modelScaleFactor, modelScaleFactor);
             base.InitScene();
             var entities = new List<IEntity>
             {
@@ -32,11 +35,11 @@ namespace Example
                 //{
                 //    Name = "Physics Box"
                 //},
-                new ModelEntity($"Content/Models/rainier/scene.gltf", new Engine.Utils.MathUtils.Vector3d(0.1f, 0.1f, 0.1f))
+                new ModelEntity($"Content/Models/rainier/scene.gltf", modelScale)
                 {
                     Name = "Rainier"
                 },
-                new ModelEntity($"Content/Models/mcrn_tachi/scene.gltf", new Engine.Utils.MathUtils.Vector3d(0.1f, 0.1f, 0.1f))
+                new ModelEntity($"Content/Models/mcrn_tachi/scene.gltf", modelScale)
                 {
                     Name = "MCRN Tachi"
                 }

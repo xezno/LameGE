@@ -1,7 +1,5 @@
 ﻿using Engine.ECS.Managers;
 using Engine.Utils;
-using Engine.Utils.MathUtils;
-using OpenGL;
 using System;
 using System.Threading;
 

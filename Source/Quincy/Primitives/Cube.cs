@@ -1,5 +1,5 @@
-﻿using OpenGL;
-using Engine.Utils.MathUtils;
+﻿using Engine.Utils.MathUtils;
+using OpenGL;
 using System;
 using System.Collections.Generic;
 

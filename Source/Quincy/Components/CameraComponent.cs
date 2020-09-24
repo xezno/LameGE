@@ -12,24 +12,49 @@ namespace Quincy.Components
     {
         public Framebuffer Framebuffer { get; private set; }
 
-        [Range(0, 180)] public float FieldOfView { get; set; } = 90f;
-        public float NearPlane { get; set; } = 0.1f;
-        public float FarPlane { get; set; } = 2500f;
-
-        public Vector2f Resolution { get; set; } = new Vector2f(GameSettings.GameResolutionX, GameSettings.GameResolutionY);
+        private float nearPlane = 0.1f;
+        private float farPlane = 2500f;
+        private float fieldOfView = 90f;
 
         private Matrix4x4f viewMatrix;
+        private Matrix4x4f projMatrix;
+
+        [Range(0, 180)] public float FieldOfView { get => fieldOfView; set { fieldOfView = value; CreateProjectionMatrix(); } }
+        public float NearPlane { get => nearPlane; set { nearPlane = value; CreateProjectionMatrix(); } }
+        public float FarPlane { get => farPlane; set { farPlane = value; CreateProjectionMatrix(); } }
+
+        private Vector2f resolution = new Vector2f(GameSettings.GameResolutionX, GameSettings.GameResolutionY);
+        public Vector2f Resolution
+        {
+            get => resolution;
+            set
+            {
+                resolution = value;
+                CreateFramebuffer();
+                CreateProjectionMatrix();
+            }
+        }
+
         public Matrix4x4f ViewMatrix { get => viewMatrix; set => viewMatrix = value; }
 
-        private Matrix4x4f projMatrix;
         public Matrix4x4f ProjMatrix { get => projMatrix; set => projMatrix = value; }
 
         public CameraComponent()
         {
+            CreateProjectionMatrix();
+            CreateFramebuffer();
+        }
+
+        private void CreateProjectionMatrix()
+        {
             ProjMatrix = CreateInfReversedZProj(FieldOfView,
                 Resolution.x / Resolution.y,
                 NearPlane);
-            Framebuffer = new Framebuffer();
+        }
+
+        private void CreateFramebuffer()
+        {
+            Framebuffer = new Framebuffer((int)Resolution.x, (int)Resolution.y);
         }
 
         private Matrix4x4f CreateInfReversedZProj(float fov, float aspectRatio, float nearPlane)

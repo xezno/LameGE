@@ -7,7 +7,6 @@ using Quincy.Entities;
 using Quincy.Primitives;
 using System;
 using System.Collections.Immutable;
-using System.Runtime.InteropServices;
 
 namespace Quincy.Managers
 {
@@ -95,8 +94,9 @@ namespace Quincy.Managers
 
         private void RenderSceneToFramebuffer()
         {
-            Gl.BindFramebuffer(FramebufferTarget.Framebuffer, MainCamera.GetComponent<CameraComponent>().Framebuffer.Fbo);
-            Gl.Viewport(0, 0, GameSettings.GameResolutionX, GameSettings.GameResolutionY);
+            var cameraComponent = MainCamera.GetComponent<CameraComponent>();
+            Gl.BindFramebuffer(FramebufferTarget.Framebuffer, cameraComponent.Framebuffer.Fbo);
+            Gl.Viewport(0, 0, (int)cameraComponent.Resolution.x, (int)cameraComponent.Resolution.y);
             Gl.ClearDepth(0.0f);
             Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             Gl.ClipControl(ClipControlOrigin.LowerLeft, ClipControlDepth.ZeroToOne);
@@ -121,13 +121,14 @@ namespace Quincy.Managers
 
         private void RenderFramebufferToScreen()
         {
+            var cameraComponent = MainCamera.GetComponent<CameraComponent>();
             Gl.Viewport(0, 0, GameSettings.GameResolutionX, GameSettings.GameResolutionY);
             Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
             Gl.ClearDepth(1.0f);
             Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             framebufferRenderShader.SetFloat("exposure", Constants.exposure);
-            framebufferRenderPlane.Draw(framebufferRenderShader, MainCamera.GetComponent<CameraComponent>().Framebuffer.ColorTexture);
+            framebufferRenderPlane.Draw(framebufferRenderShader, cameraComponent.Framebuffer.ColorTexture);
         }
 
         public void RenderShadows()

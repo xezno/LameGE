@@ -84,8 +84,9 @@ namespace Engine
             nativeWindow.Close += Closing;
 
             nativeWindow.CursorVisible = true;
-            nativeWindow.Animation = false; // Changing this to true makes input poll like once every 500ms. so don't change it
+            nativeWindow.Animation = false;
             nativeWindow.DepthBits = 24;
+            nativeWindow.MultisampleBits = 8;
 
             nativeWindow.SwapInterval = 0;
             nativeWindow.Resize += Resize;

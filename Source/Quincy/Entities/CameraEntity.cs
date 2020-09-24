@@ -19,7 +19,7 @@ namespace Quincy.Entities
         public CameraEntity(Vector3d position, int resolutionX, int resolutionY)
         {
             AddComponent(new TransformComponent(position, Quaternion.identity, new Vector3d(1, 1, 1)));
-            AddComponent(new CameraComponent() 
+            AddComponent(new CameraComponent()
             {
                 FieldOfView = 90f,
                 Resolution = new Vector2f(resolutionX, resolutionY)
