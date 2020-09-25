@@ -21,7 +21,7 @@ namespace Engine.Renderer.GL.Managers
         private const int FramesToCount = 480;
         private readonly Renderer renderer;
 
-        private ShaderComponent shadowShaders;
+        private ShaderComponent shadowShaders; // TODO: move these to lightcomponent?
         private float framerateLimitAsMs = 1000f / GameSettings.FramerateLimit;
 
         public float LastFrameTime { get; private set; }
@@ -163,18 +163,19 @@ namespace Engine.Renderer.GL.Managers
             RenderCameras();
             Gl.ClipControl(ClipControlOrigin.LowerLeft, ClipControlDepth.NegativeOneToOne);
             Gl.DepthFunc(DepthFunction.Less);
-            Gl.Disable(EnableCap.DepthTest);
-            
+            Gl.Disable(EnableCap.DepthTest);            
+
             SceneManager.Instance.MainCamera.GetComponent<CameraComponent>().Framebuffer.Render();
-            
+
             // DEBUG: Render shadow map to display
             if (RenderShadowMap)
                 SceneManager.Instance.Lights[0].GetComponent<LightComponent>().shadowMap.Render();
 
             renderer.FinishRender();
             
-            RenderCef();
             CollectPerformanceData();
+            
+            RenderCef();
         }
 
         public void RenderLighting()

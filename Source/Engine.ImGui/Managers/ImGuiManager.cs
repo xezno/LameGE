@@ -5,17 +5,19 @@ using Engine.Gui.Managers.ImGuiWindows;
 using Engine.Gui.Managers.ImGuiWindows.Editor;
 using Engine.Gui.Managers.ImGuiWindows.Overlays;
 using Engine.Gui.Managers.ImGuiWindows.Theming;
-using Engine.Renderer.GL.Components;
-using Engine.Renderer.GL.Render;
 using Engine.Utils;
 using Engine.Utils.DebugUtils;
 using ImGuiNET;
+using Quincy;
 using OpenGL;
 using OpenGL.CoreUI;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
 using Vector4f = Engine.Utils.MathUtils.Vector4f;
+using Engine.Gui.Managers.ImGuiWindows.Editor.Engine;
+using Quincy.Components;
+using Engine.Gui.Managers.ImGuiWindows.Editor.NodeEditor;
 
 namespace Engine.Gui.Managers
 {
@@ -23,7 +25,7 @@ namespace Engine.Gui.Managers
     {
         private const float PT_TO_PX = 1.3281472327365f;
 
-        private Texture2D defaultFontTexture;
+        private Texture defaultFontTexture;
         private ShaderComponent shaderComponent;
         private Vector2 windowSize;
 
@@ -44,12 +46,14 @@ namespace Engine.Gui.Managers
             }
         }
 
+        // TODO: Move over to an attributes-based system for menuing & overlays
         public List<ImGuiMenu> Menus { get; } = new List<ImGuiMenu>()
         {
             new ImGuiMenu(FontAwesome5.File, "File", new List<ImGuiWindow>()
             {
                 new SaveSettingsWindow(),
-                new CloseGameWindow()
+                new CloseGameWindow(),
+                new DockSpaceWindow()
             }),
             //new ImGuiMenu(FontAwesome5.FileCode, "Scripts", new List<ImGuiWindow>()
             //{
@@ -57,7 +61,7 @@ namespace Engine.Gui.Managers
             //}),
             new ImGuiMenu(FontAwesome5.Cubes, "Scene", new List<ImGuiWindow>()
             {
-                new PlaygroundWindow(),
+                new ViewportWindow(),
                 new ScenePropertiesWindow()
             }),
             new ImGuiMenu(FontAwesome5.Wrench, "Engine", new List<ImGuiWindow>()
@@ -66,14 +70,20 @@ namespace Engine.Gui.Managers
                 new PerformanceWindow(),
                 new TextureBrowserWindow(),
                 new ShaderWindow(),
-                new InputWindow()
+                new InputWindow(),
+                new RenderSettingsWindow(),
+                new ConsoleWindow()
+            }),
+            new ImGuiMenu(FontAwesome5.Magic, "Experimental", new List<ImGuiWindow>()
+            {
+                new NodeEditorWindow(),
+                new MouseDebugWindow()
             })
         };
 
         public List<ImGuiWindow> Overlays { get; } = new List<ImGuiWindow>()
         {
             new UnfocusedConsoleWindow(),
-            new FocusedConsoleWindow(),
             new PerformanceOverlayWindow()
         };
         public ImFontPtr MonospacedFont { get; private set; }
@@ -89,6 +99,7 @@ namespace Engine.Gui.Managers
 
             io.BackendFlags |= ImGuiBackendFlags.HasMouseCursors;
             io.ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
+            io.ConfigFlags |= ImGuiConfigFlags.DockingEnable;
 
             ImGui.StyleColorsDark();
 
@@ -105,8 +116,7 @@ namespace Engine.Gui.Managers
         #region "Initialization"
         private void InitGl()
         {
-            shaderComponent = new ShaderComponent(new Shader("Content/Shaders/ImGUI/imgui.frag", Shader.Type.FragmentShader),
-                new Shader("Content/Shaders/ImGUI/imgui.vert", Shader.Type.VertexShader));
+            shaderComponent = new ShaderComponent("Content/Shaders/ImGUI/imgui.frag", "Content/Shaders/ImGUI/imgui.vert");
 
             vao = Gl.GenVertexArray();
             vbo = Gl.GenBuffer();
@@ -154,7 +164,7 @@ namespace Engine.Gui.Managers
 
             io.Fonts.GetTexDataAsRGBA32(out IntPtr pixels, out var width, out var height, out var bpp);
             io.Fonts.SetTexID((IntPtr)1);
-            defaultFontTexture = new Texture2D(pixels, width, height, bpp);
+            defaultFontTexture = Texture.LoadFromPtr(pixels, width, height, bpp, "texture_gui");
             io.Fonts.ClearTexData();
         }
 
@@ -250,7 +260,7 @@ namespace Engine.Gui.Managers
 
         private void RenderImGui(ImDrawDataPtr drawData)
         {
-            // TODO: use abstract graphics impl
+            // TODO: use abstract graphics implementation
             Gl.BlendEquation(BlendEquationMode.FuncAdd);
             Gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             Gl.Disable(EnableCap.CullFace);
@@ -260,9 +270,9 @@ namespace Engine.Gui.Managers
             io.DisplaySize = new Vector2(GameSettings.GameResolutionX, GameSettings.GameResolutionY);
             var projectionMatrix = Matrix4x4f.Ortho2D(0f, io.DisplaySize.X, io.DisplaySize.Y, 0.0f);
 
-            shaderComponent.UseShader();
-            shaderComponent.SetVariable("albedoTexture", 0);
-            shaderComponent.SetVariable("projection", projectionMatrix);
+            shaderComponent.Use();
+            shaderComponent.SetInt("albedoTexture", 0);
+            shaderComponent.SetMatrix("projection", projectionMatrix);
 
             Gl.BindVertexArray(vao);
             Gl.BindBuffer(BufferTarget.ArrayBuffer, vbo);
@@ -297,7 +307,11 @@ namespace Engine.Gui.Managers
                             (currentCommand.ClipRect.W - clipOffset.Y) * clipScale.Y
                         );
                     Gl.Scissor((int)clipBounds.x, (int)(windowSize.Y - clipBounds.w), (int)(clipBounds.z - clipBounds.x), (int)(clipBounds.w - clipBounds.y));
-                    defaultFontTexture.Bind();
+
+                    if ((uint)currentCommand.TextureId == 1)
+                        defaultFontTexture.Bind();
+                    else
+                        Gl.BindTexture(TextureTarget.Texture2d, (uint)currentCommand.TextureId);
                     Gl.DrawElementsBaseVertex(PrimitiveType.Triangles, (int)currentCommand.ElemCount, DrawElementsType.UnsignedShort, (IntPtr)(indexOffset * 2), 0);
 
                     indexOffset += (int)currentCommand.ElemCount;

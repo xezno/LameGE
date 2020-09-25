@@ -2,15 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Platforms>AnyCPU;x86</Platforms>
+    <Platforms>x86;x64</Platforms>
   </PropertyGroup>
   
   <PropertyGroup>
     <RuntimeIdentifiers>win10-x64;debian.8-x64</RuntimeIdentifiers>
   </PropertyGroup>
-
+  
   <ItemGroup>
-    <PackageReference Include="ImGui.NET" Version="1.75.0" />
+    <PackageReference Include="ImGui.NET" Version="1.78.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -2,6 +2,7 @@
 using CefSharp.OffScreen;
 using CefSharp.Structs;
 using Engine.ECS.Components;
+using Engine.ECS.Entities;
 using Engine.ECS.Observer;
 using Engine.Renderer.GL.Entities.Cef;
 using Engine.Renderer.GL.Render;
@@ -65,7 +66,7 @@ namespace Engine.Renderer.GL.Components
 
             byte[] emptyData = new byte[browser.Size.Width * browser.Size.Height * 4];
             GetComponent<MaterialComponent>().materials[0].diffuseTexture =
-                new Texture2D(emptyData, browser.Size.Width, browser.Size.Height);
+                new Texture2D($"CEF Browser Texture ({(Parent as IEntity).Id})", emptyData, browser.Size.Width, browser.Size.Height);
 
             EventHandler<LoadingStateChangedEventArgs> handler = null;
             handler = (sender, args) =>
@@ -80,7 +81,7 @@ namespace Engine.Renderer.GL.Components
 
             browser.LoadingStateChanged += handler;
 
-            modifiedTexture = new Texture2D(IntPtr.Zero, GameSettings.GameResolutionX, GameSettings.GameResolutionY, 32);
+            modifiedTexture = new Texture2D($"Modified CEF Browser Texture ({(Parent as IEntity).Id})", IntPtr.Zero, GameSettings.GameResolutionX, GameSettings.GameResolutionY, 32);
         }
 
         public void SetTextureData()

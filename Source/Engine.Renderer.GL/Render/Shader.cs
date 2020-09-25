@@ -1,4 +1,5 @@
-﻿using Engine.Utils.DebugUtils;
+﻿using Engine.Renderer.GL.Managers;
+using Engine.Utils.DebugUtils;
 using OpenGL;
 using System;
 using System.IO;
@@ -60,8 +61,16 @@ namespace Engine.Renderer.GL.Render
 
             shaderSource = new string[0];
 
+            if (AssetManager.Instance.Shaders.ContainsKey(path))
+            {
+                this = AssetManager.Instance.Shaders[path];
+                return;
+            }
+
             ReadSourceFromFile();
             Compile();
+
+            AssetManager.Instance.Shaders.Add(path, this);
         }
 
         public void Delete()

@@ -1,4 +1,5 @@
-﻿using Engine.Utils.DebugUtils;
+﻿using Engine.Renderer.GL.Managers;
+using Engine.Utils.DebugUtils;
 using OpenGL;
 using System;
 using System.Collections.Generic;
@@ -73,14 +74,16 @@ namespace Engine.Renderer.GL.Render
 
             Marshal.FreeHGlobal(textureDataPtr);
 
+            AssetManager.Instance.Textures.Add(path, this);
+
             Logging.Log($"Texture {path}: Size {width}x{height}, ptr {glTexture}");
         }
 
-        public Texture2D(byte[] textureData, int width, int height, TextureUnit textureUnit = TextureUnit.Texture0)
+        public Texture2D(string fileName, byte[] textureData, int width, int height, TextureUnit textureUnit = TextureUnit.Texture0)
         {
             this.width = width;
             this.height = height;
-            path = "byteData";
+            path = fileName;
             this.textureUnit = textureUnit;
             glTexture = Gl.GenTexture();
 
@@ -97,6 +100,8 @@ namespace Engine.Renderer.GL.Render
             Gl.TexImage2D(TextureTarget.Texture2d, 0, InternalFormat.Rgba, width, height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, textureDataPtr);
             Gl.GenerateMipmap(TextureTarget.Texture2d);
 
+            AssetManager.Instance.Textures.Add(path, this);
+
             Marshal.FreeHGlobal(textureDataPtr);
         }
 
@@ -108,22 +113,24 @@ namespace Engine.Renderer.GL.Render
         /// <param name="height">The texture's height.</param>
         /// <param name="bpp">The texture's bits per pixel.</param>
         /// <param name="textureUnit">The texture unit to use.</param>
-        public Texture2D(IntPtr pixels, int width, int height, int bpp, TextureUnit textureUnit = TextureUnit.Texture0)
+        public Texture2D(string fileName, IntPtr pixels, int width, int height, int bpp, TextureUnit textureUnit = TextureUnit.Texture0)
         {
             this.width = width;
             this.height = height;
-            path = "intPtrData";
+            path = fileName;
             this.textureUnit = textureUnit;
             glTexture = Gl.GenTexture();
             Gl.BindTexture(TextureTarget.Texture2d, glTexture);
             Gl.TexImage2D(TextureTarget.Texture2d, 0, InternalFormat.Rgba, width, height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, pixels);
             Gl.GenerateMipmap(TextureTarget.Texture2d);
+
+            AssetManager.Instance.Textures.Add(path, this);
         }
 
-        public Texture2D(ColorRGB24[] textureData, int width, int height) : this(ConvertColorToBinary(textureData), width, height)
+        public Texture2D(string fileName, ColorRGB24[] textureData, int width, int height) : this(fileName, ConvertColorToBinary(textureData), width, height)
         { }
 
-        public Texture2D(ColorRGBA32[] textureData, int width, int height) : this(ConvertColorToBinary(textureData), width, height)
+        public Texture2D(string fileName, ColorRGBA32[] textureData, int width, int height) : this(fileName, ConvertColorToBinary(textureData), width, height)
         { }
 
         /// <summary>

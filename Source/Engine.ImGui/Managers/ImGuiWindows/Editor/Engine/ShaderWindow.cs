@@ -1,0 +1,37 @@
+﻿using Engine.Assets;
+using Engine.ECS.Observer;
+using ImGuiNET;
+using System;
+using System.IO;
+using System.Reflection;
+
+namespace Engine.Gui.Managers.ImGuiWindows.Editor
+{
+    class ShaderWindow : ImGuiWindow
+    {
+        public override bool Render { get; set; } = true;
+        public override string IconGlyph { get; } = FontAwesome5.Adjust;
+        public override string Title { get; } = "Shaders";
+
+        public ShaderWindow() { }
+
+        public override void Draw()
+        {
+            if (ImGui.Button("Reload all shaders"))
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        //private void ReloadAllShaders()
+        //{
+        //    foreach (var entity in SceneManager.Instance.Entities)
+        //    {
+        //        if (entity.HasComponent<ShaderComponent>())
+        //        {
+        //            entity.GetComponent<ShaderComponent>().ReloadAll();
+        //        }
+        //    }
+        //}
+    }
+}

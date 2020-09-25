@@ -4,7 +4,7 @@ using Engine.Gui.Managers.ImGuiWindows;
 using Engine.Utils.DebugUtils;
 using System.Collections.Generic;
 
-namespace Ulaid.Scripts
+namespace Example.Scripts
 {
     class PackageHook
     {

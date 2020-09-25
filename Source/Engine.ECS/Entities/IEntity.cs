@@ -1,6 +1,7 @@
 ﻿using Engine.ECS.Components;
 using Engine.ECS.Observer;
 using Engine.Types;
+using System;
 using System.Collections.Generic;
 
 namespace Engine.ECS.Entities
@@ -13,6 +14,7 @@ namespace Engine.ECS.Entities
         List<IComponent> Components { get; }
         string IconGlyph { get; }
         bool Enabled { get; }
+        Guid Id { get; }
 
         /// <summary>
         /// Called when an notification is broadcast.

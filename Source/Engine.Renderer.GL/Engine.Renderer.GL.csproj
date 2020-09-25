@@ -3,7 +3,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <OutputType>Library</OutputType>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <Platforms>AnyCPU;x86</Platforms>
+    <Platforms>x86;x64</Platforms>
   </PropertyGroup>
   <PropertyGroup>
     <RuntimeIdentifiers>win10-x64;debian.8-x64</RuntimeIdentifiers>
@@ -17,7 +17,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="CefSharp.OffScreen" Version="79.1.360" />
-    <PackageReference Include="ImGui.NET" Version="1.75.0" />
+    <PackageReference Include="ImGui.NET" Version="1.78.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="System.Drawing.Common" Version="5.0.0-preview.3.20214.6" />

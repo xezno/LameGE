@@ -84,9 +84,21 @@ namespace Engine.ECS.Components
             {
                 DrawImGuiColor(memberInfo, reference);
             }
+            else if (type == typeof(Utils.MathUtils.Vector2f))
+            {
+                DrawImGuiVector2(memberInfo, reference);
+            }
+            else if (type == typeof(Vertex2f))
+            {
+                DrawImGuiVertex2f(memberInfo, reference);
+            }
             else if (type == typeof(Utils.MathUtils.Vector3f))
             {
                 DrawImGuiVector3(memberInfo, reference);
+            }
+            else if (type == typeof(Utils.MathUtils.Vector3d))
+            {
+                DrawImGuiVector3d(memberInfo, reference);
             }
             else if (type == typeof(Vertex3f))
             {
@@ -121,6 +133,14 @@ namespace Engine.ECS.Components
             Vector3 value = new Vector3(tmpReference.Value.x, tmpReference.Value.y, tmpReference.Value.z);
             ImGui.DragFloat3(member.Name, ref value, 0.1f);
             (reference as ReflectionRef<Vertex3f>).Value = new Vertex3f(value.X, value.Y, value.Z);
+        }
+
+        private void DrawImGuiVertex2f(MemberInfo member, object reference)
+        {
+            var tmpReference = reference as ReflectionRef<Vertex2f>;
+            Vector2 value = new Vector2(tmpReference.Value.x, tmpReference.Value.y);
+            ImGui.DragFloat2(member.Name, ref value, 0.1f);
+            (reference as ReflectionRef<Vertex2f>).Value = new Vertex2f(value.X, value.Y);
         }
 
         public void DrawImGuiFloat(MemberInfo member, object reference)
@@ -158,6 +178,21 @@ namespace Engine.ECS.Components
             Vector3 value = (reference as ReflectionRef<Utils.MathUtils.Vector3f>).Value.ConvertToNumerics();
             ImGui.DragFloat3(member.Name, ref value, 0.1f);
             (reference as ReflectionRef<Utils.MathUtils.Vector3f>).Value = Utils.MathUtils.Vector3f.ConvertFromNumerics(value);
+        }
+
+        public void DrawImGuiVector3d(MemberInfo member, object reference)
+        {
+            Vector3 value = (reference as ReflectionRef<Utils.MathUtils.Vector3d>).Value.ConvertToNumerics();
+            ImGui.DragFloat3(member.Name, ref value, 0.1f);
+            (reference as ReflectionRef<Utils.MathUtils.Vector3d>).Value = Utils.MathUtils.Vector3d.ConvertFromNumerics(value);
+        }
+
+        public void DrawImGuiVector2(MemberInfo member, object reference)
+        {
+            Vector2 value = (reference as ReflectionRef<Utils.MathUtils.Vector2f>).Value.ConvertToNumerics();
+            ImGui.DragFloat2(member.Name, ref value, 0.1f);
+            if (value != (reference as ReflectionRef<Utils.MathUtils.Vector2f>).Value.ConvertToNumerics())
+                (reference as ReflectionRef<Utils.MathUtils.Vector2f>).Value = Utils.MathUtils.Vector2f.ConvertFromNumerics(value);
         }
 
         private void DrawImGuiQuaternion(MemberInfo member, object reference)

@@ -1,8 +1,7 @@
 ﻿using Engine.ECS.Entities;
-using Engine.Renderer.GL.Components;
-using Engine.Renderer.GL.Managers;
-using Engine.Renderer.GL.Render;
 using Engine.Utils.MathUtils;
+using Quincy.Components;
+using Quincy.Managers;
 
 namespace Engine.Entities
 {
@@ -17,10 +16,8 @@ namespace Engine.Entities
                 ParentTransform = SceneManager.Instance.MainCamera.GetComponent<TransformComponent>() // TODO: Render this as a parent of every camera?
             };
             AddComponent(transform);
-            AddComponent(new ShaderComponent(new Shader("Content/Shaders/Skybox/skybox.frag", Shader.Type.FragmentShader),
-                new Shader("Content/Shaders/Skybox/skybox.vert", Shader.Type.VertexShader)));
-            AddComponent(new MaterialComponent(new Material($"Content/Materials/Skybox.mtl")));
-            AddComponent(new MeshComponent($"Content/Models/Skybox.obj"));
+            AddComponent(new ShaderComponent("Content/Shaders/Skybox/skybox.frag", "Content/Shaders/Skybox/skybox.vert"));
+            AddComponent(new ModelComponent($"Content/Models/Skybox.obj"));
         }
     }
 }

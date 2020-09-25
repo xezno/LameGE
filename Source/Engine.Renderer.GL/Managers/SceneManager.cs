@@ -52,6 +52,18 @@ namespace Engine.Renderer.GL.Managers
                 }
             );
 
+            // Test cameras
+            var cameraList = Cameras;
+            for (int i = 0; i < 3; ++i)
+            {
+                cameraList = cameraList.Add(new CameraEntity(GameSettings.GameResolutionX,GameSettings.GameResolutionY)
+                {
+                    Name = $"Camera {i + 1}"
+                });
+            }
+
+            Cameras = cameraList;
+
             foreach (var camera in Cameras)
                 AddEntity(camera);
         }
