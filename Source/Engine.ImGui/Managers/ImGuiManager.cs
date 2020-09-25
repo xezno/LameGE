@@ -17,6 +17,7 @@ using System.Numerics;
 using Vector4f = Engine.Utils.MathUtils.Vector4f;
 using Engine.Gui.Managers.ImGuiWindows.Editor.Engine;
 using Quincy.Components;
+using Engine.Gui.Managers.ImGuiWindows.Editor.NodeEditor;
 
 namespace Engine.Gui.Managers
 {
@@ -72,6 +73,11 @@ namespace Engine.Gui.Managers
                 new InputWindow(),
                 new RenderSettingsWindow(),
                 new ConsoleWindow()
+            }),
+            new ImGuiMenu(FontAwesome5.Magic, "Experimental", new List<ImGuiWindow>()
+            {
+                new NodeEditorWindow(),
+                new MouseDebugWindow()
             })
         };
 

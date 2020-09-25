@@ -121,7 +121,7 @@ namespace Example.Components
                         0);
                     break;
                 }
-                case NotifyType.GameStart:
+                case NotifyType.ContextReady:
                     transformComponent = GetComponent<TransformComponent>();
                     break;
             }

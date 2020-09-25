@@ -195,7 +195,7 @@ namespace Engine
             LoadContent();
 
             // Setup complete - broadcast the game started event
-            Broadcast.Notify(NotifyType.GameStart, new GenericNotifyArgs(this));
+            Broadcast.Notify(NotifyType.ContextReady, new GenericNotifyArgs(this));
             StartThreads();
         }
 
@@ -234,24 +234,43 @@ namespace Engine
             //        (int)(GameSettings.GamePosY + (GameSettings.GameResolutionY / 2))));
         }
 
+        private int MouseButtonToInt(MouseButton button)
+        {
+            switch (button)
+            {
+                case MouseButton.Left:
+                    return 0;
+                case MouseButton.Right:
+                    return 1;
+                case MouseButton.Middle:
+                    return 2;
+                case MouseButton.X1:
+                    return 3;
+                case MouseButton.X2:
+                    return 4;
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
         private void MouseUp(object sender, NativeWindowMouseEventArgs e)
         {
-            var button = 0;
-            if ((e.Buttons & MouseButton.Left) != 0) button = 0;
-            else if ((e.Buttons & MouseButton.Middle) != 0) button = 1;
-            else if ((e.Buttons & MouseButton.Right) != 0) button = 2;
-
-            Broadcast.Notify(NotifyType.MouseButtonUp, new MouseButtonNotifyArgs(button, this));
+            if ((e.Buttons & MouseButton.Left) == 0)
+                Broadcast.Notify(NotifyType.MouseButtonUp, new MouseButtonNotifyArgs(0, this));
+            if ((e.Buttons & MouseButton.Right) == 0)
+                Broadcast.Notify(NotifyType.MouseButtonUp, new MouseButtonNotifyArgs(1, this));
+            if ((e.Buttons & MouseButton.Middle) == 0)
+                Broadcast.Notify(NotifyType.MouseButtonUp, new MouseButtonNotifyArgs(2, this));
         }
 
         private void MouseDown(object sender, NativeWindowMouseEventArgs e)
         {
-            var button = 0;
-            if ((e.Buttons & MouseButton.Left) != 0) button = 0;
-            else if ((e.Buttons & MouseButton.Middle) != 0) button = 1;
-            else if ((e.Buttons & MouseButton.Right) != 0) button = 2;
-
-            Broadcast.Notify(NotifyType.MouseButtonDown, new MouseButtonNotifyArgs(button, this));
+            if ((e.Buttons & MouseButton.Left) != 0)
+                Broadcast.Notify(NotifyType.MouseButtonDown, new MouseButtonNotifyArgs(0, this));
+            if ((e.Buttons & MouseButton.Right) != 0)
+                Broadcast.Notify(NotifyType.MouseButtonDown, new MouseButtonNotifyArgs(1, this));
+            if ((e.Buttons & MouseButton.Middle) != 0)
+                Broadcast.Notify(NotifyType.MouseButtonDown, new MouseButtonNotifyArgs(2, this));
         }
 
         private void KeyUp(object sender, NativeWindowKeyEventArgs e) => Broadcast.Notify(NotifyType.KeyUp, new KeyboardNotifyArgs((int)e.Key, this));

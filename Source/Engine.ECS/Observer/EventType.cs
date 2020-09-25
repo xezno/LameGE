@@ -5,7 +5,7 @@
     /// </summary>
     public enum NotifyType
     {
-        GameStart,
+        ContextReady,
         GameEnd,
 
         KeyUp,
