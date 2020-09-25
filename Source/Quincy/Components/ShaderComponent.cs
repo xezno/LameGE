@@ -84,7 +84,15 @@ namespace Quincy.Components
             }
         }
 
-        internal void SetBool(string name, bool value)
+        public void SetVector2f(string name, Vector2f value)
+        {
+            if (GetUniformLocation(name, out int loc))
+            {
+                Gl.ProgramUniform2(Id, loc, (float)value.x, (float)value.y);
+            }
+        }
+
+        public void SetBool(string name, bool value)
         {
             if (GetUniformLocation(name, out int loc))
             {

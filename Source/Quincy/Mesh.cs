@@ -12,6 +12,10 @@ namespace Quincy
         public List<uint> Indices { get; set; }
         public List<Texture> Textures { get; set; }
 
+        public int VertexCount { get; private set; }
+        public int IndexCount { get; private set; }
+        public int TextureCount { get; private set; }
+
         private Matrix4x4f localModelMatrix;
 
         private uint vao, vbo, ebo;
@@ -83,6 +87,17 @@ namespace Quincy
             Gl.VertexAttribPointer(4, 2, VertexAttribType.Float, false, vertexStructSize, (IntPtr)(12 * sizeof(float)));
 
             Gl.BindVertexArray(0);
+
+            // Buffered indices & vertices to GPU
+            // Keep counts, remove CPU copies
+            IndexCount = Indices.Count;
+            VertexCount = Vertices.Count;
+
+            Indices.Clear();
+            Vertices.Clear();
+
+            Indices = null;
+            Vertices = null;
         }
 
         public void Draw(CameraEntity camera, ShaderComponent shader, LightEntity light, (Cubemap, Cubemap, Cubemap) pbrCubemaps, Texture brdfLut, Matrix4x4f modelMatrix)
@@ -151,7 +166,7 @@ namespace Quincy
             Gl.ActiveTexture(TextureUnit.Texture0);
 
             Gl.BindVertexArray(vao);
-            Gl.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
+            Gl.DrawElements(PrimitiveType.Triangles, IndexCount, DrawElementsType.UnsignedInt, IntPtr.Zero);
             Gl.BindVertexArray(0);
         }
 
@@ -166,7 +181,7 @@ namespace Quincy
             Gl.ActiveTexture(TextureUnit.Texture0);
 
             Gl.BindVertexArray(vao);
-            Gl.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
+            Gl.DrawElements(PrimitiveType.Triangles, IndexCount, DrawElementsType.UnsignedInt, IntPtr.Zero);
             Gl.BindVertexArray(0);
         }
     }
