@@ -1,8 +1,8 @@
 ﻿using Engine.Assets;
 using Engine.ECS.Entities;
-using Engine.Renderer.GL.Components;
 using Engine.Utils.MathUtils;
 using Example.Components;
+using Quincy.Components;
 
 namespace Example.Entities
 {

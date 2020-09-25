@@ -4,11 +4,11 @@ using Engine.ECS.Entities;
 using Engine.Entities;
 using Engine.Gui.Managers;
 using Engine.Gui.Managers.ImGuiWindows;
-using Engine.Renderer.GL.Entities;
-using Engine.Renderer.GL.Managers;
 using System.Collections.Generic;
 using Example.Entities;
 using Example.Managers.ImGuiWindows.Addons;
+using Quincy.Managers;
+using Engine.Utils.MathUtils;
 
 namespace Example
 {
@@ -18,6 +18,8 @@ namespace Example
 
         protected override void InitScene()
         {
+            var modelScaleFactor = 0.0125f;
+            var modelScale = new Vector3d(modelScaleFactor, modelScaleFactor, modelScaleFactor);
             base.InitScene();
             var entities = new List<IEntity>
             {
@@ -25,23 +27,23 @@ namespace Example
                 {
                     Name = "Player"
                 },
-                new SkyboxEntity()
-                {
-                    Name = "Skybox"
-                },
-                new LevelModelEntity()
-                {
-                    Name = "Generated BSP Mesh"
-                },
+                //new LevelModelEntity()
+                //{
+                //    Name = "Generated BSP Mesh"
+                //},
                 //new TestCubeEntity()
                 //{
                 //    Name = "Physics Box"
                 //},
-                // TODO: fix this (anything that renders afterwards won't render at all?)
-                new HudEntity()
+                new ModelEntity($"Content/Models/rainier/scene.gltf", modelScale)
                 {
-                    Name = "CEF HUD Entity"
+                    Name = "Rainier"
                 },
+                new ModelEntity($"Content/Models/mcrn_tachi/scene.gltf", modelScale)
+                {
+                    Name = "MCRN Tachi"
+                }
+                // TODO: fix this (anything that renders afterwards won't render at all?)
             };
 
             foreach (IEntity entity in entities)

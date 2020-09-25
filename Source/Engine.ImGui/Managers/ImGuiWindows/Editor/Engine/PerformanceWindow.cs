@@ -1,6 +1,6 @@
 ﻿using Engine.Assets;
-using Engine.Renderer.GL.Managers;
 using ImGuiNET;
+using Quincy.Managers;
 
 namespace Engine.Gui.Managers.ImGuiWindows.Editor
 {

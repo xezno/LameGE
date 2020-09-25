@@ -1,6 +1,6 @@
 ﻿using Engine.Assets;
-using Engine.Renderer.GL.Managers;
 using ImGuiNET;
+using Quincy;
 using System;
 using System.Linq;
 using System.Numerics;
@@ -17,17 +17,24 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
 
         public override void Draw()
         {
-            var textureList = AssetManager.Instance.Textures;
+            var textureList = TextureContainer.Textures;
 
-            ImGui.Combo("Texture", ref selectedTexture, textureList.Keys.ToArray(), textureList.Count);
+            // ImGui.Combo("Texture", ref selectedTexture, textureList, textureList.Count);
+            ImGui.DragInt("Texture Id", ref selectedTexture, 1.0f, 0);
 
-            var texture = textureList.Values.ToArray()[selectedTexture];
+            if (selectedTexture < 0)
+                selectedTexture = 0;
+
+            if (selectedTexture > textureList.Count - 1)
+                selectedTexture = textureList.Count - 1;
+
+            var texture = textureList[selectedTexture];
 
             var windowWidth = ImGui.GetWindowSize().X;
-            var ratio = (float)texture.height / texture.width;
+            var ratio = 1f; // TODO
 
-            ImGui.Text($"Texture selected: {texture.glTexture}");
-            ImGui.Image((IntPtr)texture.glTexture, new Vector2(windowWidth, windowWidth * ratio), new Vector2(0, 1), new Vector2(1, 0));
+            ImGui.Text($"Texture selected: {texture.Id}");
+            ImGui.Image((IntPtr)texture.Id, new Vector2(windowWidth, windowWidth * ratio), new Vector2(0, 1), new Vector2(1, 0));
         }
     }
 }

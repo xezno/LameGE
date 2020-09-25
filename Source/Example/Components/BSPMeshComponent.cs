@@ -1,195 +1,201 @@
-﻿using Engine.ECS.Components;
-using Engine.ECS.Entities;
-using Engine.ECS.Observer;
-using Engine.Renderer.GL.Components;
-using Engine.Renderer.GL.Render;
-using Engine.Utils.DebugUtils;
-using Engine.Utils.MathUtils;
-using System;
-using Example.Assets.BSP;
-using Example.Assets.BSP.Lumps;
-using Example.Assets.BSP.Types;
+﻿//using Engine.ECS.Components;
+//using Engine.ECS.Entities;
+//using Engine.ECS.Observer;
+//using Engine.Utils.DebugUtils;
+//using Engine.Utils.MathUtils;
+//using System;
+//using Example.Assets.BSP;
+//using Example.Assets.BSP.Lumps;
+//using Example.Assets.BSP.Types;
+//using Quincy.Components;
+//using Quincy;
+//using OpenGL;
+//using System.Collections.Generic;
 
-namespace Example.Components
-{
-    public class BSPMeshComponent : Component<BSPMeshComponent>
-    {
-        private readonly BSPLoader bspLoader;
-        private readonly float bspScaleFactor = 0.0254000508f; // ????
+//namespace Example.Components
+//{
+//    public class BSPMeshComponent : Component<BSPMeshComponent>
+//    {
+//        private readonly BSPLoader bspLoader;
+//        private readonly float bspScaleFactor = 0.0254000508f; // ????
 
-        public BSPMeshComponent(string bspFileName)
-        {
-            bspLoader = new BSPLoader(bspFileName);
-        }
+//        public BSPMeshComponent(string bspFileName)
+//        {
+//            bspLoader = new BSPLoader(bspFileName);
+//        }
 
-        private void GenerateBSPMesh()
-        {
-            var meshComponent = new MeshComponent();
-            var vertexLump = (Lump<Vector3f>)bspLoader.Lumps[(int)BspLumpType.LumpVertexes];
-            var planeLump = (Lump<Plane>)bspLoader.Lumps[(int)BspLumpType.LumpPlanes];
-            var edgeLump = (Lump<Edge>)bspLoader.Lumps[(int)BspLumpType.LumpEdges];
-            var surfEdgeLump = (Lump<int>)bspLoader.Lumps[(int)BspLumpType.LumpSurfEdges];
-            var faceLump = (Lump<Face>)bspLoader.Lumps[(int)BspLumpType.LumpFaces];
-            var texInfoLump = (Lump<TexInfo>)bspLoader.Lumps[(int)BspLumpType.LumpTexInfo];
+//        private void GenerateBSPMesh()
+//        {
+//            var modelComponent = new ModelComponent();
+//            var vertexLump = (Lump<Vector3f>)bspLoader.Lumps[(int)BspLumpType.LumpVertexes];
+//            var planeLump = (Lump<Plane>)bspLoader.Lumps[(int)BspLumpType.LumpPlanes];
+//            var edgeLump = (Lump<Edge>)bspLoader.Lumps[(int)BspLumpType.LumpEdges];
+//            var surfEdgeLump = (Lump<int>)bspLoader.Lumps[(int)BspLumpType.LumpSurfEdges];
+//            var faceLump = (Lump<Face>)bspLoader.Lumps[(int)BspLumpType.LumpFaces];
+//            var texInfoLump = (Lump<TexInfo>)bspLoader.Lumps[(int)BspLumpType.LumpTexInfo];
 
-            int triCount = 0;
-            foreach (var face in faceLump.Contents)
-            {
-                int rootPoint = 0, firstPoint = 0, secondPoint = 0;
-                for (int surfEdgeNum = 0; surfEdgeNum < face.numSurfEdges; surfEdgeNum++)
-                {
-                    var surfEdgeIndex = face.firstSurfEdge + surfEdgeNum;
-                    var edgeIndex = surfEdgeLump.Contents[surfEdgeIndex];
+//            var meshVertices = new List<Vertex>();
 
-                    bool reversed = edgeIndex < 0;
-                    Edge edge = edgeLump.Contents[Math.Abs(edgeIndex)];
+//            int triCount = 0;
+//            foreach (var face in faceLump.Contents)
+//            {
+//                int rootPoint = 0, firstPoint = 0, secondPoint = 0;
+//                for (int surfEdgeNum = 0; surfEdgeNum < face.numSurfEdges; surfEdgeNum++)
+//                {
+//                    var surfEdgeIndex = face.firstSurfEdge + surfEdgeNum;
+//                    var edgeIndex = surfEdgeLump.Contents[surfEdgeIndex];
 
-                    int vertPoint;
-                    if (surfEdgeNum == 0)
-                    {
-                        rootPoint = edge.vertexIndices[reversed ? 0 : 1];
-                        vertPoint = edge.vertexIndices[reversed ? 1 : 0];
-                    }
-                    else
-                    {
-                        vertPoint = edge.vertexIndices[reversed ? 0 : 1];
+//                    bool reversed = edgeIndex < 0;
+//                    Edge edge = edgeLump.Contents[Math.Abs(edgeIndex)];
 
-                        if (vertPoint == rootPoint)
-                            continue;
-                        firstPoint = vertPoint;
+//                    int vertPoint;
+//                    if (surfEdgeNum == 0)
+//                    {
+//                        rootPoint = edge.vertexIndices[reversed ? 0 : 1];
+//                        vertPoint = edge.vertexIndices[reversed ? 1 : 0];
+//                    }
+//                    else
+//                    {
+//                        vertPoint = edge.vertexIndices[reversed ? 0 : 1];
 
-                        vertPoint = edge.vertexIndices[reversed ? 1 : 0];
+//                        if (vertPoint == rootPoint)
+//                            continue;
+//                        firstPoint = vertPoint;
 
-                        if (vertPoint == rootPoint)
-                            continue;
-                        secondPoint = vertPoint;
-                    }
+//                        vertPoint = edge.vertexIndices[reversed ? 1 : 0];
 
-                    triCount++;
-                }
-            }
-            Logging.Log($"BSP has {triCount} tris");
+//                        if (vertPoint == rootPoint)
+//                            continue;
+//                        secondPoint = vertPoint;
+//                    }
 
-            // setup vertices
-            foreach (var vertex in vertexLump.Contents)
-            {
-                // Multiply by bsp scale factor here, so that we don't have to fuck around with transform scale
-                meshComponent.RenderMesh.vertices.Add(vertex * bspScaleFactor);
-            }
+//                    triCount++;
+//                }
+//            }
+//            Logging.Log($"BSP has {triCount} tris");
 
-            // setup uv coords
-            foreach (var texInfo in texInfoLump.Contents)
-            {
-                string logStr = "";
-                for (int x = 0; x < 2; ++x)
-                {
-                    for (int y = 0; y < 4; ++y)
-                    {
-                        logStr += $"{texInfo.textureVecs[x, y]}\t";
-                    }
+//            // setup vertices
+//            foreach (var vertex in vertexLump.Contents)
+//            {
+//                modelComponent.Meshes.vertices.Add(vertex);
+//            }
 
-                    logStr += "\n\t";
-                }
-            }
+//            // setup uv coords
+//            foreach (var texInfo in texInfoLump.Contents)
+//            {
+//                string logStr = "";
+//                for (int x = 0; x < 2; ++x)
+//                {
+//                    for (int y = 0; y < 4; ++y)
+//                    {
+//                        logStr += $"{texInfo.textureVecs[x, y]}\t";
+//                    }
 
-            // setup normals
-            foreach (var plane in planeLump.Contents)
-            {
-                meshComponent.RenderMesh.normals.Add(plane.normal);
-            }
+//                    logStr += "\n\t";
+//                }
+//            }
 
-            foreach (var face in faceLump.Contents)
-            {
-                if (!face.onNode) continue;
-                int rootPoint = 0, firstPoint = 0, secondPoint = 0;
-                for (int surfEdgeNum = 0; surfEdgeNum < face.numSurfEdges; surfEdgeNum++)
-                {
-                    var surfEdgeIndex = face.firstSurfEdge + surfEdgeNum;
-                    var edgeIndex = surfEdgeLump.Contents[surfEdgeIndex];
+//            // setup normals
+//            foreach (var plane in planeLump.Contents)
+//            {
+//                modelComponent.RenderMesh.normals.Add(plane.normal);
+//            }
 
-                    // big thanks to https://github.com/ajkhoury/OpenBSP-MinGW for this bit - the vbsp docs aren't great
+//            foreach (var face in faceLump.Contents)
+//            {
+//                if (!face.onNode) continue;
+//                int rootPoint = 0, firstPoint = 0, secondPoint = 0;
+//                for (int surfEdgeNum = 0; surfEdgeNum < face.numSurfEdges; surfEdgeNum++)
+//                {
+//                    var surfEdgeIndex = face.firstSurfEdge + surfEdgeNum;
+//                    var edgeIndex = surfEdgeLump.Contents[surfEdgeIndex];
 
-                    bool reversed = edgeIndex < 0;
-                    Edge edge = edgeLump.Contents[Math.Abs(edgeIndex)];
+//                    // big thanks to https://github.com/ajkhoury/OpenBSP-MinGW for this bit - the vbsp docs aren't great
 
-                    int vertPoint;
-                    if (surfEdgeNum == 0)
-                    {
-                        rootPoint = edge.vertexIndices[reversed ? 0 : 1];
-                    }
-                    else
-                    {
-                        vertPoint = edge.vertexIndices[reversed ? 0 : 1];
+//                    bool reversed = edgeIndex < 0;
+//                    Edge edge = edgeLump.Contents[Math.Abs(edgeIndex)];
 
-                        if (vertPoint == rootPoint)
-                            continue;
-                        firstPoint = vertPoint;
+//                    int vertPoint;
+//                    if (surfEdgeNum == 0)
+//                    {
+//                        rootPoint = edge.vertexIndices[reversed ? 0 : 1];
+//                    }
+//                    else
+//                    {
+//                        vertPoint = edge.vertexIndices[reversed ? 0 : 1];
 
-                        vertPoint = edge.vertexIndices[reversed ? 1 : 0];
+//                        if (vertPoint == rootPoint)
+//                            continue;
+//                        firstPoint = vertPoint;
 
-                        if (vertPoint == rootPoint)
-                            continue;
-                        secondPoint = vertPoint;
-                    }
+//                        vertPoint = edge.vertexIndices[reversed ? 1 : 0];
 
-                    var texInfo = texInfoLump.Contents[face.texInfo];
-                    // u = tv(0,0) * x + tv(0,1) * y + tv(0,2) * z + tv(0,3)
-                    // v = tv(1,0) * x + tv(1,1) * y + tv(1,2) * z + tv(1,3)
+//                        if (vertPoint == rootPoint)
+//                            continue;
+//                        secondPoint = vertPoint;
+//                    }
 
-                    var rootPointCoords = vertexLump.Contents[rootPoint];
-                    var firstPointCoords = vertexLump.Contents[firstPoint];
-                    var secondPointCoords = vertexLump.Contents[secondPoint];
+//                    var texInfo = texInfoLump.Contents[face.texInfo];
+//                    // u = tv(0,0) * x + tv(0,1) * y + tv(0,2) * z + tv(0,3)
+//                    // v = tv(1,0) * x + tv(1,1) * y + tv(1,2) * z + tv(1,3)
 
-                    meshComponent.RenderMesh.uvCoords.Add(GetUVCoords(texInfo, rootPointCoords));
-                    meshComponent.RenderMesh.uvCoords.Add(GetUVCoords(texInfo, firstPointCoords));
-                    meshComponent.RenderMesh.uvCoords.Add(GetUVCoords(texInfo, secondPointCoords));
+//                    var rootPointCoords = vertexLump.Contents[rootPoint];
+//                    var firstPointCoords = vertexLump.Contents[firstPoint];
+//                    var secondPointCoords = vertexLump.Contents[secondPoint];
 
-                    meshComponent.RenderMesh.faceElements.Add(new MeshFaceElement(
-                        (uint)rootPoint,
-                        (uint)meshComponent.RenderMesh.uvCoords.Count - 3,
-                        face.planeNumber
-                    ));
-                    meshComponent.RenderMesh.faceElements.Add(new MeshFaceElement(
-                        (uint)firstPoint,
-                        (uint)meshComponent.RenderMesh.uvCoords.Count - 2,
-                        face.planeNumber
-                    ));
-                    meshComponent.RenderMesh.faceElements.Add(new MeshFaceElement(
-                        (uint)secondPoint,
-                        (uint)meshComponent.RenderMesh.uvCoords.Count - 1,
-                        face.planeNumber
-                    ));
-                }
-            }
+//                    modelComponent.RenderMesh.uvCoords.Add(GetUVCoords(texInfo, rootPointCoords));
+//                    modelComponent.RenderMesh.uvCoords.Add(GetUVCoords(texInfo, firstPointCoords));
+//                    modelComponent.RenderMesh.uvCoords.Add(GetUVCoords(texInfo, secondPointCoords));
 
-            meshComponent.RenderMesh.GenerateBuffers();
+//                    modelComponent.RenderMesh.faceElements.Add(new Vertex(
+//                        (uint)rootPoint,
+//                        (uint)modelComponent.RenderMesh.uvCoords.Count - 3,
+//                        face.planeNumber
+//                    ));
+//                    modelComponent.RenderMesh.faceElements.Add(new Vertex(
+//                        (uint)firstPoint,
+//                        (uint)modelComponent.RenderMesh.uvCoords.Count - 2,
+//                        face.planeNumber
+//                    ));
+//                    modelComponent.RenderMesh.faceElements.Add(new Vertex(
+//                        (uint)secondPoint,
+//                        (uint)modelComponent.RenderMesh.uvCoords.Count - 1,
+//                        face.planeNumber
+//                    ));
+//                }
+//            }
 
-            // TODO: Derive from MeshComponent instead
-            ((IEntity)Parent).AddComponent(meshComponent);
-        }
+//            var mesh = new Mesh(vertices, indices, textures, Matrix4x4f.Identity);
+//            // TODO: Scale by bspScaleFactor
 
-        private Vector2f GetUVCoords(TexInfo texInfo, Vector3f coords)
-        {
-            var uCoord = texInfo.textureVecs[0, 0] * coords.x + texInfo.textureVecs[0, 1] * coords.y + texInfo.textureVecs[0, 2] * coords.z +
-                             texInfo.textureVecs[0, 3];
-            var vCoord = texInfo.textureVecs[1, 0] * coords.x + texInfo.textureVecs[1, 1] * coords.y + texInfo.textureVecs[1, 2] * coords.z +
-                             texInfo.textureVecs[1, 3];
+//            modelComponent.RenderMesh.GenerateBuffers();
 
-            vCoord = 1.0f - vCoord; // Flip for opengl
+//            // TODO: Derive from MeshComponent instead
+//            ((IEntity)Parent).AddComponent(modelComponent);
+//        }
 
-            return new Vector2f(uCoord, vCoord) / 1000.0f;
-        }
+//        private Vector2f GetUVCoords(TexInfo texInfo, Vector3f coords)
+//        {
+//            var uCoord = texInfo.textureVecs[0, 0] * coords.x + texInfo.textureVecs[0, 1] * coords.y + texInfo.textureVecs[0, 2] * coords.z +
+//                             texInfo.textureVecs[0, 3];
+//            var vCoord = texInfo.textureVecs[1, 0] * coords.x + texInfo.textureVecs[1, 1] * coords.y + texInfo.textureVecs[1, 2] * coords.z +
+//                             texInfo.textureVecs[1, 3];
 
-        public override void OnNotify(NotifyType notifyType, INotifyArgs notifyArgs)
-        {
-            base.OnNotify(notifyType, notifyArgs);
-            // TODO: please no
-            switch (notifyType)
-            {
-                case NotifyType.GameStart:
-                    GenerateBSPMesh();
-                    break;
-            }
-        }
-    }
-}
+//            vCoord = 1.0f - vCoord; // Flip for opengl
+
+//            return new Vector2f(uCoord, vCoord) / 1000.0f;
+//        }
+
+//        public override void OnNotify(NotifyType notifyType, INotifyArgs notifyArgs)
+//        {
+//            base.OnNotify(notifyType, notifyArgs);
+//            // TODO: please no
+//            switch (notifyType)
+//            {
+//                case NotifyType.GameStart:
+//                    GenerateBSPMesh();
+//                    break;
+//            }
+//        }
+//    }
+//}

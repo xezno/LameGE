@@ -1,8 +1,8 @@
 ﻿using Engine.Assets;
-using Engine.Components;
-using Engine.Renderer.GL.Entities;
-using Engine.Renderer.GL.Managers;
 using ImGuiNET;
+using Quincy.Components;
+using Quincy.Entities;
+using Quincy.Managers;
 using System;
 
 namespace Engine.Gui.Managers.ImGuiWindows.Editor
@@ -26,11 +26,11 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
             var windowHeight = ImGui.GetWindowSize().Y;
             var camera = cameraEntity.GetComponent<CameraComponent>();
 
-            var ratio = camera.Resolution.y / camera.Resolution.x;
+            var ratio = camera.Resolution.x / camera.Resolution.y;
             var image = camera.Framebuffer.ColorTexture;
             var cameraScale = 1.0f;
 
-            ImGui.Image((IntPtr)image, new System.Numerics.Vector2(windowWidth, windowWidth * ratio) * cameraScale, new System.Numerics.Vector2(0, 1), new System.Numerics.Vector2(1, 0));
+            ImGui.Image((IntPtr)image, new System.Numerics.Vector2(windowHeight * ratio, windowHeight) * cameraScale, new System.Numerics.Vector2(0, 1), new System.Numerics.Vector2(1, 0));
 
             // TODO: Fix memory leak
             // camera.Resolution = new Utils.MathUtils.Vector2f(windowWidth, windowHeight);
