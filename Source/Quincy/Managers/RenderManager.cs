@@ -7,6 +7,9 @@ namespace Quincy.Managers
 {
     public class RenderManager : Manager<RenderManager>
     {
+        public string hdri = "Content/HDRIs/studio_small_03_4k.hdr";
+        public float exposure = 1.75f;
+
         private DateTime lastRender;
         private int currentFrametimeIndex;
         private int currentFramerateIndex;

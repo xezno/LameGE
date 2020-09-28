@@ -25,12 +25,12 @@ namespace Quincy.Components
             LoadModel(path);
         }
 
-        public void Draw(CameraEntity camera, ShaderComponent shader, LightEntity light, (Cubemap, Cubemap, Cubemap) pbrCubemaps, Texture brdfLut)
+        public void Draw(CameraEntity camera, ShaderComponent shader, LightEntity light, (Cubemap, Cubemap, Cubemap) pbrCubemaps, Texture brdfLut, Texture holoTexture)
         {
             var matrix = GetComponent<TransformComponent>().Matrix;
             foreach (var mesh in Meshes)
             {
-                mesh.Draw(camera, shader, light, pbrCubemaps, brdfLut, matrix);
+                mesh.Draw(camera, shader, light, pbrCubemaps, brdfLut, matrix, holoTexture);
             }
         }
 

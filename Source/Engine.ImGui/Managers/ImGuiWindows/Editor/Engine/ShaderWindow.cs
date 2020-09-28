@@ -1,6 +1,8 @@
 ﻿using Engine.Assets;
 using Engine.ECS.Observer;
 using ImGuiNET;
+using Quincy.Components;
+using Quincy.Managers;
 using System;
 using System.IO;
 using System.Reflection;
@@ -19,19 +21,19 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
         {
             if (ImGui.Button("Reload all shaders"))
             {
-                throw new NotImplementedException();
+                ReloadAllShaders();
             }
         }
 
-        //private void ReloadAllShaders()
-        //{
-        //    foreach (var entity in SceneManager.Instance.Entities)
-        //    {
-        //        if (entity.HasComponent<ShaderComponent>())
-        //        {
-        //            entity.GetComponent<ShaderComponent>().ReloadAll();
-        //        }
-        //    }
-        //}
+        private void ReloadAllShaders()
+        {
+            foreach (var entity in SceneManager.Instance.Entities)
+            {
+                if (entity.HasComponent<ShaderComponent>())
+                {
+                    entity.GetComponent<ShaderComponent>().Load();
+                }
+            }
+        }
     }
 }

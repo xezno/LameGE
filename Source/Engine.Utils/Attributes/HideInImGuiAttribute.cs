@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace Engine.Gui.Attributes
+namespace Engine.Utils.Attributes
 {
     /// <summary>
     /// Prevents an item from being shown in ImGui windows.
     /// </summary>
     [AttributeUsage(AttributeTargets.All, AllowMultiple = false, Inherited = false)]
-    public class HideInImGuiAttribute : Attribute { }
+    public sealed class HideInImGuiAttribute : Attribute { }
 }

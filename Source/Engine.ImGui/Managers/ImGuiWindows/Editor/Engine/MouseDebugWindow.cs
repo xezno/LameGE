@@ -5,7 +5,7 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor.Engine
 {
     public class MouseDebugWindow : ImGuiWindow
     {
-        public override bool Render { get; set; } = true;
+        public override bool Render { get; set; }
 
         public override string Title => "Mouse Debug";
 
@@ -20,6 +20,8 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor.Engine
             ImGui.Text($"LMB Drag: {ImGui.IsMouseDragging(ImGuiMouseButton.Left)}");
             ImGui.Text($"RMB Drag: {ImGui.IsMouseDragging(ImGuiMouseButton.Right)}");
             ImGui.Text($"MMB Drag: {ImGui.IsMouseDragging(ImGuiMouseButton.Middle)}");
+
+            ImGui.Text($"Position: {ImGui.GetMousePos()}");
         }
     }
 }

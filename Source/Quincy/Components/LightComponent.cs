@@ -8,9 +8,10 @@ namespace Quincy.Components
     [Requires(typeof(TransformComponent))]
     public sealed class LightComponent : Component<LightComponent>
     {
-        public LightComponent(Vector3d position)
+        private Matrix4x4f viewMatrix;
+
+        public LightComponent()
         {
-            Position = position;
             var size = 20f;
             var farPlane = 200f;
             ProjMatrix = Matrix4x4f.Ortho(-size, size, -size, size, 0.1f, farPlane);
@@ -18,17 +19,21 @@ namespace Quincy.Components
             ShadowMap = new ShadowMap(4096, 4096);
         }
 
-        public Vector3d Position { get; set; }
-        public Matrix4x4f ViewMatrix { get; set; }
+        public Matrix4x4f ViewMatrix { get => viewMatrix; set => viewMatrix = value; }
         public Matrix4x4f ProjMatrix { get; set; }
         public ShadowMap ShadowMap { get; set; }
 
-        public override void Render()
+        public override void Update(float deltaTime)
         {
-            ViewMatrix = Matrix4x4f.LookAt(new Vertex3f(
-                (float)Position.x,
-                (float)Position.y,
-                (float)Position.z), new Vertex3f(0f, 0f, 0f), new Vertex3f(0f, 1f, 0f));
+            var transformComponent = GetComponent<TransformComponent>();
+            viewMatrix = Matrix4x4f.Identity;
+            viewMatrix.RotateX((float)transformComponent.RotationEuler.x);
+            viewMatrix.RotateY((float)transformComponent.RotationEuler.y);
+            viewMatrix.RotateZ((float)transformComponent.RotationEuler.z);
+            viewMatrix *= Matrix4x4f.LookAtDirection(new Vertex3f(
+                (float)transformComponent.Position.x,
+                (float)transformComponent.Position.y,
+                (float)transformComponent.Position.z), new Vertex3f(0f, 0f, -1f), new Vertex3f(0f, 1f, 0f));
         }
     }
 }

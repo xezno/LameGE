@@ -1,7 +1,6 @@
 ﻿using Engine;
 using Engine.Assets;
 using Engine.ECS.Entities;
-using Engine.Entities;
 using Engine.Gui.Managers;
 using Engine.Gui.Managers.ImGuiWindows;
 using System.Collections.Generic;
@@ -35,14 +34,18 @@ namespace Example
                 //{
                 //    Name = "Physics Box"
                 //},
-                new ModelEntity($"Content/Models/rainier/scene.gltf", modelScale)
-                {
-                    Name = "Rainier"
-                },
-                new ModelEntity($"Content/Models/mcrn_tachi/scene.gltf", modelScale)
+                //new ModelEntity($"Content/Models/rainier/scene.gltf", new Vector3d(-10f, 0, 0), modelScale)
+                //{
+                //    Name = "Rainier"
+                //},
+                new ModelEntity($"Content/Models/mcrn_tachi/scene.gltf", new Vector3d(0, 0, 0), Vector3d.one * 0.0125f)
                 {
                     Name = "MCRN Tachi"
-                }
+                },
+                //new ModelEntity($"Content/Models/mimicgltf/scene.gltf", new Vector3d(0, 0, 0), Vector3d.one * 5f)
+                //{
+                //    Name = "Treasure Chest Mimic"
+                //}
                 // TODO: fix this (anything that renders afterwards won't render at all?)
             };
 

@@ -12,13 +12,14 @@ namespace Quincy.Managers
 {
     public sealed class SceneManager : Manager<SceneManager> // TODO: we probably want to read scene data from a file later.
     {
-        private ShaderComponent shader, depthShader;
+        private ShaderComponent depthShader;
         private Plane framebufferRenderPlane;
         private ShaderComponent framebufferRenderShader;
 
         private DateTime lastUpdate;
 
         private Texture brdfLut;
+        private Texture holoTexture;
 
         private SkyboxEntity skyboxEntity;
 
@@ -42,7 +43,6 @@ namespace Quincy.Managers
 
         private void LoadBaseContent()
         {
-            shader = new ShaderComponent("Content/Shaders/PBR/pbr.frag", "Content/Shaders/PBR/pbr.vert");
             depthShader = new ShaderComponent("Content/Shaders/Depth/depth.frag", "Content/Shaders/Depth/depth.vert");
 
             framebufferRenderShader = new ShaderComponent("Content/Shaders/Framebuffer/framebuffer.frag", "Content/Shaders/Framebuffer/framebuffer.vert");
@@ -54,6 +54,8 @@ namespace Quincy.Managers
                 Path = "brdfLut",
                 Type = "texture_lut"
             };
+
+            holoTexture = Texture.LoadFromFile("Content/Textures/holoMap.png", "texture_diffuse");
         }
 
         private void AddBaseEntities()
@@ -80,7 +82,7 @@ namespace Quincy.Managers
             foreach (var camera in Cameras)
                 AddEntity(camera);
 
-            skyboxEntity = new SkyboxEntity(Constants.hdri);
+            skyboxEntity = new SkyboxEntity(RenderManager.Instance.hdri);
             AddEntity(skyboxEntity);
         }
 
@@ -111,7 +113,7 @@ namespace Quincy.Managers
                     continue;
 
                 var modelComponent = entity.GetComponent<ModelComponent>();
-                modelComponent.Draw(MainCamera, shader, Lights[0], (skyboxComponent.skybox, skyboxComponent.convolutedSkybox, skyboxComponent.prefilteredSkybox), brdfLut);
+                modelComponent.Draw(MainCamera, entity.GetComponent<ShaderComponent>(), Lights[0], (skyboxComponent.skybox, skyboxComponent.convolutedSkybox, skyboxComponent.prefilteredSkybox), brdfLut, holoTexture);
             }
             // testModel.Draw(camera, shader, light, (skybox, convolutedSkybox, prefilteredSkybox), brdfLut);
 
@@ -127,7 +129,7 @@ namespace Quincy.Managers
             Gl.ClearDepth(1.0f);
             Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            framebufferRenderShader.SetFloat("exposure", Constants.exposure);
+            framebufferRenderShader.SetFloat("exposure", RenderManager.Instance.exposure);
             framebufferRenderPlane.Draw(framebufferRenderShader, cameraComponent.Framebuffer.ColorTexture);
         }
 
@@ -139,7 +141,6 @@ namespace Quincy.Managers
             Gl.BindFramebuffer(FramebufferTarget.Framebuffer, Lights[0].GetComponent<LightComponent>().ShadowMap.DepthMapFbo);
             Gl.Clear(ClearBufferMask.DepthBufferBit);
 
-            Lights[0].Render();
             foreach (var entity in Entities)
             {
                 if (!entity.HasComponent<ModelComponent>())
@@ -167,6 +168,7 @@ namespace Quincy.Managers
                 modelComponent.Update(deltaTime);
             }
             // testModel.Update(deltaTime);
+            Lights[0].Update(deltaTime);
             MainCamera.Update(deltaTime);
 
             lastUpdate = DateTime.Now;

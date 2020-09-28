@@ -1,5 +1,6 @@
 ﻿using Engine.Assets;
 using Engine.ECS.Observer;
+using Engine.Utils.DebugUtils;
 using ImGuiNET;
 using System.Collections.Generic;
 using System.Numerics;
@@ -9,7 +10,7 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor.NodeEditor
     // Based on https://gist.github.com/ocornut/7e9b3ec566a333d725d4
     public class NodeEditorWindow : ImGuiWindow
     {
-        public override bool Render { get;set; } = true;
+        public override bool Render { get; set; }
 
         public override string Title => "Node Editor";
 
@@ -19,7 +20,7 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor.NodeEditor
         private List<NodeLink> links;
         private Vector2 scrolling = new Vector2(0f, 0f);
         private bool showGrid = true;
-        private float gridSize = 32.0f;
+        private const float GRID_SIZE = 32.0f;
         private int nodeSelected = -1;
 
         /// <summary>
@@ -66,9 +67,9 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor.NodeEditor
                 var winPos = ImGui.GetCursorScreenPos();
                 var canvasSize = ImGui.GetWindowSize();
 
-                for (float x = scrolling.X % gridSize; x < canvasSize.X; x += gridSize)
+                for (float x = scrolling.X % GRID_SIZE; x < canvasSize.X; x += GRID_SIZE)
                     drawList.AddLine(new Vector2(x, 0.0f) + winPos, new Vector2(x, canvasSize.Y) + winPos, gridColor);
-                for (float y = scrolling.Y % gridSize; y < canvasSize.Y; y += gridSize)
+                for (float y = scrolling.Y % GRID_SIZE; y < canvasSize.Y; y += GRID_SIZE)
                     drawList.AddLine(new Vector2(0.0f, y) + winPos, new Vector2(canvasSize.X, y) + winPos, gridColor);
             }
 
@@ -96,14 +97,8 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor.NodeEditor
                 ImGui.SetCursorScreenPos(nodeRectMin + nodeWindowPadding);
                 ImGui.BeginGroup();
                 ImGui.Text($"{node.Name}");
-                
-                var nodeValue = node.Value;
-                ImGui.SliderFloat($"##node{node.Id}value", ref nodeValue, 0.0f, 1.0f, "Alpha %.2f");
-                node.Value = nodeValue;
 
-                var nodeColor = node.Color;
-                ImGui.ColorEdit4($"##node{node.Id}color", ref nodeColor);
-                node.Color = nodeColor;
+                ImGuiUtils.RenderImGuiMembers(node);
 
                 ImGui.EndGroup();
 
@@ -138,7 +133,7 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor.NodeEditor
                 {
                     var circlePos = offset + node.GetInputSlotPos(slotId);
                     ImGui.SetCursorScreenPos(circlePos - halfNodeSlotRadiusVec);
-                    ImGui.InvisibleButton($"input{slotId}", new Vector2(nodeSlotRadius, nodeSlotRadius));
+                    ImGui.InvisibleButton($"input{slotId}", nodeSlotRadiusVec);
 
                     bool inputHovered = ImGui.IsItemHovered();
                     var color = inputHovered ? GetImGuiColor(new Vector4(150, 255, 150, 150)) : GetImGuiColor(new Vector4(150, 150, 150, 150));
@@ -148,7 +143,7 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor.NodeEditor
                 {
                     var circlePos = offset + node.GetOutputSlotPos(slotId);
                     ImGui.SetCursorScreenPos(circlePos - halfNodeSlotRadiusVec);
-                    ImGui.InvisibleButton($"output{slotId}", new Vector2(nodeSlotRadius, nodeSlotRadius));
+                    ImGui.InvisibleButton($"output{slotId}", nodeSlotRadiusVec);
 
                     bool outputHovered = ImGui.IsItemHovered();
                     var color = outputHovered ? GetImGuiColor(new Vector4(150, 255, 150, 150)) : GetImGuiColor(new Vector4(150, 150, 150, 150));
@@ -191,7 +186,10 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor.NodeEditor
                 }
                 else
                 {
-                    if (ImGui.MenuItem("Add")) { nodes.Add(new Node(nodes.Count, "New node", scenePos, new Vector2(0, 0), 0.5f, new Vector4(100, 100, 200, 255) / 255.0f, 2, 2)); }
+                    if (ImGui.MenuItem("Add")) 
+                    {
+                        nodes.Add(new PbrNode(nodes.Count, "Principled BRDF", scenePos, new Vector2(0, 0), 0.5f, new Vector4(100, 100, 200, 255) / 255.0f, 2, 2)); 
+                    }
                     if (ImGui.MenuItem("Paste")) { }
                 }
 

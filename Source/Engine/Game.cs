@@ -7,6 +7,7 @@ using Engine.Utils;
 using Engine.Utils.DebugUtils;
 using Engine.Utils.MathUtils;
 using Newtonsoft.Json;
+using OpenGL;
 using OpenGL.CoreUI;
 using Quincy.Managers;
 using System;
@@ -54,8 +55,11 @@ namespace Engine
 
         private void Render(object sender, NativeWindowEventArgs e)
         {
+            Gl.Enable(EnableCap.FramebufferSrgb);
             RenderManager.Instance.Run();
+            Gl.Disable(EnableCap.FramebufferSrgb);
             ImGuiManager.Instance.Run();
+            Gl.Enable(EnableCap.FramebufferSrgb);
         }
 
         public void Close()

@@ -1,4 +1,6 @@
 ﻿using Engine.Assets;
+using ImGuiNET;
+using Quincy.Managers;
 
 namespace Engine.Gui.Managers.ImGuiWindows.Editor
 {
@@ -10,7 +12,8 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
 
         public override void Draw()
         {
-            // ImGui.SliderFloat("Exposure", )
+            ImGui.SliderFloat("Exposure", ref RenderManager.Instance.exposure, 0.0f, 10.0f, "%.2f", ImGuiSliderFlags.Logarithmic);
+            ImGui.InputText("HDRI", ref RenderManager.Instance.hdri, 256, ImGuiInputTextFlags.None);
         }
     }
 }

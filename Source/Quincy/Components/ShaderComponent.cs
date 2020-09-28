@@ -13,7 +13,16 @@ namespace Quincy.Components
         private List<string> knownMissingVariables = new List<string>();
         public uint Id { get; set; }
 
+        private string fragGlslPath, vertGlslPath;
+
         public ShaderComponent(string fragGlslPath, string vertGlslPath)
+        {
+            this.fragGlslPath = fragGlslPath;
+            this.vertGlslPath = vertGlslPath;
+            Load();
+        }
+
+        public void Load()
         {
             var fragGlslContents = File.ReadAllText(fragGlslPath);
             var vertGlslContents = File.ReadAllText(vertGlslPath);

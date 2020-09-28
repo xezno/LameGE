@@ -18,6 +18,10 @@ using Vector4f = Engine.Utils.MathUtils.Vector4f;
 using Engine.Gui.Managers.ImGuiWindows.Editor.Engine;
 using Quincy.Components;
 using Engine.Gui.Managers.ImGuiWindows.Editor.NodeEditor;
+using Engine.Types;
+using System.Reflection;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace Engine.Gui.Managers
 {
