@@ -9,6 +9,16 @@ namespace Quincy.Managers
     {
         public string hdri = "Content/HDRIs/studio_small_03_4k.hdr";
         public float exposure = 1.75f;
+        public TonemapOperator tonemapOperator;
+
+        public enum TonemapOperator
+        {
+            None,
+            Reinhard,
+            ReinhardExtendedLuminance,
+            ReinhardJodie,
+            AcesApproximation
+        };
 
         private DateTime lastRender;
         private int currentFrametimeIndex;

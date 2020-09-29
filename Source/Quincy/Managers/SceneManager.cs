@@ -115,7 +115,6 @@ namespace Quincy.Managers
                 var modelComponent = entity.GetComponent<ModelComponent>();
                 modelComponent.Draw(MainCamera, entity.GetComponent<ShaderComponent>(), Lights[0], (skyboxComponent.skybox, skyboxComponent.convolutedSkybox, skyboxComponent.prefilteredSkybox), brdfLut, holoTexture);
             }
-            // testModel.Draw(camera, shader, light, (skybox, convolutedSkybox, prefilteredSkybox), brdfLut);
 
             Gl.DepthFunc(DepthFunction.Less);
             Gl.ClipControl(ClipControlOrigin.LowerLeft, ClipControlDepth.NegativeOneToOne);
@@ -130,6 +129,7 @@ namespace Quincy.Managers
             Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             framebufferRenderShader.SetFloat("exposure", RenderManager.Instance.exposure);
+            framebufferRenderShader.SetInt("tonemapOperator", (int)RenderManager.Instance.tonemapOperator);
             framebufferRenderPlane.Draw(framebufferRenderShader, cameraComponent.Framebuffer.ColorTexture);
         }
 
@@ -149,7 +149,6 @@ namespace Quincy.Managers
                 var modelComponent = entity.GetComponent<ModelComponent>();
                 modelComponent.DrawShadows(Lights[0].GetComponent<LightComponent>(), depthShader);
             }
-            // testModel.DrawShadows(light.GetComponent<LightComponent>(), depthShader);
 
             Gl.Enable(EnableCap.CullFace);
 
@@ -167,7 +166,6 @@ namespace Quincy.Managers
                 var modelComponent = entity.GetComponent<ModelComponent>();
                 modelComponent.Update(deltaTime);
             }
-            // testModel.Update(deltaTime);
             Lights[0].Update(deltaTime);
             MainCamera.Update(deltaTime);
 
