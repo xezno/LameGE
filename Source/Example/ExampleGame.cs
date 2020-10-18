@@ -17,8 +17,6 @@ namespace Example
 
         protected override void InitScene()
         {
-            var modelScaleFactor = 0.0125f;
-            var modelScale = new Vector3d(modelScaleFactor, modelScaleFactor, modelScaleFactor);
             base.InitScene();
             var entities = new List<IEntity>
             {
@@ -26,10 +24,10 @@ namespace Example
                 {
                     Name = "Player"
                 },
-                //new LevelModelEntity()
-                //{
-                //    Name = "Generated BSP Mesh"
-                //},
+                new LevelModelEntity("Content/Maps/gm_flatgrass.bsp")
+                {
+                    Name = "Generated BSP Mesh"
+                },
                 //new TestCubeEntity()
                 //{
                 //    Name = "Physics Box"

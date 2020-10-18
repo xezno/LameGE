@@ -40,10 +40,10 @@ namespace Engine.Managers
 
         volatile bool disposed;
 
-        Worker[] workers;
-        AutoResetEvent finished;
+        readonly Worker[] workers;
+        readonly AutoResetEvent finished;
 
-        BufferPool[] bufferPools;
+        readonly BufferPool[] bufferPools;
 
         volatile Action<int> workerBody;
         int workerIndex;
@@ -161,7 +161,7 @@ namespace Engine.Managers
         private float GetDt(float val, float dt)
         {
             var clamped = Math.Max(Math.Min(val, 1), 0);
-            return (float)Math.Pow(val, dt);
+            return (float)Math.Pow(clamped, dt);
         }
 
         public void PrepareForIntegration(float dt)
@@ -177,7 +177,7 @@ namespace Engine.Managers
             if (localInertia.InverseMass > 0)
             {
                 velocity.Linear = (velocity.Linear + gravityDt) * linearDampingDt;
-                velocity.Angular = velocity.Angular * angularDampingDt;
+                velocity.Angular *= angularDampingDt;
             }
         }
 

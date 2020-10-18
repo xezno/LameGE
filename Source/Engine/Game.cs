@@ -240,21 +240,16 @@ namespace Engine
 
         private int MouseButtonToInt(MouseButton button)
         {
-            switch (button)
+            return button switch
             {
-                case MouseButton.Left:
-                    return 0;
-                case MouseButton.Right:
-                    return 1;
-                case MouseButton.Middle:
-                    return 2;
-                case MouseButton.X1:
-                    return 3;
-                case MouseButton.X2:
-                    return 4;
-                default:
-                    throw new NotImplementedException();
-            }
+                MouseButton.Left => 0,
+                MouseButton.Right => 1,
+                MouseButton.Middle => 2,
+                MouseButton.X1 => 3,
+                MouseButton.X2 => 4,
+                MouseButton.None => -1,
+                _ => throw new NotImplementedException(),
+            };
         }
 
         private void MouseUp(object sender, NativeWindowMouseEventArgs e)

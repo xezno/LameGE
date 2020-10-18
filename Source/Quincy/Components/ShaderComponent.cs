@@ -1,6 +1,7 @@
 ﻿using Engine.ECS.Components;
 using Engine.Utils.DebugUtils;
 using Engine.Utils.MathUtils;
+using Newtonsoft.Json;
 using OpenGL;
 using System.Collections.Generic;
 using System.IO;
@@ -14,6 +15,22 @@ namespace Quincy.Components
         public uint Id { get; set; }
 
         private string fragGlslPath, vertGlslPath;
+
+        public ShaderComponent(string jsonPath)
+        {
+            /* 
+             * Example:
+             *  {
+             *      "fragment": "standard.frag",
+             *      "vertex": "standard.vert"
+             *  }
+             */
+            var shaderDescription = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(jsonPath));
+            var directory = Path.GetDirectoryName(jsonPath);
+            this.fragGlslPath = $"{directory}/{shaderDescription["fragment"]}";
+            this.vertGlslPath = $"{directory}/{shaderDescription["vertex"]}";
+            Load();
+        }
 
         public ShaderComponent(string fragGlslPath, string vertGlslPath)
         {

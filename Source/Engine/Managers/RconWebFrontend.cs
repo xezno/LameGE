@@ -11,8 +11,8 @@ namespace Engine.Managers
 {
     class RconWebFrontendManager : Manager<RconWebFrontendManager>
     {
-        private HttpListener listener;
-        private Thread httpThread;
+        private readonly HttpListener listener;
+        private readonly Thread httpThread;
         private bool shouldRun = true;
 
         public RconWebFrontendManager()
@@ -68,17 +68,13 @@ namespace Engine.Managers
         private string GetContentType(string filePath)
         {
             var extension = Path.GetExtension(filePath)?.Substring(1);
-            switch (extension)
+            return extension switch
             {
-                case "css":
-                    return "text/css";
-                case "html":
-                    return "text/html";
-                case "js":
-                    return "text/javascript";
-                default:
-                    return "text/plain";
-            }
+                "css" => "text/css",
+                "html" => "text/html",
+                "js" => "text/javascript",
+                _ => "text/plain",
+            };
         }
 
         public override void OnNotify(NotifyType eventType, INotifyArgs notifyArgs)
