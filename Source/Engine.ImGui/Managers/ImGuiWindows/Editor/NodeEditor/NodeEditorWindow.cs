@@ -21,7 +21,10 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor.NodeEditor
         private Vector2 scrolling = new Vector2(0f, 0f);
         private bool showGrid = true;
         private const float GRID_SIZE = 32.0f;
+
         private int nodeSelected = -1;
+
+        private Vector2 nodeIoPosition = new Vector2(0, 0);
 
         /// <summary>
         /// Converts 0-255 RGBA into an imgui-compatible uint
@@ -87,6 +90,7 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor.NodeEditor
                 drawList.AddBezierCurve(p1, p1 + new Vector2(50, 0), p2 + new Vector2(-50, 0), p2, GetImGuiColor(new Vector4(200, 200, 100, 255)), 3.0f);
             }
 
+            bool nodeIoActive = false;
             for (int i = 0; i < nodes.Count; i++)
             {
                 Node node = nodes[i];
@@ -134,6 +138,11 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor.NodeEditor
                     var circlePos = offset + node.GetInputSlotPos(slotId);
                     ImGui.SetCursorScreenPos(circlePos - halfNodeSlotRadiusVec);
                     ImGui.InvisibleButton($"input{slotId}", nodeSlotRadiusVec);
+                    if (ImGui.IsItemActive())
+                    {
+                        nodeIoActive = true;
+                        nodeIoPosition = node.GetInputSlotPos(slotId);
+                    }
 
                     bool inputHovered = ImGui.IsItemHovered();
                     var color = inputHovered ? GetImGuiColor(new Vector4(150, 255, 150, 150)) : GetImGuiColor(new Vector4(150, 150, 150, 150));
@@ -144,6 +153,11 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor.NodeEditor
                     var circlePos = offset + node.GetOutputSlotPos(slotId);
                     ImGui.SetCursorScreenPos(circlePos - halfNodeSlotRadiusVec);
                     ImGui.InvisibleButton($"output{slotId}", nodeSlotRadiusVec);
+                    if (ImGui.IsItemActive())
+                    {
+                        nodeIoActive = true;
+                        nodeIoPosition = node.GetOutputSlotPos(slotId);
+                    }
 
                     bool outputHovered = ImGui.IsItemHovered();
                     var color = outputHovered ? GetImGuiColor(new Vector4(150, 255, 150, 150)) : GetImGuiColor(new Vector4(150, 150, 150, 150));
@@ -152,6 +166,13 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor.NodeEditor
 
                 ImGui.PopID();
             }
+
+            if (nodeIoActive && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
+            {
+                var mousePos = ImGui.GetMousePos();
+                drawList.AddBezierCurve(offset + nodeIoPosition, offset + nodeIoPosition + new Vector2(50, 0), mousePos + new Vector2(-50, 0), mousePos, GetImGuiColor(new Vector4(200, 200, 100, 255)), 3.0f);
+            }
+
             drawList.ChannelsMerge();
 
             if (ImGui.IsMouseReleased(ImGuiMouseButton.Right))
@@ -159,6 +180,7 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor.NodeEditor
                 if (ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) || !ImGui.IsAnyItemHovered())
                 {
                     nodeSelected = nodeHoveredInScene = -1;
+                    nodeIoActive = false;
                     openContextMenu = true;
                 }
             }

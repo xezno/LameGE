@@ -15,7 +15,7 @@ namespace Example.Entities
                                                 new Vector3d(0, 0, 0),
                                                 scale));
 
-            AddComponent(new ShaderComponent("Content/Shaders/PBR/pbr.frag", "Content/Shaders/PBR/pbr.vert"));
+            AddComponent(new ShaderComponent("Content/Shaders/pbr.json"));
             AddComponent(new ModelComponent(modelPath));
         }
     }
