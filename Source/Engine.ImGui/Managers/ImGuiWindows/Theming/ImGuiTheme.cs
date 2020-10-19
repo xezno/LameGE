@@ -1,4 +1,5 @@
 ﻿using Engine.Utils.DebugUtils;
+using Engine.Utils.FileUtils;
 using ImGuiNET;
 using Newtonsoft.Json;
 using System;
@@ -110,15 +111,10 @@ namespace Engine.Gui.Managers.ImGuiWindows.Theming
 
         private const string numRegex = @"(\d+\.\d+|\d+)";
 
-        public static ImGuiTheme LoadFromFile(string path)
+        public static ImGuiTheme Load(Asset asset)
         {
-            if (!File.Exists(path))
-            {
-                Logging.Log($"File {path} not found", Logging.Severity.Fatal);
-            }
-
-            var fileContents = File.ReadAllText(path);
-            return JsonConvert.DeserializeObject<ImGuiTheme>(fileContents);
+            var str = asset.AsString();
+            return JsonConvert.DeserializeObject<ImGuiTheme>(str);
         }
 
         private static Vector2 ParseVector2String(string str)

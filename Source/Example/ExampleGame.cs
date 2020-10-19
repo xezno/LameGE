@@ -8,6 +8,7 @@ using Example.Entities;
 using Example.Managers.ImGuiWindows.Addons;
 using Quincy.Managers;
 using Engine.Utils.MathUtils;
+using Engine.Utils.FileUtils;
 
 namespace Example
 {
@@ -24,7 +25,7 @@ namespace Example
                 {
                     Name = "Player"
                 },
-                new LevelModelEntity("Content/Maps/gm_flatgrass.bsp")
+                new LevelModelEntity(FileSystem.GetAsset("/Maps/gm_flatgrass.bsp"))
                 {
                     Name = "Generated BSP Mesh"
                 },
@@ -36,7 +37,7 @@ namespace Example
                 //{
                 //    Name = "Rainier"
                 //},
-                new ModelEntity($"Content/Models/mcrn_tachi/scene.gltf", new Vector3d(0, 0, 0), Vector3d.one * 0.0125f)
+                new ModelEntity(FileSystem.GetAsset("/Models/mcrn_tachi/scene.gltf"), new Vector3d(0, 0, 0), Vector3d.one * 0.0125f)
                 {
                     Name = "MCRN Tachi"
                 },

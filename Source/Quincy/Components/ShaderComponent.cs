@@ -1,8 +1,11 @@
 ﻿using Engine.ECS.Components;
+using Engine.Utils.Attributes;
 using Engine.Utils.DebugUtils;
+using Engine.Utils.FileUtils;
 using Engine.Utils.MathUtils;
 using Newtonsoft.Json;
 using OpenGL;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -13,10 +16,9 @@ namespace Quincy.Components
     {
         private List<string> knownMissingVariables = new List<string>();
         public uint Id { get; set; }
+        private Asset fragShaderAsset, vertShaderAsset;
 
-        private string fragGlslPath, vertGlslPath;
-
-        public ShaderComponent(string jsonPath)
+        public ShaderComponent(Asset jsonAsset)
         {
             /* 
              * Example:
@@ -25,24 +27,24 @@ namespace Quincy.Components
              *      "vertex": "standard.vert"
              *  }
              */
-            var shaderDescription = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(jsonPath));
-            var directory = Path.GetDirectoryName(jsonPath);
-            this.fragGlslPath = $"{directory}/{shaderDescription["fragment"]}";
-            this.vertGlslPath = $"{directory}/{shaderDescription["vertex"]}";
+            var shaderDescription = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonAsset.AsString());
+            var directory = Path.GetDirectoryName(jsonAsset.MountPath);
+            this.fragShaderAsset = FileSystem.GetAsset($"{directory}/{shaderDescription["fragment"]}");
+            this.vertShaderAsset = FileSystem.GetAsset($"{directory}/{shaderDescription["vertex"]}");
             Load();
         }
 
-        public ShaderComponent(string fragGlslPath, string vertGlslPath)
+        public ShaderComponent(Asset fragShaderAsset, Asset vertShaderAsset)
         {
-            this.fragGlslPath = fragGlslPath;
-            this.vertGlslPath = vertGlslPath;
+            this.fragShaderAsset = fragShaderAsset;
+            this.vertShaderAsset = vertShaderAsset;
             Load();
         }
 
         public void Load()
         {
-            var fragGlslContents = File.ReadAllText(fragGlslPath);
-            var vertGlslContents = File.ReadAllText(vertGlslPath);
+            var fragGlslContents = fragShaderAsset.AsString();
+            var vertGlslContents = vertShaderAsset.AsString();
 
             var fragId = Gl.CreateShader(ShaderType.FragmentShader);
             Gl.ShaderSource(fragId, new[] { fragGlslContents });

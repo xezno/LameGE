@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Example.Assets.BSP.Lumps;
 using Example.Assets.BSP.Types;
+using Engine.Utils.FileUtils;
 
 namespace Example.Assets.BSP
 {
@@ -12,11 +13,11 @@ namespace Example.Assets.BSP
         private BSPHeader header;
         public Lump[] Lumps { get; } = new Lump[64];
 
-        public BSPLoader(string path)
+        public BSPLoader(Asset asset)
         {
-            using var streamReader = new StreamReader(path);
-            using var binaryReader = new BinaryReader(streamReader.BaseStream);
-            Logging.Log($"Reading BSP file {path}");
+            using var memoryStream = new MemoryStream(asset.Data);
+            using var binaryReader = new BinaryReader(memoryStream);
+            Logging.Log($"Reading BSP file {asset.MountPath}");
 
             ReadFile(binaryReader);
         }

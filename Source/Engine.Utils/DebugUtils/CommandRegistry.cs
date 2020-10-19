@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 
 namespace Engine.Utils.DebugUtils
 {
@@ -25,18 +26,37 @@ namespace Engine.Utils.DebugUtils
             }));
         }
 
-        public static DebugResult ExecuteMethod(string methodName)
+        private static bool FindDebugFunction(string methodName, out DebugMember debugMember)
         {
             var debugCommandMatch = debugMembers.FirstOrDefault(t => t.name == methodName);
 
             if (debugCommandMatch == null)
             {
                 Logging.Log($"No such method {methodName}");
-                return new DebugResult(DebugResultStatus.Failure);
+                debugMember = null;
+                return false;
             }
 
-            var methodExecResult = new DebugResult(DebugResultStatus.Success);
-            return methodExecResult;
+            debugMember = debugCommandMatch;
+            return true;
+        }
+
+        public static DebugResult ExecuteMethod(string methodName)
+        {
+            if (!FindDebugFunction(methodName, out var debugMember))
+                return new DebugResult(DebugResultStatus.Failure);
+
+            throw new NotImplementedException();
+            return new DebugResult(DebugResultStatus.Success);
+        }
+
+        public static DebugResult ExecuteMethod(string methodName, List<string> parameters)
+        {
+            if (!FindDebugFunction(methodName, out var debugMember))
+                return new DebugResult(DebugResultStatus.Failure);
+
+            throw new NotImplementedException();
+            return new DebugResult(DebugResultStatus.Success);
         }
 
         public static void RegisterAllCommands()
@@ -49,26 +69,44 @@ namespace Engine.Utils.DebugUtils
             }
         }
 
-        public static List<DebugMember> GiveSuggestions(string input)
+        public static List<DebugMember> GiveSuggestions(string input) => (List<DebugMember>)debugMembers.Where(t => t.MatchSuggestion(input)).Take(5);
+
+        public static void ParseAndExecute(string currentConsoleInput)
         {
-            List<DebugMember> suggestions = new List<DebugMember>();
+            /*
+             * Command syntax:
+             * [function name] <parameters | "parameter with spaces!!">
+             */
 
-            suggestions = (List<DebugMember>)debugMembers.Where(t => t.MatchSuggestion(input)).Take(5);
+            List<string> strings = new List<string>();
+            StringBuilder currentBuffer = new StringBuilder();
+            bool isInString = false;
+            foreach (var c in currentConsoleInput)
+            {
+                switch (c)
+                {
+                    case '"':
+                        isInString = !isInString;
+                        continue;
+                    case ' ' when !isInString:
+                        strings.Add(currentBuffer.ToString());
+                        currentBuffer = new StringBuilder();
+                        continue;
+                }
 
-            //int count = 0;
-            //foreach (var command in debugMembers)
-            //{
-            //    if (command.MatchSuggestion(input))
-            //    {
-            //        suggestions.Add(command);
-            //        count++;
-            //    }
+                currentBuffer.Append(c);
+            }
 
-            //    if (count > 5)
-            //        break;
-            //}
+            // Write remaining buffer contents
+            strings.Add(currentBuffer.ToString());
 
-            return suggestions;
+            if (strings.Count <= 0)
+                return;
+
+            if (strings.Count == 1)
+                ExecuteMethod(strings[0]);
+            else
+                ExecuteMethod(strings[0], strings.GetRange(1, strings.Count - 1));
         }
 
         #region Debug commands

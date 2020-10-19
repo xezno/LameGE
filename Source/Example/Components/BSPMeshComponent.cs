@@ -11,6 +11,7 @@ using Quincy.Components;
 using Quincy;
 using OpenGL;
 using System.Collections.Generic;
+using Engine.Utils.FileUtils;
 
 namespace Example.Components
 {
@@ -19,9 +20,9 @@ namespace Example.Components
         private readonly BSPLoader bspLoader;
         private readonly float bspScaleFactor = 0.0254000508f;
 
-        public BSPMeshComponent(string bspFileName)
+        public BSPMeshComponent(Asset asset)
         {
-            bspLoader = new BSPLoader(bspFileName);
+            bspLoader = new BSPLoader(asset);
         }
 
         private void GenerateBSPMesh()
@@ -41,7 +42,7 @@ namespace Example.Components
             var meshIndices = new List<uint>();
             var meshTextures = new List<Texture>()
             {
-                Texture.LoadFromFile("Content/Textures/UVBoard.png", "texture_diffuse")
+                Texture.LoadFromAsset(FileSystem.GetAsset("/Textures/UVBoard.png"), "texture_diffuse")
             };
 
             int triCount = 0;

@@ -1,4 +1,5 @@
 ﻿using Engine.ECS.Entities;
+using Engine.Utils.FileUtils;
 using Engine.Utils.MathUtils;
 using Quincy.Components;
 using Quincy.Managers;
@@ -16,8 +17,9 @@ namespace Engine.Entities
                 ParentTransform = SceneManager.Instance.MainCamera.GetComponent<TransformComponent>() // TODO: Render this as a parent of every camera?
             };
             AddComponent(transform);
-            AddComponent(new ShaderComponent("Content/Shaders/Skybox/skybox.frag", "Content/Shaders/Skybox/skybox.vert"));
-            AddComponent(new ModelComponent($"Content/Models/Skybox.obj"));
+            AddComponent(new ShaderComponent(FileSystem.GetAsset("/Shaders/Skybox/skybox.frag"),
+                                             FileSystem.GetAsset("/Shaders/Skybox/skybox.vert")));
+            AddComponent(new ModelComponent(FileSystem.GetAsset("/Models/Skybox.obj")));
         }
     }
 }

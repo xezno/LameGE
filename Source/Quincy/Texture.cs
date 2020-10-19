@@ -1,4 +1,5 @@
 ﻿using Engine.Utils.DebugUtils;
+using Engine.Utils.FileUtils;
 using OpenGL;
 using StbiSharp;
 using System;
@@ -16,20 +17,23 @@ namespace Quincy
         public string Type { get; set; }
         public string Path { get; set; }
 
-        public static Texture LoadFromFile(string filePath, string typeName)
+        public static Texture LoadFromAsset(Asset asset, string typeName)
         {
             // Check if already loaded
-            if (TextureContainer.Textures.Any(t => t.Path == filePath))
+            if (TextureContainer.Textures.Any(t => t.Path == asset.MountPath))
             {
                 // Already loaded, we'll just use that
-                return TextureContainer.Textures.First(t => t.Path == filePath);
+                return TextureContainer.Textures.First(t => t.Path == asset.MountPath);
             }
 
             // Not loaded, load from scratch
+            var start = DateTime.Now;
             var texturePtr = Gl.GenTexture();
             Gl.BindTexture(TextureTarget.Texture2d, texturePtr);
-            var fileData = File.ReadAllBytes(filePath);
-            var image = Stbi.LoadFromMemory(fileData, 4);
+            var image = Stbi.LoadFromMemory(asset.Data, 4);
+            var end = DateTime.Now;
+
+            Logging.Log($"Stbi load took {(end - start).TotalSeconds:F2}s");
 
             var imageFormat = PixelFormat.Rgb;
             if (image.NumChannels == 4)
@@ -58,13 +62,13 @@ namespace Quincy
             image.Dispose();
             Marshal.FreeHGlobal(textureDataPtr);
 
-            Logging.Log($"Loaded texture {filePath}, ptr {texturePtr}");
+            Logging.Log($"Loaded texture {asset.MountPath}, ptr {texturePtr}");
             Gl.BindTexture(TextureTarget.Texture2d, 0);
 
             return new Texture()
             {
                 Id = texturePtr,
-                Path = filePath,
+                Path = asset.MountPath,
                 Type = typeName
             };
         }

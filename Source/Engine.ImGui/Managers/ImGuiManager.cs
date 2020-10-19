@@ -18,10 +18,7 @@ using Vector4f = Engine.Utils.MathUtils.Vector4f;
 using Engine.Gui.Managers.ImGuiWindows.Editor.Engine;
 using Quincy.Components;
 using Engine.Gui.Managers.ImGuiWindows.Editor.NodeEditor;
-using Engine.Types;
-using System.Reflection;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
+using Engine.Utils.FileUtils;
 
 namespace Engine.Gui.Managers
 {
@@ -108,7 +105,7 @@ namespace Engine.Gui.Managers
             ImGui.StyleColorsDark();
 
             // Set default theme from game settings
-            Theme = ImGuiTheme.LoadFromFile($"Content/Themes/{GameSettings.EditorTheme}.json");
+            Theme = ImGuiTheme.Load(FileSystem.GetAsset($"/Themes/{GameSettings.EditorTheme}.json"));
             // TODO: Check if theme doesn't exist, set a default
             // TODO: Move code to somewhere that makes more sense?
 
@@ -120,7 +117,7 @@ namespace Engine.Gui.Managers
         #region "Initialization"
         private void InitGl()
         {
-            shaderComponent = new ShaderComponent("Content/Shaders/ImGUI/imgui.frag", "Content/Shaders/ImGUI/imgui.vert");
+            shaderComponent = new ShaderComponent(FileSystem.GetAsset("/Shaders/ImGUI/imgui.frag"), FileSystem.GetAsset("/Shaders/ImGUI/imgui.vert"));
 
             vao = Gl.GenVertexArray();
             vbo = Gl.GenBuffer();
@@ -135,12 +132,15 @@ namespace Engine.Gui.Managers
             // Standard fonts
             unsafe
             {
+                // TODO: Load fonts from archives
+
                 var stdConfig = ImGuiNative.ImFontConfig_ImFontConfig();
 
                 io.Fonts.AddFontFromFileTTF("Content/Fonts/OpenSans/OpenSans-SemiBold.ttf", fontSizePixels, stdConfig);
 
                 ImGuiNative.ImFontConfig_destroy(stdConfig);
 
+                // TODO: Fix
                 var faRanges = new ushort[] { FontAwesome5.IconMin, FontAwesome5.IconMax, 0 };
                 var faConfig = ImGuiNative.ImFontConfig_ImFontConfig();
                 faConfig->MergeMode = 1;

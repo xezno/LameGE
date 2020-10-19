@@ -7,7 +7,7 @@ namespace Quincy.Managers
 {
     public class RenderManager : Manager<RenderManager>
     {
-        public string hdri = "Content/HDRIs/studio_small_03_4k.hdr";
+        public string hdri = "/HDRIs/studio_small_03_4k.hdr";
         public float exposure = 1.75f;
         public TonemapOperator tonemapOperator;
 

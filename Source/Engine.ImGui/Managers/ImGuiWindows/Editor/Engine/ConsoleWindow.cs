@@ -31,7 +31,6 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor.Engine
 
         public override void Draw()
         {
-            // ImGui.PushStyleColor(ImGuiCol.ChildBg, ImGui.GetStyle().Colors[(int)ImGuiCol.FrameBg]);
             ImGui.BeginChild("ConsoleInner", new Vector2(-1, -64));
             ImGui.PushFont(ImGuiManager.Instance.MonospacedFont);
 
@@ -40,8 +39,10 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor.Engine
                 if (!string.IsNullOrWhiteSpace(currentConsoleFilter) && !GetFilterMatch(logEntry, currentConsoleFilter))
                     continue;
 
+                ImGui.TextWrapped(logEntry.timestamp.TimeOfDay.ToString());
+                ImGui.SameLine();
                 ImGui.PushStyleColor(ImGuiCol.Text, SeverityToColor(logEntry.severity));
-                ImGui.TextWrapped(logEntry.ToString());
+                ImGui.TextWrapped(logEntry.str);
                 ImGui.PopStyleColor();
 
                 if (ImGui.IsItemHovered())
@@ -67,12 +68,16 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor.Engine
             
             ImGui.PopFont();
             ImGui.EndChild();
-            // ImGui.PopStyleColor();
             
             ImGui.InputText("Filter", ref currentConsoleFilter, 256);
 
+            ImGui.InputText("Input", ref currentConsoleInput, 256);
             ImGui.SameLine();
-            ImGui.Button("Submit");
+            if (ImGui.Button("Submit"))
+            {
+                CommandRegistry.ParseAndExecute(currentConsoleInput);
+                currentConsoleInput = "";
+            }
         }
 
         public override void OnNotify(NotifyType eventType, INotifyArgs notifyArgs)

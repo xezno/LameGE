@@ -1,4 +1,5 @@
 ﻿using Engine.ECS.Components;
+using Engine.Utils.FileUtils;
 using OpenGL;
 using Quincy.Entities;
 using Quincy.Primitives;
@@ -21,7 +22,7 @@ namespace Quincy.Components
             convolutedSkybox = cubemaps.Item2;
             prefilteredSkybox = cubemaps.Item3;
 
-            skyboxShader = new ShaderComponent("Content/Shaders/Skybox/skybox.frag", "Content/Shaders/Skybox/skybox.vert");
+            skyboxShader = new ShaderComponent(FileSystem.GetAsset("/Shaders/Skybox/skybox.frag"), FileSystem.GetAsset("/Shaders/Skybox/skybox.vert"));
             skyboxCube = new Cube();
         }
 

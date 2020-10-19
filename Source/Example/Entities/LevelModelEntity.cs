@@ -1,5 +1,6 @@
 ﻿using Engine.Assets;
 using Engine.ECS.Entities;
+using Engine.Utils.FileUtils;
 using Engine.Utils.MathUtils;
 using Example.Components;
 using Quincy.Components;
@@ -10,13 +11,13 @@ namespace Example.Entities
     {
         public override string IconGlyph { get; } = FontAwesome5.LayerGroup;
 
-        public LevelModelEntity(string bspPath)
+        public LevelModelEntity(Asset asset)
         {
             AddComponent(new TransformComponent(new Vector3d(0, 300f, 0f),
                                                 new Vector3d(270, 0, 0),
                                                 new Vector3d(1, 1, 1)));
-            AddComponent(new ShaderComponent("Content/Shaders/standard.json"));
-            AddComponent(new BSPMeshComponent(bspPath));
+            AddComponent(new ShaderComponent(FileSystem.GetAsset("/Shaders/standard.json")));
+            AddComponent(new BSPMeshComponent(asset));
         }
     }
 }

@@ -41,6 +41,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "stbi", "stbi", "{FCACDE17-D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "stbi-sharp", "..\Other\stbi-sharp\stbi-sharp.csproj", "{D1756EE0-4B72-4359-90A8-AE561929B1D0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.AssetCompiler", "Engine.AssetCompiler\Engine.AssetCompiler.csproj", "{842677F2-B370-43CD-9AD2-42054EC940A1}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\Other\OpenGL.Net\Source\Khronos.Net\Khronos.Net.projitems*{032cf8ed-7cb5-4717-b763-42e7da7ee27f}*SharedItemsImports = 5
@@ -176,6 +178,18 @@ Global
 		{D1756EE0-4B72-4359-90A8-AE561929B1D0}.Release|x64.Build.0 = Release|Any CPU
 		{D1756EE0-4B72-4359-90A8-AE561929B1D0}.Release|x86.ActiveCfg = Release|Any CPU
 		{D1756EE0-4B72-4359-90A8-AE561929B1D0}.Release|x86.Build.0 = Release|Any CPU
+		{842677F2-B370-43CD-9AD2-42054EC940A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{842677F2-B370-43CD-9AD2-42054EC940A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{842677F2-B370-43CD-9AD2-42054EC940A1}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{842677F2-B370-43CD-9AD2-42054EC940A1}.Debug|x64.Build.0 = Debug|Any CPU
+		{842677F2-B370-43CD-9AD2-42054EC940A1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{842677F2-B370-43CD-9AD2-42054EC940A1}.Debug|x86.Build.0 = Debug|Any CPU
+		{842677F2-B370-43CD-9AD2-42054EC940A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{842677F2-B370-43CD-9AD2-42054EC940A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{842677F2-B370-43CD-9AD2-42054EC940A1}.Release|x64.ActiveCfg = Release|Any CPU
+		{842677F2-B370-43CD-9AD2-42054EC940A1}.Release|x64.Build.0 = Release|Any CPU
+		{842677F2-B370-43CD-9AD2-42054EC940A1}.Release|x86.ActiveCfg = Release|Any CPU
+		{842677F2-B370-43CD-9AD2-42054EC940A1}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -197,6 +211,7 @@ Global
 		{06F0F3AF-A076-4F86-9498-20FFD8752C13} = {79CF9038-94CD-47AA-BD5E-B0D278BAAE27}
 		{FCACDE17-D032-468F-8FB2-86DD298005A6} = {B6266319-C3E9-4791-BEA0-739C1D998D21}
 		{D1756EE0-4B72-4359-90A8-AE561929B1D0} = {FCACDE17-D032-468F-8FB2-86DD298005A6}
+		{842677F2-B370-43CD-9AD2-42054EC940A1} = {22706AA2-FC20-46A2-A815-DFB033A41904}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7A1302DF-7820-469A-9EB2-83CF7691A088}

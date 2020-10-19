@@ -26,13 +26,13 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor
 
         private void LoadThemes()
         {
-            foreach (var file in Directory.GetFiles("Content/Themes"))
-            {
-                if (file.EndsWith(".json", StringComparison.CurrentCultureIgnoreCase))
-                {
-                    themes.Add(ImGuiTheme.LoadFromFile(file));
-                }
-            }
+            //foreach (var file in Directory.GetFiles("Content/Themes"))
+            //{
+            //    if (file.EndsWith(".json", StringComparison.CurrentCultureIgnoreCase))
+            //    {
+            //        themes.Add(ImGuiTheme.LoadFromFile(file));
+            //    }
+            //}
 
             themeNames = new string[themes.Count];
             for (int i = 0; i < themes.Count; ++i)
