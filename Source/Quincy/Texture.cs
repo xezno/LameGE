@@ -56,7 +56,7 @@ namespace Quincy
 
             Gl.TexImage2D(TextureTarget.Texture2d, 0, internalFormat, image.Width, image.Height, 0, imageFormat, PixelType.UnsignedByte, textureDataPtr);
 
-            Gl.TexParameterf(TextureTarget.Texture2d, (TextureParameterName)Gl.TEXTURE_MAX_ANISOTROPY, 16.0f); // (should be) 16x anisotropic filtering
+            // Gl.TexParameterf(TextureTarget.Texture2d, (TextureParameterName)Gl.TEXTURE_MAX_ANISOTROPY, 16.0f); // (should be) 16x anisotropic filtering
             Gl.GenerateMipmap(TextureTarget.Texture2d);
 
             image.Dispose();

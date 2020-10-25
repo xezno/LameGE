@@ -41,7 +41,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "stbi", "stbi", "{FCACDE17-D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "stbi-sharp", "..\Other\stbi-sharp\stbi-sharp.csproj", "{D1756EE0-4B72-4359-90A8-AE561929B1D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.AssetCompiler", "Engine.AssetCompiler\Engine.AssetCompiler.csproj", "{842677F2-B370-43CD-9AD2-42054EC940A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Engine.AssetCompiler", "Engine.AssetCompiler\Engine.AssetCompiler.csproj", "{842677F2-B370-43CD-9AD2-42054EC940A1}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution

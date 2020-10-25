@@ -179,7 +179,6 @@ namespace Example.Components
                 meshIndices.Add((uint)i);
             }
 
-            // TODO: Scale by bspScaleFactor
             var matrix = Matrix4x4f.Identity;
             matrix.Scale(bspScaleFactor, bspScaleFactor, bspScaleFactor);
             var mesh = new Mesh(bakedMeshVertices, meshIndices, meshTextures, matrix);
@@ -197,7 +196,7 @@ namespace Example.Components
             var vCoord = texInfo.textureVecs[1, 0] * coords.x + texInfo.textureVecs[1, 1] * coords.y + texInfo.textureVecs[1, 2] * coords.z +
                              texInfo.textureVecs[1, 3];
 
-            vCoord = 1.0f - vCoord; // Flip for opengl
+            vCoord = 1.0f - vCoord; // Flipped for opengl
 
             return new Vector2f(uCoord, vCoord) / 1000.0f;
         }

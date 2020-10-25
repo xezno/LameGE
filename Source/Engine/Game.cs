@@ -10,6 +10,7 @@ using Engine.Utils.MathUtils;
 using Newtonsoft.Json;
 using OpenGL;
 using OpenGL.CoreUI;
+using Quincy;
 using Quincy.Managers;
 using System;
 using System.Collections.Generic;
@@ -211,11 +212,17 @@ namespace Engine
         {
             FileSystem.LoadArchive((string)archivePath);
         }
+
+        private void InitServices()
+        {
+            ServiceLocator.Renderer.ProvideService(new QuincyRenderer());
+        }
         #endregion
 
         #region Event Handlers
         private void ContextCreated(object sender, NativeWindowEventArgs e)
         {
+            InitServices();
             LoadContent();
             InitManagers();
             InitScene();

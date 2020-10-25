@@ -25,7 +25,7 @@ namespace Example
                 {
                     Name = "Player"
                 },
-                new LevelModelEntity(FileSystem.GetAsset("/Maps/gm_flatgrass.bsp"))
+                new LevelModelEntity(FileSystem.GetAsset("/Maps/gm_fork.bsp"))
                 {
                     Name = "Generated BSP Mesh"
                 },
