@@ -1,4 +1,5 @@
 ﻿using Engine.Utils.Base;
+using Engine.Utils.FileUtils.FileSystems;
 
 namespace Engine.Utils
 {
@@ -24,6 +25,10 @@ namespace Engine.Utils
 
     public static class ServiceLocator
     {
-        public static LocatableService<BaseRenderer> Renderer = new LocatableService<BaseRenderer>(new NullRenderer());
+        public static LocatableService<IRenderer> renderer = new LocatableService<IRenderer>(new NullRenderer());
+        public static LocatableService<IFileSystem> fileSystem = new LocatableService<IFileSystem>(new NullFileSystem());
+
+        public static IRenderer Renderer => renderer.GetService();
+        public static IFileSystem FileSystem => fileSystem.GetService();
     }
 }

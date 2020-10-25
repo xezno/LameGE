@@ -105,7 +105,7 @@ namespace Engine.Gui.Managers
             ImGui.StyleColorsDark();
 
             // Set default theme from game settings
-            Theme = ImGuiTheme.Load(FileSystem.GetAsset($"/Themes/{GameSettings.EditorTheme}.json"));
+            Theme = ImGuiTheme.Load(ServiceLocator.FileSystem.GetAsset($"/Themes/{GameSettings.EditorTheme}.json"));
             // TODO: Check if theme doesn't exist, set a default
             // TODO: Move code to somewhere that makes more sense?
 
@@ -117,7 +117,8 @@ namespace Engine.Gui.Managers
         #region "Initialization"
         private void InitGl()
         {
-            shaderComponent = new ShaderComponent(FileSystem.GetAsset("/Shaders/ImGUI/imgui.frag"), FileSystem.GetAsset("/Shaders/ImGUI/imgui.vert"));
+            var fs = ServiceLocator.FileSystem;
+            shaderComponent = new ShaderComponent(fs.GetAsset("/Shaders/ImGUI/imgui.frag"), fs.GetAsset("/Shaders/ImGUI/imgui.vert"));
 
             vao = Gl.GenVertexArray();
             vbo = Gl.GenBuffer();

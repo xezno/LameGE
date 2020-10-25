@@ -6,6 +6,7 @@ using Engine.Types;
 using Engine.Utils;
 using Engine.Utils.DebugUtils;
 using Engine.Utils.FileUtils;
+using Engine.Utils.FileUtils.FileSystems;
 using Engine.Utils.MathUtils;
 using Newtonsoft.Json;
 using OpenGL;
@@ -190,32 +191,12 @@ namespace Engine
             }
         }
 
-        private void LoadContent()     
-        { 
-            // Load asset packages in parallel. 1 thread for each
-            // First, load archive list
-            var archiveList = JsonConvert.DeserializeObject<List<string>>(File.ReadAllText("Content/archives.json"));
-            
-            // Next, spawn a read thread for each archive
-            foreach (var archive in archiveList)
-            {
-                //var loadThread = new Thread(LoadThread);
-                //loadThread.Start($"Content/{archive}.alex");
-
-                LoadThread($"Content/{archive}.alex");
-            }
-
-            // ???? Profit
-        }
-
-        private void LoadThread(object archivePath)
-        {
-            FileSystem.LoadArchive((string)archivePath);
-        }
-
         private void InitServices()
         {
-            ServiceLocator.Renderer.ProvideService(new QuincyRenderer());
+            ServiceLocator.renderer.ProvideService(new QuincyRenderer());
+            ServiceLocator.fileSystem.ProvideService(new DiskFileSystem());
+
+            ServiceLocator.FileSystem.Init("Content/");
         }
         #endregion
 
@@ -223,7 +204,6 @@ namespace Engine
         private void ContextCreated(object sender, NativeWindowEventArgs e)
         {
             InitServices();
-            LoadContent();
             InitManagers();
             InitScene();
 
@@ -265,20 +245,6 @@ namespace Engine
             //if (MouseMode == MouseMode.Locked)
             //    nativeWindow.SetCursorPos(new Point((int)(GameSettings.GamePosX + (GameSettings.GameResolutionX / 2)),
             //        (int)(GameSettings.GamePosY + (GameSettings.GameResolutionY / 2))));
-        }
-
-        private int MouseButtonToInt(MouseButton button)
-        {
-            return button switch
-            {
-                MouseButton.Left => 0,
-                MouseButton.Right => 1,
-                MouseButton.Middle => 2,
-                MouseButton.X1 => 3,
-                MouseButton.X2 => 4,
-                MouseButton.None => -1,
-                _ => throw new NotImplementedException(),
-            };
         }
 
         private void MouseUp(object sender, NativeWindowMouseEventArgs e)

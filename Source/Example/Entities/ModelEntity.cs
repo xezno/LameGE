@@ -1,5 +1,6 @@
 ﻿using Engine.Assets;
 using Engine.ECS.Entities;
+using Engine.Utils;
 using Engine.Utils.FileUtils;
 using Engine.Utils.MathUtils;
 using Quincy.Components;
@@ -16,7 +17,7 @@ namespace Example.Entities
                                                 new Vector3d(0, 0, 0),
                                                 scale));
 
-            AddComponent(new ShaderComponent(FileSystem.GetAsset("/Shaders/pbr.json")));
+            AddComponent(new ShaderComponent(ServiceLocator.FileSystem.GetAsset("/Shaders/pbr.json")));
             AddComponent(new ModelComponent(modelAsset));
         }
     }

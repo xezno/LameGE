@@ -1,4 +1,5 @@
 ﻿using Engine.ECS.Components;
+using Engine.Utils;
 using Engine.Utils.Attributes;
 using Engine.Utils.DebugUtils;
 using Engine.Utils.FileUtils;
@@ -29,8 +30,8 @@ namespace Quincy.Components
              */
             var shaderDescription = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonAsset.AsString());
             var directory = Path.GetDirectoryName(jsonAsset.MountPath);
-            this.fragShaderAsset = FileSystem.GetAsset($"{directory}/{shaderDescription["fragment"]}");
-            this.vertShaderAsset = FileSystem.GetAsset($"{directory}/{shaderDescription["vertex"]}");
+            fragShaderAsset = ServiceLocator.FileSystem.GetAsset($"{directory}/{shaderDescription["fragment"]}");
+            vertShaderAsset = ServiceLocator.FileSystem.GetAsset($"{directory}/{shaderDescription["vertex"]}");
             Load();
         }
 

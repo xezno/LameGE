@@ -44,9 +44,10 @@ namespace Quincy.Managers
 
         private void LoadBaseContent()
         {
-            depthShader = new ShaderComponent(FileSystem.GetAsset("/Shaders/Depth/depth.frag"), FileSystem.GetAsset("/Shaders/Depth/depth.vert"));
+            var fs = ServiceLocator.FileSystem;
+            depthShader = new ShaderComponent(fs.GetAsset("/Shaders/Depth/depth.frag"), fs.GetAsset("/Shaders/Depth/depth.vert"));
 
-            framebufferRenderShader = new ShaderComponent(FileSystem.GetAsset("/Shaders/Framebuffer/framebuffer.frag"), FileSystem.GetAsset("/Shaders/Framebuffer/framebuffer.vert"));
+            framebufferRenderShader = new ShaderComponent(fs.GetAsset("/Shaders/Framebuffer/framebuffer.frag"), fs.GetAsset("/Shaders/Framebuffer/framebuffer.vert"));
             framebufferRenderPlane = new Plane();
 
             brdfLut = new Texture()
@@ -56,7 +57,7 @@ namespace Quincy.Managers
                 Type = "texture_lut"
             };
 
-            holoTexture = Texture.LoadFromAsset(FileSystem.GetAsset("/Textures/holoMap.png"), "texture_diffuse");
+            holoTexture = Texture.LoadFromAsset(fs.GetAsset("/Textures/holoMap.png"), "texture_diffuse");
         }
 
         private void AddBaseEntities()

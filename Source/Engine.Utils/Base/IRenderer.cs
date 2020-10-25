@@ -2,7 +2,7 @@
 
 namespace Engine.Utils.Base
 {
-    public interface BaseRenderer
+    public interface IRenderer
     {
         void ContextCreated();
         void RenderImGui();
@@ -10,7 +10,7 @@ namespace Engine.Utils.Base
         void RenderToShadowMap();
     }
 
-    public class NullRenderer : BaseRenderer
+    public class NullRenderer : IRenderer
     {
         public void ContextCreated()
         {

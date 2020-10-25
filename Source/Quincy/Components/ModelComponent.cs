@@ -1,5 +1,6 @@
 ﻿using Assimp;
 using Engine.ECS.Components;
+using Engine.Utils;
 using Engine.Utils.Attributes;
 using Engine.Utils.DebugUtils;
 using Engine.Utils.FileUtils;
@@ -216,7 +217,7 @@ namespace Quincy.Components
 
                 Logging.Log($"Loading {directory}/{textureSlot.FilePath} as {typeName}");
 
-                var texture = Texture.LoadFromAsset(FileSystem.GetAsset($"{directory}/{textureSlot.FilePath}"), typeName);
+                var texture = Texture.LoadFromAsset(ServiceLocator.FileSystem.GetAsset($"{directory}/{textureSlot.FilePath}"), typeName);
 
                 // Add to texture container so that we don't reload it later
                 TextureContainer.Textures.Add(texture);

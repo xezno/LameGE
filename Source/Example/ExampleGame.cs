@@ -9,6 +9,7 @@ using Example.Managers.ImGuiWindows.Addons;
 using Quincy.Managers;
 using Engine.Utils.MathUtils;
 using Engine.Utils.FileUtils;
+using Engine.Utils;
 
 namespace Example
 {
@@ -19,33 +20,26 @@ namespace Example
         protected override void InitScene()
         {
             base.InitScene();
+            var fs = ServiceLocator.fileSystem.GetService();
+
             var entities = new List<IEntity>
             {
                 new PlayerEntity()
                 {
                     Name = "Player"
                 },
-                new LevelModelEntity(FileSystem.GetAsset("/Maps/gm_fork.bsp"))
+                new LevelModelEntity(fs.GetAsset("/Maps/gm_fork.bsp"))
                 {
                     Name = "Generated BSP Mesh"
                 },
-                //new TestCubeEntity()
-                //{
-                //    Name = "Physics Box"
-                //},
-                //new ModelEntity($"Content/Models/rainier/scene.gltf", new Vector3d(-10f, 0, 0), modelScale)
-                //{
-                //    Name = "Rainier"
-                //},
-                new ModelEntity(FileSystem.GetAsset("/Models/mcrn_tachi/scene.gltf"), new Vector3d(0, 0, 0), Vector3d.one * 0.0125f)
+                new ModelEntity(fs.GetAsset("/Models/mcrn_tachi/scene.gltf"), new Vector3d(0, 0, 0), Vector3d.one * 0.0125f)
                 {
                     Name = "MCRN Tachi"
                 },
-                //new ModelEntity($"Content/Models/mimicgltf/scene.gltf", new Vector3d(0, 0, 0), Vector3d.one * 5f)
-                //{
-                //    Name = "Treasure Chest Mimic"
-                //}
-                // TODO: fix this (anything that renders afterwards won't render at all?)
+                new ModelEntity(fs.GetAsset("/Models/mimicgltf/scene.gltf"), new Vector3d(0, 0, 0), Vector3d.one * 5f)
+                {
+                    Name = "Treasure Chest Mimic"
+                }
             };
 
             foreach (IEntity entity in entities)

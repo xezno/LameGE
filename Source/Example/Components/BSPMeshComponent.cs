@@ -12,6 +12,7 @@ using Quincy;
 using OpenGL;
 using System.Collections.Generic;
 using Engine.Utils.FileUtils;
+using Engine.Utils;
 
 namespace Example.Components
 {
@@ -42,7 +43,7 @@ namespace Example.Components
             var meshIndices = new List<uint>();
             var meshTextures = new List<Texture>()
             {
-                Texture.LoadFromAsset(FileSystem.GetAsset("/Textures/UVBoard.png"), "texture_diffuse")
+                Texture.LoadFromAsset(ServiceLocator.FileSystem.GetAsset("/Textures/UVBoard.png"), "texture_diffuse")
             };
 
             int triCount = 0;
@@ -158,17 +159,17 @@ namespace Example.Components
                     texCoords.Add(GetUVCoords(texInfo, secondPointCoords));
                     bakedMeshVertices.Add(new Vertex() {
                         Position = meshVertices[rootPoint],
-                        TexCoords = texCoords[texCoords.Count - 3],
+                        TexCoords = texCoords[^3],
                         Normal = meshNormals[face.planeNumber]
                     });
                     bakedMeshVertices.Add(new Vertex() {
                         Position = meshVertices[firstPoint],
-                        TexCoords = texCoords[texCoords.Count - 2],
+                        TexCoords = texCoords[^2],
                         Normal = meshNormals[face.planeNumber]
                     });
                     bakedMeshVertices.Add(new Vertex() {
                         Position = meshVertices[secondPoint],
-                        TexCoords = texCoords[texCoords.Count - 1],
+                        TexCoords = texCoords[^1],
                         Normal = meshNormals[face.planeNumber]
                     });
                 }

@@ -21,7 +21,7 @@ namespace Quincy.Managers
             AcesApproximation
         };
 
-        private BaseRenderer renderer;
+        private IRenderer renderer;
 
         private DateTime lastRender;
         private int currentFrametimeIndex;
@@ -38,7 +38,7 @@ namespace Quincy.Managers
 
         public RenderManager()
         {
-            renderer = ServiceLocator.Renderer.GetService();
+            renderer = ServiceLocator.renderer.GetService();
             renderer.ContextCreated();
         }
 

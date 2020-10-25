@@ -1,28 +1,46 @@
 ﻿using Engine.Utils.DebugUtils;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Engine.Utils.FileUtils
+namespace Engine.Utils.FileUtils.FileSystems
 {
-    public class FileSystem
+    public class ArchiveFileSystem : IFileSystem
     {
-        private static Dictionary<string, FileArchive> mountPoints { get; set; } = new Dictionary<string, FileArchive>();
+        private Dictionary<string, FileArchive> MountPoints { get; set; } = new Dictionary<string, FileArchive>();
 
-        public static void LoadArchive(string archivePath) 
+        public void Init(string contentPath)
         {
+            // Load asset packages in parallel. 1 thread for each
+            var archiveList = JsonConvert.DeserializeObject<List<string>>(File.ReadAllText($"{contentPath}/archives.json"));
+            
+            // Next, spawn a read thread for each archive
+            foreach (var archive in archiveList)
+            {
+                //var loadThread = new Thread(LoadThread);
+                //loadThread.Start($"Content/{archive}.alex");
+
+                LoadThread($"Content/{archive}.alex");
+            }
+        }
+
+        private void LoadThread(object archivePath_)
+        {
+            var archivePath = (string)archivePath_;
+
             var mountPoint = Path.GetFileNameWithoutExtension(archivePath);
-            if (mountPoints.ContainsKey(mountPoint))
+            if (MountPoints.ContainsKey(mountPoint))
             {
                 Logging.Log($"{mountPoint} already exists as a mount point.", Logging.Severity.High);
                 return;
             }
 
-            mountPoints.Add(mountPoint, FileArchive.LoadFromFile(archivePath));
+            MountPoints.Add(mountPoint, FileArchive.LoadFromFile(archivePath));
         }
 
-        private static (string, string) ParseMountPoint(string path)
+        private (string, string) ParseMountPoint(string path)
         {
             /*
              * Mount point is always /mountpoint/path
@@ -40,18 +58,18 @@ namespace Engine.Utils.FileUtils
             return (mountPoint, fsPath);
         }
 
-        public static Asset GetAsset(string path)
+        public Asset GetAsset(string path)
         {
             var parsedMountPoint = ParseMountPoint(path.Replace("\\", "/"));
             var mountPoint = parsedMountPoint.Item1;
             var fsPath = parsedMountPoint.Item2;
-            if (!mountPoints.ContainsKey(mountPoint))
+            if (!MountPoints.ContainsKey(mountPoint))
             {
                 Logging.Log($"{parsedMountPoint} isn't mounted.", Logging.Severity.High);
                 return Asset.Empty;
             }
 
-            var mountedArchive = mountPoints[mountPoint];
+            var mountedArchive = MountPoints[mountPoint];
 
             var files = mountedArchive.Files.Where(file => file.FileName.Replace("\\", "/").Equals(fsPath, StringComparison.CurrentCultureIgnoreCase));
             if (files.Count() == 0)

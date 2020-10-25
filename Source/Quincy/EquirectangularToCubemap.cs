@@ -12,10 +12,12 @@ namespace Quincy
         public static (Cubemap, Cubemap, Cubemap) Convert(string hdriPath)
         {
             Gl.Disable(EnableCap.CullFace);
-            var equirectangularToCubemapShader = new ShaderComponent(FileSystem.GetAsset("/Shaders/EquirectangularToCubemap/EquirectangularToCubemap.frag"), FileSystem.GetAsset("/Shaders/EquirectangularToCubemap/EquirectangularToCubemap.vert"));
-            var convolutionShader = new ShaderComponent(FileSystem.GetAsset("/Shaders/Convolution/convolution.frag"), FileSystem.GetAsset("/Shaders/Convolution/convolution.vert"));
-            var prefilterShader = new ShaderComponent(FileSystem.GetAsset("/Shaders/Prefilter/prefilter.frag"), FileSystem.GetAsset("/Shaders/Prefilter/prefilter.vert"));
-            var skyHdri = HdriTexture.LoadFromAsset(FileSystem.GetAsset(hdriPath));
+
+            var fs = ServiceLocator.FileSystem;
+            var equirectangularToCubemapShader = new ShaderComponent(fs.GetAsset("/Shaders/EquirectangularToCubemap/EquirectangularToCubemap.frag"), fs.GetAsset("/Shaders/EquirectangularToCubemap/EquirectangularToCubemap.vert"));
+            var convolutionShader = new ShaderComponent(fs.GetAsset("/Shaders/Convolution/convolution.frag"), fs.GetAsset("/Shaders/Convolution/convolution.vert"));
+            var prefilterShader = new ShaderComponent(fs.GetAsset("/Shaders/Prefilter/prefilter.frag"), fs.GetAsset("/Shaders/Prefilter/prefilter.vert"));
+            var skyHdri = HdriTexture.LoadFromAsset(fs.GetAsset(hdriPath));
 
             var envMap = new Cubemap(RenderToCubemap(equirectangularToCubemapShader, 512, () =>
             {
@@ -104,7 +106,8 @@ namespace Quincy
 
         public static uint CreateBrdfLut()
         {
-            var shader = new ShaderComponent(FileSystem.GetAsset("/Shaders/BrdfLut/brdfLut.frag"), FileSystem.GetAsset("/Shaders/BrdfLut/brdfLut.vert"));
+            var fs = ServiceLocator.FileSystem;
+            var shader = new ShaderComponent(fs.GetAsset("/Shaders/BrdfLut/brdfLut.frag"), fs.GetAsset("/Shaders/BrdfLut/brdfLut.vert"));
             var brdfLutTexture = Gl.GenTexture();
             var plane = new Plane();
             Gl.BindTexture(TextureTarget.Texture2d, brdfLutTexture);

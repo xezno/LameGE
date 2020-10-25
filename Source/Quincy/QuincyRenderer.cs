@@ -4,7 +4,7 @@ using Quincy.Managers;
 
 namespace Quincy
 {
-    public class QuincyRenderer : BaseRenderer
+    public class QuincyRenderer : IRenderer
     {
         public QuincyRenderer() { }
 
