@@ -9,12 +9,6 @@ using Example.Managers.ImGuiWindows.Addons;
 using Quincy.Managers;
 using Engine.Utils.MathUtils;
 using Engine.Utils.FileUtils;
-using System.Threading;
-using LevelEditor;
-
-#if LEVEL_EDITOR_ENABLED
-using System.Windows.Forms;
-#endif
 
 namespace Example
 {
@@ -31,45 +25,34 @@ namespace Example
                 {
                     Name = "Player"
                 },
-                new LevelModelEntity(FileSystem.GetAsset("/Maps/gm_construct.bsp"))
+                new LevelModelEntity(FileSystem.GetAsset("/Maps/gm_fork.bsp"))
                 {
                     Name = "Generated BSP Mesh"
                 },
+                //new TestCubeEntity()
+                //{
+                //    Name = "Physics Box"
+                //},
+                //new ModelEntity($"Content/Models/rainier/scene.gltf", new Vector3d(-10f, 0, 0), modelScale)
+                //{
+                //    Name = "Rainier"
+                //},
                 new ModelEntity(FileSystem.GetAsset("/Models/mcrn_tachi/scene.gltf"), new Vector3d(0, 0, 0), Vector3d.one * 0.0125f)
                 {
                     Name = "MCRN Tachi"
                 },
-                new ModelEntity(FileSystem.GetAsset($"/Models/mimicgltf/scene.gltf"), new Vector3d(0, 0, 0), Vector3d.one * 5f)
-                {
-                    Name = "Treasure Chest Mimic"
-                }
+                //new ModelEntity($"Content/Models/mimicgltf/scene.gltf", new Vector3d(0, 0, 0), Vector3d.one * 5f)
+                //{
+                //    Name = "Treasure Chest Mimic"
+                //}
+                // TODO: fix this (anything that renders afterwards won't render at all?)
             };
 
             foreach (IEntity entity in entities)
                 SceneManager.Instance.AddEntity(entity);
 
             SetupCustomImGuiMenus();
-
-            #if LEVEL_EDITOR_ENABLED
-            SetupLevelEditorWindow();
-            #endif
         }
-
-        #if LEVEL_EDITOR_ENABLED
-        private void SetupLevelEditorWindow()
-        {
-            var levelEditorThread = new Thread(LevelEditorThread);
-            levelEditorThread.Start();
-        }
-
-        private void LevelEditorThread()
-        {
-            Application.SetHighDpiMode(HighDpiMode.SystemAware);
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
-        }
-        #endif
 
         private void SetupCustomImGuiMenus()
         {

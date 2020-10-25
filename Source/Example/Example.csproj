@@ -6,7 +6,6 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <LangVersion>8</LangVersion>
     <Platforms>x86;x64</Platforms>
-    <Configurations>Debug;Release;Debug-LevelEditor</Configurations>
   </PropertyGroup>
   <PropertyGroup>
     <RuntimeIdentifiers>win10-x64;debian.8-x64</RuntimeIdentifiers>
@@ -28,7 +27,6 @@
     <OutputPath>bin\x86\Debug\</OutputPath>
     <LangVersion>8</LangVersion>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <DefineConstants>TRACE;LEVEL_EDITOR_ENABLED;</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -48,7 +46,6 @@
     <ProjectReference Include="..\..\Other\OpenGL.Net\Source\OpenGL.Net\OpenGL.Net.csproj" />
     <ProjectReference Include="..\..\Other\OpenGL.Net\Source\OpenGL.Net\OpenGL.Net.Math.csproj" />
     <ProjectReference Include="..\Engine\Engine.csproj" />
-    <ProjectReference Include="..\LevelEditor\LevelEditor.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="BepuPhysics">
@@ -59,12 +56,5 @@
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <DefineConstants>TRACE</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug-LevelEditor|x64'">
-    <DefineConstants>TRACE;LEVEL_EDITOR_ENABLED;</DefineConstants>
-    <OutputPath>bin\x64\Debug\</OutputPath>
-    <Optimize>false</Optimize>
-  </PropertyGroup>
+  <PropertyGroup />
 </Project>

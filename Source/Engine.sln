@@ -43,10 +43,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "stbi-sharp", "..\Other\stbi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Engine.AssetCompiler", "Engine.AssetCompiler\Engine.AssetCompiler.csproj", "{842677F2-B370-43CD-9AD2-42054EC940A1}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{8D99643B-D640-44C5-BC8C-24EDC104D2BA}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LevelEditor", "LevelEditor\LevelEditor.csproj", "{6A429270-0886-4E8A-A630-9CE5B45283DD}"
-EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\Other\OpenGL.Net\Source\Khronos.Net\Khronos.Net.projitems*{032cf8ed-7cb5-4717-b763-42e7da7ee27f}*SharedItemsImports = 5
@@ -194,18 +190,6 @@ Global
 		{842677F2-B370-43CD-9AD2-42054EC940A1}.Release|x64.Build.0 = Release|Any CPU
 		{842677F2-B370-43CD-9AD2-42054EC940A1}.Release|x86.ActiveCfg = Release|Any CPU
 		{842677F2-B370-43CD-9AD2-42054EC940A1}.Release|x86.Build.0 = Release|Any CPU
-		{6A429270-0886-4E8A-A630-9CE5B45283DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6A429270-0886-4E8A-A630-9CE5B45283DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6A429270-0886-4E8A-A630-9CE5B45283DD}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{6A429270-0886-4E8A-A630-9CE5B45283DD}.Debug|x64.Build.0 = Debug|Any CPU
-		{6A429270-0886-4E8A-A630-9CE5B45283DD}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{6A429270-0886-4E8A-A630-9CE5B45283DD}.Debug|x86.Build.0 = Debug|Any CPU
-		{6A429270-0886-4E8A-A630-9CE5B45283DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6A429270-0886-4E8A-A630-9CE5B45283DD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6A429270-0886-4E8A-A630-9CE5B45283DD}.Release|x64.ActiveCfg = Release|Any CPU
-		{6A429270-0886-4E8A-A630-9CE5B45283DD}.Release|x64.Build.0 = Release|Any CPU
-		{6A429270-0886-4E8A-A630-9CE5B45283DD}.Release|x86.ActiveCfg = Release|Any CPU
-		{6A429270-0886-4E8A-A630-9CE5B45283DD}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -228,7 +212,6 @@ Global
 		{FCACDE17-D032-468F-8FB2-86DD298005A6} = {B6266319-C3E9-4791-BEA0-739C1D998D21}
 		{D1756EE0-4B72-4359-90A8-AE561929B1D0} = {FCACDE17-D032-468F-8FB2-86DD298005A6}
 		{842677F2-B370-43CD-9AD2-42054EC940A1} = {22706AA2-FC20-46A2-A815-DFB033A41904}
-		{6A429270-0886-4E8A-A630-9CE5B45283DD} = {8D99643B-D640-44C5-BC8C-24EDC104D2BA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7A1302DF-7820-469A-9EB2-83CF7691A088}
