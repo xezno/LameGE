@@ -210,7 +210,9 @@ namespace Engine
 
         private void LoadThread(object archivePath)
         {
+            Logging.Log($"Loading archive {archivePath}");
             FileSystem.LoadArchive((string)archivePath);
+            Logging.Log($"Loaded {archivePath}");
         }
 
         private void InitServices()
