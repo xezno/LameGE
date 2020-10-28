@@ -58,7 +58,6 @@ namespace Engine.Utils.MathUtils
 
         public Vector3d ToVector3d()
         {
-            // TODO: Replace with explicit conversion
             return new Vector3d(x, y, z);
         }
 

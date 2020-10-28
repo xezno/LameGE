@@ -1,9 +1,10 @@
-﻿using OpenGL;
+﻿using Engine.Utils.Base;
+using OpenGL;
 using Quincy.Managers;
 
 namespace Quincy
 {
-    public class QuincyRenderer
+    public class QuincyRenderer : IRenderer
     {
         public QuincyRenderer() { }
 

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Engine.AssetCompiler": {
+      "commandName": "Project",
+      "commandLineArgs": "D:\\Projects\\ECSEngine\\Content D:\\Projects\\ECSEngine\\content_package"
+    }
+  }
+}

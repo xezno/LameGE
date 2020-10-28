@@ -12,64 +12,74 @@ namespace Example.Components
     {
         private TransformComponent transformComponent;
         private bool lockRotation;
-        private Vector3f currentInput;
+        private Vector3d currentInput;
 
-        public Vector3f CurrentInput { get => currentInput; set => currentInput = value; }
-        public Vector3f CurrentDirection { get; set; }
+        public Vector3d CurrentInput { get => currentInput; set => currentInput = value; }
+        public Vector3d CurrentDirection { get; set; }
+        public Vector3d HorizontalDirection { get; set; }
 
-        public Vector3d Velocity { get; set; }
+        public float VerticalVelocity { get; set; }
+        public float ForwardVelocity { get; set; }
         public Vector3d CurrentRotation { get; set; }
-        public float Acceleration { get; set; } = 0.125f;
-        public float Deceleration { get; set; } = 0.0625f;
-        public float MaxSpeed { get; set; } = 10.0f;
+        public float Acceleration { get; set; } = 2f;
+        public float Deceleration { get; set; } = 1f;
+        public float MaxSpeed { get; set; } = 15.0f;
         public float MouseSensitivityMultiplier { get; set; } = 0.1f;
         public float RotationSensitivity { get; set; } = 3f;
-        public float MinVelocity { get; set; } = 0.05f;
+        public float MinVelocity { get; set; } = 0.001f;
 
         public override void Update(float deltaTime)
         {
             var sceneCamera = SceneManager.Instance.MainCamera;
             var sceneCameraTransform = sceneCamera.GetComponent<TransformComponent>();
 
-            transformComponent.Position += Velocity * deltaTime;
-            sceneCameraTransform.Position = transformComponent.Position;
-
-            sceneCameraTransform.RotationEuler = CurrentRotation * RotationSensitivity;
-            transformComponent.RotationEuler = CurrentRotation * RotationSensitivity;
-
-            var newDirection = (transformComponent.Forward * CurrentInput.z) + (transformComponent.Right * CurrentInput.x) + (transformComponent.Up * CurrentInput.y);
+            var newDirection = (transformComponent.Forward * (float)CurrentInput.z) + (transformComponent.Right * (float)CurrentInput.x);
             newDirection.Normalize();
 
-            CurrentDirection = newDirection.Normalized;
+            CurrentDirection = EaseLerpVector3(newDirection.ToVector3d(), CurrentDirection, 0.7f);
 
-            Velocity += CurrentDirection.ToVector3d() * Acceleration;
-            Velocity += new Vector3d(
-                Math.Sign(Velocity.x) * -Deceleration,
-                Math.Sign(Velocity.y) * -Deceleration,
-                Math.Sign(Velocity.z) * -Deceleration
-            );
+            var newHorizontalDirection = (Vector3d.up * (float)currentInput.y);
+            newHorizontalDirection.Normalize();
 
-            Velocity = new Vector3d(
-                Math.Max(Math.Min(Velocity.x, MaxSpeed), -MaxSpeed),
-                Math.Max(Math.Min(Velocity.y, MaxSpeed), -MaxSpeed),
-                Math.Max(Math.Min(Velocity.z, MaxSpeed), -MaxSpeed)
-            );
+            HorizontalDirection = EaseLerpVector3(newHorizontalDirection, HorizontalDirection, 0.7f);
 
-            if (Velocity.Magnitude < MinVelocity)
+            ForwardVelocity += (float)Math.Abs(CurrentInput.Magnitude) * Acceleration;
+            ForwardVelocity += Math.Sign(ForwardVelocity) * -Deceleration;
+
+            VerticalVelocity += (float)newHorizontalDirection.Magnitude * Acceleration;
+            VerticalVelocity += Math.Sign(VerticalVelocity) * -Deceleration;
+
+            ForwardVelocity = Math.Clamp(ForwardVelocity, -MaxSpeed, MaxSpeed);
+            VerticalVelocity = Math.Clamp(VerticalVelocity, -MaxSpeed, MaxSpeed);
+
+            // Accounts for rounding errors
+            if (ForwardVelocity < MinVelocity)
             {
-                Velocity = new Vector3d(0, 0, 0);
+                ForwardVelocity = 0f;
             }
+
+            if (VerticalVelocity < MinVelocity)
+            {
+                VerticalVelocity = 0f;
+            }
+
+            transformComponent.Position += CurrentDirection * ForwardVelocity * deltaTime;
+            transformComponent.Position += HorizontalDirection * VerticalVelocity * deltaTime;
+
+            sceneCameraTransform.Position = transformComponent.Position;
+            sceneCameraTransform.RotationEuler = CurrentRotation * RotationSensitivity;
+            transformComponent.RotationEuler = CurrentRotation * RotationSensitivity;
         }
 
-        public float EaseLerp(float a, float b, float t)
+        public double EaseLerp(double a, double b, double t)
         {
-            t = (float)(Math.Sin(t * (Math.PI / 2)));
+            t = Math.Sin(t * (Math.PI / 2));
             return (1.0f - t) * a + t * b;
         }
 
-        public Vector3f EaseLerpVector3(Vector3f a, Vector3f b, float t)
+        public Vector3d EaseLerpVector3(Vector3d a, Vector3d b, float t)
         {
-            return new Vector3f(EaseLerp(a.x, b.x, t), EaseLerp(a.y, b.y, t), EaseLerp(a.z, b.z, t));
+            return new Vector3d(EaseLerp(a.x, b.x, t), EaseLerp(a.y, b.y, t), EaseLerp(a.z, b.z, t));
         }
 
         public override void OnNotify(NotifyType eventType, INotifyArgs notifyArgs)

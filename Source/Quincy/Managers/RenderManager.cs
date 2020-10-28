@@ -1,5 +1,6 @@
 ﻿using Engine.ECS.Managers;
 using Engine.Utils;
+using Engine.Utils.Base;
 using System;
 using System.Threading;
 
@@ -7,15 +8,26 @@ namespace Quincy.Managers
 {
     public class RenderManager : Manager<RenderManager>
     {
+        public string hdri = "/HDRIs/studio_small_03_4k.hdr";
+        public float exposure = 1.75f;
+        public TonemapOperator tonemapOperator;
+
+        public enum TonemapOperator
+        {
+            None,
+            Reinhard,
+            ReinhardExtendedLuminance,
+            ReinhardJodie,
+            AcesApproximation
+        };
+
+        private IRenderer renderer;
+
         private DateTime lastRender;
         private int currentFrametimeIndex;
         private int currentFramerateIndex;
-
         private const int FramesToCount = 480;
-        private readonly QuincyRenderer renderer;
-
         private float framerateLimitAsMs = 1000f / GameSettings.FramerateLimit;
-
         public float LastFrameTime { get; private set; }
         public int CalculatedFramerate => (int)(1000f / Math.Max(LastFrameTime, 0.001f));
         public float[] FrametimeHistory { get; } = new float[FramesToCount];
@@ -26,7 +38,7 @@ namespace Quincy.Managers
 
         public RenderManager()
         {
-            renderer = new QuincyRenderer();
+            renderer = ServiceLocator.renderer.GetService();
             renderer.ContextCreated();
         }
 

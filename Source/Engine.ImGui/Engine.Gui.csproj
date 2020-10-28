@@ -18,16 +18,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Managers\ImGui\ImGuiWindows\Scripts\**" />
+    <EmbeddedResource Remove="Managers\ImGui\ImGuiWindows\Scripts\**" />
+    <None Remove="Managers\ImGui\ImGuiWindows\Scripts\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\Other\OpenGL.Net\Source\OpenGL.Net.CoreUI\OpenGL.Net.CoreUI.csproj" />
     <ProjectReference Include="..\..\Other\OpenGL.Net\Source\OpenGL.Net\OpenGL.Net.csproj" />
     <ProjectReference Include="..\..\Other\OpenGL.Net\Source\OpenGL.Net\OpenGL.Net.Math.csproj" />
     <ProjectReference Include="..\Engine.ECS\Engine.ECS.csproj" />
     <ProjectReference Include="..\Engine.Utils\Engine.Utils.csproj" />
     <ProjectReference Include="..\Quincy\Quincy.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Managers\ImGuiWindows\Scripts\" />
   </ItemGroup>
 
   <ItemGroup>

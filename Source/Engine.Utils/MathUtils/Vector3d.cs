@@ -19,7 +19,8 @@ namespace Engine.Utils.MathUtils
         /// </summary>
         public double z;
 
-        public double Magnitude => (float)Math.Sqrt(x * x + y * y + z * z);
+        public double Magnitude => Math.Sqrt(SqrMagnitude);
+        public double SqrMagnitude => x * x + y * y + z * z;
 
         public Vector3d Normalized
         {
@@ -80,6 +81,7 @@ namespace Engine.Utils.MathUtils
         public static Vector3d up = new Vector3d(0, 1, 0);
         public static Vector3d right = new Vector3d(1, 0, 0);
         public static Vector3d forward = new Vector3d(0, 0, 1);
+        public static Vector3d one = new Vector3d(1, 1, 1);
 
         /// <summary>
         /// Get all values within the <see cref="Vector3d"/> as a string.
@@ -100,9 +102,9 @@ namespace Engine.Utils.MathUtils
             return new System.Numerics.Vector3((float)x, (float)y, (float)z);
         }
 
-        public Vector3f ToVector3()
+        public Vector3f ToVector3f()
         {
-            return new Vector3f((float)x, (float)y, (float)z); // TODO: Replace with explicit conversion
+            return new Vector3f((float)x, (float)y, (float)z);
         }
     }
 }

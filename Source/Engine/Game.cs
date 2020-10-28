@@ -5,9 +5,13 @@ using Engine.Managers;
 using Engine.Types;
 using Engine.Utils;
 using Engine.Utils.DebugUtils;
+using Engine.Utils.FileUtils;
+using Engine.Utils.FileUtils.FileSystems;
 using Engine.Utils.MathUtils;
 using Newtonsoft.Json;
+using OpenGL;
 using OpenGL.CoreUI;
+using Quincy;
 using Quincy.Managers;
 using System;
 using System.Collections.Generic;
@@ -54,8 +58,11 @@ namespace Engine
 
         private void Render(object sender, NativeWindowEventArgs e)
         {
+            Gl.Enable(EnableCap.FramebufferSrgb);
             RenderManager.Instance.Run();
+            Gl.Disable(EnableCap.FramebufferSrgb);
             ImGuiManager.Instance.Run();
+            Gl.Enable(EnableCap.FramebufferSrgb);
         }
 
         public void Close()
@@ -184,15 +191,21 @@ namespace Engine
             }
         }
 
-        private void LoadContent() { }
+        private void InitServices()
+        {
+            ServiceLocator.renderer.ProvideService(new QuincyRenderer());
+            ServiceLocator.fileSystem.ProvideService(new DiskFileSystem());
+
+            ServiceLocator.FileSystem.Init("Content/");
+        }
         #endregion
 
         #region Event Handlers
         private void ContextCreated(object sender, NativeWindowEventArgs e)
         {
+            InitServices();
             InitManagers();
             InitScene();
-            LoadContent();
 
             // Setup complete - broadcast the game started event
             Broadcast.Notify(NotifyType.ContextReady, new GenericNotifyArgs(this));
@@ -232,25 +245,6 @@ namespace Engine
             //if (MouseMode == MouseMode.Locked)
             //    nativeWindow.SetCursorPos(new Point((int)(GameSettings.GamePosX + (GameSettings.GameResolutionX / 2)),
             //        (int)(GameSettings.GamePosY + (GameSettings.GameResolutionY / 2))));
-        }
-
-        private int MouseButtonToInt(MouseButton button)
-        {
-            switch (button)
-            {
-                case MouseButton.Left:
-                    return 0;
-                case MouseButton.Right:
-                    return 1;
-                case MouseButton.Middle:
-                    return 2;
-                case MouseButton.X1:
-                    return 3;
-                case MouseButton.X2:
-                    return 4;
-                default:
-                    throw new NotImplementedException();
-            }
         }
 
         private void MouseUp(object sender, NativeWindowMouseEventArgs e)

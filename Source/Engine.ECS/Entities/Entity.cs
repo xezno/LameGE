@@ -155,7 +155,6 @@ namespace Engine.ECS.Entities
             return results.Count > 0;
         }
 
-        // TODO: Consider removal
         public virtual void OnNotify(NotifyType notifyType, INotifyArgs notifyArgs)
         {
             var tmpComponentsCopy = new IComponent[Components.Count];
@@ -167,7 +166,6 @@ namespace Engine.ECS.Entities
             }
         }
 
-        // TODO: Consider removal
         public void Render()
         {
             foreach (var component in Components)
@@ -176,7 +174,6 @@ namespace Engine.ECS.Entities
             }
         }
 
-        // TODO: Consider removal
         public void Update(float deltaTime)
         {
             foreach (var component in Components)

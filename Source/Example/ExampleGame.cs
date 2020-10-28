@@ -1,7 +1,6 @@
 ﻿using Engine;
 using Engine.Assets;
 using Engine.ECS.Entities;
-using Engine.Entities;
 using Engine.Gui.Managers;
 using Engine.Gui.Managers.ImGuiWindows;
 using System.Collections.Generic;
@@ -9,6 +8,7 @@ using Example.Entities;
 using Example.Managers.ImGuiWindows.Addons;
 using Quincy.Managers;
 using Engine.Utils.MathUtils;
+using Engine.Utils;
 
 namespace Example
 {
@@ -18,32 +18,27 @@ namespace Example
 
         protected override void InitScene()
         {
-            var modelScaleFactor = 0.0125f;
-            var modelScale = new Vector3d(modelScaleFactor, modelScaleFactor, modelScaleFactor);
             base.InitScene();
+            var fs = ServiceLocator.fileSystem.GetService();
+
             var entities = new List<IEntity>
             {
                 new PlayerEntity()
                 {
                     Name = "Player"
                 },
-                //new LevelModelEntity()
-                //{
-                //    Name = "Generated BSP Mesh"
-                //},
-                //new TestCubeEntity()
-                //{
-                //    Name = "Physics Box"
-                //},
-                new ModelEntity($"Content/Models/rainier/scene.gltf", modelScale)
+                new LevelModelEntity(fs.GetAsset("/Maps/gm_fork.bsp"))
                 {
-                    Name = "Rainier"
+                    Name = "Generated BSP Mesh"
                 },
-                new ModelEntity($"Content/Models/mcrn_tachi/scene.gltf", modelScale)
+                //new ModelEntity(fs.GetAsset("/Models/mcrn_tachi/scene.gltf"), new Vector3d(0, 0, 0), Vector3d.one * 0.0125f)
+                //{
+                //    Name = "MCRN Tachi"
+                //},
+                new ModelEntity(fs.GetAsset("/Models/mimicgltf/scene.gltf"), new Vector3d(0, 0, 0), Vector3d.one * 5f)
                 {
-                    Name = "MCRN Tachi"
+                    Name = "Treasure Chest Mimic"
                 }
-                // TODO: fix this (anything that renders afterwards won't render at all?)
             };
 
             foreach (IEntity entity in entities)
@@ -54,12 +49,13 @@ namespace Example
 
         private void SetupCustomImGuiMenus()
         {
-            ImGuiManager.Instance.Menus.Add(
-                new ImGuiMenu(FontAwesome5.Hammer, "Anvil", new List<ImGuiWindow>()
-                {
-                    new AnvilBrowserWindow()
-                })
-            );
+            // TODO: Replace with the new attribute system
+            //ImGuiManager.Instance.Menus.Add(
+            //    new ImGuiMenu(FontAwesome5.Hammer, ImGuiMenus.Menu.Experimental, new List<ImGuiWindow>()
+            //    {
+            //        new AnvilBrowserWindow()
+            //    })
+            //);
         }
     }
 }

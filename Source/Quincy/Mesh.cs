@@ -100,7 +100,7 @@ namespace Quincy
             Vertices = null;
         }
 
-        public void Draw(CameraEntity camera, ShaderComponent shader, LightEntity light, (Cubemap, Cubemap, Cubemap) pbrCubemaps, Texture brdfLut, Matrix4x4f modelMatrix)
+        public void Draw(CameraEntity camera, ShaderComponent shader, LightEntity light, (Cubemap, Cubemap, Cubemap) pbrCubemaps, Texture brdfLut, Matrix4x4f modelMatrix, Texture holoTexture)
         {
             Dictionary<string, uint> counts = new Dictionary<string, uint>();
             List<string> expected = new List<string>() { "texture_diffuse", "texture_emissive", "texture_unknown", "texture_normal" };
@@ -142,7 +142,7 @@ namespace Quincy
             shader.SetMatrix("modelMatrix", modelMatrix * localModelMatrix);
 
             shader.SetVector3d("camPos", camera.GetComponent<TransformComponent>().Position);
-            shader.SetVector3d("lightPos", lightComponent.Position);
+            shader.SetVector3d("lightPos", light.GetComponent<TransformComponent>().Position);
 
             shader.SetMatrix("lightProjectionMatrix", lightComponent.ProjMatrix);
             shader.SetMatrix("lightViewMatrix", lightComponent.ViewMatrix);
@@ -162,6 +162,10 @@ namespace Quincy
             Gl.ActiveTexture(TextureUnit.Texture0 + Textures.Count + 3);
             Gl.BindTexture(TextureTarget.TextureCubeMap, pbrCubemaps.Item3.Id);
             shader.SetInt("prefilterMap", Textures.Count + 3);
+
+            Gl.ActiveTexture(TextureUnit.Texture0 + Textures.Count + 4);
+            Gl.BindTexture(TextureTarget.Texture2d, holoTexture.Id);
+            shader.SetInt("holoMap", Textures.Count + 4);
 
             Gl.ActiveTexture(TextureUnit.Texture0);
 

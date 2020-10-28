@@ -65,7 +65,7 @@ float GetFacing(float blendFactor, vec3 view, vec3 N)
 {
     float facing = abs(dot(view, N));
     if (blendFactor != 0.5) {
-        blendFactor = clamp(blendFactor, 0.0, 0.99999);
+        blendFactor = clamp(blendFactor, 0.0, 0.999);
         blendFactor = (blendFactor < 0.5) ? 2.0 * blendFactor : 0.5 / (1.0 - blendFactor);
         facing = pow(facing, blendFactor);
     }
@@ -82,7 +82,7 @@ float GetRand(vec4 seed)
 // Shadow mapping
 float CalcShadows(vec4 fragPos)
 {
-    float bias = 0.002;
+    float bias = 0.0005;
 
     vec3 projectedCoords = fragPos.xyz / fragPos.w;
     projectedCoords = projectedCoords * 0.5 + 0.5;
@@ -91,7 +91,7 @@ float CalcShadows(vec4 fragPos)
 
     float shadow = 0.0;
     vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
-    const int sampleCount = 64;
+    const int sampleCount = 32;
     int totalSampleCount = 0;
     for (int i = 0; i < sampleCount - 1; ++i)
     {
@@ -157,7 +157,7 @@ void main() {
     vec3 albedo = albedoSrc.xyz;
 
     float ao = 1.0;
-    float roughness = 1.0;
+    float roughness = 0.0;
     float metallic = 1.0;
     if (material.texture_unknown1.exists)
     {
@@ -212,7 +212,7 @@ void main() {
     vec3 diffuse = irradiance * albedo;
     vec3 ambient = (kD * diffuse + specular) * ao;
 
-    vec3 color = Lo + ambient;
+    vec3 color = (Lo + ambient) * (1.0.xxx - vec3(CalcShadows(vs_out.fragPosLightSpace) * 0.75));
     
     vec4 emissive = vec4(0.0);
     // Emissive lighting

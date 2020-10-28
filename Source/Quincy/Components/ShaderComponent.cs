@@ -1,7 +1,12 @@
 ﻿using Engine.ECS.Components;
+using Engine.Utils;
+using Engine.Utils.Attributes;
 using Engine.Utils.DebugUtils;
+using Engine.Utils.FileUtils;
 using Engine.Utils.MathUtils;
+using Newtonsoft.Json;
 using OpenGL;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -12,11 +17,35 @@ namespace Quincy.Components
     {
         private List<string> knownMissingVariables = new List<string>();
         public uint Id { get; set; }
+        private Asset fragShaderAsset, vertShaderAsset;
 
-        public ShaderComponent(string fragGlslPath, string vertGlslPath)
+        public ShaderComponent(Asset jsonAsset)
         {
-            var fragGlslContents = File.ReadAllText(fragGlslPath);
-            var vertGlslContents = File.ReadAllText(vertGlslPath);
+            /* 
+             * Example:
+             *  {
+             *      "fragment": "standard.frag",
+             *      "vertex": "standard.vert"
+             *  }
+             */
+            var shaderDescription = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonAsset.AsString());
+            var directory = Path.GetDirectoryName(jsonAsset.MountPath);
+            fragShaderAsset = ServiceLocator.FileSystem.GetAsset($"{directory}/{shaderDescription["fragment"]}");
+            vertShaderAsset = ServiceLocator.FileSystem.GetAsset($"{directory}/{shaderDescription["vertex"]}");
+            Load();
+        }
+
+        public ShaderComponent(Asset fragShaderAsset, Asset vertShaderAsset)
+        {
+            this.fragShaderAsset = fragShaderAsset;
+            this.vertShaderAsset = vertShaderAsset;
+            Load();
+        }
+
+        public void Load()
+        {
+            var fragGlslContents = fragShaderAsset.AsString();
+            var vertGlslContents = vertShaderAsset.AsString();
 
             var fragId = Gl.CreateShader(ShaderType.FragmentShader);
             Gl.ShaderSource(fragId, new[] { fragGlslContents });

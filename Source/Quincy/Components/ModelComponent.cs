@@ -1,7 +1,9 @@
 ﻿using Assimp;
 using Engine.ECS.Components;
+using Engine.Utils;
 using Engine.Utils.Attributes;
 using Engine.Utils.DebugUtils;
+using Engine.Utils.FileUtils;
 using Engine.Utils.MathUtils;
 using OpenGL;
 using Quincy.Entities;
@@ -20,17 +22,17 @@ namespace Quincy.Components
 
         public ModelComponent() { }
 
-        public ModelComponent(string path)
+        public ModelComponent(Asset asset)
         {
-            LoadModel(path);
+            LoadModel(asset);
         }
 
-        public void Draw(CameraEntity camera, ShaderComponent shader, LightEntity light, (Cubemap, Cubemap, Cubemap) pbrCubemaps, Texture brdfLut)
+        public void Draw(CameraEntity camera, ShaderComponent shader, LightEntity light, (Cubemap, Cubemap, Cubemap) pbrCubemaps, Texture brdfLut, Texture holoTexture)
         {
             var matrix = GetComponent<TransformComponent>().Matrix;
             foreach (var mesh in Meshes)
             {
-                mesh.Draw(camera, shader, light, pbrCubemaps, brdfLut, matrix);
+                mesh.Draw(camera, shader, light, pbrCubemaps, brdfLut, matrix, holoTexture);
             }
         }
 
@@ -51,9 +53,10 @@ namespace Quincy.Components
             }
         }
 
-        private void LoadModel(string path)
+        private void LoadModel(Asset asset)
         {
-            var importer = new AssimpContext();
+            // TODO: Remove assimp
+            var context = new AssimpContext();
 
             var logStream = new LogStream((msg, userData) =>
             {
@@ -61,17 +64,22 @@ namespace Quincy.Components
             });
             logStream.Attach();
 
-            var scene = importer.ImportFile(path, PostProcessSteps.Triangulate |
-                                                  PostProcessSteps.PreTransformVertices |
-                                                  PostProcessSteps.RemoveRedundantMaterials |
-                                                  PostProcessSteps.CalculateTangentSpace |
-                                                  PostProcessSteps.OptimizeMeshes |
-                                                  PostProcessSteps.OptimizeGraph |
-                                                  PostProcessSteps.ValidateDataStructure |
-                                                  PostProcessSteps.GenerateNormals |
-                                                  PostProcessSteps.FlipUVs);
+            var extension = Path.GetExtension(asset.MountPath).Substring(1);
+            using var memoryStream = new MemoryStream(asset.Data);
+            memoryStream.Seek(0, SeekOrigin.Begin);
 
-            directory = Path.GetDirectoryName(path);
+            var scene = context.ImportFile("Content/" + asset.MountPath, 
+                PostProcessSteps.Triangulate
+                | PostProcessSteps.PreTransformVertices
+                | PostProcessSteps.RemoveRedundantMaterials
+                | PostProcessSteps.CalculateTangentSpace
+                | PostProcessSteps.OptimizeMeshes
+                | PostProcessSteps.OptimizeGraph
+                | PostProcessSteps.ValidateDataStructure
+                | PostProcessSteps.GenerateNormals
+                | PostProcessSteps.FlipUVs);
+
+            directory = Path.GetDirectoryName(asset.MountPath);
 
             ProcessNode(scene.RootNode, scene);
         }
@@ -209,7 +217,7 @@ namespace Quincy.Components
 
                 Logging.Log($"Loading {directory}/{textureSlot.FilePath} as {typeName}");
 
-                var texture = Texture.LoadFromFile($"{directory}/{textureSlot.FilePath}", typeName);
+                var texture = Texture.LoadFromAsset(ServiceLocator.FileSystem.GetAsset($"{directory}/{textureSlot.FilePath}"), typeName);
 
                 // Add to texture container so that we don't reload it later
                 TextureContainer.Textures.Add(texture);
