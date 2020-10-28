@@ -8,6 +8,7 @@ using System.Numerics;
 namespace Engine.Gui.Managers.ImGuiWindows.Editor.NodeEditor
 {
     // Based on https://gist.github.com/ocornut/7e9b3ec566a333d725d4
+    [ImGuiMenuPath(ImGuiMenus.Menu.Experimental)]
     public class NodeEditorWindow : ImGuiWindow
     {
         public override bool Render { get; set; }

@@ -15,6 +15,6 @@
         public long FileLocation { get; }
         public long FileLength { get; }
         public CompressionMethod FileCompressionMethod { get; }
-        public byte[] FileData { get; set; } // TODO: Decompress via property?
+        public byte[] FileData { get; set; }
     }
 }

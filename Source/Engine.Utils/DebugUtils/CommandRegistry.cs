@@ -61,12 +61,15 @@ namespace Engine.Utils.DebugUtils
 
         public static void RegisterAllCommands()
         {
-            // TODO: Optimize
+            // TODO: Optimize?
+            var start = DateTime.Now;
             foreach (var method in Assembly.GetExecutingAssembly().GetTypes().SelectMany(t => t.GetMethods()).Where(m => m.GetCustomAttributes(typeof(ConsoleFunction), false).Length > 0))
             {
                 var consoleFunction = method.GetCustomAttribute<ConsoleFunction>();
                 RegisterMethod(consoleFunction.FunctionName, "", () => method.Invoke(null, null));
             }
+            var totalTime = (DateTime.Now - start);
+            Logging.Log($"RegisterAllCommands took {totalTime.TotalSeconds:F2}s");
         }
 
         public static List<DebugMember> GiveSuggestions(string input) => (List<DebugMember>)debugMembers.Where(t => t.MatchSuggestion(input)).Take(5);

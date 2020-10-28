@@ -18,11 +18,13 @@ using Vector4f = Engine.Utils.MathUtils.Vector4f;
 using Engine.Gui.Managers.ImGuiWindows.Editor.Engine;
 using Quincy.Components;
 using Engine.Gui.Managers.ImGuiWindows.Editor.NodeEditor;
-using Engine.Utils.FileUtils;
+using System.Runtime;
+using System.Reflection;
+using System.Linq;
 
 namespace Engine.Gui.Managers
 {
-    public class ImGuiManager : Manager<ImGuiManager>
+    public class ImGuiManager : Manager<ImGuiManager>, IGuiProvider
     {
         private const float PT_TO_PX = 1.3281472327365f;
 
@@ -47,40 +49,7 @@ namespace Engine.Gui.Managers
             }
         }
 
-        // TODO: Move over to an attributes-based system for menuing & overlays
-        public List<ImGuiMenu> Menus { get; } = new List<ImGuiMenu>()
-        {
-            new ImGuiMenu(FontAwesome5.File, "File", new List<ImGuiWindow>()
-            {
-                new SaveSettingsWindow(),
-                new CloseGameWindow(),
-                new DockSpaceWindow()
-            }),
-            //new ImGuiMenu(FontAwesome5.FileCode, "Scripts", new List<ImGuiWindow>()
-            //{
-            //    new ScriptCompileWindow()
-            //}),
-            new ImGuiMenu(FontAwesome5.Cubes, "Scene", new List<ImGuiWindow>()
-            {
-                new ViewportWindow(),
-                new ScenePropertiesWindow()
-            }),
-            new ImGuiMenu(FontAwesome5.Wrench, "Engine", new List<ImGuiWindow>()
-            {
-                new EngineConfigWindow(),
-                new PerformanceWindow(),
-                new TextureBrowserWindow(),
-                new ShaderWindow(),
-                new InputWindow(),
-                new RenderSettingsWindow(),
-                new ConsoleWindow()
-            }),
-            new ImGuiMenu(FontAwesome5.Magic, "Experimental", new List<ImGuiWindow>()
-            {
-                new NodeEditorWindow(),
-                new MouseDebugWindow()
-            })
-        };
+        public List<ImGuiMenu> Menus { get; } = new List<ImGuiMenu>();
 
         public List<ImGuiWindow> Overlays { get; } = new List<ImGuiWindow>()
         {
@@ -109,12 +78,36 @@ namespace Engine.Gui.Managers
             // TODO: Check if theme doesn't exist, set a default
             // TODO: Move code to somewhere that makes more sense?
 
+            InitMenus();
             InitFonts();
             InitKeymap();
             InitGl();
         }
 
         #region "Initialization"
+        private void InitMenus()
+        {
+            foreach (var type in Assembly.GetExecutingAssembly().GetTypes().Where(t => t.GetCustomAttributes(typeof(ImGuiMenuPathAttribute), false).Length > 0))
+            {
+                var pathAttrib = (ImGuiMenuPathAttribute)type.GetCustomAttribute(typeof(ImGuiMenuPathAttribute));
+                var menuMatches = Menus.FindAll(m => m.Menu == pathAttrib.Path);
+                var typeInstance = (ImGuiWindow)Activator.CreateInstance(type);
+                if (menuMatches.Count > 0)
+                {
+                    menuMatches.First().Windows.Add(typeInstance);
+                }
+                else
+                {
+                    Menus.Add(new ImGuiMenu(ImGuiMenus.Icons[pathAttrib.Path], pathAttrib.Path, new List<ImGuiWindow>()
+                    {
+                        typeInstance
+                    }));
+                }
+            }
+
+            Menus.Sort((a, b) => a.Menu - b.Menu);
+        }
+
         private void InitGl()
         {
             var fs = ServiceLocator.FileSystem;
@@ -134,14 +127,12 @@ namespace Engine.Gui.Managers
             unsafe
             {
                 // TODO: Load fonts from archives
-
                 var stdConfig = ImGuiNative.ImFontConfig_ImFontConfig();
 
                 io.Fonts.AddFontFromFileTTF("Content/Fonts/OpenSans/OpenSans-SemiBold.ttf", fontSizePixels, stdConfig);
 
                 ImGuiNative.ImFontConfig_destroy(stdConfig);
 
-                // TODO: Fix
                 var faRanges = new ushort[] { FontAwesome5.IconMin, FontAwesome5.IconMax, 0 };
                 var faConfig = ImGuiNative.ImFontConfig_ImFontConfig();
                 faConfig->MergeMode = 1;
@@ -205,11 +196,11 @@ namespace Engine.Gui.Managers
 
             foreach (var menu in Menus)
             {
-                if (menu.windows.Count < 0) continue;
+                if (menu.Windows.Count < 0) continue;
 
-                if (ImGui.BeginMenu($"{menu.IconGlyph} {menu.Title}"))
+                if (ImGui.BeginMenu($"{menu.IconGlyph} {menu.Menu.ToString()}"))
                 {
-                    foreach (var window in menu.windows)
+                    foreach (var window in menu.Windows)
                     {
                         if (ImGui.MenuItem($"{window.IconGlyph} {window.Title}"))
                         {
@@ -237,7 +228,7 @@ namespace Engine.Gui.Managers
 
                 foreach (var menu in Menus)
                 {
-                    foreach (var window in menu.windows)
+                    foreach (var window in menu.Windows)
                     {
                         if (window.Render)
                         {
@@ -323,7 +314,6 @@ namespace Engine.Gui.Managers
                 }
             }
 
-            // TODO: Move these elsewhere to prevent later confusion
             Gl.Disable(EnableCap.ScissorTest);
             Gl.Enable(EnableCap.DepthTest);
             Gl.Enable(EnableCap.CullFace);
@@ -331,10 +321,9 @@ namespace Engine.Gui.Managers
 
         private char KeyCodeToChar(KeyCode keyCode)
         {
-            // TODO: correctly handle different locales and keyboard layouts
-            // This is currently only written for ISO UK qwerty.
-
+            // TODO: correctly handle different locales and keyboard layouts - this is currently only written for ISO UK qwerty.
             // TODO: Handle modifier keys
+
             var c = '\0';
             if (keyCode >= KeyCode.A && keyCode <= KeyCode.Z)
             {

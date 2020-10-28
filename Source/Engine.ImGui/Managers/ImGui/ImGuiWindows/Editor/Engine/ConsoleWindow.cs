@@ -9,6 +9,7 @@ using System.Numerics;
 
 namespace Engine.Gui.Managers.ImGuiWindows.Editor.Engine
 {
+    [ImGuiMenuPath(ImGuiMenus.Menu.Engine)]
     class ConsoleWindow : ImGuiWindow
     {
         public override bool Render { get; set; }
@@ -17,7 +18,7 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor.Engine
 
         private string currentConsoleFilter = "", currentConsoleInput = "";
 
-        private int logLimit = 1024;
+        private const int logLimit = 1024;
 
         private bool scrollQueued = true;
 
@@ -115,19 +116,14 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor.Engine
 
         public static Vector4 SeverityToColor(Logging.Severity severity)
         {
-            switch (severity)
+            return severity switch
             {
-                case Logging.Severity.Fatal:
-                    return new Vector4(255f / 255f, 0, 0, 1);
-                case Logging.Severity.High:
-                    return new Vector4(255f / 255f, 94f / 255f, 94f / 255f, 1);
-                case Logging.Severity.Low:
-                    return new Vector4(67f / 255f, 255f / 255f, 83f / 255f, 1);
-                case Logging.Severity.Medium:
-                    return new Vector4(255f / 255f, 200f / 255f, 0, 1);
-            }
-            
-            return new Vector4(67f / 255f, 255f / 255f, 83f / 255f, 1);
+                Logging.Severity.Fatal => new Vector4(255f / 255f, 0, 0, 1),
+                Logging.Severity.High => new Vector4(255f / 255f, 94f / 255f, 94f / 255f, 1),
+                Logging.Severity.Low => new Vector4(67f / 255f, 255f / 255f, 83f / 255f, 1),
+                Logging.Severity.Medium => new Vector4(255f / 255f, 200f / 255f, 0, 1),
+                _ => new Vector4(67f / 255f, 255f / 255f, 83f / 255f, 1),
+            };
         }
     }
 }

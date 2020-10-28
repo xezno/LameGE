@@ -5,6 +5,7 @@ using ImGuiNET;
 namespace Engine.Gui.Managers.ImGuiWindows.Editor
 {
     // Definitely a HACK. TODO: Improve
+    [ImGuiMenuPath(ImGuiMenus.Menu.File)]
     class SaveSettingsWindow : ImGuiWindow
     {
         public override bool Render { get; set; }

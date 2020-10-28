@@ -93,7 +93,7 @@ namespace Quincy.Components
         /// <summary>
         /// The transform that this transform is a child of within the scene hierarchy.
         /// </summary>
-        public TransformComponent? ParentTransform { get; set; }
+        public TransformComponent ParentTransform { get; set; }
 
         /// <summary>
         /// Construct a new TransformComponent with the parameters specified.
@@ -104,7 +104,7 @@ namespace Quincy.Components
         public TransformComponent(Vector3d position, Quaternion rotation, Vector3d scale)
         {
             this.Position = position;
-            rotationEuler = rotation.ToEulerAngles(); // TODO
+            rotationEuler = rotation.ToEulerAngles(); // TODO: proper quaternions
             this.Scale = scale;
         }
 
@@ -117,7 +117,7 @@ namespace Quincy.Components
         public TransformComponent(Vector3d position, Vector3d rotationEuler, Vector3d scale)
         {
             this.Position = position;
-            this.rotationEuler = rotationEuler; // TODO
+            this.rotationEuler = rotationEuler;
             this.Scale = scale;
         }
     }

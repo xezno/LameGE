@@ -4,6 +4,7 @@ using Quincy.Managers;
 
 namespace Engine.Gui.Managers.ImGuiWindows.Editor
 {
+    [ImGuiMenuPath(ImGuiMenus.Menu.Engine)]
     class PerformanceWindow : ImGuiWindow
     {
         public override bool Render { get; set; }

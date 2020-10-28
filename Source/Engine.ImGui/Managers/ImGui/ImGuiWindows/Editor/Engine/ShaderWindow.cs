@@ -9,6 +9,7 @@ using System.Reflection;
 
 namespace Engine.Gui.Managers.ImGuiWindows.Editor
 {
+    [ImGuiMenuPath(ImGuiMenus.Menu.Engine)]
     class ShaderWindow : ImGuiWindow
     {
         public override bool Render { get; set; } = true;

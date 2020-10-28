@@ -12,7 +12,7 @@ namespace Engine.Gui.Managers.ImGuiWindows
         public abstract string Title { get; }
         public abstract string IconGlyph { get; }
         public virtual ImGuiWindowFlags Flags { get; }
-        public IHasParent Parent { get => ImGuiManager.Instance; set { } } // HACK
+        public IHasParent Parent { get => ImGuiManager.Instance; set { _ = value; } }
 
         public abstract void Draw();
 

@@ -5,6 +5,7 @@ using Quincy.Managers;
 
 namespace Engine.Gui.Managers.ImGuiWindows.Editor
 {
+    [ImGuiMenuPath(ImGuiMenus.Menu.Scene)]
     class ScenePropertiesWindow : ImGuiWindow
     {
         public override bool Render { get; set; } = true;

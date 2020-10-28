@@ -5,6 +5,7 @@ using System.Numerics;
 
 namespace Engine.Gui.Managers.ImGuiWindows.Editor.Engine
 {
+    [ImGuiMenuPath(ImGuiMenus.Menu.File)]
     class DockSpaceWindow : ImGuiWindow
     {
         public override bool Render { get; set; } = true;

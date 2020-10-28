@@ -101,11 +101,10 @@ namespace Engine.Utils.DebugUtils
 
         public static void DrawImGuiArray(dynamic memberValue, int depth)
         {
-            // TODO: what??
-            //foreach (var element in memberValue)
-            //{
-            //    RenderImGuiMembers(depth + 1);
-            //}
+            foreach (var element in memberValue)
+            {
+                RenderImGuiMembers(element, depth + 1);
+            }
         }
 
         /// <summary>

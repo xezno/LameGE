@@ -3,6 +3,7 @@ using ImGuiNET;
 
 namespace Engine.Gui.Managers.ImGuiWindows.Editor
 {
+    [ImGuiMenuPath(ImGuiMenus.Menu.Engine)]
     public sealed class InputWindow : ImGuiWindow
     {
         public override bool Render { get; set; }

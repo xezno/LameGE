@@ -8,6 +8,7 @@ using System.Numerics;
 
 namespace Engine.Gui.Managers.ImGuiWindows.Editor
 {
+    [ImGuiMenuPath(ImGuiMenus.Menu.File)]
     class CloseGameWindow : ImGuiWindow
     {
         public override bool Render { get; set; }

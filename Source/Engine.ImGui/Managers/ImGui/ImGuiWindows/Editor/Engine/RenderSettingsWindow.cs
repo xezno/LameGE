@@ -7,6 +7,7 @@ using static Quincy.Managers.RenderManager;
 
 namespace Engine.Gui.Managers.ImGuiWindows.Editor
 {
+    [ImGuiMenuPath(ImGuiMenus.Menu.Engine)]
     class RenderSettingsWindow : ImGuiWindow
     {
         public override bool Render { get; set; }

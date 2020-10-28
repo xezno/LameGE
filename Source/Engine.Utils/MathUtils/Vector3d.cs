@@ -102,9 +102,9 @@ namespace Engine.Utils.MathUtils
             return new System.Numerics.Vector3((float)x, (float)y, (float)z);
         }
 
-        public Vector3f ToVector3()
+        public Vector3f ToVector3f()
         {
-            return new Vector3f((float)x, (float)y, (float)z); // TODO: Replace with explicit conversion
+            return new Vector3f((float)x, (float)y, (float)z);
         }
     }
 }

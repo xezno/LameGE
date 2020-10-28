@@ -3,12 +3,11 @@ using ImGuiNET;
 
 namespace Engine.Gui.Managers.ImGuiWindows.Editor.Engine
 {
+    [ImGuiMenuPath(ImGuiMenus.Menu.Engine)]
     public class MouseDebugWindow : ImGuiWindow
     {
         public override bool Render { get; set; }
-
         public override string Title => "Mouse Debug";
-
         public override string IconGlyph => FontAwesome5.Mouse;
 
         public override void Draw()

@@ -22,8 +22,7 @@ namespace Engine.Gui.Managers.ImGuiWindows.Overlays
             foreach (var logEntry in Logging.LogEntries.TakeLast(logLimit))
             {
                 DrawShadowLabel(logEntry.ToString(), ImGui.GetStyle().WindowPadding + currentOffset);
-
-                currentOffset += new Vector2(0, ImGui.GetStyle().ItemSpacing.Y + 12); // TODO: match line height???
+                currentOffset += new Vector2(0, ImGui.GetStyle().ItemSpacing.Y + 12);
             }
             ImGui.PopFont();
         }

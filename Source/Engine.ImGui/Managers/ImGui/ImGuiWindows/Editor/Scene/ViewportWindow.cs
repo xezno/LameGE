@@ -7,6 +7,7 @@ using System;
 
 namespace Engine.Gui.Managers.ImGuiWindows.Editor
 {
+    [ImGuiMenuPath(ImGuiMenus.Menu.Scene)]
     class ViewportWindow : ImGuiWindow
     {
         public override bool Render { get; set; }
