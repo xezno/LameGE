@@ -42,6 +42,7 @@
 - .NET Core 3.1
 - Visual Studio 2019
 - Windows
+- CMake (for libstbi)
 
 #### Recommendations
 
@@ -50,9 +51,17 @@
 
 ### Instructions
 
+#### Building with the example project
 1. First, clone the repository recursively with `git clone --recursive https://github.com/xezno/engine`
 2. Next, run `git submodule update` to ensure that all submodules are up to date.
-3. Once complete, open Source/Ulaid.sln and build the solution. This will fetch / build any dependencies automatically, and then build the engine and example game.
+3. Once done, create a junction to `(root dir)/Content` in `(root dir)/Source/Example/bin/x64/Debug/netcoreapp3.1`. You will need to provide some of your own content, as some copyrighted material has been omitted from this repository.
+4. Now, compile stbi; this can be done by executing the following commands in a terminal window:
+ - `cd (root-dir)/Other/stbi-sharp/`
+ - `mkdir build`
+ - `cd build`
+ - `cmake ../libstbi`
+ - You will then need to build the project located at `(root-dir)/Other/stbi-sharp/build/INSTALL.vcxproj`.
+5. Once complete, open `Source/Ulaid.sln` and build the solution, optionally using `Example/Example` as the startup project. This will fetch / build any dependencies automatically, and then build the engine and example game.
 
 ## Platform Support
 

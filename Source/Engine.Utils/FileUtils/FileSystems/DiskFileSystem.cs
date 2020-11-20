@@ -10,9 +10,10 @@ namespace Engine.Utils.FileUtils.FileSystems
 
         public Asset GetAsset(string path)
         {
-            if (!File.Exists($"{contentPath}/{path}"))
+            var fullPath = $"{contentPath}/{path}";
+            if (!File.Exists(fullPath))
             {
-                Logging.Log($"Asset {path} doesn't exist on disk.", Logging.Severity.High);
+                Logging.Log($"Asset {fullPath} doesn't exist on disk.", Logging.Severity.High);
                 return Asset.Empty;
             }
 
