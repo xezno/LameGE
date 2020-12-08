@@ -222,9 +222,6 @@ namespace Quincy.Components
                 Logging.Log($"Loading {directory}/{textureSlot.FilePath} as {typeName}");
 
                 var texture = Texture.LoadFromAsset(ServiceLocator.FileSystem.GetAsset($"{directory}/{textureSlot.FilePath}"), typeName);
-
-                // Add to texture container so that we don't reload it later
-                TextureContainer.Textures.Add(texture);
                 textures.Add(texture);
             }
 

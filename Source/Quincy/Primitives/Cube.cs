@@ -61,37 +61,7 @@ namespace Quincy.Primitives
             0.0f, 1.0f
         };
 
-        public List<Vertex> Vertices
-        {
-            get
-            {
-                List<Vertex> tmp = new List<Vertex>();
-
-                for (int i = 0; i < cubeVertices.Length; i += 3)
-                {
-                    var x = cubeVertices[i];
-                    var y = cubeVertices[i + 1];
-                    var z = cubeVertices[i + 2];
-
-                    // TODO: better uvs
-                    var u = cubeUvs[(i / 3) % cubeUvs.Length];
-                    var v = cubeUvs[((i / 3) + 1) % cubeUvs.Length];
-
-                    tmp.Add(new Vertex()
-                    {
-                        Position = new Vector3f(x, y, z),
-                        TexCoords = new Vector2f(u, v),
-
-                        // TODO:
-                        BiTangent = new Vector3f(0, 0, 0),
-                        Normal = new Vector3f(0, 0, 0),
-                        Tangent = new Vector3f(0, 0, 0),
-                    });
-                }
-
-                return tmp;
-            }
-        }
+        public List<Vertex> Vertices { get; set; }
 
         public List<uint> Indices
         {
@@ -109,7 +79,37 @@ namespace Quincy.Primitives
 
         public Cube()
         {
+            SetupVertices();
             SetupMesh();
+        }
+
+        private void SetupVertices()
+        {
+            List<Vertex> vertices = new List<Vertex>();
+
+            for (int i = 0; i < cubeVertices.Length; i += 3)
+            {
+                var x = cubeVertices[i];
+                var y = cubeVertices[i + 1];
+                var z = cubeVertices[i + 2];
+
+                // TODO: better uvs
+                var u = cubeUvs[(i / 3) % cubeUvs.Length];
+                var v = cubeUvs[((i / 3) + 1) % cubeUvs.Length];
+
+                vertices.Add(new Vertex()
+                {
+                    Position = new Vector3f(x, y, z),
+                    TexCoords = new Vector2f(u, v),
+
+                    // TODO:
+                    BiTangent = new Vector3f(0, 0, 0),
+                    Normal = new Vector3f(0, 0, 0),
+                    Tangent = new Vector3f(0, 0, 0),
+                });
+            }
+
+            Vertices = vertices;
         }
 
         public void SetupMesh()

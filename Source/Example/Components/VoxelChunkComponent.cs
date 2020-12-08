@@ -2,16 +2,19 @@
 using Engine.ECS.Entities;
 using Engine.ECS.Observer;
 using Engine.Utils;
+using Engine.Utils.DebugUtils;
 using Engine.Utils.MathUtils;
+using ImGuiNET;
 using OpenGL;
 using Quincy;
 using Quincy.Components;
 using Quincy.Primitives;
+using System;
 using System.Collections.Generic;
 
 namespace Example.Components
 {
-    public class VoxelTerrainComponent : Component<BSPMeshComponent>
+    public class VoxelChunkComponent : Component<BSPMeshComponent>
     {
         public struct Voxel
         {
@@ -23,8 +26,65 @@ namespace Example.Components
 
             public VoxelId Id { get; set; }
         }
+        public struct TerrainOctave
+        {
+            public float intensity;
+            public float scale;
+        }
 
-        public VoxelTerrainComponent() { }
+        public /*const*/ int chunkSize = 8;
+        public /*const*/ int chunkHeight = 256;
+        public int seed;
+        public TerrainOctave[] octaves = new[] { new TerrainOctave() { intensity = 1.0f, scale = 8.0f } };
+        public FastNoise noise;
+        public float threshold = 0.2f;
+
+        private int xPos;
+        private int zPos;
+
+        public VoxelChunkComponent(int seed, int xIndex, int zIndex) 
+        {
+            this.seed = seed;
+            xPos = xIndex * chunkSize;
+            zPos = zIndex * chunkSize;
+            // zPos = zIndex * chunkHeight;
+            noise = new FastNoise(seed);
+        }
+
+        private float GetNoise(float x, float y, float z, float noiseScale, float noiseIntensity)
+        {
+            return (noise.GetPerlin(x * noiseScale, y * noiseScale, z * noiseScale) * noiseIntensity + 0.5f) / 2f;
+        }
+
+        private Voxel[,,] GenerateVoxelMap()
+        {
+            Voxel[,,] voxels = new Voxel[chunkSize, chunkHeight, chunkSize];
+
+            for (int x = 0; x < chunkSize; x++)
+            {
+                for (int y = 0; y < chunkHeight; y++)
+                {
+                    for (int z = 0; z < chunkSize; z++)
+                    {
+                        float value = 0f;
+                        foreach (var octave in octaves)
+                        {
+                            value += GetNoise(x + xPos, y, z + zPos, octave.scale, octave.intensity);
+                        }
+                        if (value > threshold)
+                        {
+                            voxels[x, y, z].Id = Voxel.VoxelId.Filled;
+                        }
+                        else
+                        {
+                            voxels[x, y, z].Id = Voxel.VoxelId.Air;
+                        }
+                    }
+                }
+            }
+
+            return voxels;
+        }
 
         private void GenerateMesh()
         {
@@ -36,24 +96,10 @@ namespace Example.Components
                 Texture.LoadFromAsset(ServiceLocator.FileSystem.GetAsset("Textures/holoMap.png"), "texture_diffuse")
             };
 
-            const int chunkSize = 8;
-            const int chunkHeight = 256;
-
             modelComponent.Meshes = new List<Mesh>();
 
             List<Vertex> vertices = new List<Vertex>();
-            Voxel[,,] voxels = new Voxel[chunkSize, chunkHeight, chunkSize];
-
-            for (int x = 0; x < chunkSize; x++)
-            {
-                for (int y = 0; y < chunkHeight; y++)
-                {
-                    for (int z = 0; z < chunkSize; z++)
-                    {
-                        voxels[x, y, z] = new Voxel() { Id = Voxel.VoxelId.Filled };
-                    }
-                }
-            }
+            var voxels = GenerateVoxelMap();
 
             for (int x = 0; x < chunkSize; x++)
             {
@@ -109,31 +155,27 @@ namespace Example.Components
                 }
             }
 
-            //for (int x = 0; x < chunkSize; ++x)
-            //{
-            //    for (int y = 0; y < chunkSize; ++y)
-            //    {
-            //        for (int z = 0; z < chunkSize; ++z)
-            //        {
-            //            var modelMat = Matrix4x4f.Identity;
-            //            modelMat.Translate(x, y, z);
-            //            modelMat.Scale(.5f, .5f, .5f);
-
-
-            //            var mesh = new Mesh(cube.Vertices, cube.Indices, textures, modelMat);
-            //            modelComponent.Meshes.Add(mesh);
-            //        }
-            //    }
-            //}
-
             var indices = new List<uint>();
             for (uint i = 0; i < vertices.Count; ++i)
                 indices.Add(i);
 
+            Logging.Log($"Generated ({xPos / chunkSize}, {zPos / chunkSize})");
             modelComponent.Meshes.Add(new Mesh(vertices, indices, textures, Matrix4x4f.Identity));
 
             // TODO: Derive from MeshComponent instead
-            ((IEntity)Parent).AddComponent(modelComponent);
+            var parent = (IEntity)Parent;
+            if (parent.HasComponent<ModelComponent>())
+                parent.RemoveComponent<ModelComponent>();
+            parent.AddComponent(modelComponent);
+        }
+
+        public override void RenderImGui()
+        {
+            if (ImGui.Button("Generate Terrain"))
+            {
+                GenerateMesh();
+            }
+            base.RenderImGui();
         }
 
         public override void OnNotify(NotifyType notifyType, INotifyArgs notifyArgs)

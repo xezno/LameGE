@@ -50,8 +50,15 @@ namespace Engine.ECS.Entities
 
         /// <summary>
         /// Add a component to an entity. This will also check for component dependencies.
+        /// Only one component of a given type can be attached to an entity at one time.
         /// </summary>
         /// <param name="component">An instance of the desired component to add.</param>
         void AddComponent(IComponent component);
+
+        /// <summary>
+        /// Remove a component from an entity.
+        /// </summary>
+        /// <typeparam name="T">An instance of the desired component to add.</typeparam>
+        void RemoveComponent<T>();
     }
 }

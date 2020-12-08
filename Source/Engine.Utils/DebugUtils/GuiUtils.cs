@@ -116,7 +116,11 @@ namespace Engine.Utils.DebugUtils
 
         public static void DrawImGuiArray(dynamic memberValue, int depth)
         {
-            throw new NotImplementedException();
+            var depth_ = ++depth;
+            foreach (var value in memberValue)
+            {
+                RenderImGuiMembers(value, depth_);
+            }
         }
 
         public static void DrawFilePath(string name, object reference)

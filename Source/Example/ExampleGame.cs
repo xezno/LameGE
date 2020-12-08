@@ -9,6 +9,9 @@ using Example.Managers.ImGuiWindows.Addons;
 using Quincy.Managers;
 using Engine.Utils.MathUtils;
 using Engine.Utils;
+using Quincy.Components;
+using System;
+using Engine.Utils.DebugUtils;
 
 namespace Example
 {
@@ -27,10 +30,6 @@ namespace Example
                 {
                     Name = "Player"
                 },
-                new VoxelTerrainEntity()
-                {
-                    Name = "Voxel Terrain"
-                },
                 //new LevelModelEntity(fs.GetAsset("/Maps/gm_fork.bsp"))
                 //{
                 //    Name = "Generated BSP Mesh"
@@ -44,6 +43,24 @@ namespace Example
                 //    Name = "Treasure Chest Mimic"
                 //}
             };
+
+            var random = new Random();
+            var seed = random.Next(0, 10000);
+
+            for (int x = 0; x < 16; x++)
+            {
+                for (int z = 0; z < 16; z++)
+                {
+                    var newEntity = new VoxelChunkEntity(seed, x, z)
+                    {
+                        Name = $"Voxel Chunk ({x}, {z})",
+                    };
+                    newEntity.GetComponent<TransformComponent>().Position = new Vector3d(x * 16, 0, z * 16);
+                    entities.Add(
+                        newEntity
+                    );
+                }
+            }
 
             foreach (IEntity entity in entities)
                 SceneManager.Instance.AddEntity(entity);

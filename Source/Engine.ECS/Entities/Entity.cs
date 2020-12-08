@@ -74,8 +74,11 @@ namespace Engine.ECS.Entities
 
             ImGui.Separator();
 
+            // Make a copy to prevent interfering with any changes that occur
+            var componentsCopy = new List<IComponent>(Components);
+
             // Components
-            foreach (var component in Components)
+            foreach (var component in componentsCopy)
             {
                 if (ImGui.TreeNode(component.GetType().Name))
                 {
@@ -123,6 +126,9 @@ namespace Engine.ECS.Entities
         /// <param name="component">An instance of the desired component to add.</param>
         public virtual void AddComponent(IComponent component)
         {
+            if (Components.FindAll(t => { return t.GetType() == component.GetType(); }).Count > 0)
+                throw new Exception("Component already exists on this entity.");
+
             component.Parent = this;
             Components.Add(component);
 
@@ -180,6 +186,11 @@ namespace Engine.ECS.Entities
             {
                 component.Update(deltaTime);
             }
+        }
+
+        public void RemoveComponent<T1>()
+        {
+            Components.RemoveAll(t => t.GetType() == typeof(T1));
         }
     }
 }
