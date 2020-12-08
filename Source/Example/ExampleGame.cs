@@ -46,10 +46,11 @@ namespace Example
 
             var random = new Random();
             var seed = random.Next(0, 10000);
+            var chunksToGenerate = 8;
 
-            for (int x = 0; x < 16; x++)
+            for (int x = 0; x < chunksToGenerate; x++)
             {
-                for (int z = 0; z < 16; z++)
+                for (int z = 0; z < chunksToGenerate; z++)
                 {
                     var newEntity = new VoxelChunkEntity(seed, x, z)
                     {

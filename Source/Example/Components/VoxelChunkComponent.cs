@@ -32,7 +32,7 @@ namespace Example.Components
             public float scale;
         }
 
-        public /*const*/ int chunkSize = 8;
+        public /*const*/ int chunkSize = 16;
         public /*const*/ int chunkHeight = 256;
         public int seed;
         public TerrainOctave[] octaves = new[] { new TerrainOctave() { intensity = 1.0f, scale = 8.0f } };
