@@ -10,129 +10,118 @@ using System.Reflection;
 
 namespace Engine.Utils.DebugUtils
 {
-    public static class ImGuiUtils
+    public static class GuiUtils
     {
-        /// <summary>
-        /// Queues a DragFloat3 ImGui component for the Vertex3f parameter given.
-        /// </summary>
-        /// <param name="member"></param>
-        /// <param name="reference"></param>
-        public static void DrawImGuiVertex3f(MemberInfo member, object reference)
+        public static void DrawImGuiVertex3f(string name, object reference)
         {
             var tmpReference = reference as ReflectionRef<Vertex3f>;
             Vector3 value = new Vector3(tmpReference.Value.x, tmpReference.Value.y, tmpReference.Value.z);
-            ImGui.Text(member.Name);
+            ImGui.Text(name);
             ImGui.NextColumn();
-            ImGui.DragFloat3($"{member.Name}##hidelabel", ref value, 0.1f);
+            ImGui.DragFloat3($"{name}##hidelabel", ref value, 0.1f);
             ImGui.NextColumn();
             (reference as ReflectionRef<Vertex3f>).Value = new Vertex3f(value.X, value.Y, value.Z);
         }
 
-        public static void DrawImGuiVertex2f(MemberInfo member, object reference)
+        public static void DrawImGuiVertex2f(string name, object reference)
         {
             var tmpReference = reference as ReflectionRef<Vertex2f>;
             Vector2 value = new Vector2(tmpReference.Value.x, tmpReference.Value.y);
-            ImGui.Text(member.Name);
+            ImGui.Text(name);
             ImGui.NextColumn();
-            ImGui.DragFloat2($"{member.Name}##hidelabel", ref value, 0.1f);
+            ImGui.DragFloat2($"{name}##hidelabel", ref value, 0.1f);
             ImGui.NextColumn();
             (reference as ReflectionRef<Vertex2f>).Value = new Vertex2f(value.X, value.Y);
         }
 
-        public static void DrawImGuiFloat(MemberInfo member, object reference)
+        public static void DrawImGuiFloat(string name, object reference, float minRange = float.MinValue, float maxRange = float.MaxValue)
         {
             float value = (reference as ReflectionRef<float>).Value;
             var min = float.MinValue;
             var max = float.MaxValue;
-            var useSlider = false;
-            var fieldAttributes = member.GetCustomAttributes(false);
-            foreach (var attrib in fieldAttributes.Where(o => o is RangeAttribute))
-            {
-                var rangeAttrib = (RangeAttribute)attrib;
-                min = rangeAttrib.Min;
-                max = rangeAttrib.Max;
-                useSlider = true;
-            }
+            var useSlider = (minRange > float.MaxValue) && (maxRange < float.MaxValue);
 
-            ImGui.Text(member.Name);
+            ImGui.Text(name);
             ImGui.NextColumn();
 
             if (useSlider)
-                ImGui.SliderFloat($"{member.Name}##hidelabel", ref value, min, max);
+                ImGui.SliderFloat($"{name}##hidelabel", ref value, min, max);
             else
-                ImGui.InputFloat($"{member.Name}##hidelabel", ref value);
+                ImGui.InputFloat($"{name}##hidelabel", ref value);
             ImGui.NextColumn();
             (reference as ReflectionRef<float>).Value = value;
         }
 
-        public static void DrawImGuiColor(MemberInfo member, object reference)
+        public static void DrawImGuiColor(string name, object reference)
         {
             var tmpReference = reference as ReflectionRef<ColorRGB24>;
             var value = new Vector3(tmpReference.Value.r / 255f, tmpReference.Value.g / 255f, tmpReference.Value.b / 255f);
-            ImGui.Text(member.Name);
+            ImGui.Text(name);
             ImGui.NextColumn();
-            ImGui.ColorEdit3($"{member.Name}##hidelabel", ref value);
+            ImGui.ColorEdit3($"{name}##hidelabel", ref value);
             ImGui.NextColumn();
             (reference as ReflectionRef<ColorRGB24>).Value = new ColorRGB24((byte)(value.X * 255f), (byte)(value.Y * 255f), (byte)(value.Z * 255f));
         }
 
-        public static void DrawImGuiVector3(MemberInfo member, object reference)
+        public static void DrawImGuiVector3(string name, object reference)
         {
-            Vector3 value = (reference as ReflectionRef<Utils.MathUtils.Vector3f>).Value.ConvertToNumerics();
-            ImGui.Text(member.Name);
+            Vector3 value = (reference as ReflectionRef<MathUtils.Vector3f>).Value.ConvertToNumerics();
+            ImGui.Text(name);
             ImGui.NextColumn();
-            ImGui.DragFloat3($"{member.Name}##hidelabel", ref value, 0.1f);
+            ImGui.DragFloat3($"{name}##hidelabel", ref value, 0.1f);
             ImGui.NextColumn();
-            (reference as ReflectionRef<Utils.MathUtils.Vector3f>).Value = Utils.MathUtils.Vector3f.ConvertFromNumerics(value);
+            (reference as ReflectionRef<MathUtils.Vector3f>).Value = MathUtils.Vector3f.ConvertFromNumerics(value);
         }
 
-        public static void DrawImGuiVector3d(MemberInfo member, object reference)
+        public static void DrawImGuiVector3d(string name, object reference)
         {
-            Vector3 value = (reference as ReflectionRef<Utils.MathUtils.Vector3d>).Value.ConvertToNumerics();
-            ImGui.Text(member.Name);
+            Vector3 value = (reference as ReflectionRef<MathUtils.Vector3d>).Value.ConvertToNumerics();
+            ImGui.Text(name);
             ImGui.NextColumn();
-            ImGui.DragFloat3($"{member.Name}##hidelabel", ref value, 0.1f);
+            ImGui.DragFloat3($"{name}##hidelabel", ref value, 0.1f);
             ImGui.NextColumn();
-            (reference as ReflectionRef<Utils.MathUtils.Vector3d>).Value = Utils.MathUtils.Vector3d.ConvertFromNumerics(value);
+            (reference as ReflectionRef<MathUtils.Vector3d>).Value = MathUtils.Vector3d.ConvertFromNumerics(value);
         }
 
-        public static void DrawImGuiVector2(MemberInfo member, object reference)
+        public static void DrawImGuiVector2(string name, object reference)
         {
-            Vector2 value = (reference as ReflectionRef<Utils.MathUtils.Vector2f>).Value.ConvertToNumerics();
-            ImGui.Text(member.Name);
+            Vector2 value = (reference as ReflectionRef<MathUtils.Vector2f>).Value.ConvertToNumerics();
+            ImGui.Text(name);
             ImGui.NextColumn();
-            ImGui.DragFloat2($"{member.Name}##hidelabel", ref value, 0.1f);
+            ImGui.DragFloat2($"{name}##hidelabel", ref value, 0.1f);
             ImGui.NextColumn();
-            if (value != (reference as ReflectionRef<Utils.MathUtils.Vector2f>).Value.ConvertToNumerics())
-                (reference as ReflectionRef<Utils.MathUtils.Vector2f>).Value = Utils.MathUtils.Vector2f.ConvertFromNumerics(value);
+            if (value != (reference as ReflectionRef<MathUtils.Vector2f>).Value.ConvertToNumerics())
+                (reference as ReflectionRef<MathUtils.Vector2f>).Value = MathUtils.Vector2f.ConvertFromNumerics(value);
         }
 
-        public static void DrawImGuiQuaternion(MemberInfo member, object reference)
+        public static void DrawImGuiQuaternion(string name, object reference)
         {
-            Vector3 value = (reference as ReflectionRef<Utils.MathUtils.Quaternion>).Value.ToEulerAngles().ConvertToNumerics();
-            ImGui.Text(member.Name);
+            Vector3 value = (reference as ReflectionRef<MathUtils.Quaternion>).Value.ToEulerAngles().ConvertToNumerics();
+            ImGui.Text(name);
             ImGui.NextColumn();
-            ImGui.DragFloat3($"{member.Name}##hidelabel", ref value, 0.1f);
+            ImGui.DragFloat3($"{name}##hidelabel", ref value, 0.1f);
             ImGui.NextColumn();
-            (reference as ReflectionRef<Utils.MathUtils.Quaternion>).Value = Utils.MathUtils.Quaternion.FromEulerAngles(Utils.MathUtils.Vector3f.ConvertFromNumerics(value));
+            (reference as ReflectionRef<MathUtils.Quaternion>).Value = MathUtils.Quaternion.FromEulerAngles(MathUtils.Vector3f.ConvertFromNumerics(value));
         }
 
-        public static void DrawImGuiInt(MemberInfo field, object reference)
+        public static void DrawImGuiInt(string name, object reference)
         {
             int value = (reference as ReflectionRef<int>).Value;
-            ImGui.Text(field.Name);
+            ImGui.Text(name);
             ImGui.NextColumn();
-            ImGui.DragInt($"{field.Name}##hidelabel", ref value);
+            ImGui.DragInt($"{name}##hidelabel", ref value);
             ImGui.NextColumn();
             (reference as ReflectionRef<int>).Value = value;
         }
 
         public static void DrawImGuiArray(dynamic memberValue, int depth)
         {
-            foreach (var element in memberValue)
-            {
-                RenderImGuiMembers(element, depth + 1);
-            }
+            throw new NotImplementedException();
+        }
+
+        public static void DrawFilePath(string name, object reference)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -169,39 +158,48 @@ namespace Engine.Utils.DebugUtils
 
             if (type == typeof(float))
             {
-                DrawImGuiFloat(memberInfo, reference);
+                var minValue = float.MinValue;
+                var maxValue = float.MaxValue;
+                var fieldAttributes = memberInfo.GetCustomAttributes(false);
+                foreach (var attrib in fieldAttributes.Where(o => o is RangeAttribute))
+                {
+                    var rangeAttrib = (RangeAttribute)attrib;
+                    minValue = rangeAttrib.Min;
+                    maxValue = rangeAttrib.Max;
+                }
+                DrawImGuiFloat(memberInfo.Name, reference, minValue, maxValue);
             }
             else if (type == typeof(ColorRGB24))
             {
-                DrawImGuiColor(memberInfo, reference);
+                DrawImGuiColor(memberInfo.Name, reference);
             }
-            else if (type == typeof(Utils.MathUtils.Vector2f))
+            else if (type == typeof(MathUtils.Vector2f))
             {
-                DrawImGuiVector2(memberInfo, reference);
+                DrawImGuiVector2(memberInfo.Name, reference);
             }
             else if (type == typeof(Vertex2f))
             {
-                DrawImGuiVertex2f(memberInfo, reference);
+                DrawImGuiVertex2f(memberInfo.Name, reference);
             }
-            else if (type == typeof(Utils.MathUtils.Vector3f))
+            else if (type == typeof(MathUtils.Vector3f))
             {
-                DrawImGuiVector3(memberInfo, reference);
+                DrawImGuiVector3(memberInfo.Name, reference);
             }
-            else if (type == typeof(Utils.MathUtils.Vector3d))
+            else if (type == typeof(MathUtils.Vector3d))
             {
-                DrawImGuiVector3d(memberInfo, reference);
+                DrawImGuiVector3d(memberInfo.Name, reference);
             }
             else if (type == typeof(Vertex3f))
             {
-                DrawImGuiVertex3f(memberInfo, reference);
+                DrawImGuiVertex3f(memberInfo.Name, reference);
             }
             else if (type == typeof(MathUtils.Quaternion))
             {
-                DrawImGuiQuaternion(memberInfo, reference);
+                DrawImGuiQuaternion(memberInfo.Name, reference);
             }
             else if (type == typeof(int))
             {
-                DrawImGuiInt(memberInfo, reference);
+                DrawImGuiInt(memberInfo.Name, reference);
             }
             else if (type == typeof(List<>) || type.BaseType == typeof(Array))
             {

@@ -31,12 +31,12 @@ namespace Quincy.Components
             LoadModel(asset);
         }
 
-        public void Draw(CameraEntity camera, ShaderComponent shader, LightEntity light, (Cubemap, Cubemap, Cubemap) pbrCubemaps, Texture brdfLut, Texture holoTexture)
+        public void Draw(Mesh.DrawInfo drawInfo)
         {
             var matrix = GetComponent<TransformComponent>().Matrix;
             foreach (var mesh in Meshes)
             {
-                mesh.Draw(camera, shader, light, pbrCubemaps, brdfLut, matrix, holoTexture);
+                mesh.Draw(drawInfo);
             }
         }
 

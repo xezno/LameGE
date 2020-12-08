@@ -108,13 +108,30 @@ namespace Quincy.Managers
             MainCamera.Render();
             var skyboxComponent = skyboxEntity.GetComponent<SkyboxComponent>();
             skyboxComponent.DrawSkybox(MainCamera);
+
+            // MainCamera, entity.GetComponent<ShaderComponent>(), Lights[0], , brdfLut, holoTexture
+            var templateDrawInfo = new Mesh.DrawInfo()
+            {
+                Camera = MainCamera,
+                Light = Lights[0],
+                PbrCubemaps = (skyboxComponent.skybox, skyboxComponent.convolutedSkybox, skyboxComponent.prefilteredSkybox),
+                BrdfLut = brdfLut,
+                HoloTexture = holoTexture,
+                ProjMatrix = MainCamera.GetComponent<CameraComponent>().ProjMatrix,
+                ViewMatrix = MainCamera.GetComponent<CameraComponent>().ViewMatrix
+            };
+
             foreach (var entity in Entities)
             {
                 if (!entity.HasComponent<ModelComponent>())
                     continue;
 
                 var modelComponent = entity.GetComponent<ModelComponent>();
-                modelComponent.Draw(MainCamera, entity.GetComponent<ShaderComponent>(), Lights[0], (skyboxComponent.skybox, skyboxComponent.convolutedSkybox, skyboxComponent.prefilteredSkybox), brdfLut, holoTexture);
+                var newDrawInfo = new Mesh.DrawInfo(templateDrawInfo);
+                newDrawInfo.Shader = entity.GetComponent<ShaderComponent>();
+                newDrawInfo.ModelMatrix = entity.GetComponent<TransformComponent>().Matrix;
+
+                modelComponent.Draw(newDrawInfo);
             }
 
             Gl.DepthFunc(DepthFunction.Less);
