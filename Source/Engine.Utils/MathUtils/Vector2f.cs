@@ -63,5 +63,15 @@
         {
             return new System.Numerics.Vector2(x, y);
         }
+
+        public static bool operator ==(Vector2f a, Vector2f b)
+        {
+            return (a.x == b.x) && (a.y == b.y);
+        }
+
+        public static bool operator !=(Vector2f a, Vector2f b)
+        {
+            return !(a == b);
+        }
     }
 }
