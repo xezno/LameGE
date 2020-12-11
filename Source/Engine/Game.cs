@@ -97,7 +97,7 @@ namespace Engine
 
             nativeWindow.SwapInterval = 0;
             nativeWindow.Resize += Resize;
-            nativeWindow.Create(GameSettings.GamePosX, GameSettings.GamePosY, (uint)GameSettings.GameResolutionX + 16, (uint)GameSettings.GameResolutionY + 16, NativeWindowStyles.Caption | NativeWindowStyles.Border);
+            nativeWindow.Create(GameSettings.GamePosX, GameSettings.GamePosY, (uint)GameSettings.GameResolutionX, (uint)GameSettings.GameResolutionY, NativeWindowStyles.Overlapped);
 
             nativeWindow.Fullscreen = GameSettings.Fullscreen;
             nativeWindow.Caption = FormatWindowTitle(gameProperties.WindowTitle) ?? "Engine Game";
@@ -215,8 +215,8 @@ namespace Engine
         private void Resize(object sender, EventArgs e)
         {
             var windowSize = new Vector2f(nativeWindow.ClientSize.Width, nativeWindow.ClientSize.Height);
-
-            // renderer.SetViewportSize();
+            GameSettings.GameResolutionX = (int)windowSize.x;
+            GameSettings.GameResolutionY = (int)windowSize.y;
 
             Broadcast.Notify(NotifyType.WindowResized, new WindowResizeNotifyArgs(windowSize, this));
         }
