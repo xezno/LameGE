@@ -21,7 +21,7 @@ using System.Threading;
 
 namespace Engine
 {
-    public class Game : IHasParent
+    public class Game : IManager
     {
         #region Variables
         private readonly string gamePropertyPath;
@@ -67,8 +67,8 @@ namespace Engine
 
         public void Close()
         {
-            nativeWindow.Stop();
             nativeWindow.Destroy();
+            Environment.Exit(0);
         }
         #endregion
 
@@ -112,7 +112,7 @@ namespace Engine
         private void Closing(object sender, EventArgs e)
         {
             Logging.Log("Closing game...");
-            isRunning = false;
+            Close();
         }
 
         private void NativeWindowOnMouseEnter(object sender, NativeWindowMouseEventArgs e)
@@ -146,6 +146,8 @@ namespace Engine
                 RenderManager.Instance,
                 ImGuiManager.Instance
             };
+
+            Broadcast.SetGame(this);
 
             foreach (var mainThreadManager in mainThreadManagers)
             {

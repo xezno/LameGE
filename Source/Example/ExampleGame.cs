@@ -46,7 +46,7 @@ namespace Example
 
             var random = new Random();
             var seed = random.Next(0, 10000);
-            var chunksToGenerate = 8;
+            var chunksToGenerate = 2;
 
             for (int x = 0; x < chunksToGenerate; x++)
             {
