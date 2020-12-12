@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Engine.Utils.Attributes
+namespace Engine.Common.Attributes
 {
     /// <summary>
     /// Prevents an item from being shown in ImGui windows.

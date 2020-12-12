@@ -1,7 +1,7 @@
 ﻿using Engine.ECS.Observer;
 using Engine.ECS.Managers;
-using Engine.Utils;
-using Engine.Utils.DebugUtils;
+using Engine.Common;
+using Engine.Common.DebugUtils;
 using System.IO;
 using System.Net;
 using System.Text;

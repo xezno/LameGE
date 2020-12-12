@@ -1,7 +1,7 @@
-﻿using Engine.Utils.Base;
-using Engine.Utils.FileUtils.FileSystems;
+﻿using Engine.Common.Base;
+using Engine.Common.FileUtils.FileSystems;
 
-namespace Engine.Utils
+namespace Engine.Common
 {
     public class LocatableService<T>
     {

@@ -1,6 +1,6 @@
 ﻿using Engine.ECS.Components;
-using Engine.Utils.Attributes;
-using Engine.Utils.MathUtils;
+using Engine.Common.Attributes;
+using Engine.Common.MathUtils;
 using OpenGL;
 
 namespace Quincy.Components

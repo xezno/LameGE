@@ -1,5 +1,5 @@
-﻿using Engine.Utils.Attributes;
-using Engine.Utils.MathUtils;
+﻿using Engine.Common.Attributes;
+using Engine.Common.MathUtils;
 using System;
 using System.Numerics;
 

@@ -1,5 +1,5 @@
 ﻿using Engine.Types;
-using Engine.Utils.Attributes;
+using Engine.Common.Attributes;
 using ImGuiNET;
 using OpenGL;
 using System;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Numerics;
 using System.Reflection;
 
-namespace Engine.Utils.DebugUtils
+namespace Engine.Common.DebugUtils
 {
     public static class GuiUtils
     {

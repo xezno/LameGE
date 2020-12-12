@@ -3,11 +3,10 @@ using Engine.ECS.Observer;
 using Engine.Gui.Managers;
 using Engine.Managers;
 using Engine.Types;
-using Engine.Utils;
-using Engine.Utils.DebugUtils;
-using Engine.Utils.FileUtils;
-using Engine.Utils.FileUtils.FileSystems;
-using Engine.Utils.MathUtils;
+using Engine.Common;
+using Engine.Common.DebugUtils;
+using Engine.Common.FileUtils.FileSystems;
+using Engine.Common.MathUtils;
 using Newtonsoft.Json;
 using OpenGL;
 using OpenGL.CoreUI;
@@ -18,6 +17,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Threading;
+using Engine.FSM.Managers;
 
 namespace Engine
 {
@@ -144,7 +144,9 @@ namespace Engine
         {
             mainThreadManagers = new List<IManager> {
                 RenderManager.Instance,
-                ImGuiManager.Instance
+                ImGuiManager.Instance,
+                SceneManager.Instance,
+                StateManager.Instance
             };
 
             Broadcast.SetGame(this);
@@ -159,7 +161,7 @@ namespace Engine
             {
                 UpdateManager.Instance,
                 PhysicsManager.Instance,
-                SceneManager.Instance,
+                // SceneManager.Instance,
                 // ScriptManager.Instance,
                 RconManager.Instance,
                 RconWebFrontendManager.Instance,

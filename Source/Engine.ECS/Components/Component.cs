@@ -1,7 +1,7 @@
 ﻿using Engine.ECS.Entities;
 using Engine.ECS.Observer;
 using Engine.Types;
-using Engine.Utils.DebugUtils;
+using Engine.Common.DebugUtils;
 using ImGuiNET;
 
 namespace Engine.ECS.Components

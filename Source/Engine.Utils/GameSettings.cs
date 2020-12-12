@@ -1,7 +1,7 @@
-﻿using Engine.Utils.DebugUtils;
+﻿using Engine.Common.DebugUtils;
 using Newtonsoft.Json;
 
-namespace Engine.Utils
+namespace Engine.Common
 {
     struct GameSettingsValues
     {

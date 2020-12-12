@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Engine.Utils.MathUtils
+namespace Engine.Common.MathUtils
 {
     public struct Quaternion
     {

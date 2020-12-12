@@ -1,7 +1,7 @@
 ﻿using Engine.Assets;
 using Engine.ECS.Observer;
-using Engine.Utils;
-using Engine.Utils.DebugUtils;
+using Engine.Common;
+using Engine.Common.DebugUtils;
 using ImGuiNET;
 using OpenGL.CoreUI;
 using System.Numerics;

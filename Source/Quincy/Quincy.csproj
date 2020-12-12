@@ -4,6 +4,7 @@
     <OutputType>Library</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Platforms>x64;x86</Platforms>
+    <Configurations>Debug;Release;Debug-Console</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -18,7 +19,15 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug-Console|x64'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug-Console|x86'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
@@ -33,7 +42,7 @@
     <ProjectReference Include="..\..\Other\OpenGL.Net\Source\OpenGL.Net\OpenGL.Net.Math.csproj" />
     <ProjectReference Include="..\..\Other\stbi-sharp\stbi-sharp.csproj" />
     <ProjectReference Include="..\Engine.ECS\Engine.ECS.csproj" />
-    <ProjectReference Include="..\Engine.Utils\Engine.Utils.csproj" />
+    <ProjectReference Include="..\Engine.Utils\Engine.Common.csproj" />
   </ItemGroup>
 
 </Project>

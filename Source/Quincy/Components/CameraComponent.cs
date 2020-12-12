@@ -1,8 +1,8 @@
 ﻿using Engine.ECS.Components;
 using Engine.ECS.Observer;
-using Engine.Utils;
-using Engine.Utils.Attributes;
-using Engine.Utils.MathUtils;
+using Engine.Common;
+using Engine.Common.Attributes;
+using Engine.Common.MathUtils;
 using OpenGL;
 using System;
 

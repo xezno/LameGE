@@ -6,6 +6,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <LangVersion>latest</LangVersion>
     <Platforms>x86;x64</Platforms>
+    <Configurations>Debug;Release;Debug-Console</Configurations>
   </PropertyGroup>
   <PropertyGroup>
     <RuntimeIdentifiers>win10-x64;debian.8-x64</RuntimeIdentifiers>
@@ -14,6 +15,12 @@
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <LangVersion>latest</LangVersion>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug-Console|x64'">
     <OutputPath>bin\x64\Debug\</OutputPath>
     <LangVersion>latest</LangVersion>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
@@ -33,6 +40,14 @@
     <WarningsAsErrors></WarningsAsErrors>
     <DocumentationFile></DocumentationFile>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug-Console|x86'">
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <LangVersion>latest</LangVersion>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <WarningsAsErrors />
+    <DocumentationFile />
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
     <LangVersion>latest</LangVersion>
@@ -48,8 +63,9 @@
     <ProjectReference Include="..\..\Other\OpenGL.Net\Source\OpenGL.Net\OpenGL.Net.csproj" />
     <ProjectReference Include="..\..\Other\OpenGL.Net\Source\OpenGL.Net\OpenGL.Net.Math.csproj" />
     <ProjectReference Include="..\Engine.ECS\Engine.ECS.csproj" />
+    <ProjectReference Include="..\Engine.FSM\Engine.FSM.csproj" />
     <ProjectReference Include="..\Engine.ImGui\Engine.Gui.csproj" />
-    <ProjectReference Include="..\Engine.Utils\Engine.Utils.csproj" />
+    <ProjectReference Include="..\Engine.Utils\Engine.Common.csproj" />
     <ProjectReference Include="..\Quincy\Quincy.csproj" />
   </ItemGroup>
   <ItemGroup>

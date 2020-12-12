@@ -1,9 +1,9 @@
 ﻿using Engine.ECS.Components;
-using Engine.Utils;
-using Engine.Utils.Attributes;
-using Engine.Utils.DebugUtils;
-using Engine.Utils.FileUtils;
-using Engine.Utils.MathUtils;
+using Engine.Common;
+using Engine.Common.Attributes;
+using Engine.Common.DebugUtils;
+using Engine.Common.FileUtils;
+using Engine.Common.MathUtils;
 using Newtonsoft.Json;
 using OpenGL;
 using System;

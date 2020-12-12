@@ -5,7 +5,7 @@ using BepuPhysics.Constraints;
 using BepuUtilities;
 using BepuUtilities.Memory;
 using Engine.ECS.Managers;
-using Engine.Utils;
+using Engine.Common;
 using System;
 using System.Numerics;
 using System.Runtime.CompilerServices;

@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Engine.ECS\Engine.ECS.csproj" />
+    <ProjectReference Include="..\Quincy\Quincy.csproj" />
+  </ItemGroup>
+
+</Project>

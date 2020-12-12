@@ -6,14 +6,20 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <LangVersion>8</LangVersion>
     <Platforms>x86;x64</Platforms>
+    <Configurations>Debug;Release;Debug-Console</Configurations>
   </PropertyGroup>
   <PropertyGroup>
     <RuntimeIdentifiers>win10-x64;debian.8-x64</RuntimeIdentifiers>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Example.Program</StartupObject>
+    <StartupObject>Example.Bootstrap</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <LangVersion>8</LangVersion>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug-Console|x64'">
     <OutputPath>bin\x64\Debug\</OutputPath>
     <LangVersion>8</LangVersion>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
@@ -24,6 +30,11 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <LangVersion>8</LangVersion>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug-Console|x86'">
     <OutputPath>bin\x86\Debug\</OutputPath>
     <LangVersion>8</LangVersion>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
@@ -45,6 +56,11 @@
     <ProjectReference Include="..\..\Other\OpenGL.Net\Source\OpenGL.Net.CoreUI\OpenGL.Net.CoreUI.csproj" />
     <ProjectReference Include="..\..\Other\OpenGL.Net\Source\OpenGL.Net\OpenGL.Net.csproj" />
     <ProjectReference Include="..\..\Other\OpenGL.Net\Source\OpenGL.Net\OpenGL.Net.Math.csproj" />
+    <ProjectReference Include="..\Engine.AssetCompiler\Engine.AssetCompiler.csproj" />
+    <ProjectReference Include="..\Engine.ECS\Engine.ECS.csproj" />
+    <ProjectReference Include="..\Engine.FSM\Engine.FSM.csproj" />
+    <ProjectReference Include="..\Engine.ImGui\Engine.Gui.csproj" />
+    <ProjectReference Include="..\Engine.Utils\Engine.Common.csproj" />
     <ProjectReference Include="..\Engine\Engine.csproj" />
   </ItemGroup>
   <ItemGroup>

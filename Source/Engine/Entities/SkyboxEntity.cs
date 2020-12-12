@@ -1,7 +1,7 @@
 ﻿using Engine.ECS.Entities;
-using Engine.Utils;
-using Engine.Utils.FileUtils;
-using Engine.Utils.MathUtils;
+using Engine.Common;
+using Engine.Common.FileUtils;
+using Engine.Common.MathUtils;
 using Quincy.Components;
 using Quincy.Managers;
 

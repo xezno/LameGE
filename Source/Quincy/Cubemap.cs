@@ -1,4 +1,4 @@
-﻿using Engine.Utils.DebugUtils;
+﻿using Engine.Common.DebugUtils;
 using OpenGL;
 using StbiSharp;
 using System.IO;

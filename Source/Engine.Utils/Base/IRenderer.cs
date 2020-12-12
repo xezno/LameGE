@@ -1,6 +1,6 @@
-﻿using Engine.Utils.DebugUtils;
+﻿using Engine.Common.DebugUtils;
 
-namespace Engine.Utils.Base
+namespace Engine.Common.Base
 {
     public interface IRenderer
     {

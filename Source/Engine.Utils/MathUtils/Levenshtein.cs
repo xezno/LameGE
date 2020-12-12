@@ -1,7 +1,7 @@
-﻿using Engine.Utils.Attributes;
+﻿using Engine.Common.Attributes;
 using System;
 
-namespace Engine.Utils.MathUtils
+namespace Engine.Common.MathUtils
 {
     public static class Levenshtein
     {

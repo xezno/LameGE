@@ -1,5 +1,5 @@
-﻿using Engine.Utils.DebugUtils;
-using Engine.Utils.FileUtils;
+﻿using Engine.Common.DebugUtils;
+using Engine.Common.FileUtils;
 using OpenGL;
 using StbiSharp;
 using System;

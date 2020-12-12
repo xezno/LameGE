@@ -1,5 +1,5 @@
-﻿using Engine.Utils;
-using Engine.Utils.FileUtils;
+﻿using Engine.Common;
+using Engine.Common.FileUtils;
 using OpenGL;
 using Quincy.Components;
 using Quincy.Primitives;
@@ -7,7 +7,7 @@ using System;
 
 namespace Quincy
 {
-    internal class EquirectangularToCubemap
+    public class EquirectangularToCubemap
     {
         public static (Cubemap, Cubemap, Cubemap) Convert(string hdriPath)
         {

@@ -1,0 +1,17 @@
+{
+    "name": "Test Scene",
+    "entities": [
+        {
+            "typeName": "ModelEntity",
+            "properties": {
+                "ModelAsset": "/Models/mcrn_tachi/scene.gltf",
+                "Shader": "/shaders/pbr.json",
+                "Position": "<0.0, 0.0, 0.0>",
+                "Scale": "<0.0125, 0.0125, 0.0125>"
+            }
+        },
+        {
+            "typeName": "PlayerEntity"
+        }
+    ]
+}

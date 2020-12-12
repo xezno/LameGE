@@ -1,6 +1,6 @@
 ﻿using Engine.Assets;
 using Engine.ECS.Observer;
-using Engine.Utils.DebugUtils;
+using Engine.Common.DebugUtils;
 using ImGuiNET;
 using System.Collections.Generic;
 using System.Numerics;

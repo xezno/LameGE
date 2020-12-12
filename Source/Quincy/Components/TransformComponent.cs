@@ -1,8 +1,8 @@
 ﻿using Engine.ECS.Components;
-using Engine.Utils.MathUtils;
+using Engine.Common.MathUtils;
 using OpenGL;
 using System;
-using Quaternion = Engine.Utils.MathUtils.Quaternion;
+using Quaternion = Engine.Common.MathUtils.Quaternion;
 
 namespace Quincy.Components
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Engine.Utils.Attributes
+namespace Engine.Common.Attributes
 {
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
     public sealed class RangeAttribute : Attribute

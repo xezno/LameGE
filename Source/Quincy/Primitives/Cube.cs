@@ -1,4 +1,4 @@
-﻿using Engine.Utils.MathUtils;
+﻿using Engine.Common.MathUtils;
 using OpenGL;
 using System;
 using System.Collections.Generic;

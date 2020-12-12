@@ -1,11 +1,11 @@
-﻿using Engine.Utils.Attributes;
+﻿using Engine.Common.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
-namespace Engine.Utils.DebugUtils
+namespace Engine.Common.DebugUtils
 {
     public static class Logging
     {

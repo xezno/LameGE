@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Engine.Utils.Attributes
+namespace Engine.Common.Attributes
 {
     /// <summary>
     /// This attribute will inform the engine that one component relies on another component.

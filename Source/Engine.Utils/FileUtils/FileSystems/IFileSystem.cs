@@ -1,4 +1,4 @@
-﻿namespace Engine.Utils.FileUtils.FileSystems
+﻿namespace Engine.Common.FileUtils.FileSystems
 {
     public interface IFileSystem
     {

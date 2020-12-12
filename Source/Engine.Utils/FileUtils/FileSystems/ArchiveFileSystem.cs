@@ -1,11 +1,11 @@
-﻿using Engine.Utils.DebugUtils;
+﻿using Engine.Common.DebugUtils;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Engine.Utils.FileUtils.FileSystems
+namespace Engine.Common.FileUtils.FileSystems
 {
     public class ArchiveFileSystem : IFileSystem
     {

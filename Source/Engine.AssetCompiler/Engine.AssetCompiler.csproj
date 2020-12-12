@@ -4,10 +4,11 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Platforms>AnyCPU;x64;x86</Platforms>
+    <Configurations>Debug;Release;Debug-Console</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Engine.Utils\Engine.Utils.csproj" />
+    <ProjectReference Include="..\Engine.Utils\Engine.Common.csproj" />
   </ItemGroup>
 
 </Project>

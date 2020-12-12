@@ -1,9 +1,9 @@
 ﻿using Engine.ECS.Components;
 using Engine.ECS.Entities;
 using Engine.ECS.Observer;
-using Engine.Utils;
-using Engine.Utils.DebugUtils;
-using Engine.Utils.MathUtils;
+using Engine.Common;
+using Engine.Common.DebugUtils;
+using Engine.Common.MathUtils;
 using ImGuiNET;
 using OpenGL;
 using Quincy;

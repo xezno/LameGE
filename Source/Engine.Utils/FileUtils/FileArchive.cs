@@ -28,7 +28,7 @@ using Zstandard.Net;
  * 4 bytes - padding
  */
 
-namespace Engine.Utils.FileUtils
+namespace Engine.Common.FileUtils
 {
     public partial class FileArchive
     {

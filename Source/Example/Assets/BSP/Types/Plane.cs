@@ -1,4 +1,4 @@
-﻿using Engine.Utils.MathUtils;
+﻿using Engine.Common.MathUtils;
 
 namespace Example.Assets.BSP.Types
 {

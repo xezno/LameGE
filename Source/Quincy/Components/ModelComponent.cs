@@ -1,11 +1,11 @@
 ﻿using Assimp;
 using Engine.Assets;
 using Engine.ECS.Components;
-using Engine.Utils;
-using Engine.Utils.Attributes;
-using Engine.Utils.DebugUtils;
-using Engine.Utils.FileUtils;
-using Engine.Utils.MathUtils;
+using Engine.Common;
+using Engine.Common.Attributes;
+using Engine.Common.DebugUtils;
+using Engine.Common.FileUtils;
+using Engine.Common.MathUtils;
 using ImGuiNET;
 using OpenGL;
 using Quincy.Entities;
@@ -19,7 +19,7 @@ namespace Quincy.Components
     public class ModelComponent : Component<ModelComponent>
     {
         private string directory;
-        private Asset asset;
+        public Asset Asset { get; private set; }
 
         public List<Mesh> Meshes { get; set; } = new List<Mesh>();
 
@@ -27,7 +27,7 @@ namespace Quincy.Components
 
         public ModelComponent(Asset asset)
         {
-            this.asset = asset;
+            this.Asset = asset;
             LoadModel(asset);
         }
 
@@ -234,7 +234,7 @@ namespace Quincy.Components
 
             ImGui.Columns(2);
 
-            var assetName = asset?.MountPath ?? "No Asset";
+            var assetName = Asset?.MountPath ?? "No Asset";
             ImGui.Text("File");
             ImGui.NextColumn();
             ImGui.InputText("##hidelabel", ref assetName, (uint)assetName.Length, ImGuiInputTextFlags.ReadOnly);

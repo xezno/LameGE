@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Platforms>x86;x64</Platforms>
+    <Configurations>Debug;Release;Debug-Console</Configurations>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -13,7 +14,15 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug-Console|x64'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug-Console|x86'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
@@ -28,7 +37,7 @@
     <ProjectReference Include="..\..\Other\OpenGL.Net\Source\OpenGL.Net\OpenGL.Net.csproj" />
     <ProjectReference Include="..\..\Other\OpenGL.Net\Source\OpenGL.Net\OpenGL.Net.Math.csproj" />
     <ProjectReference Include="..\Engine.ECS\Engine.ECS.csproj" />
-    <ProjectReference Include="..\Engine.Utils\Engine.Utils.csproj" />
+    <ProjectReference Include="..\Engine.Utils\Engine.Common.csproj" />
     <ProjectReference Include="..\Quincy\Quincy.csproj" />
   </ItemGroup>
 

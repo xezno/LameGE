@@ -2,7 +2,7 @@
 using Engine.ECS.Components;
 using Engine.ECS.Observer;
 using Engine.Types;
-using Engine.Utils.Attributes;
+using Engine.Common.Attributes;
 using ImGuiNET;
 using System;
 using System.Collections.Generic;

@@ -1,6 +1,6 @@
-﻿using Engine.Utils.DebugUtils;
+﻿using Engine.Common.DebugUtils;
 
-namespace Engine.Utils.FileUtils.FileSystems
+namespace Engine.Common.FileUtils.FileSystems
 {
     class NullFileSystem : IFileSystem
     {

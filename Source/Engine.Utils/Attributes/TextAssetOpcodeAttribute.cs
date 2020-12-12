@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Engine.Utils.Attributes
+namespace Engine.Common.Attributes
 {
     /// <summary>
     /// Inform plaintext asset loaders of various fields with particular opcodes.

@@ -1,5 +1,5 @@
 ﻿using Engine.Assets;
-using Engine.Utils;
+using Engine.Common;
 using ImGuiNET;
 using System.Numerics;
 
@@ -21,8 +21,10 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor.Engine
             var dockSpaceId = ImGui.GetID("mainDockSpace");
             ImGui.DockSpace(dockSpaceId, new Vector2(-1, -1), ImGuiDockNodeFlags.PassthruCentralNode);
 
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(0, 0));
             ImGui.SetWindowSize(new Vector2(GameSettings.GameResolutionX, GameSettings.GameResolutionY));
             ImGui.SetWindowPos(new Vector2(0, 18 /* Menu bar hack */));
+            ImGui.PopStyleVar();
         }
     }
 }

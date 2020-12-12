@@ -1,5 +1,5 @@
 ﻿using Engine.Assets;
-using Engine.Utils.DebugUtils;
+using Engine.Common.DebugUtils;
 using ImGuiNET;
 using System.Linq;
 using System.Numerics;

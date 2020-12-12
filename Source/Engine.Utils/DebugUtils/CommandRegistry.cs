@@ -1,4 +1,4 @@
-﻿using Engine.Utils.Attributes;
+﻿using Engine.Common.Attributes;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Engine.Utils.DebugUtils
+namespace Engine.Common.DebugUtils
 {
     public static class CommandRegistry
     {

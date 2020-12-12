@@ -1,7 +1,7 @@
 ﻿using Engine.Assets;
 using Engine.ECS.Entities;
-using Engine.Utils;
-using Engine.Utils.MathUtils;
+using Engine.Common;
+using Engine.Common.MathUtils;
 using Example.Components;
 using Quincy.Components;
 

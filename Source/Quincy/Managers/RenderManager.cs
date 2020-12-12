@@ -1,6 +1,6 @@
 ﻿using Engine.ECS.Managers;
-using Engine.Utils;
-using Engine.Utils.Base;
+using Engine.Common;
+using Engine.Common.Base;
 using System;
 using System.Threading;
 
@@ -8,7 +8,7 @@ namespace Quincy.Managers
 {
     public class RenderManager : Manager<RenderManager>
     {
-        public string hdri = "/HDRIs/studio_small_03_4k.hdr";
+        public string hdri = "/HDRIs/sapaced.hdr";
         public float exposure = 1.75f;
         public TonemapOperator tonemapOperator;
 

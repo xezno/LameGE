@@ -1,8 +1,8 @@
 ﻿using Engine.Assets;
 using Engine.ECS.Entities;
-using Engine.Utils.MathUtils;
+using Engine.Common.MathUtils;
 using Quincy.Components;
-using Quaternion = Engine.Utils.MathUtils.Quaternion;
+using Quaternion = Engine.Common.MathUtils.Quaternion;
 
 namespace Quincy.Entities
 {

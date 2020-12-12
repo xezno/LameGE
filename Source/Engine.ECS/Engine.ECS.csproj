@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Platforms>x86;x64</Platforms>
+    <Configurations>Debug;Release;Debug-Console</Configurations>
   </PropertyGroup>
   
   <PropertyGroup>
@@ -17,6 +18,6 @@
     <ProjectReference Include="..\..\Other\OpenGL.Net\Source\OpenGL.Net.CoreUI\OpenGL.Net.CoreUI.csproj" />
     <ProjectReference Include="..\..\Other\OpenGL.Net\Source\OpenGL.Net\OpenGL.Net.csproj" />
     <ProjectReference Include="..\..\Other\OpenGL.Net\Source\OpenGL.Net\OpenGL.Net.Math.csproj" />
-    <ProjectReference Include="..\Engine.Utils\Engine.Utils.csproj" />
+    <ProjectReference Include="..\Engine.Utils\Engine.Common.csproj" />
   </ItemGroup>
 </Project>

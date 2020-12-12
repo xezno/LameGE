@@ -1,4 +1,4 @@
-﻿namespace Engine.Utils.FileUtils
+﻿namespace Engine.Common.FileUtils
 {
     public enum CompressionMethod
     {

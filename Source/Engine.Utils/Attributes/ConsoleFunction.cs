@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Engine.Utils.Attributes
+namespace Engine.Common.Attributes
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
     public sealed class ConsoleFunction : Attribute

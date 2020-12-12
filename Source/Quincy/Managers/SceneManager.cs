@@ -1,6 +1,9 @@
 ﻿using Engine.ECS.Managers;
-using Engine.Utils;
-using Engine.Utils.MathUtils;
+using Engine.Common;
+using Engine.Common.DebugUtils;
+using Engine.Common.FileUtils;
+using Engine.Common.MathUtils;
+using Newtonsoft.Json;
 using OpenGL;
 using Quincy.Components;
 using Quincy.Entities;
@@ -178,16 +181,23 @@ namespace Quincy.Managers
             float deltaTime = (float)(DateTime.Now - lastUpdate).TotalSeconds;
             foreach (var entity in Entities)
             {
-                if (!entity.HasComponent<ModelComponent>())
-                    continue;
-
-                var modelComponent = entity.GetComponent<ModelComponent>();
-                modelComponent.Update(deltaTime);
+                if (entity.Enabled)
+                    entity.Update(deltaTime);
             }
             Lights[0].Update(deltaTime);
             MainCamera.Update(deltaTime);
 
             lastUpdate = DateTime.Now;
+        }
+
+        public void LoadSceneFromAsset(Asset asset)
+        {
+            var scene = JsonConvert.DeserializeObject<Scene>(asset.AsString());
+            Logging.Log($"Loading scene {scene.Name}");
+            foreach (var serializedEntity in scene.Entities)
+            {
+                Entities.Add(serializedEntity.ToEntity());
+            }
         }
     }
 }

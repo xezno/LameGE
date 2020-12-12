@@ -1,4 +1,4 @@
-﻿using Engine.Utils.MathUtils;
+﻿using Engine.Common.MathUtils;
 using System;
 
 namespace Engine.ECS.Observer

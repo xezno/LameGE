@@ -16,6 +16,8 @@
         MouseButtonDown,
         MouseScroll,
 
+        LoadFinished,
+
         WindowResized,
         CloseGame
     }

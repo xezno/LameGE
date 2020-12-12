@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace Engine.Utils.FileUtils
+namespace Engine.Common.FileUtils
 {
     public class Asset
     {

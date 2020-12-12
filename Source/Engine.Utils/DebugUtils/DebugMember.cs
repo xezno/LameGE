@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Engine.Utils.DebugUtils
+namespace Engine.Common.DebugUtils
 {
     public class DebugMember
     {

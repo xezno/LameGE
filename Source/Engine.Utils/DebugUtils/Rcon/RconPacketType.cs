@@ -1,4 +1,4 @@
-﻿namespace Engine.Utils.DebugUtils.Rcon
+﻿namespace Engine.Common.DebugUtils.Rcon
 {
     // TODO: Protocol spec
     public enum RconPacketType

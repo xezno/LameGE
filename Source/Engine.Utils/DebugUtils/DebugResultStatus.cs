@@ -1,4 +1,4 @@
-﻿namespace Engine.Utils.DebugUtils
+﻿namespace Engine.Common.DebugUtils
 {
     public enum DebugResultStatus
     {

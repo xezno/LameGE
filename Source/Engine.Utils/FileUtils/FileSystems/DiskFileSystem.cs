@@ -1,8 +1,8 @@
-﻿using Engine.Utils.DebugUtils;
+﻿using Engine.Common.DebugUtils;
 using System;
 using System.IO;
 
-namespace Engine.Utils.FileUtils.FileSystems
+namespace Engine.Common.FileUtils.FileSystems
 {
     public class DiskFileSystem : IFileSystem
     {

@@ -1,8 +1,8 @@
 ﻿using Engine.ECS.Components;
 using Engine.ECS.Entities;
 using Engine.ECS.Observer;
-using Engine.Utils.DebugUtils;
-using Engine.Utils.MathUtils;
+using Engine.Common.DebugUtils;
+using Engine.Common.MathUtils;
 using System;
 using Example.Assets.BSP;
 using Example.Assets.BSP.Lumps;
@@ -11,8 +11,8 @@ using Quincy.Components;
 using Quincy;
 using OpenGL;
 using System.Collections.Generic;
-using Engine.Utils.FileUtils;
-using Engine.Utils;
+using Engine.Common.FileUtils;
+using Engine.Common;
 
 namespace Example.Components
 {

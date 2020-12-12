@@ -1,6 +1,6 @@
 ﻿using Engine.ECS.Observer;
 using Engine.ECS.Components;
-using Engine.Utils.MathUtils;
+using Engine.Common.MathUtils;
 using OpenGL.CoreUI;
 using System;
 using Quincy.Components;
