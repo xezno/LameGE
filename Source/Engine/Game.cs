@@ -21,7 +21,7 @@ using System.Threading;
 
 namespace Engine
 {
-    public class Game : IHasParent
+    public class Game : IManager
     {
         #region Variables
         private readonly string gamePropertyPath;
@@ -67,8 +67,8 @@ namespace Engine
 
         public void Close()
         {
-            nativeWindow.Stop();
             nativeWindow.Destroy();
+            Environment.Exit(0);
         }
         #endregion
 
@@ -97,7 +97,7 @@ namespace Engine
 
             nativeWindow.SwapInterval = 0;
             nativeWindow.Resize += Resize;
-            nativeWindow.Create(GameSettings.GamePosX, GameSettings.GamePosY, (uint)GameSettings.GameResolutionX + 16, (uint)GameSettings.GameResolutionY + 16, NativeWindowStyles.Caption | NativeWindowStyles.Border);
+            nativeWindow.Create(GameSettings.GamePosX, GameSettings.GamePosY, (uint)GameSettings.GameResolutionX, (uint)GameSettings.GameResolutionY, NativeWindowStyles.Overlapped);
 
             nativeWindow.Fullscreen = GameSettings.Fullscreen;
             nativeWindow.Caption = FormatWindowTitle(gameProperties.WindowTitle) ?? "Engine Game";
@@ -112,7 +112,7 @@ namespace Engine
         private void Closing(object sender, EventArgs e)
         {
             Logging.Log("Closing game...");
-            isRunning = false;
+            Close();
         }
 
         private void NativeWindowOnMouseEnter(object sender, NativeWindowMouseEventArgs e)
@@ -146,6 +146,8 @@ namespace Engine
                 RenderManager.Instance,
                 ImGuiManager.Instance
             };
+
+            Broadcast.SetGame(this);
 
             foreach (var mainThreadManager in mainThreadManagers)
             {
@@ -215,8 +217,8 @@ namespace Engine
         private void Resize(object sender, EventArgs e)
         {
             var windowSize = new Vector2f(nativeWindow.ClientSize.Width, nativeWindow.ClientSize.Height);
-
-            // renderer.SetViewportSize();
+            GameSettings.GameResolutionX = (int)windowSize.x;
+            GameSettings.GameResolutionY = (int)windowSize.y;
 
             Broadcast.Notify(NotifyType.WindowResized, new WindowResizeNotifyArgs(windowSize, this));
         }

@@ -1,10 +1,12 @@
 ﻿using Assimp;
+using Engine.Assets;
 using Engine.ECS.Components;
 using Engine.Utils;
 using Engine.Utils.Attributes;
 using Engine.Utils.DebugUtils;
 using Engine.Utils.FileUtils;
 using Engine.Utils.MathUtils;
+using ImGuiNET;
 using OpenGL;
 using Quincy.Entities;
 using System.Collections.Generic;
@@ -17,6 +19,7 @@ namespace Quincy.Components
     public class ModelComponent : Component<ModelComponent>
     {
         private string directory;
+        private Asset asset;
 
         public List<Mesh> Meshes { get; set; } = new List<Mesh>();
 
@@ -24,15 +27,16 @@ namespace Quincy.Components
 
         public ModelComponent(Asset asset)
         {
+            this.asset = asset;
             LoadModel(asset);
         }
 
-        public void Draw(CameraEntity camera, ShaderComponent shader, LightEntity light, (Cubemap, Cubemap, Cubemap) pbrCubemaps, Texture brdfLut, Texture holoTexture)
+        public void Draw(Mesh.DrawInfo drawInfo)
         {
             var matrix = GetComponent<TransformComponent>().Matrix;
             foreach (var mesh in Meshes)
             {
-                mesh.Draw(camera, shader, light, pbrCubemaps, brdfLut, matrix, holoTexture);
+                mesh.Draw(drawInfo);
             }
         }
 
@@ -218,13 +222,26 @@ namespace Quincy.Components
                 Logging.Log($"Loading {directory}/{textureSlot.FilePath} as {typeName}");
 
                 var texture = Texture.LoadFromAsset(ServiceLocator.FileSystem.GetAsset($"{directory}/{textureSlot.FilePath}"), typeName);
-
-                // Add to texture container so that we don't reload it later
-                TextureContainer.Textures.Add(texture);
                 textures.Add(texture);
             }
 
             return textures;
+        }
+
+        public override void RenderImGui()
+        {
+            base.RenderImGui();
+
+            ImGui.Columns(2);
+
+            var assetName = asset?.MountPath ?? "No Asset";
+            ImGui.Text("File");
+            ImGui.NextColumn();
+            ImGui.InputText("##hidelabel", ref assetName, (uint)assetName.Length, ImGuiInputTextFlags.ReadOnly);
+            ImGui.SameLine();
+            ImGui.Button(FontAwesome5.EllipsisH);
+
+            ImGui.Columns(1);
         }
     }
 }

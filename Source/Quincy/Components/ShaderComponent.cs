@@ -9,6 +9,7 @@ using OpenGL;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Quincy.Components
@@ -32,6 +33,7 @@ namespace Quincy.Components
             var directory = Path.GetDirectoryName(jsonAsset.MountPath);
             fragShaderAsset = ServiceLocator.FileSystem.GetAsset($"{directory}/{shaderDescription["fragment"]}");
             vertShaderAsset = ServiceLocator.FileSystem.GetAsset($"{directory}/{shaderDescription["vertex"]}");
+
             Load();
         }
 
@@ -44,6 +46,13 @@ namespace Quincy.Components
 
         public void Load()
         {
+            if (ShaderContainer.Shaders.Any(s => s.fragShaderAsset.MountPath == fragShaderAsset.MountPath && s.vertShaderAsset.MountPath == vertShaderAsset.MountPath))
+            {
+                var cachedShader = ShaderContainer.Shaders.First(s => s.fragShaderAsset.MountPath == fragShaderAsset.MountPath && s.vertShaderAsset.MountPath == vertShaderAsset.MountPath);
+                Id = cachedShader.Id;
+                return;
+            }
+
             var fragGlslContents = fragShaderAsset.AsString();
             var vertGlslContents = vertShaderAsset.AsString();
 
@@ -185,5 +194,10 @@ namespace Quincy.Components
         //        }
         //    }
         //}
+    }
+
+    public class ShaderContainer
+    {
+        public static List<ShaderComponent> Shaders { get; } = new List<ShaderComponent>();
     }
 }

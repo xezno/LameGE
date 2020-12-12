@@ -8,6 +8,33 @@ namespace Quincy
 {
     public class Mesh
     {
+        public struct DrawInfo
+        {
+            public CameraEntity Camera { get; set; }
+            public ShaderComponent Shader { get; set; }
+            public LightEntity Light { get; set; }
+            public (Cubemap, Cubemap, Cubemap) PbrCubemaps { get; set; }
+            public Texture BrdfLut { get; set; }
+            public Matrix4x4f ModelMatrix { get; set; }
+            public Texture HoloTexture { get; set; }
+
+            public Matrix4x4f ViewMatrix { get; set; }
+            public Matrix4x4f ProjMatrix { get; set; }
+
+            public DrawInfo(DrawInfo drawInfo)
+            {
+                Camera = drawInfo.Camera;
+                Shader = drawInfo.Shader;
+                Light = drawInfo.Light;
+                PbrCubemaps = drawInfo.PbrCubemaps;
+                BrdfLut = drawInfo.BrdfLut;
+                ModelMatrix = drawInfo.ModelMatrix;
+                HoloTexture = drawInfo.HoloTexture;
+                ViewMatrix = drawInfo.ViewMatrix;
+                ProjMatrix = drawInfo.ProjMatrix;
+            }
+        }
+
         public List<Vertex> Vertices { get; set; }
         public List<uint> Indices { get; set; }
         public List<Texture> Textures { get; set; }
@@ -100,12 +127,12 @@ namespace Quincy
             Vertices = null;
         }
 
-        public void Draw(CameraEntity camera, ShaderComponent shader, LightEntity light, (Cubemap, Cubemap, Cubemap) pbrCubemaps, Texture brdfLut, Matrix4x4f modelMatrix, Texture holoTexture)
+        public void Draw(DrawInfo drawInfo)
         {
             Dictionary<string, uint> counts = new Dictionary<string, uint>();
-            List<string> expected = new List<string>() { "texture_diffuse", "texture_emissive", "texture_unknown", "texture_normal" };
+            List<string> expectedTextures = new List<string>() { "texture_diffuse", "texture_emissive", "texture_unknown", "texture_normal" };
 
-            shader.Use();
+            drawInfo.Shader.Use();
 
             for (int i = 0; i < Textures.Count; ++i)
             {
@@ -123,49 +150,49 @@ namespace Quincy
 
                 string number = (++counts[name]).ToString();
 
-                shader.SetBool($"material.{name}{number}.exists", true);
-                shader.SetInt($"material.{name}{number}.texture", i);
+                drawInfo.Shader.SetBool($"material.{name}{number}.exists", true);
+                drawInfo.Shader.SetInt($"material.{name}{number}.texture", i);
             }
 
-            foreach (var expectedVar in expected)
+            foreach (var texture in expectedTextures)
             {
-                if (!counts.ContainsKey(expectedVar))
+                if (!counts.ContainsKey(texture))
                 {
-                    shader.SetBool($"material.{expectedVar}1.exists", false);
+                    drawInfo.Shader.SetBool($"material.{texture}1.exists", false);
                 }
             }
-            var cameraComponent = camera.GetComponent<CameraComponent>();
-            var lightComponent = light.GetComponent<LightComponent>();
+            var cameraComponent = drawInfo.Camera.GetComponent<CameraComponent>();
+            var lightComponent = drawInfo.Light.GetComponent<LightComponent>();
 
-            shader.SetMatrix("projectionMatrix", cameraComponent.ProjMatrix);
-            shader.SetMatrix("viewMatrix", cameraComponent.ViewMatrix);
-            shader.SetMatrix("modelMatrix", modelMatrix * localModelMatrix);
+            drawInfo.Shader.SetMatrix("projectionMatrix", drawInfo.ProjMatrix);
+            drawInfo.Shader.SetMatrix("viewMatrix", drawInfo.ViewMatrix);
+            drawInfo.Shader.SetMatrix("modelMatrix", drawInfo.ModelMatrix * localModelMatrix);
 
-            shader.SetVector3d("camPos", camera.GetComponent<TransformComponent>().Position);
-            shader.SetVector3d("lightPos", light.GetComponent<TransformComponent>().Position);
+            drawInfo.Shader.SetVector3d("camPos", drawInfo.Camera.GetComponent<TransformComponent>().Position);
+            drawInfo.Shader.SetVector3d("lightPos", drawInfo.Light.GetComponent<TransformComponent>().Position);
 
-            shader.SetMatrix("lightProjectionMatrix", lightComponent.ProjMatrix);
-            shader.SetMatrix("lightViewMatrix", lightComponent.ViewMatrix);
+            drawInfo.Shader.SetMatrix("lightProjectionMatrix", lightComponent.ProjMatrix);
+            drawInfo.Shader.SetMatrix("lightViewMatrix", lightComponent.ViewMatrix);
 
             Gl.ActiveTexture(TextureUnit.Texture0 + Textures.Count);
             Gl.BindTexture(TextureTarget.Texture2d, lightComponent.ShadowMap.DepthMap);
-            shader.SetInt("shadowMap", Textures.Count);
+            drawInfo.Shader.SetInt("shadowMap", Textures.Count);
 
             Gl.ActiveTexture(TextureUnit.Texture0 + Textures.Count + 1);
-            Gl.BindTexture(TextureTarget.TextureCubeMap, pbrCubemaps.Item2.Id);
-            shader.SetInt("irradianceMap", Textures.Count + 1);
+            Gl.BindTexture(TextureTarget.TextureCubeMap, drawInfo.PbrCubemaps.Item2.Id);
+            drawInfo.Shader.SetInt("irradianceMap", Textures.Count + 1);
 
             Gl.ActiveTexture(TextureUnit.Texture0 + Textures.Count + 2);
-            Gl.BindTexture(TextureTarget.Texture2d, brdfLut.Id);
-            shader.SetInt("brdfLut", Textures.Count + 2);
+            Gl.BindTexture(TextureTarget.Texture2d, drawInfo.BrdfLut.Id);
+            drawInfo.Shader.SetInt("brdfLut", Textures.Count + 2);
 
             Gl.ActiveTexture(TextureUnit.Texture0 + Textures.Count + 3);
-            Gl.BindTexture(TextureTarget.TextureCubeMap, pbrCubemaps.Item3.Id);
-            shader.SetInt("prefilterMap", Textures.Count + 3);
+            Gl.BindTexture(TextureTarget.TextureCubeMap, drawInfo.PbrCubemaps.Item3.Id);
+            drawInfo.Shader.SetInt("prefilterMap", Textures.Count + 3);
 
             Gl.ActiveTexture(TextureUnit.Texture0 + Textures.Count + 4);
-            Gl.BindTexture(TextureTarget.Texture2d, holoTexture.Id);
-            shader.SetInt("holoMap", Textures.Count + 4);
+            Gl.BindTexture(TextureTarget.Texture2d, drawInfo.HoloTexture.Id);
+            drawInfo.Shader.SetInt("holoMap", Textures.Count + 4);
 
             Gl.ActiveTexture(TextureUnit.Texture0);
 

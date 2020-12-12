@@ -103,7 +103,7 @@ namespace Engine.Gui.Managers.ImGuiWindows.Editor.NodeEditor
                 ImGui.BeginGroup();
                 ImGui.Text($"{node.Name}");
 
-                ImGuiUtils.RenderImGuiMembers(node);
+                GuiUtils.RenderImGuiMembers(node);
 
                 ImGui.EndGroup();
 

@@ -21,7 +21,7 @@ namespace Engine.ECS.Components
         /// </summary>
         public virtual void RenderImGui()
         {
-            ImGuiUtils.RenderImGuiMembers(this);
+            GuiUtils.RenderImGuiMembers(this);
         }
 
         private ImGuiInputTextFlags GetFlags(dynamic reference) => reference.CanGet ? ImGuiInputTextFlags.None : ImGuiInputTextFlags.ReadOnly;

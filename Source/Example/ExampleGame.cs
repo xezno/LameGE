@@ -9,6 +9,9 @@ using Example.Managers.ImGuiWindows.Addons;
 using Quincy.Managers;
 using Engine.Utils.MathUtils;
 using Engine.Utils;
+using Quincy.Components;
+using System;
+using Engine.Utils.DebugUtils;
 
 namespace Example
 {
@@ -27,19 +30,38 @@ namespace Example
                 {
                     Name = "Player"
                 },
-                new LevelModelEntity(fs.GetAsset("/Maps/gm_fork.bsp"))
-                {
-                    Name = "Generated BSP Mesh"
-                },
+                //new LevelModelEntity(fs.GetAsset("/Maps/gm_fork.bsp"))
+                //{
+                //    Name = "Generated BSP Mesh"
+                //},
                 //new ModelEntity(fs.GetAsset("/Models/mcrn_tachi/scene.gltf"), new Vector3d(0, 0, 0), Vector3d.one * 0.0125f)
                 //{
                 //    Name = "MCRN Tachi"
                 //},
-                new ModelEntity(fs.GetAsset("/Models/mimicgltf/scene.gltf"), new Vector3d(0, 0, 0), Vector3d.one * 5f)
-                {
-                    Name = "Treasure Chest Mimic"
-                }
+                //new ModelEntity(fs.GetAsset("/Models/mimicgltf/scene.gltf"), new Vector3d(0, 0, 0), Vector3d.one * 5f)
+                //{
+                //    Name = "Treasure Chest Mimic"
+                //}
             };
+
+            var random = new Random();
+            var seed = random.Next(0, 10000);
+            var chunksToGenerate = 2;
+
+            for (int x = 0; x < chunksToGenerate; x++)
+            {
+                for (int z = 0; z < chunksToGenerate; z++)
+                {
+                    var newEntity = new VoxelChunkEntity(seed, x, z)
+                    {
+                        Name = $"Voxel Chunk ({x}, {z})",
+                    };
+                    newEntity.GetComponent<TransformComponent>().Position = new Vector3d(x * 16, 0, z * 16);
+                    entities.Add(
+                        newEntity
+                    );
+                }
+            }
 
             foreach (IEntity entity in entities)
                 SceneManager.Instance.AddEntity(entity);

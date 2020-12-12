@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Quincy.Primitives
 {
-    internal class Plane
+    public class Plane
     {
         public static Vertex[] Vertices { get; } = new[]
         {

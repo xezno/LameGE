@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Quincy.Primitives
 {
-    internal class Cube
+    public class Cube
     {
         private float[] cubeVertices = new[] {
             -1.0f,  1.0f, 1.0f,
@@ -51,31 +51,27 @@ namespace Quincy.Primitives
              1.0f, -1.0f, -1.0f
         };
 
-        public List<Vertex> Vertices
+        private float[] cubeUvs = new[]
+        {
+            0.0f, 1.0f,
+            0.0f, 0.0f,
+            1.0f, 0.0f,
+            1.0f, 0.0f,
+            1.0f, 1.0f,
+            0.0f, 1.0f
+        };
+
+        public List<Vertex> Vertices { get; set; }
+
+        public List<uint> Indices
         {
             get
             {
-                List<Vertex> tmp = new List<Vertex>();
+                var indexList = new List<uint>();
+                for (uint i = 0; i < Vertices.Count; ++i)
+                    indexList.Add(i);
 
-                for (int i = 0; i < cubeVertices.Length; i += 3)
-                {
-                    var x = cubeVertices[i];
-                    var y = cubeVertices[i + 1];
-                    var z = cubeVertices[i + 2];
-
-                    tmp.Add(new Vertex()
-                    {
-                        Position = new Vector3f(x, y, z),
-
-                        // TODO:
-                        TexCoords = new Vector2f(0, 0),
-                        BiTangent = new Vector3f(0, 0, 0),
-                        Normal = new Vector3f(0, 0, 0),
-                        Tangent = new Vector3f(0, 0, 0),
-                    });
-                }
-
-                return tmp;
+                return indexList;
             }
         }
 
@@ -83,7 +79,37 @@ namespace Quincy.Primitives
 
         public Cube()
         {
+            SetupVertices();
             SetupMesh();
+        }
+
+        private void SetupVertices()
+        {
+            List<Vertex> vertices = new List<Vertex>();
+
+            for (int i = 0; i < cubeVertices.Length; i += 3)
+            {
+                var x = cubeVertices[i];
+                var y = cubeVertices[i + 1];
+                var z = cubeVertices[i + 2];
+
+                // TODO: better uvs
+                var u = cubeUvs[(i / 3) % cubeUvs.Length];
+                var v = cubeUvs[((i / 3) + 1) % cubeUvs.Length];
+
+                vertices.Add(new Vertex()
+                {
+                    Position = new Vector3f(x, y, z),
+                    TexCoords = new Vector2f(u, v),
+
+                    // TODO:
+                    BiTangent = new Vector3f(0, 0, 0),
+                    Normal = new Vector3f(0, 0, 0),
+                    Tangent = new Vector3f(0, 0, 0),
+                });
+            }
+
+            Vertices = vertices;
         }
 
         public void SetupMesh()

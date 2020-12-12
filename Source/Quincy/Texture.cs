@@ -65,12 +65,16 @@ namespace Quincy
             Logging.Log($"Loaded texture {asset.MountPath}, ptr {texturePtr}");
             Gl.BindTexture(TextureTarget.Texture2d, 0);
 
-            return new Texture()
+            var texture = new Texture()
             {
                 Id = texturePtr,
                 Path = asset.MountPath,
                 Type = typeName
             };
+
+            // Add to texture container so that we don't reload it later
+            TextureContainer.Textures.Add(texture);
+            return texture;
         }
 
         public static Texture LoadFromData(byte[] data, int width, int height, int bpp, string typeName)
