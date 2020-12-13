@@ -2,8 +2,8 @@
 using Engine.Utils;
 using Engine.Utils.FileUtils;
 using Engine.Utils.MathUtils;
-using Quincy.Components;
-using Quincy.Managers;
+using Engine.Renderer.Components;
+using Engine.Renderer.Managers;
 
 namespace Engine.Entities
 {

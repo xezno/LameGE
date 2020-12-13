@@ -1,6 +1,6 @@
 ﻿using Engine.ECS.Managers;
 using Engine.ECS.Observer;
-using Engine.Gui.Managers;
+using Engine.GUI.Managers;
 using Engine.Managers;
 using Engine.Types;
 using Engine.Utils;
@@ -11,8 +11,8 @@ using Engine.Utils.MathUtils;
 using Newtonsoft.Json;
 using OpenGL;
 using OpenGL.CoreUI;
-using Quincy;
-using Quincy.Managers;
+using Engine.Renderer;
+using Engine.Renderer.Managers;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -33,6 +33,8 @@ namespace Engine
         protected NativeWindow nativeWindow;
         private Vector2f lastMousePos;
         private bool ignoreSingleMouseDelta;
+
+        private bool initialized;
 
         public bool isRunning = true; // TODO: properly detect window close event (needs adding within nativewindow)
 
@@ -58,6 +60,17 @@ namespace Engine
 
         private void Render(object sender, NativeWindowEventArgs e)
         {
+            if (!initialized)
+            {
+                InitServices();
+                InitManagers();
+                InitScene();
+
+                // Setup complete - broadcast the game started event
+                Broadcast.Notify(NotifyType.ContextReady, new GenericNotifyArgs(this));
+                StartThreads();
+                initialized = true;
+            }
             Gl.Enable(EnableCap.FramebufferSrgb);
             RenderManager.Instance.Run();
             Gl.Disable(EnableCap.FramebufferSrgb);
@@ -77,7 +90,7 @@ namespace Engine
         {
             nativeWindow = NativeWindow.Create();
 
-            nativeWindow.ContextCreated += ContextCreated;
+            // nativeWindow.ContextCreated += ContextCreated;
             nativeWindow.ContextDestroying += ContextDestroyed;
             nativeWindow.Render += Render;
             nativeWindow.KeyDown += KeyDown;
@@ -203,16 +216,6 @@ namespace Engine
         #endregion
 
         #region Event Handlers
-        private void ContextCreated(object sender, NativeWindowEventArgs e)
-        {
-            InitServices();
-            InitManagers();
-            InitScene();
-
-            // Setup complete - broadcast the game started event
-            Broadcast.Notify(NotifyType.ContextReady, new GenericNotifyArgs(this));
-            StartThreads();
-        }
 
         private void Resize(object sender, EventArgs e)
         {
