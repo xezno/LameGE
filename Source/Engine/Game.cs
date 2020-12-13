@@ -1,6 +1,6 @@
 ﻿using Engine.ECS.Managers;
 using Engine.ECS.Observer;
-using Engine.Gui.Managers;
+using Engine.GUI.Managers;
 using Engine.Managers;
 using Engine.Types;
 using Engine.Utils;
@@ -11,8 +11,8 @@ using Engine.Utils.MathUtils;
 using Newtonsoft.Json;
 using OpenGL;
 using OpenGL.CoreUI;
-using Quincy;
-using Quincy.Managers;
+using Engine.Renderer;
+using Engine.Renderer.Managers;
 using System;
 using System.Collections.Generic;
 using System.IO;
