@@ -20,7 +20,7 @@ namespace Engine.ECS.Observer
 
         public static void Notify(NotifyType eventType, INotifyArgs notifyArgs)
         {
-            gameInstance.OnNotify(eventType, notifyArgs);
+            gameInstance?.OnNotify(eventType, notifyArgs);
 
             foreach (var manager in managers)
             {

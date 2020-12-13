@@ -34,6 +34,8 @@ namespace Engine
         private Vector2f lastMousePos;
         private bool ignoreSingleMouseDelta;
 
+        private bool initialized;
+
         public bool isRunning = true; // TODO: properly detect window close event (needs adding within nativewindow)
 
         public IHasParent Parent { get; set; }
@@ -58,6 +60,17 @@ namespace Engine
 
         private void Render(object sender, NativeWindowEventArgs e)
         {
+            if (!initialized)
+            {
+                InitServices();
+                InitManagers();
+                InitScene();
+
+                // Setup complete - broadcast the game started event
+                Broadcast.Notify(NotifyType.ContextReady, new GenericNotifyArgs(this));
+                StartThreads();
+                initialized = true;
+            }
             Gl.Enable(EnableCap.FramebufferSrgb);
             RenderManager.Instance.Run();
             Gl.Disable(EnableCap.FramebufferSrgb);
@@ -77,7 +90,7 @@ namespace Engine
         {
             nativeWindow = NativeWindow.Create();
 
-            nativeWindow.ContextCreated += ContextCreated;
+            // nativeWindow.ContextCreated += ContextCreated;
             nativeWindow.ContextDestroying += ContextDestroyed;
             nativeWindow.Render += Render;
             nativeWindow.KeyDown += KeyDown;
@@ -203,16 +216,6 @@ namespace Engine
         #endregion
 
         #region Event Handlers
-        private void ContextCreated(object sender, NativeWindowEventArgs e)
-        {
-            InitServices();
-            InitManagers();
-            InitScene();
-
-            // Setup complete - broadcast the game started event
-            Broadcast.Notify(NotifyType.ContextReady, new GenericNotifyArgs(this));
-            StartThreads();
-        }
 
         private void Resize(object sender, EventArgs e)
         {
