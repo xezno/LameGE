@@ -74,6 +74,9 @@ namespace Engine.GUI.Managers
             // TODO: Check if theme doesn't exist, set a default
             // TODO: Move code to somewhere that makes more sense?
 
+            windowSize = new Vector2(GameSettings.GameResolutionX, GameSettings.GameResolutionY);
+            io.DisplaySize = new Vector2(windowSize.X, windowSize.Y);
+
             InitMenus();
             InitFonts();
             InitKeymap();
@@ -259,7 +262,6 @@ namespace Engine.GUI.Managers
             Gl.Disable(EnableCap.DepthTest);
             Gl.Enable(EnableCap.ScissorTest);
 
-            io.DisplaySize = new Vector2(GameSettings.GameResolutionX, GameSettings.GameResolutionY);
             var projectionMatrix = Matrix4x4f.Ortho2D(0f, io.DisplaySize.X, io.DisplaySize.Y, 0.0f);
 
             shaderComponent.Use();
