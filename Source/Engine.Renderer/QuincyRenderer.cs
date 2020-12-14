@@ -1,6 +1,6 @@
-﻿using Engine.Utils.Base;
+﻿using Engine.Renderer.Managers;
+using Engine.Utils.Base;
 using OpenGL;
-using Engine.Renderer.Managers;
 
 namespace Engine.Renderer
 {

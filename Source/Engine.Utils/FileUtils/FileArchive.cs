@@ -73,7 +73,7 @@ namespace Engine.Utils.FileUtils
                 binaryWriter.Write((long)00);
                 binaryWriter.Write((long)file.FileData.Length);
                 binaryWriter.Write((int)file.FileCompressionMethod);
-                
+
                 for (int i = 0; i < 8; ++i)
                     binaryWriter.Write((byte)0);
             }
@@ -87,8 +87,8 @@ namespace Engine.Utils.FileUtils
                 binaryWriter.BaseStream.Seek(fileLocOffsets[fileIndex], SeekOrigin.Begin);
                 binaryWriter.Write(fileDataPos);
 
-                binaryWriter.BaseStream.Seek(fileDataPos, SeekOrigin.Begin);;
-                
+                binaryWriter.BaseStream.Seek(fileDataPos, SeekOrigin.Begin); ;
+
                 for (int i = 0; i < 4; ++i)
                     binaryWriter.Write((byte)0);
 

@@ -1,9 +1,8 @@
 ﻿using Engine.Assets;
 using Engine.ECS.Entities;
-using Engine.Utils;
-using Engine.Utils.FileUtils;
-using Engine.Utils.MathUtils;
 using Engine.Renderer.Components;
+using Engine.Utils;
+using Engine.Utils.MathUtils;
 
 namespace Engine.Renderer.Entities
 {

@@ -1,10 +1,10 @@
 ﻿using Engine.Utils.DebugUtils;
+using Engine.Utils.FileUtils;
 using Engine.Utils.MathUtils;
-using System.IO;
-using System.Linq;
 using ExampleGame.Assets.BSP.Lumps;
 using ExampleGame.Assets.BSP.Types;
-using Engine.Utils.FileUtils;
+using System.IO;
+using System.Linq;
 
 namespace ExampleGame.Assets.BSP
 {

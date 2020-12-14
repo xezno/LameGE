@@ -1,10 +1,10 @@
 ﻿using Engine.ECS.Managers;
-using Engine.Utils;
-using Engine.Utils.MathUtils;
-using OpenGL;
 using Engine.Renderer.Components;
 using Engine.Renderer.Entities;
 using Engine.Renderer.Primitives;
+using Engine.Utils;
+using Engine.Utils.MathUtils;
+using OpenGL;
 using System;
 using System.Collections.Immutable;
 

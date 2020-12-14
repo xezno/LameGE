@@ -1,12 +1,10 @@
 ﻿using Engine.ECS.Components;
 using Engine.Utils;
-using Engine.Utils.Attributes;
 using Engine.Utils.DebugUtils;
 using Engine.Utils.FileUtils;
 using Engine.Utils.MathUtils;
 using Newtonsoft.Json;
 using OpenGL;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;

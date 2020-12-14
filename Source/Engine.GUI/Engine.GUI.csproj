@@ -28,8 +28,8 @@
     <ProjectReference Include="..\..\Other\OpenGL.Net\Source\OpenGL.Net\OpenGL.Net.csproj" />
     <ProjectReference Include="..\..\Other\OpenGL.Net\Source\OpenGL.Net\OpenGL.Net.Math.csproj" />
     <ProjectReference Include="..\Engine.ECS\Engine.ECS.csproj" />
+    <ProjectReference Include="..\Engine.Renderer\Engine.Renderer.csproj" />
     <ProjectReference Include="..\Engine.Utils\Engine.Utils.csproj" />
-    <ProjectReference Include="..\Quincy\Engine.Renderer.csproj" />
   </ItemGroup>
 
   <ItemGroup>

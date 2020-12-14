@@ -8,7 +8,6 @@ using Engine.Utils.FileUtils;
 using Engine.Utils.MathUtils;
 using ImGuiNET;
 using OpenGL;
-using Engine.Renderer.Entities;
 using System.Collections.Generic;
 using System.IO;
 
@@ -72,7 +71,7 @@ namespace Engine.Renderer.Components
             using var memoryStream = new MemoryStream(asset.Data);
             memoryStream.Seek(0, SeekOrigin.Begin);
 
-            var scene = context.ImportFile("Content/" + asset.MountPath, 
+            var scene = context.ImportFile("Content/" + asset.MountPath,
                 PostProcessSteps.Triangulate
                 | PostProcessSteps.PreTransformVertices
                 | PostProcessSteps.RemoveRedundantMaterials

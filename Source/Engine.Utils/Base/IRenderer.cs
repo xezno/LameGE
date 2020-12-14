@@ -19,17 +19,17 @@ namespace Engine.Utils.Base
 
         public void RenderImGui()
         {
-            
+
         }
 
         public void RenderToScreen()
         {
-            
+
         }
 
         public void RenderToShadowMap()
         {
-            
+
         }
     }
 }

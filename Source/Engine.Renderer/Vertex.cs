@@ -12,12 +12,12 @@ namespace Engine.Renderer
         public Vector3f Tangent { get; set; }
         public Vector3f BiTangent { get; set; }
 
-        public static bool operator== (Vertex a, Vertex b)
+        public static bool operator ==(Vertex a, Vertex b)
         {
             return (a.Position == b.Position) && (a.Normal == b.Normal) && (a.TexCoords == b.TexCoords) && (a.Tangent == b.Tangent) && (a.BiTangent == b.BiTangent);
         }
 
-        public static bool operator!= (Vertex a, Vertex b)
+        public static bool operator !=(Vertex a, Vertex b)
         {
             return !(a == b);
         }

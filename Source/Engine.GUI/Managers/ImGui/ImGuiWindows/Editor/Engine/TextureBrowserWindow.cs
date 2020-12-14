@@ -1,8 +1,7 @@
 ﻿using Engine.Assets;
-using ImGuiNET;
 using Engine.Renderer;
+using ImGuiNET;
 using System;
-using System.Linq;
 using System.Numerics;
 
 namespace Engine.GUI.Managers.ImGuiWindows.Editor

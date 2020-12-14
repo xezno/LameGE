@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Engine.GUI.Managers.Nuklear
+﻿namespace Engine.GUI.Managers.Nuklear
 {
     class NuklearGui
     {

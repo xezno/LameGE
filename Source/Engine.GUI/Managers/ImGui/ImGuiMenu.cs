@@ -1,7 +1,6 @@
 ﻿using Engine.Assets;
 using Engine.GUI.Managers.ImGuiWindows;
 using System.Collections.Generic;
-using System.IO;
 
 namespace Engine.GUI.Managers
 {

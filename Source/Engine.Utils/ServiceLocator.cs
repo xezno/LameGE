@@ -12,7 +12,7 @@ namespace Engine.Utils
             service = defaultService;
         }
 
-        public void ProvideService(T service) 
+        public void ProvideService(T service)
         {
             this.service = service;
         }

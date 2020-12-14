@@ -1,10 +1,10 @@
-﻿using Engine.ECS.Observer;
-using Engine.ECS.Components;
+﻿using Engine.ECS.Components;
+using Engine.ECS.Observer;
+using Engine.Renderer.Components;
+using Engine.Renderer.Managers;
 using Engine.Utils.MathUtils;
 using OpenGL.CoreUI;
 using System;
-using Engine.Renderer.Components;
-using Engine.Renderer.Managers;
 
 namespace ExampleGame.Components
 {
@@ -88,49 +88,49 @@ namespace ExampleGame.Components
             {
                 case NotifyType.KeyDown:
                 case NotifyType.KeyUp:
-                {
-                    KeyboardNotifyArgs keyboardEventArgs = (KeyboardNotifyArgs)notifyArgs;
-
-                    switch ((KeyCode)keyboardEventArgs.KeyboardKey)
                     {
-                        case KeyCode.W:
-                            currentInput.z = eventType == NotifyType.KeyDown ? -1 : 0;
-                            break;
-                        case KeyCode.A:
-                            currentInput.x = eventType == NotifyType.KeyDown ? -1 : 0;
-                            break;
-                        case KeyCode.S:
-                            currentInput.z = eventType == NotifyType.KeyDown ? 1 : 0;
-                            break;
-                        case KeyCode.D:
-                            currentInput.x = eventType == NotifyType.KeyDown ? 1 : 0;
-                            break;
-                        case KeyCode.Space:
-                            currentInput.y = eventType == NotifyType.KeyDown ? 1 : 0;
-                            break;
-                        case KeyCode.Control:
-                            currentInput.y = eventType == NotifyType.KeyDown ? -1 : 0;
-                            break;
-                        case KeyCode.F3:
-                        case KeyCode.F1:
-                            if (eventType == NotifyType.KeyUp)
-                                lockRotation = !lockRotation;
-                            break;
+                        KeyboardNotifyArgs keyboardEventArgs = (KeyboardNotifyArgs)notifyArgs;
+
+                        switch ((KeyCode)keyboardEventArgs.KeyboardKey)
+                        {
+                            case KeyCode.W:
+                                currentInput.z = eventType == NotifyType.KeyDown ? -1 : 0;
+                                break;
+                            case KeyCode.A:
+                                currentInput.x = eventType == NotifyType.KeyDown ? -1 : 0;
+                                break;
+                            case KeyCode.S:
+                                currentInput.z = eventType == NotifyType.KeyDown ? 1 : 0;
+                                break;
+                            case KeyCode.D:
+                                currentInput.x = eventType == NotifyType.KeyDown ? 1 : 0;
+                                break;
+                            case KeyCode.Space:
+                                currentInput.y = eventType == NotifyType.KeyDown ? 1 : 0;
+                                break;
+                            case KeyCode.Control:
+                                currentInput.y = eventType == NotifyType.KeyDown ? -1 : 0;
+                                break;
+                            case KeyCode.F3:
+                            case KeyCode.F1:
+                                if (eventType == NotifyType.KeyUp)
+                                    lockRotation = !lockRotation;
+                                break;
+                        }
+
+                        break;
                     }
-
-                    break;
-                }
                 case NotifyType.MouseMove:
-                {
-                    if (lockRotation)
-                        return;
+                    {
+                        if (lockRotation)
+                            return;
 
-                    MouseMoveNotifyArgs mouseEventArgs = (MouseMoveNotifyArgs)notifyArgs;
-                    CurrentRotation += new Vector3d(mouseEventArgs.MouseDelta.y * -MouseSensitivityMultiplier,
-                        mouseEventArgs.MouseDelta.x * -MouseSensitivityMultiplier,
-                        0);
-                    break;
-                }
+                        MouseMoveNotifyArgs mouseEventArgs = (MouseMoveNotifyArgs)notifyArgs;
+                        CurrentRotation += new Vector3d(mouseEventArgs.MouseDelta.y * -MouseSensitivityMultiplier,
+                            mouseEventArgs.MouseDelta.x * -MouseSensitivityMultiplier,
+                            0);
+                        break;
+                    }
                 case NotifyType.ContextReady:
                     transformComponent = GetComponent<TransformComponent>();
                     break;

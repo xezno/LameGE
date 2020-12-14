@@ -106,12 +106,12 @@ namespace Engine.Utils.MathUtils
             return new System.Numerics.Vector3(x, y, z);
         }
 
-        public static bool operator== (Vector3f a, Vector3f b)
+        public static bool operator ==(Vector3f a, Vector3f b)
         {
             return (a.x == b.x) && (a.y == b.y) && (a.z == b.z);
         }
 
-        public static bool operator!= (Vector3f a, Vector3f b)
+        public static bool operator !=(Vector3f a, Vector3f b)
         {
             return !(a == b);
         }

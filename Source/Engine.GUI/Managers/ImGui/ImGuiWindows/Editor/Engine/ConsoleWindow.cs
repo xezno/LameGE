@@ -36,7 +36,7 @@ namespace Engine.GUI.Managers.ImGuiWindows.Editor.Engine
             ImGui.PushFont(ImGuiManager.Instance.MonospacedFont);
 
             foreach (var logEntry in Logging.LogEntries.TakeLast(logLimit))
-            {                
+            {
                 if (!string.IsNullOrWhiteSpace(currentConsoleFilter) && !GetFilterMatch(logEntry, currentConsoleFilter))
                     continue;
 
@@ -66,10 +66,10 @@ namespace Engine.GUI.Managers.ImGuiWindows.Editor.Engine
                 ImGui.SetScrollHereY(1.0f);
                 scrollQueued = false;
             }
-            
+
             ImGui.PopFont();
             ImGui.EndChild();
-            
+
             ImGui.InputText("Filter", ref currentConsoleFilter, 256);
 
             ImGui.InputText("Input", ref currentConsoleInput, 256);

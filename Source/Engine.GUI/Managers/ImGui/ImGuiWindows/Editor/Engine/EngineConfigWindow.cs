@@ -1,9 +1,7 @@
 ﻿using Engine.Assets;
 using Engine.GUI.Managers.ImGuiWindows.Theming;
 using ImGuiNET;
-using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace Engine.GUI.Managers.ImGuiWindows.Editor
 {

@@ -1,15 +1,14 @@
 ﻿using Engine.ECS.Components;
 using Engine.ECS.Entities;
 using Engine.ECS.Observer;
+using Engine.Renderer;
+using Engine.Renderer.Components;
+using Engine.Renderer.Primitives;
 using Engine.Utils;
 using Engine.Utils.DebugUtils;
 using Engine.Utils.MathUtils;
 using ImGuiNET;
 using OpenGL;
-using Engine.Renderer;
-using Engine.Renderer.Components;
-using Engine.Renderer.Primitives;
-using System;
 using System.Collections.Generic;
 
 namespace ExampleGame.Components
@@ -42,7 +41,7 @@ namespace ExampleGame.Components
         private int xPos;
         private int zPos;
 
-        public VoxelChunkComponent(int seed, int xIndex, int zIndex) 
+        public VoxelChunkComponent(int seed, int xIndex, int zIndex)
         {
             this.seed = seed;
             xPos = xIndex * chunkSize;

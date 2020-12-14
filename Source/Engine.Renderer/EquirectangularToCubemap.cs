@@ -1,8 +1,7 @@
-﻿using Engine.Utils;
-using Engine.Utils.FileUtils;
-using OpenGL;
-using Engine.Renderer.Components;
+﻿using Engine.Renderer.Components;
 using Engine.Renderer.Primitives;
+using Engine.Utils;
+using OpenGL;
 using System;
 
 namespace Engine.Renderer

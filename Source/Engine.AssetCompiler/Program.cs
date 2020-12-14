@@ -39,7 +39,7 @@ namespace Engine.AssetCompiler
             var files = new List<FileArchiveFile>();
 
             ReadFilesFromDirectory(ref files, directory, directory);
-            
+
             Logging.Log($"Writing archive contents...");
             FileArchive fileArchive = new FileArchive(files);
             fileArchive.WriteToFile($"{directory}.alex");

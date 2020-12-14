@@ -15,7 +15,7 @@ namespace Engine.Utils.FileUtils.FileSystems
         {
             // Load asset packages in parallel. 1 thread for each
             var archiveList = JsonConvert.DeserializeObject<List<string>>(File.ReadAllText($"{contentPath}/archives.json"));
-            
+
             // Next, spawn a read thread for each archive
             foreach (var archive in archiveList)
             {

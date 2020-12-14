@@ -1,9 +1,9 @@
 ﻿using Engine.Assets;
 using Engine.ECS.Entities;
+using Engine.Renderer.Components;
 using Engine.Utils;
 using Engine.Utils.FileUtils;
 using Engine.Utils.MathUtils;
-using Engine.Renderer.Components;
 
 namespace ExampleGame.Entities
 {

@@ -17,7 +17,7 @@ namespace Engine.GUI.Managers.ImGuiWindows.Overlays
         public override void Draw()
         {
             var currentOffset = new Vector2();
-            
+
             ImGui.PushFont(ImGuiManager.Instance.MonospacedFont);
             foreach (var logEntry in Logging.LogEntries.TakeLast(logLimit))
             {

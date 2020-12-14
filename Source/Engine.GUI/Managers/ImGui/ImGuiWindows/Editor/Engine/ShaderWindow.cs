@@ -1,11 +1,7 @@
 ﻿using Engine.Assets;
-using Engine.ECS.Observer;
-using ImGuiNET;
 using Engine.Renderer.Components;
 using Engine.Renderer.Managers;
-using System;
-using System.IO;
-using System.Reflection;
+using ImGuiNET;
 
 namespace Engine.GUI.Managers.ImGuiWindows.Editor
 {

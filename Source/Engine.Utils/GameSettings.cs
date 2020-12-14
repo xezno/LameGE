@@ -5,7 +5,7 @@ namespace Engine.Utils
 {
     struct GameSettingsValues
     {
-        #pragma warning disable CS0649 // Field is never assigned to, and will always have its default value 'null'
+#pragma warning disable CS0649 // Field is never assigned to, and will always have its default value 'null'
         public int gameResolutionX;
         public int gameResolutionY;
         public bool vsyncEnabled;
@@ -25,7 +25,7 @@ namespace Engine.Utils
         // TODO: cascades
         public int shadowMapX;
         public int shadowMapY;
-        #pragma warning restore CS0649
+#pragma warning restore CS0649
     }
 
     public sealed class GameSettings

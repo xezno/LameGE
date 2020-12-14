@@ -1,18 +1,18 @@
 ﻿using Engine.ECS.Components;
 using Engine.ECS.Entities;
 using Engine.ECS.Observer;
+using Engine.Renderer;
+using Engine.Renderer.Components;
+using Engine.Utils;
 using Engine.Utils.DebugUtils;
+using Engine.Utils.FileUtils;
 using Engine.Utils.MathUtils;
-using System;
 using ExampleGame.Assets.BSP;
 using ExampleGame.Assets.BSP.Lumps;
 using ExampleGame.Assets.BSP.Types;
-using Engine.Renderer.Components;
-using Engine.Renderer;
 using OpenGL;
+using System;
 using System.Collections.Generic;
-using Engine.Utils.FileUtils;
-using Engine.Utils;
 
 namespace ExampleGame.Components
 {
@@ -157,17 +157,20 @@ namespace ExampleGame.Components
                     texCoords.Add(GetUVCoords(texInfo, rootPointCoords));
                     texCoords.Add(GetUVCoords(texInfo, firstPointCoords));
                     texCoords.Add(GetUVCoords(texInfo, secondPointCoords));
-                    bakedMeshVertices.Add(new Vertex() {
+                    bakedMeshVertices.Add(new Vertex()
+                    {
                         Position = meshVertices[rootPoint],
                         TexCoords = texCoords[^3],
                         Normal = meshNormals[face.planeNumber]
                     });
-                    bakedMeshVertices.Add(new Vertex() {
+                    bakedMeshVertices.Add(new Vertex()
+                    {
                         Position = meshVertices[firstPoint],
                         TexCoords = texCoords[^2],
                         Normal = meshNormals[face.planeNumber]
                     });
-                    bakedMeshVertices.Add(new Vertex() {
+                    bakedMeshVertices.Add(new Vertex()
+                    {
                         Position = meshVertices[secondPoint],
                         TexCoords = texCoords[^1],
                         Normal = meshNormals[face.planeNumber]

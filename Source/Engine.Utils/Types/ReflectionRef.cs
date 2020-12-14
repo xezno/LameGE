@@ -40,7 +40,7 @@ namespace Engine.Types
                         break;
                     case MemberTypes.Property: // TODO: Check if there is no set method beforehand, set as readonly within imgui
                         var propertyInfo = ((PropertyInfo)memberInfo);
-                            propertyInfo.SetValue(origin, value);
+                        propertyInfo.SetValue(origin, value);
                         break;
                     default:
                         throw new NotImplementedException($"Member type {memberInfo.MemberType} not implemented");

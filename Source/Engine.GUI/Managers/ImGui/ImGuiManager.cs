@@ -1,26 +1,22 @@
 ﻿using Engine.Assets;
-using Engine.ECS.Observer;
 using Engine.ECS.Managers;
+using Engine.ECS.Observer;
 using Engine.GUI.Managers.ImGuiWindows;
-using Engine.GUI.Managers.ImGuiWindows.Editor;
 using Engine.GUI.Managers.ImGuiWindows.Overlays;
 using Engine.GUI.Managers.ImGuiWindows.Theming;
+using Engine.Renderer;
+using Engine.Renderer.Components;
 using Engine.Utils;
 using Engine.Utils.DebugUtils;
 using ImGuiNET;
-using Engine.Renderer;
 using OpenGL;
 using OpenGL.CoreUI;
 using System;
 using System.Collections.Generic;
-using System.Numerics;
-using Vector4f = Engine.Utils.MathUtils.Vector4f;
-using Engine.GUI.Managers.ImGuiWindows.Editor.Engine;
-using Engine.Renderer.Components;
-using Engine.GUI.Managers.ImGuiWindows.Editor.NodeEditor;
-using System.Runtime;
-using System.Reflection;
 using System.Linq;
+using System.Numerics;
+using System.Reflection;
+using Vector4f = Engine.Utils.MathUtils.Vector4f;
 
 namespace Engine.GUI.Managers
 {

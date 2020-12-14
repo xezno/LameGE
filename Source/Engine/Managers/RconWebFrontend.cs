@@ -1,5 +1,5 @@
-﻿using Engine.ECS.Observer;
-using Engine.ECS.Managers;
+﻿using Engine.ECS.Managers;
+using Engine.ECS.Observer;
 using Engine.Utils;
 using Engine.Utils.DebugUtils;
 using System.IO;

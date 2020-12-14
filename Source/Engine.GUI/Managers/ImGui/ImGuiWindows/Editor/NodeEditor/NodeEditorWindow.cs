@@ -133,7 +133,7 @@ namespace Engine.GUI.Managers.ImGuiWindows.Editor.NodeEditor
 
                 drawList.AddRectFilled(nodeRectMin, nodeRectMax, nodeBgColor, 4.0f);
                 drawList.AddRectFilled(nodeRectMin, nodeRectMax, GetImGuiColor(new Vector4(100, 100, 100, 255)), 4.0f);
-                
+
                 for (int slotId = 0; slotId < node.InputCount; ++slotId)
                 {
                     var circlePos = offset + node.GetInputSlotPos(slotId);
@@ -209,9 +209,9 @@ namespace Engine.GUI.Managers.ImGuiWindows.Editor.NodeEditor
                 }
                 else
                 {
-                    if (ImGui.MenuItem("Add")) 
+                    if (ImGui.MenuItem("Add"))
                     {
-                        nodes.Add(new PbrNode(nodes.Count, "Principled BRDF", scenePos, new Vector2(0, 0), 0.5f, new Vector4(100, 100, 200, 255) / 255.0f, 2, 2)); 
+                        nodes.Add(new PbrNode(nodes.Count, "Principled BRDF", scenePos, new Vector2(0, 0), 0.5f, new Vector4(100, 100, 200, 255) / 255.0f, 2, 2));
                     }
                     if (ImGui.MenuItem("Paste")) { }
                 }
@@ -221,7 +221,7 @@ namespace Engine.GUI.Managers.ImGuiWindows.Editor.NodeEditor
             ImGui.PopStyleVar();
 
             if (ImGui.IsWindowHovered() && !ImGui.IsAnyItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Middle, 0.0f))
-                scrolling += io.MouseDelta;  
+                scrolling += io.MouseDelta;
 
             ImGui.PopItemWidth();
             ImGui.EndChild();

@@ -1,6 +1,5 @@
 ﻿using Engine.ECS.Components;
 using Engine.Utils.Attributes;
-using Engine.Utils.MathUtils;
 using OpenGL;
 
 namespace Engine.Renderer.Components

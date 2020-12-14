@@ -1,7 +1,7 @@
 ﻿using Engine.Assets;
 using Engine.ECS.Entities;
-using Engine.Utils.MathUtils;
 using Engine.Renderer.Components;
+using Engine.Utils.MathUtils;
 using Quaternion = Engine.Utils.MathUtils.Quaternion;
 
 namespace Engine.Renderer.Entities

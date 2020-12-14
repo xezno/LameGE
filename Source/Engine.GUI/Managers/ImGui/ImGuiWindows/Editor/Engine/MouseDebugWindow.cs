@@ -15,7 +15,7 @@ namespace Engine.GUI.Managers.ImGuiWindows.Editor.Engine
             ImGui.Text($"LMB: {ImGui.IsMouseDown(ImGuiMouseButton.Left)}");
             ImGui.Text($"RMB: {ImGui.IsMouseDown(ImGuiMouseButton.Right)}");
             ImGui.Text($"MMB: {ImGui.IsMouseDown(ImGuiMouseButton.Middle)}");
-            
+
             ImGui.Text($"LMB Drag: {ImGui.IsMouseDragging(ImGuiMouseButton.Left)}");
             ImGui.Text($"RMB Drag: {ImGui.IsMouseDragging(ImGuiMouseButton.Right)}");
             ImGui.Text($"MMB Drag: {ImGui.IsMouseDragging(ImGuiMouseButton.Middle)}");

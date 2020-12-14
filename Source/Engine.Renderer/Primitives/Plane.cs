@@ -1,6 +1,6 @@
-﻿using Engine.Utils.MathUtils;
+﻿using Engine.Renderer.Components;
+using Engine.Utils.MathUtils;
 using OpenGL;
-using Engine.Renderer.Components;
 using System;
 using System.Collections.Generic;
 

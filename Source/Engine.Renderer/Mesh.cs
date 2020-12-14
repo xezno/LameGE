@@ -1,6 +1,6 @@
-﻿using OpenGL;
-using Engine.Renderer.Components;
+﻿using Engine.Renderer.Components;
 using Engine.Renderer.Entities;
+using OpenGL;
 using System;
 using System.Collections.Generic;
 

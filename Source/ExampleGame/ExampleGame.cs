@@ -1,17 +1,12 @@
 ﻿using Engine;
-using Engine.Assets;
 using Engine.ECS.Entities;
-using Engine.GUI.Managers;
-using Engine.GUI.Managers.ImGuiWindows;
-using System.Collections.Generic;
-using ExampleGame.Entities;
-using ExampleGame.Managers.ImGuiWindows.Addons;
-using Engine.Renderer.Managers;
-using Engine.Utils.MathUtils;
-using Engine.Utils;
 using Engine.Renderer.Components;
+using Engine.Renderer.Managers;
+using Engine.Utils;
+using Engine.Utils.MathUtils;
+using ExampleGame.Entities;
 using System;
-using Engine.Utils.DebugUtils;
+using System.Collections.Generic;
 
 namespace ExampleGame
 {
