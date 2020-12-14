@@ -29,16 +29,24 @@ namespace ExampleGame
                 //{
                 //    Name = "Generated BSP Mesh"
                 //},
-                //new ModelEntity(fs.GetAsset("/Models/mcrn_tachi/scene.gltf"), new Vector3d(0, 0, 0), Vector3d.one * 0.0125f)
-                //{
-                //    Name = "MCRN Tachi"
-                //},
+                new ModelEntity(fs.GetAsset("/Models/mcrn_tachi/scene.gltf"), new Vector3d(0, 0, 0), Vector3d.one * 0.0125f)
+                {
+                    Name = "MCRN Tachi"
+                },
                 //new ModelEntity(fs.GetAsset("/Models/mimicgltf/scene.gltf"), new Vector3d(0, 0, 0), Vector3d.one * 5f)
                 //{
                 //    Name = "Treasure Chest Mimic"
                 //}
             };
 
+            foreach (IEntity entity in entities)
+                SceneManager.Instance.AddEntity(entity);
+
+            SetupCustomImGuiMenus();
+        }
+
+        private void GenerateTerrain(ref List<IEntity> entities)
+        {
             var random = new Random();
             var seed = random.Next(0, 10000);
             var chunksToGenerate = 2;
@@ -57,11 +65,6 @@ namespace ExampleGame
                     );
                 }
             }
-
-            foreach (IEntity entity in entities)
-                SceneManager.Instance.AddEntity(entity);
-
-            SetupCustomImGuiMenus();
         }
 
         private void SetupCustomImGuiMenus()
