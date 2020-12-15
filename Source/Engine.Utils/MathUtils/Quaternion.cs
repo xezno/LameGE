@@ -24,12 +24,12 @@ namespace Engine.Utils.MathUtils
         public static Quaternion FromEulerAngles(Vector3f eulerAngles)
         {
             var degToRad = 0.0174533f;
-            var halfCosX = (float)Math.Cos(eulerAngles.x * degToRad) / 2.0f;
-            var halfCosY = (float)Math.Cos(eulerAngles.y * degToRad) / 2.0f;
-            var halfCosZ = (float)Math.Cos(eulerAngles.z * degToRad) / 2.0f;
-            var halfSinX = (float)Math.Cos(eulerAngles.x * degToRad) / 2.0f;
-            var halfSinY = (float)Math.Cos(eulerAngles.y * degToRad) / 2.0f;
-            var halfSinZ = (float)Math.Cos(eulerAngles.z * degToRad) / 2.0f;
+            var halfCosX = (float)Math.Cos(eulerAngles.X * degToRad) / 2.0f;
+            var halfCosY = (float)Math.Cos(eulerAngles.Y * degToRad) / 2.0f;
+            var halfCosZ = (float)Math.Cos(eulerAngles.Z * degToRad) / 2.0f;
+            var halfSinX = (float)Math.Cos(eulerAngles.X * degToRad) / 2.0f;
+            var halfSinY = (float)Math.Cos(eulerAngles.Y * degToRad) / 2.0f;
+            var halfSinZ = (float)Math.Cos(eulerAngles.Z * degToRad) / 2.0f;
 
             return new Quaternion(halfCosX * halfCosY * halfCosZ + halfSinX * halfSinY * halfSinZ,
                 halfSinX * halfCosY * halfCosZ - halfCosX * halfSinY * halfSinZ,

@@ -43,11 +43,11 @@ namespace Engine.Renderer.Components
             {
                 // TODO: Convert doubles to float relative to camera instead of relative to world origin
                 var temp = Matrix4x4f.Identity;
-                temp.Translate((float)Position.x, (float)Position.y, (float)Position.z);
-                temp.RotateX((float)rotationEuler.x);
-                temp.RotateY((float)rotationEuler.y);
-                temp.RotateZ((float)rotationEuler.z);
-                temp.Scale((float)Scale.x, (float)Scale.y, (float)Scale.z);
+                temp.Translate((float)Position.X, (float)Position.Y, (float)Position.Z);
+                temp.RotateX((float)rotationEuler.X);
+                temp.RotateY((float)rotationEuler.Y);
+                temp.RotateZ((float)rotationEuler.Z);
+                temp.Scale((float)Scale.X, (float)Scale.Y, (float)Scale.Z);
                 return temp;
             }
         }

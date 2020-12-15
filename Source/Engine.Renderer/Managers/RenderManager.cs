@@ -8,7 +8,7 @@ namespace Engine.Renderer.Managers
 {
     public class RenderManager : Manager<RenderManager>
     {
-        public string hdri = "/HDRIs/studio_small_03_4k.hdr";
+        public string hdri = "/HDRIs/sapaced.hdr";
         public float exposure = 1.75f;
         public TonemapOperator tonemapOperator;
 

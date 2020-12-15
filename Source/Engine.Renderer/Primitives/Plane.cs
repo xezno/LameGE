@@ -73,21 +73,21 @@ namespace Engine.Renderer.Primitives
             foreach (var vertex in Vertices)
             {
                 glVertices.AddRange(new[] {
-                    vertex.Position.x,
-                    vertex.Position.y,
-                    vertex.Position.z,
+                    vertex.Position.X,
+                    vertex.Position.Y,
+                    vertex.Position.Z,
 
-                    vertex.Normal.x,
-                    vertex.Normal.y,
-                    vertex.Normal.z,
+                    vertex.Normal.X,
+                    vertex.Normal.Y,
+                    vertex.Normal.Z,
 
-                    vertex.Tangent.x,
-                    vertex.Tangent.y,
-                    vertex.Tangent.z,
+                    vertex.Tangent.X,
+                    vertex.Tangent.Y,
+                    vertex.Tangent.Z,
 
-                    vertex.BiTangent.x,
-                    vertex.BiTangent.y,
-                    vertex.BiTangent.z,
+                    vertex.BiTangent.X,
+                    vertex.BiTangent.Y,
+                    vertex.BiTangent.Z,
 
                     vertex.TexCoords.x,
                     vertex.TexCoords.y

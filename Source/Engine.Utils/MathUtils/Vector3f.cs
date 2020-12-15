@@ -2,24 +2,26 @@
 
 namespace Engine.Utils.MathUtils
 {
-    public struct Vector3f
+    public struct Vector3f : IVector3<float, Vector3f>
     {
         /// <summary>
         /// The point at which the vector resides on the X axis
         /// </summary>
-        public float x;
+        public float X { get; set; }
 
         /// <summary>
         /// The point at which the vector resides on the Y axis
         /// </summary>
-        public float y;
+        public float Y { get; set; }
 
         /// <summary>
         /// The point at which the vector resides on the Z axis
         /// </summary>
-        public float z;
+        public float Z { get; set; }
 
-        public float Magnitude => (float)Math.Sqrt(x * x + y * y + z * z);
+        public float Magnitude => (float)Math.Sqrt(SqrMagnitude);
+
+        public float SqrMagnitude => X * X + Y * Y + Z * Z;
 
         public Vector3f Normalized
         {
@@ -41,47 +43,47 @@ namespace Engine.Utils.MathUtils
         /// <param name="z">The initial z coordinate</param>
         public Vector3f(float x, float y, float z)
         {
-            this.x = x;
-            this.y = y;
-            this.z = z;
+            this.X = x;
+            this.Y = y;
+            this.Z = z;
         }
 
-        public static Vector3f operator *(Vector3f a, Vector3f b) => new Vector3f(a.x * b.x,
-                                                                                a.y * b.y,
-                                                                                a.z * b.z);
-        public static Vector3f operator -(Vector3f a, Vector3f b) => new Vector3f(a.x - b.x,
-                                                                                a.y - b.y,
-                                                                                a.z - b.z);
-        public static Vector3f operator /(Vector3f a, Vector3f b) => new Vector3f(a.x / b.x,
-                                                                                a.y / b.y,
-                                                                                a.z / b.z);
+        public static Vector3f operator *(Vector3f a, Vector3f b) => new Vector3f(a.X * b.X,
+                                                                                a.Y * b.Y,
+                                                                                a.Z * b.Z);
+        public static Vector3f operator -(Vector3f a, Vector3f b) => new Vector3f(a.X - b.X,
+                                                                                a.Y - b.Y,
+                                                                                a.Z - b.Z);
+        public static Vector3f operator /(Vector3f a, Vector3f b) => new Vector3f(a.X / b.X,
+                                                                                a.Y / b.Y,
+                                                                                a.Z / b.Z);
 
         public Vector3d ToVector3d()
         {
-            return new Vector3d(x, y, z);
+            return new Vector3d(X, Y, Z);
         }
 
-        public static Vector3f operator +(Vector3f a, Vector3f b) => new Vector3f(a.x + b.x,
-                                                                                a.y + b.y,
-                                                                                a.z + b.z);
+        public static Vector3f operator +(Vector3f a, Vector3f b) => new Vector3f(a.X + b.X,
+                                                                                a.Y + b.Y,
+                                                                                a.Z + b.Z);
 
-        public static Vector3f operator *(Vector3f a, float b) => new Vector3f(a.x * b,
-                                                                            a.y * b,
-                                                                            a.z * b);
-        public static Vector3f operator -(Vector3f a, float b) => new Vector3f(a.x - b,
-                                                                            a.y - b,
-                                                                            a.z - b);
-        public static Vector3f operator /(Vector3f a, float b) => new Vector3f(a.x / b,
-                                                                            a.y / b,
-                                                                            a.z / b);
+        public static Vector3f operator *(Vector3f a, float b) => new Vector3f(a.X * b,
+                                                                            a.Y * b,
+                                                                            a.Z * b);
+        public static Vector3f operator -(Vector3f a, float b) => new Vector3f(a.X - b,
+                                                                            a.Y - b,
+                                                                            a.Z - b);
+        public static Vector3f operator /(Vector3f a, float b) => new Vector3f(a.X / b,
+                                                                            a.Y / b,
+                                                                            a.Z / b);
 
-        public static Vector3f operator +(Vector3f a, float b) => new Vector3f(a.x + b,
-                                                                            a.y + b,
-                                                                            a.z + b);
+        public static Vector3f operator +(Vector3f a, float b) => new Vector3f(a.X + b,
+                                                                            a.Y + b,
+                                                                            a.Z + b);
 
-        public static Vector3f operator %(Vector3f a, float b) => new Vector3f(a.x % b,
-                                                                            a.y % b,
-                                                                            a.z % b);
+        public static Vector3f operator %(Vector3f a, float b) => new Vector3f(a.X % b,
+                                                                            a.Y % b,
+                                                                            a.Z % b);
 
         public static Vector3f up = new Vector3f(0, 1, 0);
         public static Vector3f right = new Vector3f(1, 0, 0);
@@ -90,10 +92,10 @@ namespace Engine.Utils.MathUtils
         /// <summary>
         /// Get all values within the <see cref="Vector3f"/> as a string.
         /// </summary>
-        /// <returns>All coordinates (<see cref="x"/>, <see cref="y"/> and <see cref="z"/>) concatenated as a string.</returns>
+        /// <returns>All coordinates (<see cref="X"/>, <see cref="Y"/> and <see cref="Z"/>) concatenated as a string.</returns>
         public override string ToString()
         {
-            return $"{x}, {y}, {z}";
+            return $"{X}, {Y}, {Z}";
         }
 
         public static Vector3f ConvertFromNumerics(System.Numerics.Vector3 numericsVector3)
@@ -103,12 +105,12 @@ namespace Engine.Utils.MathUtils
 
         public System.Numerics.Vector3 ConvertToNumerics()
         {
-            return new System.Numerics.Vector3(x, y, z);
+            return new System.Numerics.Vector3(X, Y, Z);
         }
 
         public static bool operator ==(Vector3f a, Vector3f b)
         {
-            return (a.x == b.x) && (a.y == b.y) && (a.z == b.z);
+            return (a.X == b.X) && (a.Y == b.Y) && (a.Z == b.Z);
         }
 
         public static bool operator !=(Vector3f a, Vector3f b)

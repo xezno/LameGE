@@ -32,30 +32,15 @@ namespace Engine.ECS.Entities
 
         public virtual string IconGlyph { get; } = FontAwesome5.Box;
 
-        public virtual List<string> Tags { get; set; } = new List<string>();
-
-        /// <summary>
-        /// The entity's parent; usually a manager.
-        /// </summary>
         public virtual IHasParent Parent { get; set; }
 
-        /// <summary>
-        /// A list of components that the entity contains.
-        /// </summary>
         public List<IComponent> Components { get; private set; }
 
-        /// <summary>
-        /// Construct an <see cref="Entity{T}"/>.
-        /// </summary>
         public Entity()
         {
             Components = new List<IComponent>();
         }
 
-        /// <summary>
-        /// Display the available components & their properties
-        /// within ImGUI.
-        /// </summary>
         public virtual void RenderImGui()
         {
             bool enabled = Enabled;
@@ -120,10 +105,6 @@ namespace Engine.ECS.Entities
             }
         }
 
-        /// <summary>
-        /// Add a component to an entity. This will also check for component dependencies.
-        /// </summary>
-        /// <param name="component">An instance of the desired component to add.</param>
         public virtual void AddComponent(IComponent component)
         {
             if (Components.FindAll(t => { return t.GetType() == component.GetType(); }).Count > 0)
@@ -136,11 +117,6 @@ namespace Engine.ECS.Entities
             CheckComponentDependencies();
         }
 
-        /// <summary>
-        /// Retrieve a component of type <typeparamref name="T1"/> from an entity.
-        /// </summary>
-        /// <typeparam name="T1">The desired type of component.</typeparam>
-        /// <returns>The first component of type <typeparamref name="T1"/> from the entity's component list.</returns>
         public virtual T1 GetComponent<T1>()
         {
             var results = Components.FindAll(t => { return t.GetType() == typeof(T1); });
@@ -150,11 +126,6 @@ namespace Engine.ECS.Entities
             return (T1)results.First();
         }
 
-        /// <summary>
-        /// Check whether this entity has the component of type T1.
-        /// </summary>
-        /// <typeparam name="T1">The type of the component to check for.</typeparam>
-        /// <returns></returns>
         public bool HasComponent<T1>()
         {
             var results = Components.FindAll(t => { return t.GetType() == typeof(T1); });

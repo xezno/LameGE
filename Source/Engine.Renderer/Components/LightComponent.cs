@@ -26,13 +26,13 @@ namespace Engine.Renderer.Components
         {
             var transformComponent = GetComponent<TransformComponent>();
             viewMatrix = Matrix4x4f.Identity;
-            viewMatrix.RotateX((float)transformComponent.RotationEuler.x);
-            viewMatrix.RotateY((float)transformComponent.RotationEuler.y);
-            viewMatrix.RotateZ((float)transformComponent.RotationEuler.z);
+            viewMatrix.RotateX((float)transformComponent.RotationEuler.X);
+            viewMatrix.RotateY((float)transformComponent.RotationEuler.Y);
+            viewMatrix.RotateZ((float)transformComponent.RotationEuler.Z);
             viewMatrix *= Matrix4x4f.LookAtDirection(new Vertex3f(
-                (float)transformComponent.Position.x,
-                (float)transformComponent.Position.y,
-                (float)transformComponent.Position.z), new Vertex3f(0f, 0f, -1f), new Vertex3f(0f, 1f, 0f));
+                (float)transformComponent.Position.X,
+                (float)transformComponent.Position.Y,
+                (float)transformComponent.Position.Z), new Vertex3f(0f, 0f, -1f), new Vertex3f(0f, 1f, 0f));
         }
     }
 }

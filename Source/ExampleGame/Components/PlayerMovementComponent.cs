@@ -33,12 +33,12 @@ namespace ExampleGame.Components
             var sceneCamera = SceneManager.Instance.MainCamera;
             var sceneCameraTransform = sceneCamera.GetComponent<TransformComponent>();
 
-            var newDirection = (transformComponent.Forward * (float)CurrentInput.z) + (transformComponent.Right * (float)CurrentInput.x);
+            var newDirection = (transformComponent.Forward * (float)CurrentInput.Z) + (transformComponent.Right * (float)CurrentInput.X);
             newDirection.Normalize();
 
             CurrentDirection = EaseLerpVector3(newDirection.ToVector3d(), CurrentDirection, 0.7f);
 
-            var newHorizontalDirection = (Vector3d.up * (float)currentInput.y);
+            var newHorizontalDirection = (Vector3d.up * (float)currentInput.Y);
             newHorizontalDirection.Normalize();
 
             HorizontalDirection = EaseLerpVector3(newHorizontalDirection, HorizontalDirection, 0.7f);
@@ -79,7 +79,7 @@ namespace ExampleGame.Components
 
         public Vector3d EaseLerpVector3(Vector3d a, Vector3d b, float t)
         {
-            return new Vector3d(EaseLerp(a.x, b.x, t), EaseLerp(a.y, b.y, t), EaseLerp(a.z, b.z, t));
+            return new Vector3d(EaseLerp(a.X, b.X, t), EaseLerp(a.Y, b.Y, t), EaseLerp(a.Z, b.Z, t));
         }
 
         public override void OnNotify(NotifyType eventType, INotifyArgs notifyArgs)
@@ -94,22 +94,22 @@ namespace ExampleGame.Components
                         switch ((KeyCode)keyboardEventArgs.KeyboardKey)
                         {
                             case KeyCode.W:
-                                currentInput.z = eventType == NotifyType.KeyDown ? -1 : 0;
+                                currentInput.Z = eventType == NotifyType.KeyDown ? -1 : 0;
                                 break;
                             case KeyCode.A:
-                                currentInput.x = eventType == NotifyType.KeyDown ? -1 : 0;
+                                currentInput.X = eventType == NotifyType.KeyDown ? -1 : 0;
                                 break;
                             case KeyCode.S:
-                                currentInput.z = eventType == NotifyType.KeyDown ? 1 : 0;
+                                currentInput.Z = eventType == NotifyType.KeyDown ? 1 : 0;
                                 break;
                             case KeyCode.D:
-                                currentInput.x = eventType == NotifyType.KeyDown ? 1 : 0;
+                                currentInput.X = eventType == NotifyType.KeyDown ? 1 : 0;
                                 break;
                             case KeyCode.Space:
-                                currentInput.y = eventType == NotifyType.KeyDown ? 1 : 0;
+                                currentInput.Y = eventType == NotifyType.KeyDown ? 1 : 0;
                                 break;
                             case KeyCode.Control:
-                                currentInput.y = eventType == NotifyType.KeyDown ? -1 : 0;
+                                currentInput.Y = eventType == NotifyType.KeyDown ? -1 : 0;
                                 break;
                             case KeyCode.F3:
                             case KeyCode.F1:

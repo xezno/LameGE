@@ -108,7 +108,7 @@ namespace Engine.Renderer.Components
         {
             if (GetUniformLocation(name, out int loc))
             {
-                Gl.ProgramUniform3(Id, loc, value.x, value.y, value.z);
+                Gl.ProgramUniform3(Id, loc, value.X, value.Y, value.Z);
             }
         }
 
@@ -116,7 +116,7 @@ namespace Engine.Renderer.Components
         {
             if (GetUniformLocation(name, out int loc))
             {
-                Gl.ProgramUniform3(Id, loc, (float)value.x, (float)value.y, (float)value.z);
+                Gl.ProgramUniform3(Id, loc, (float)value.X, (float)value.Y, (float)value.Z);
             }
         }
 

@@ -2,11 +2,29 @@
 
 namespace Engine.Utils.Base
 {
+    /// <summary>
+    /// An interface specifying the minimum contract required for a renderer to attach to the engine.
+    /// </summary>
     public interface IRenderer
     {
+        /// <summary>
+        /// Called when the window's renderer context has been created.
+        /// </summary>
         void ContextCreated();
+
+        /// <summary>
+        /// Called when ImGui is to be rendered.
+        /// </summary>
         void RenderImGui();
+
+        /// <summary>
+        /// Called when objects are to be rendered to the screen.
+        /// </summary>
         void RenderToScreen();
+
+        /// <summary>
+        /// Called when objects are to be rendered to the shadow map.
+        /// </summary>
         void RenderToShadowMap();
     }
 

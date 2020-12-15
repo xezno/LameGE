@@ -195,9 +195,9 @@ namespace ExampleGame.Components
 
         private Vector2f GetUVCoords(TexInfo texInfo, Vector3f coords)
         {
-            var uCoord = texInfo.textureVecs[0, 0] * coords.x + texInfo.textureVecs[0, 1] * coords.y + texInfo.textureVecs[0, 2] * coords.z +
+            var uCoord = texInfo.textureVecs[0, 0] * coords.X + texInfo.textureVecs[0, 1] * coords.Y + texInfo.textureVecs[0, 2] * coords.Z +
                              texInfo.textureVecs[0, 3];
-            var vCoord = texInfo.textureVecs[1, 0] * coords.x + texInfo.textureVecs[1, 1] * coords.y + texInfo.textureVecs[1, 2] * coords.z +
+            var vCoord = texInfo.textureVecs[1, 0] * coords.X + texInfo.textureVecs[1, 1] * coords.Y + texInfo.textureVecs[1, 2] * coords.Z +
                              texInfo.textureVecs[1, 3];
 
             vCoord = 1.0f - vCoord; // Flipped for opengl

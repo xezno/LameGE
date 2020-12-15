@@ -28,6 +28,11 @@ namespace Engine.Utils.Attributes
             this.opcodes = opcodes;
         }
 
+        /// <summary>
+        /// Construct an instance of the TextAssetOpcodeAttribute.
+        /// </summary>
+        /// <param name="opcode">An opcode that the field can be loaded from.</param>
+        /// <param name="invertValue">Whether or not to invert the value.</param>
         public TextAssetOpcodeAttribute(string opcode, bool invertValue = false)
         {
             opcodes = new[] { opcode };

@@ -8,12 +8,29 @@ namespace Engine.ECS.Entities
 {
     public interface IEntity : IHasParent
     {
+        /// <summary>
+        /// A human-friendly identifier for this entity.
+        /// </summary>
         string Name { get; set; }
-        List<string> Tags { get; set; }
 
+        /// <summary>
+        /// A list of components that are owned by this entity.
+        /// </summary>
         List<IComponent> Components { get; }
+
+        /// <summary>
+        /// A character or character pair, used within the ImGui editor to represent this entity.
+        /// </summary>
         string IconGlyph { get; }
+
+        /// <summary>
+        /// Determines whether or not the entity is updated or rendered.
+        /// </summary>
         bool Enabled { get; }
+
+        /// <summary>
+        /// A globally unique identifier for this entity.
+        /// </summary>
         Guid Id { get; }
 
         /// <summary>
