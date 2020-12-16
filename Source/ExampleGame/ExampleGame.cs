@@ -17,7 +17,7 @@ namespace ExampleGame
         protected override void InitScene()
         {
             base.InitScene();
-            var fs = ServiceLocator.fileSystem.GetService();
+            var fs = ServiceLocator.FileSystem;
 
             var entities = new List<IEntity>
             {

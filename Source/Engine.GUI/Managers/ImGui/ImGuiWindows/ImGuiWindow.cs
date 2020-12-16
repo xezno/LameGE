@@ -1,12 +1,13 @@
-﻿using Engine.ECS.Managers;
+﻿using Engine.ECS.Entities;
 using Engine.ECS.Observer;
 using Engine.Types;
 using ImGuiNET;
+using System.Collections.Generic;
 using System.Numerics;
 
 namespace Engine.GUI.Managers.ImGuiWindows
 {
-    public abstract class ImGuiWindow : IManager
+    public abstract class ImGuiWindow : IObserver
     {
         public abstract bool Render { get; set; }
         public abstract string Title { get; }
@@ -14,11 +15,13 @@ namespace Engine.GUI.Managers.ImGuiWindows
         public virtual ImGuiWindowFlags Flags { get; }
         public IHasParent Parent { get => ImGuiManager.Instance; set { _ = value; } }
 
+        public List<IEntity> Entities => throw new System.NotImplementedException();
+
         public abstract void Draw();
 
         public ImGuiWindow()
         {
-            Broadcast.AddManager(this);
+            Subject.AddObserver(this);
         }
 
         protected void DrawShadowLabel(string str, Vector2 position)
@@ -31,10 +34,6 @@ namespace Engine.GUI.Managers.ImGuiWindows
                 position, 0xFFFFFFFF, str);
         }
 
-        public virtual void OnNotify(NotifyType eventType, INotifyArgs notifyArgs) { }
-
-        public void Run() { }
-
-        public void RenderImGui() { }
+        public virtual void OnNotify(NotifyType notifyType, INotifyArgs notifyArgs) { }
     }
 }

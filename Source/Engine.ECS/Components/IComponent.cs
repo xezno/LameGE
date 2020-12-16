@@ -6,7 +6,7 @@ namespace Engine.ECS.Components
     /// <summary>
     /// The base interface for any component running in the engine.
     /// </summary>
-    public interface IComponent : IHasParent
+    public interface IComponent : IHasParent, IObserver
     {
         /// <summary>
         /// Called when an notification is broadcast.

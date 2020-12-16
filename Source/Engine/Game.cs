@@ -20,7 +20,7 @@ using System.Threading;
 
 namespace Engine
 {
-    public class Game : IManager
+    public class Game : IHasParent, IObserver
     {
         #region Variables
         private readonly string gamePropertyPath;
@@ -66,7 +66,7 @@ namespace Engine
                 InitScene();
 
                 // Setup complete - broadcast the game started event
-                Broadcast.Notify(NotifyType.ContextReady, new GenericNotifyArgs(this));
+                Subject.Notify(NotifyType.ContextReady, new GenericNotifyArgs(this));
                 StartThreads();
                 initialized = true;
             }
@@ -159,11 +159,11 @@ namespace Engine
                 ImGuiManager.Instance
             };
 
-            Broadcast.SetGame(this);
+            Subject.AddObserver(this);
 
             foreach (var mainThreadManager in mainThreadManagers)
             {
-                Broadcast.AddManager(mainThreadManager);
+                Subject.AddObserver(mainThreadManager);
                 mainThreadManager.Parent = this;
             }
 
@@ -179,7 +179,7 @@ namespace Engine
 
             foreach (var multiThreadedManager in multiThreadedManagers)
             {
-                Broadcast.AddManager(multiThreadedManager);
+                Subject.AddObserver(multiThreadedManager);
                 multiThreadedManager.Parent = this;
 
                 threads.Add(new Thread(() =>
@@ -207,8 +207,8 @@ namespace Engine
 
         private void InitServices()
         {
-            ServiceLocator.renderer.ProvideService(new QuincyRenderer());
-            ServiceLocator.fileSystem.ProvideService(new DiskFileSystem());
+            ServiceLocator.Renderer = new QuincyRenderer();
+            ServiceLocator.FileSystem = new DiskFileSystem();
 
             ServiceLocator.FileSystem.Init("Content/");
         }
@@ -222,12 +222,12 @@ namespace Engine
             GameSettings.GameResolutionX = (int)windowSize.x;
             GameSettings.GameResolutionY = (int)windowSize.y;
 
-            Broadcast.Notify(NotifyType.WindowResized, new WindowResizeNotifyArgs(windowSize, this));
+            Subject.Notify(NotifyType.WindowResized, new WindowResizeNotifyArgs(windowSize, this));
         }
 
         private void MouseWheel(object sender, NativeWindowMouseEventArgs e)
         {
-            Broadcast.Notify(NotifyType.MouseScroll, new MouseWheelNotifyArgs(e.WheelTicks, this));
+            Subject.Notify(NotifyType.MouseScroll, new MouseWheelNotifyArgs(e.WheelTicks, this));
         }
 
         private void MouseMove(object sender, NativeWindowMouseEventArgs e)
@@ -242,7 +242,7 @@ namespace Engine
                 ignoreSingleMouseDelta = false;
             }
 
-            Broadcast.Notify(NotifyType.MouseMove, new MouseMoveNotifyArgs(mouseDelta, mousePos, this));
+            Subject.Notify(NotifyType.MouseMove, new MouseMoveNotifyArgs(mouseDelta, mousePos, this));
 
             lastMousePos = mousePos;
 
@@ -254,26 +254,26 @@ namespace Engine
         private void MouseUp(object sender, NativeWindowMouseEventArgs e)
         {
             if ((e.Buttons & MouseButton.Left) == 0)
-                Broadcast.Notify(NotifyType.MouseButtonUp, new MouseButtonNotifyArgs(0, this));
+                Subject.Notify(NotifyType.MouseButtonUp, new MouseButtonNotifyArgs(0, this));
             if ((e.Buttons & MouseButton.Right) == 0)
-                Broadcast.Notify(NotifyType.MouseButtonUp, new MouseButtonNotifyArgs(1, this));
+                Subject.Notify(NotifyType.MouseButtonUp, new MouseButtonNotifyArgs(1, this));
             if ((e.Buttons & MouseButton.Middle) == 0)
-                Broadcast.Notify(NotifyType.MouseButtonUp, new MouseButtonNotifyArgs(2, this));
+                Subject.Notify(NotifyType.MouseButtonUp, new MouseButtonNotifyArgs(2, this));
         }
 
         private void MouseDown(object sender, NativeWindowMouseEventArgs e)
         {
             if ((e.Buttons & MouseButton.Left) != 0)
-                Broadcast.Notify(NotifyType.MouseButtonDown, new MouseButtonNotifyArgs(0, this));
+                Subject.Notify(NotifyType.MouseButtonDown, new MouseButtonNotifyArgs(0, this));
             if ((e.Buttons & MouseButton.Right) != 0)
-                Broadcast.Notify(NotifyType.MouseButtonDown, new MouseButtonNotifyArgs(1, this));
+                Subject.Notify(NotifyType.MouseButtonDown, new MouseButtonNotifyArgs(1, this));
             if ((e.Buttons & MouseButton.Middle) != 0)
-                Broadcast.Notify(NotifyType.MouseButtonDown, new MouseButtonNotifyArgs(2, this));
+                Subject.Notify(NotifyType.MouseButtonDown, new MouseButtonNotifyArgs(2, this));
         }
 
-        private void KeyUp(object sender, NativeWindowKeyEventArgs e) => Broadcast.Notify(NotifyType.KeyUp, new KeyboardNotifyArgs((int)e.Key, this));
+        private void KeyUp(object sender, NativeWindowKeyEventArgs e) => Subject.Notify(NotifyType.KeyUp, new KeyboardNotifyArgs((int)e.Key, this));
 
-        private void KeyDown(object sender, NativeWindowKeyEventArgs e) => Broadcast.Notify(NotifyType.KeyDown, new KeyboardNotifyArgs((int)e.Key, this));
+        private void KeyDown(object sender, NativeWindowKeyEventArgs e) => Subject.Notify(NotifyType.KeyDown, new KeyboardNotifyArgs((int)e.Key, this));
 
         private void ContextDestroyed(object sender, NativeWindowEventArgs e)
         {

@@ -38,7 +38,7 @@ namespace Engine.Renderer.Managers
 
         public RenderManager()
         {
-            renderer = ServiceLocator.renderer.GetService();
+            renderer = ServiceLocator.Renderer;
             renderer.ContextCreated();
         }
 

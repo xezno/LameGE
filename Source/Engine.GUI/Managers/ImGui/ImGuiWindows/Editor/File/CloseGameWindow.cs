@@ -21,7 +21,7 @@ namespace Engine.GUI.Managers.ImGuiWindows.Editor
 
             if (ImGui.Button("Yes"))
             {
-                Broadcast.Notify(NotifyType.CloseGame, null); // TODO: FIX?
+                Subject.Notify(NotifyType.CloseGame, null); // TODO: FIX?
                 Logging.Log("Close game");
             }
 

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Engine.ECS.Entities
 {
-    public interface IEntity : IHasParent
+    public interface IEntity : IHasParent, IObserver
     {
         /// <summary>
         /// A human-friendly identifier for this entity.
