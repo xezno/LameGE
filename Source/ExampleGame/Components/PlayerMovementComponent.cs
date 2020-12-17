@@ -27,6 +27,7 @@ namespace ExampleGame.Components
         public float MouseSensitivityMultiplier { get; set; } = 0.1f;
         public float RotationSensitivity { get; set; } = 3f;
         public float MinVelocity { get; set; } = 0.001f;
+        public Vector3d CameraOffset { get; set; }
 
         public override void Update(float deltaTime)
         {
@@ -66,7 +67,7 @@ namespace ExampleGame.Components
             transformComponent.Position += CurrentDirection * ForwardVelocity * deltaTime;
             transformComponent.Position += HorizontalDirection * VerticalVelocity * deltaTime;
 
-            sceneCameraTransform.Position = transformComponent.Position;
+            sceneCameraTransform.Position = transformComponent.Position + CameraOffset;
             sceneCameraTransform.RotationEuler = CurrentRotation * RotationSensitivity;
             transformComponent.RotationEuler = CurrentRotation * RotationSensitivity;
         }

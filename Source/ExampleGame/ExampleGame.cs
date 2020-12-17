@@ -19,24 +19,24 @@ namespace ExampleGame
             base.InitScene();
             var fs = ServiceLocator.FileSystem;
 
-            var entities = new List<IEntity>
-            {
+            var playerEntity =
                 new PlayerEntity()
                 {
                     Name = "Player"
-                },
-                //new LevelModelEntity(fs.GetAsset("/Maps/gm_fork.bsp"))
-                //{
-                //    Name = "Generated BSP Mesh"
-                //},
+                };
+
+            var mcrnModel =
                 new ModelEntity(fs.GetAsset("/Models/mcrn_tachi/scene.gltf"), new Vector3d(0, 0, 0), Vector3d.one * 0.0125f)
                 {
                     Name = "MCRN Tachi"
-                },
-                //new ModelEntity(fs.GetAsset("/Models/mimicgltf/scene.gltf"), new Vector3d(0, 0, 0), Vector3d.one * 5f)
-                //{
-                //    Name = "Treasure Chest Mimic"
-                //}
+                };
+
+            mcrnModel.GetComponent<TransformComponent>().ParentTransform = playerEntity.GetComponent<TransformComponent>();
+
+            var entities = new List<IEntity>
+            {
+                playerEntity,
+                mcrnModel
             };
 
             foreach (IEntity entity in entities)

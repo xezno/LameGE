@@ -1,6 +1,7 @@
 ﻿using Engine.Assets;
 using Engine.ECS.Entities;
 using Engine.Renderer.Components;
+using Engine.Utils;
 using Engine.Utils.MathUtils;
 using ExampleGame.Components;
 
