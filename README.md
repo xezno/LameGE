@@ -1,3 +1,7 @@
+| Archive Notice |
+| --- |
+| This repository has been archived. <br> A forked variant of the engine is being used for [OpenTPW](https://github.com/ThemeParkWorld/OpenTPW), but this repository will no longer be updated with any new features. The reasoning for this is simple: this engine is on the verge of becoming completely unmaintainable - the design & architecture here sucks, and the more I try to develop the engine the worse it seems to become - resulting in a sort-of snowball effect. |
+
 <p align="center">
     <h1 align="center">
         Engine
