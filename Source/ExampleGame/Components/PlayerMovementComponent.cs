@@ -132,7 +132,7 @@ namespace ExampleGame.Components
                             0);
                         break;
                     }
-                case NotifyType.ContextReady:
+                case NotifyType.SceneReady:
                     transformComponent = GetComponent<TransformComponent>();
                     break;
             }

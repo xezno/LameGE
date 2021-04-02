@@ -210,7 +210,7 @@ namespace ExampleGame.Components
             base.OnNotify(notifyType, notifyArgs);
             switch (notifyType)
             {
-                case NotifyType.ContextReady:
+                case NotifyType.SceneReady:
                     GenerateBSPMesh();
                     break;
             }

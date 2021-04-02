@@ -66,7 +66,7 @@ namespace Engine
                 InitScene();
 
                 // Setup complete - broadcast the game started event
-                Subject.Notify(NotifyType.ContextReady, new GenericNotifyArgs(this));
+                Subject.Notify(NotifyType.SceneReady, new GenericNotifyArgs(this));
                 StartThreads();
                 initialized = true;
             }

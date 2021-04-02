@@ -26,6 +26,7 @@ namespace ExampleGame.Screens
         {
             var fs = ServiceLocator.FileSystem;
 
+            // Entities
             var playerEntity =
                 new PlayerEntity()
                 {
@@ -49,10 +50,14 @@ namespace ExampleGame.Screens
                 level
             };
 
+            // Add entities to scene
             foreach (IEntity entity in entities)
+            {
                 SceneManager.Instance.AddEntity(entity);
+            }
 
-            Subject.Notify(NotifyType.ContextReady, new GenericNotifyArgs(this));
+            // Tell entities that they can load stuff
+            Subject.Notify(NotifyType.SceneReady, new GenericNotifyArgs(this));
         }
 
         public void Render()

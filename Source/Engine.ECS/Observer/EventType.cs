@@ -7,7 +7,7 @@
     {
         //--------------------------------
         /* GL context */
-        ContextReady,
+        SceneReady,
 
         //--------------------------------
         /* Game events */
