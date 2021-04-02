@@ -149,10 +149,10 @@ function writeLogHistory(packet)
 function tryConnect()
 {
     console.log("Trying to connect...");
-    socket = new WebSocket("ws://127.0.0.1:" + port, [ "ulaidRcon" ]);
+    socket = new WebSocket("ws://127.0.0.1:" + port, [ "XRcon" ]);
     socket.addEventListener("message", handleMessage);
     socket.addEventListener("open", handleOpen);
-    socket.addEventListener("close",handleClose);
+    socket.addEventListener("close", handleClose);
     socket.addEventListener("error", function(e) {
         console.log("Websocket fucked it (again): ", event);
 

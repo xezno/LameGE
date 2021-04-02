@@ -20,7 +20,7 @@ using Vector4f = Engine.Utils.MathUtils.Vector4f;
 
 namespace Engine.GUI.Managers
 {
-    public class ImGuiManager : Manager<ImGuiManager>, IGuiProvider
+    public class ImGuiManager : Manager<ImGuiManager>
     {
         private const float PT_TO_PX = 1.3281472327365f;
 
