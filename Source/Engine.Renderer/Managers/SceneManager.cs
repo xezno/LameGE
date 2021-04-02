@@ -10,7 +10,8 @@ using System.Collections.Immutable;
 
 namespace Engine.Renderer.Managers
 {
-    public sealed class SceneManager : Manager<SceneManager> // TODO: we probably want to read scene data from a file later.
+    // TODO: we probably want to read scene data from a file later.
+    public sealed class SceneManager : Manager<SceneManager>
     {
         private ShaderComponent depthShader;
         private Plane framebufferRenderPlane;

@@ -31,40 +31,21 @@ namespace ExampleGame
                     Name = "MCRN Tachi"
                 };
 
+            var level = new LevelModelEntity(fs.GetAsset("/Maps/gm_flatgrass.bsp"));
+
             mcrnModel.GetComponent<TransformComponent>().ParentTransform = playerEntity.GetComponent<TransformComponent>();
 
             var entities = new List<IEntity>
             {
                 playerEntity,
-                mcrnModel
+                mcrnModel,
+                level
             };
 
             foreach (IEntity entity in entities)
                 SceneManager.Instance.AddEntity(entity);
 
             SetupCustomImGuiMenus();
-        }
-
-        private void GenerateTerrain(ref List<IEntity> entities)
-        {
-            var random = new Random();
-            var seed = random.Next(0, 10000);
-            var chunksToGenerate = 2;
-
-            for (int x = 0; x < chunksToGenerate; x++)
-            {
-                for (int z = 0; z < chunksToGenerate; z++)
-                {
-                    var newEntity = new VoxelChunkEntity(seed, x, z)
-                    {
-                        Name = $"Voxel Chunk ({x}, {z})",
-                    };
-                    newEntity.GetComponent<TransformComponent>().Position = new Vector3d(x * 16, 0, z * 16);
-                    entities.Add(
-                        newEntity
-                    );
-                }
-            }
         }
 
         private void SetupCustomImGuiMenus()

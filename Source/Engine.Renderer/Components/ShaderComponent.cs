@@ -164,7 +164,7 @@ namespace Engine.Renderer.Components
                 var stringBuilder = new StringBuilder(maxLength);
                 Gl.GetShaderInfoLog(shader, maxLength, out int _, stringBuilder);
 
-                Logging.Log(stringBuilder.ToString(), Logging.Severity.Fatal);
+                Logging.Log(stringBuilder.ToString(), Logging.Severity.High);
             }
         }
 

@@ -4,13 +4,11 @@
     --low:          #a2e19544;
     --medium:       #fce38a44;
     --high:         #f3818144;
-    --fatal:        #fa465944;
     --input:        #43ff5344;
 
     --low-text:     #43ff53;
     --medium-text:  #ffc800;
     --high-text:    #ff5e5e;
-    --fatal-text:   #ff0000;
     --input-text:   #43ff53;
 }
 
@@ -158,30 +156,12 @@ header {
     background: var(--high-text);
 }
 
-.console-message.fatal {
-    background: var(--fatal);
-    color: var(--fatal-text);
-}
-
-.console-message.fatal .console-timestamp {
-    background: var(--fatal-text);
-    color: white;
-}
-
-.console-message.fatal::before {
-    background: var(--fatal-text);
-}
-
 .console-message.low::before {
     content: 'LOW';
 }
 
 .console-message.medium::before {
     content: 'MEDIUM';
-}
-
-.console-message.fatal::before {
-    CONTENT: 'FATAL';
 }
 
 .console-message.high::before {

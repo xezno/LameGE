@@ -89,7 +89,6 @@ namespace Engine
         {
             nativeWindow = NativeWindow.Create();
 
-            // nativeWindow.ContextCreated += ContextCreated;
             nativeWindow.ContextDestroying += ContextDestroyed;
             nativeWindow.Render += Render;
             nativeWindow.KeyDown += KeyDown;
@@ -113,8 +112,6 @@ namespace Engine
 
             nativeWindow.Fullscreen = GameSettings.Fullscreen;
             nativeWindow.Caption = FormatWindowTitle(gameProperties.WindowTitle) ?? "Engine Game";
-
-            // TODO: get choice of monitor to use.
 
             nativeWindow.Show();
             nativeWindow.Run();

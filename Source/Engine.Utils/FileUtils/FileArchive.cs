@@ -159,14 +159,24 @@ namespace Engine.Utils.FileUtils
                 binaryReader.BaseStream.Seek(file.FileLocation, SeekOrigin.Begin);
                 binaryReader.ReadBytes(4); // Padding
 
-                var fileData = binaryReader.ReadBytes((int)file.FileLength); // TODO: support long for reading from stream (i.e. remove cast)
+                List<byte> fileData = new List<byte>();
+
+                // Read in chunks
+                for (long i = 0; i < file.FileLength; )
+                {
+                    var chunkLen = Math.Min(int.MaxValue, file.FileLength);
+                    fileData.AddRange(binaryReader.ReadBytes((int)chunkLen));
+
+                    i += chunkLen;
+                }
+
                 if (file.FileCompressionMethod == CompressionMethod.None)
                 {
-                    file.FileData = fileData;
+                    file.FileData = fileData.ToArray();
                 }
                 else if (file.FileCompressionMethod == CompressionMethod.Zstd)
                 {
-                    using var memoryStream = new MemoryStream(fileData);
+                    using var memoryStream = new MemoryStream(fileData.ToArray());
                     using var dcmpMemoryStream = new MemoryStream();
                     using var compressionStream = new ZstandardStream(memoryStream, System.IO.Compression.CompressionMode.Decompress);
                     compressionStream.CopyTo(dcmpMemoryStream);

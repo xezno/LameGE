@@ -2,6 +2,7 @@
 using Engine.ECS.Observer;
 using Engine.Utils;
 using Engine.Utils.DebugUtils;
+using FuzzySharp;
 using ImGuiNET;
 using OpenGL.CoreUI;
 using System.Linq;
@@ -92,10 +93,9 @@ namespace Engine.GUI.Managers.ImGuiWindows.Editor.Engine
 
         private static bool GetLogEntryStringMatch(LogEntry logEntry, string str)
         {
-            return logEntry.str.Contains(str) || logEntry.stackTrace.ToString().Contains(str);
+            return Fuzz.PartialRatio(str, logEntry.str) > 80 || Fuzz.PartialRatio(str, logEntry.stackTrace.ToString()) > 90;
         }
 
-        // TODO: use fuzzy search
         private static bool GetFilterMatch(LogEntry logEntry, string filter)
         {
             if (filter.Contains(","))
@@ -118,7 +118,6 @@ namespace Engine.GUI.Managers.ImGuiWindows.Editor.Engine
         {
             return severity switch
             {
-                Logging.Severity.Fatal => new Vector4(255f / 255f, 0, 0, 1),
                 Logging.Severity.High => new Vector4(255f / 255f, 94f / 255f, 94f / 255f, 1),
                 Logging.Severity.Low => new Vector4(67f / 255f, 255f / 255f, 83f / 255f, 1),
                 Logging.Severity.Medium => new Vector4(255f / 255f, 200f / 255f, 0, 1),

@@ -69,18 +69,21 @@ namespace Engine.GUI.Managers
 
             ImGui.StyleColorsDark();
 
-            // Set default theme from game settings
-            Theme = ImGuiTheme.Load(ServiceLocator.FileSystem.GetAsset($"/Themes/{GameSettings.EditorTheme}.json"));
-            // TODO: Check if theme doesn't exist, set a default
-            // TODO: Move code to somewhere that makes more sense?
-
             windowSize = new Vector2(GameSettings.GameResolutionX, GameSettings.GameResolutionY);
             io.DisplaySize = new Vector2(windowSize.X, windowSize.Y);
+
+            LoadTheme();
 
             InitMenus();
             InitFonts();
             InitKeymap();
             InitGl();
+        }
+
+        private void LoadTheme()
+        {
+            // Set default theme from game settings
+            Theme = ImGuiTheme.Load(ServiceLocator.FileSystem.GetAsset($"/Themes/{GameSettings.EditorTheme}.json"));
         }
 
         #region "Initialization"
@@ -255,7 +258,6 @@ namespace Engine.GUI.Managers
 
         private void RenderImGui(ImDrawDataPtr drawData)
         {
-            // TODO: use abstract graphics implementation
             Gl.BlendEquation(BlendEquationMode.FuncAdd);
             Gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             Gl.Disable(EnableCap.CullFace);
