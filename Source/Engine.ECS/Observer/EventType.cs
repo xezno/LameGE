@@ -6,7 +6,7 @@
     public enum NotifyType
     {
         //--------------------------------
-        /* GL context */
+        /* Scene */
         SceneReady,
 
         //--------------------------------
