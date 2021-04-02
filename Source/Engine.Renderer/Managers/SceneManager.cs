@@ -93,7 +93,6 @@ namespace Engine.Renderer.Managers
             Update();
 
             RenderSceneToFramebuffer();
-            RenderFramebufferToScreen();
         }
 
         private void RenderSceneToFramebuffer()
@@ -139,7 +138,7 @@ namespace Engine.Renderer.Managers
             Gl.ClipControl(ClipControlOrigin.LowerLeft, ClipControlDepth.NegativeOneToOne);
         }
 
-        private void RenderFramebufferToScreen()
+        public void RenderFramebuffer()
         {
             var cameraComponent = MainCamera.GetComponent<CameraComponent>();
             Gl.Viewport(0, 0, GameSettings.GameResolutionX, GameSettings.GameResolutionY);

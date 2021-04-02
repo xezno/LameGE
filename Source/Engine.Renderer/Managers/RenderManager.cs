@@ -36,6 +36,15 @@ namespace Engine.Renderer.Managers
         public bool RenderShadowMap { get; set; }
         public bool Paused { get; set; }
 
+        #region Screens
+        private const int MAX_SCREEN_STACK_SIZE = 16;
+        private IScreen[] screens = new IScreen[MAX_SCREEN_STACK_SIZE];
+
+        private int currentScreenStackPos = -1;
+
+        private IScreen CurrentScreen => screens[currentScreenStackPos];
+        #endregion
+
         public RenderManager()
         {
             renderer = ServiceLocator.Renderer;
@@ -47,10 +56,48 @@ namespace Engine.Renderer.Managers
         /// </summary>
         public override void Run()
         {
-            renderer.RenderToShadowMap();
-            renderer.RenderToScreen();
+            if (currentScreenStackPos >= 0 && CurrentScreen != null)
+            {
+                CurrentScreen.Render();
+            }
+
+            SceneManager.Instance.RenderFramebuffer();
 
             CollectPerformanceData();
+        }
+
+        public void Update(float deltaTime)
+        {
+            if (currentScreenStackPos >= 0 && CurrentScreen != null)
+            {
+                CurrentScreen.Update(deltaTime);
+            }
+        }
+
+        public void PushScreen(IScreen screen)
+        {
+            if (currentScreenStackPos >= 0 && CurrentScreen != null)
+            {
+                CurrentScreen.Exit();
+            }
+
+            screen.LoadContent();
+            screen.Enter();
+
+            screens[++currentScreenStackPos] = screen;
+        }
+
+        public IScreen PopScreen()
+        {
+            CurrentScreen.Exit();
+            CurrentScreen.UnloadContent();
+
+            return screens[--currentScreenStackPos];
+        }
+
+        public IScreen PeekScreen()
+        {
+            return screens[currentScreenStackPos];
         }
 
         public void CollectPerformanceData()

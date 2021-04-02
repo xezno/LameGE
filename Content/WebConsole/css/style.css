@@ -42,7 +42,7 @@ header {
     padding: 10px;
     margin: 10px 0;
     border: 1px solid #ffffff22;
-    background: inherit;
+    background: black;
     color: inherit;
     width: 100%;
 }
@@ -59,7 +59,7 @@ header {
 
 .console-wrapper {
     width: 100%;
-    height: calc(100vh - 150px);
+    height: calc(100vh - 220px);
     overflow-x: hidden;
     overflow-y: auto;
 }
@@ -227,7 +227,7 @@ header {
     justify-content: center;
     flex-wrap: wrap;
     width: 250px;
-    height: 100px;
+    height: auto;
     margin-left: -125px;
     margin-top: -50px;
 
@@ -240,4 +240,5 @@ header {
 
 .message-title {
     font-size: 1.2em;
+    margin-bottom: 8px;
 }

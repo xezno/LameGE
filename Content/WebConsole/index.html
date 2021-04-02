@@ -11,7 +11,7 @@
 
         <div class="message" id="message">
             <span class="message-title">No connection</span>
-            <span class="message-description">Try launching the game if you haven't already.</span>
+            <span class="message-description">Waiting for game launch...</span>
         </div>
 
         <main>
@@ -22,6 +22,9 @@
             <ul class="console-suggestions" id="console-suggestions">
             </ul>
             <input id="console-input" class="console-input" placeholder="Input..." onkeyup="inputKeyDown(event)" />
+            <a class="button">Clear</a>
+            <input id="console-filter" class="console-input" placeholder="Filter..." onkeyup="inputKeyDown(event)" />
+            <a class="button">Clear</a>
         </main>
 
         <script src="script/frontend.js"></script> 
