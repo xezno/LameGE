@@ -4,6 +4,7 @@ using Engine.Renderer.Components;
 using Engine.Utils;
 using Engine.Utils.FileUtils;
 using Engine.Utils.MathUtils;
+using System.Numerics;
 
 namespace ExampleGame.Entities
 {
@@ -11,10 +12,10 @@ namespace ExampleGame.Entities
     {
         public override string IconGlyph { get; } = FontAwesome5.LayerGroup;
 
-        public ModelEntity(Asset modelAsset, Vector3d position, Vector3d scale)
+        public ModelEntity(Asset modelAsset, Vector3 position, Vector3 scale)
         {
             AddComponent(new TransformComponent(position,
-                                                new Vector3d(0, 0, 0),
+                                                new Vector3(0, 0, 0),
                                                 scale));
 
             AddComponent(new ShaderComponent(ServiceLocator.FileSystem.GetAsset("/Shaders/pbr.json")));

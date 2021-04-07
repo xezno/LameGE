@@ -2,6 +2,7 @@
 using OpenGL;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 
 namespace Engine.Renderer.Primitives
 {
@@ -99,13 +100,13 @@ namespace Engine.Renderer.Primitives
 
                 vertices.Add(new Vertex()
                 {
-                    Position = new Vector3f(x, y, z),
-                    TexCoords = new Vector2f(u, v),
+                    Position = new Vector3(x, y, z),
+                    TexCoords = new Vector2(u, v),
 
                     // TODO:
-                    BiTangent = new Vector3f(0, 0, 0),
-                    Normal = new Vector3f(0, 0, 0),
-                    Tangent = new Vector3f(0, 0, 0),
+                    BiTangent = new Vector3(0, 0, 0),
+                    Normal = new Vector3(0, 0, 0),
+                    Tangent = new Vector3(0, 0, 0),
                 });
             }
 
@@ -141,8 +142,8 @@ namespace Engine.Renderer.Primitives
                     vertex.BiTangent.Y,
                     vertex.BiTangent.Z,
 
-                    vertex.TexCoords.x,
-                    vertex.TexCoords.y
+                    vertex.TexCoords.X,
+                    vertex.TexCoords.Y
                 });
             }
 

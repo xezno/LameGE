@@ -12,7 +12,6 @@ namespace Engine.Managers
 {
     // TODO: either optimize this or scrap it
     //          - protobufs?
-    // TODO: switch to more extensible (i.e. use class-based solution)
     public sealed class RconManager : Manager<RconManager>
     {
         #region Fields
@@ -31,9 +30,9 @@ namespace Engine.Managers
 
             FleckLog.LogAction = CustomFleckLog;
 
-            var socketServer = new WebSocketServer($"ws://0.0.0.0:{GameSettings.RconPort}")
+            var socketServer = new WebSocketServer($"ws://127.0.0.1:{GameSettings.RconPort}")
             {
-                SupportedSubProtocols = new[] { "engineRcon" },
+                SupportedSubProtocols = new[] { "XRcon" },
                 ListenerSocket =
                 {
                     NoDelay = true
@@ -248,7 +247,7 @@ namespace Engine.Managers
                 {"timestamp", logEntry.timestamp.ToLongTimeString()},
                 {"stackTrace", logEntry.stackTrace.ToString()},
                 {"str", logEntry.str},
-                {"severity", logEntry.ToString().ToLower()}
+                {"severity", logEntry.severity.ToString().ToLower()}
             };
         }
         #endregion

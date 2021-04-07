@@ -4,13 +4,11 @@
     --low:          #a2e19544;
     --medium:       #fce38a44;
     --high:         #f3818144;
-    --fatal:        #fa465944;
     --input:        #43ff5344;
 
     --low-text:     #43ff53;
     --medium-text:  #ffc800;
     --high-text:    #ff5e5e;
-    --fatal-text:   #ff0000;
     --input-text:   #43ff53;
 }
 
@@ -44,7 +42,7 @@ header {
     padding: 10px;
     margin: 10px 0;
     border: 1px solid #ffffff22;
-    background: inherit;
+    background: black;
     color: inherit;
     width: 100%;
 }
@@ -61,7 +59,7 @@ header {
 
 .console-wrapper {
     width: 100%;
-    height: calc(100vh - 150px);
+    height: calc(100vh - 220px);
     overflow-x: hidden;
     overflow-y: auto;
 }
@@ -69,9 +67,12 @@ header {
 .console-message, .console-input-message {
     width: 100%;
     padding: 4px;
-    padding-left: 16px;
+    padding-left: 8px;
     position: relative;
     cursor: pointer;
+    word-wrap: break-word;
+
+    border-bottom: 1px solid #00000022;
 
     transition: 150ms all ease-in-out;
 }
@@ -83,13 +84,13 @@ header {
     color: var(--input-text);
 }
 
-.console-message::before, .console-input-message::before {
+.console-message::after, .console-input-message::after {
     content: ' ';
     display: inline-block;
     width: 4px;
     overflow: hidden;
     position: absolute;
-    left: 0;
+    right: 0;
     top: 1px;
     bottom: 1px;
     background: #000;
@@ -101,17 +102,17 @@ header {
     transition: 150ms all ease-in-out;
 }
 
-.console-message:hover::before, .console-input-message:hover::before {
+.console-message:hover::after, .console-input-message:hover::after {
     width: 42px;
     padding: 8px;
     color: black;
 }
 
 .console-message:hover, .console-input-message:hover {
-    padding-left: 66px;
+    padding-right: 66px;
 }
 
-.console-input-message::before {
+.console-input-message::after {
     background: var(--input);
     color: var(--input);
 }
@@ -126,7 +127,7 @@ header {
     color: black;
 }
 
-.console-message.low::before {
+.console-message.low::after {
     background: var(--low-text);
 }
 
@@ -140,7 +141,7 @@ header {
     color: black;
 }
 
-.console-message.medium::before {
+.console-message.medium::after {
     background: var(--medium-text);
 }
 
@@ -154,41 +155,23 @@ header {
     color: black;
 }
 
-.console-message.high::before {
+.console-message.high::after {
     background: var(--high-text);
 }
 
-.console-message.fatal {
-    background: var(--fatal);
-    color: var(--fatal-text);
-}
-
-.console-message.fatal .console-timestamp {
-    background: var(--fatal-text);
-    color: white;
-}
-
-.console-message.fatal::before {
-    background: var(--fatal-text);
-}
-
-.console-message.low::before {
+.console-message.low::after {
     content: 'LOW';
 }
 
-.console-message.medium::before {
+.console-message.medium::after {
     content: 'MEDIUM';
 }
 
-.console-message.fatal::before {
-    CONTENT: 'FATAL';
-}
-
-.console-message.high::before {
+.console-message.high::after {
     content: 'HIGH';
 }
 
-.console-input-message::before {
+.console-input-message::after {
     content: 'INPUT';
 }
 
@@ -247,7 +230,7 @@ header {
     justify-content: center;
     flex-wrap: wrap;
     width: 250px;
-    height: 100px;
+    height: auto;
     margin-left: -125px;
     margin-top: -50px;
 
@@ -260,4 +243,5 @@ header {
 
 .message-title {
     font-size: 1.2em;
+    margin-bottom: 8px;
 }

@@ -73,6 +73,8 @@ namespace Engine.Renderer
 
             // Add to texture container so that we don't reload it later
             TextureContainer.Textures.Add(texture);
+            // Add path for texture browser window
+            TextureContainer.TexturePaths.Add(texture.Path);
             return texture;
         }
 
@@ -161,6 +163,7 @@ namespace Engine.Renderer
 
     public class TextureContainer
     {
+        public static List<string> TexturePaths { get; } = new List<string>();
         public static List<Texture> Textures { get; } = new List<Texture>();
     }
 }

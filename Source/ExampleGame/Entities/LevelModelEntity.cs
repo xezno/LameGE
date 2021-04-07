@@ -5,6 +5,7 @@ using Engine.Utils;
 using Engine.Utils.FileUtils;
 using Engine.Utils.MathUtils;
 using ExampleGame.Components;
+using System.Numerics;
 
 namespace ExampleGame.Entities
 {
@@ -14,9 +15,9 @@ namespace ExampleGame.Entities
 
         public LevelModelEntity(Asset asset)
         {
-            AddComponent(new TransformComponent(new Vector3d(0, 300f, 0f),
-                                                new Vector3d(270, 0, 0),
-                                                new Vector3d(1, 1, 1)));
+            AddComponent(new TransformComponent(new Vector3(0, 300f, 0f),
+                                                new Vector3(270, 0, 0),
+                                                new Vector3(1, 1, 1)));
             AddComponent(new ShaderComponent(ServiceLocator.FileSystem.GetAsset("/Shaders/standard.json")));
             AddComponent(new BSPMeshComponent(asset));
         }

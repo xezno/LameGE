@@ -6,8 +6,8 @@
     public enum NotifyType
     {
         //--------------------------------
-        /* GL context */
-        ContextReady,
+        /* Scene */
+        SceneReady,
 
         //--------------------------------
         /* Game events */

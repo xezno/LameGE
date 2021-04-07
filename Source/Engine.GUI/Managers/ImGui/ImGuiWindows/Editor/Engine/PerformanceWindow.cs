@@ -26,8 +26,8 @@ namespace Engine.GUI.Managers.ImGuiWindows.Editor
                 return averageFramerate;
             }
         }
-        public float AverageFrameTime
 
+        public float AverageFrameTime
         {
             get
             {
@@ -54,7 +54,7 @@ namespace Engine.GUI.Managers.ImGuiWindows.Editor
                 "",
                 0
             );
-            ImGui.LabelText($"{AverageFrameTime}fps", "Average frame time");
+            ImGui.LabelText($"{AverageFrameTime}ms", "Average frame time");
 
             ImGui.LabelText($"{RenderManager.Instance.CalculatedFramerate}fps", "Current framerate");
             ImGui.PlotLines(

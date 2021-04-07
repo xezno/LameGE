@@ -23,15 +23,14 @@ namespace Engine.Utils.DebugUtils
         {
             Low,
             Medium,
-            High,
-            Fatal
+            High
         }
 
         private static void WriteLog(StackTrace stackTrace, string logString = "", Severity severity = Severity.Low)
         {
             var logEntry = new LogEntry(DateTime.Now, stackTrace, logString, severity);
 
-            Console.WriteLine(logEntry.ToString()); // TODO: Make engine stable enough that we don't need this anymore
+            Console.WriteLine(logEntry.ToString());
 
             LogEntries.Add(logEntry);
             onDebugLog?.Invoke(logEntry);
@@ -62,8 +61,6 @@ namespace Engine.Utils.DebugUtils
         {
             switch (severity)
             {
-                case Severity.Fatal:
-                    return ConsoleColor.DarkRed;
                 case Severity.High:
                     return ConsoleColor.Red;
                 case Severity.Low:

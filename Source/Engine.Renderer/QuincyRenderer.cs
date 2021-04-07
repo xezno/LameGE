@@ -22,12 +22,10 @@ namespace Engine.Renderer
 
         public void RenderToScreen()
         {
-            SceneManager.Instance.Render();
         }
 
         public void RenderToShadowMap()
         {
-            SceneManager.Instance.RenderShadows();
         }
     }
 }

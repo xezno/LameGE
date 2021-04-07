@@ -5,50 +5,54 @@ using Engine.Renderer.Managers;
 using Engine.Utils.MathUtils;
 using OpenGL.CoreUI;
 using System;
+using System.Numerics;
 
 namespace ExampleGame.Components
 {
+    // TODO: Broken af
     class PlayerMovementComponent : Component<PlayerMovementComponent>
     {
         private TransformComponent transformComponent;
         private bool lockRotation;
-        private Vector3d currentInput;
+        private Vector3 currentInput;
 
-        public Vector3d CurrentInput { get => currentInput; set => currentInput = value; }
-        public Vector3d CurrentDirection { get; set; }
-        public Vector3d HorizontalDirection { get; set; }
+        public Vector3 CurrentInput { get => currentInput; set => currentInput = value; }
+        public Vector3 CurrentDirection { get; set; }
+        public Vector3 HorizontalDirection { get; set; }
 
         public float VerticalVelocity { get; set; }
         public float ForwardVelocity { get; set; }
-        public Vector3d CurrentRotation { get; set; }
+        public Vector3 CurrentRotation { get; set; }
         public float Acceleration { get; set; } = 2f;
         public float Deceleration { get; set; } = 1f;
         public float MaxSpeed { get; set; } = 15.0f;
-        public float MouseSensitivityMultiplier { get; set; } = 0.1f;
+        public float MouseSensitivityMultiplier { get; set; } = 0.001f;
         public float RotationSensitivity { get; set; } = 3f;
         public float MinVelocity { get; set; } = 0.001f;
-        public Vector3d CameraOffset { get; set; }
+        public Vector3 CameraOffset { get; set; }
 
         public override void Update(float deltaTime)
         {
             var sceneCamera = SceneManager.Instance.MainCamera;
             var sceneCameraTransform = sceneCamera.GetComponent<TransformComponent>();
 
-            var newDirection = (transformComponent.Forward * (float)CurrentInput.Z) + (transformComponent.Right * (float)CurrentInput.X);
-            newDirection.Normalize();
+            var newDirection = (transformComponent.Forward * CurrentInput.Z) + (transformComponent.Right * -CurrentInput.X);
+            if (newDirection.Length() != 0)
+                newDirection = Vector3.Normalize(newDirection); // this returns NaN instead of (0,0,0) if the vector's length is zero... wtf microsoft
 
-            CurrentDirection = EaseLerpVector3(newDirection.ToVector3d(), CurrentDirection, 0.7f);
+            CurrentDirection = EaseLerpVector3(newDirection, CurrentDirection, 0.7f);
 
-            var newHorizontalDirection = (Vector3d.up * (float)currentInput.Y);
-            newHorizontalDirection.Normalize();
+            var newHorizontalDirection = (new Vector3(0, 1, 0) * (float)currentInput.Y);
+            if (newHorizontalDirection.Length() != 0)
+                newHorizontalDirection = Vector3.Normalize(newHorizontalDirection);
 
             HorizontalDirection = EaseLerpVector3(newHorizontalDirection, HorizontalDirection, 0.7f);
 
-            ForwardVelocity += (float)Math.Abs(CurrentInput.Magnitude) * Acceleration;
-            ForwardVelocity += Math.Sign(ForwardVelocity) * -Deceleration;
+            ForwardVelocity += (float)Math.Abs(CurrentInput.Length()) * Acceleration;
+            ForwardVelocity += -Deceleration;
 
-            VerticalVelocity += (float)newHorizontalDirection.Magnitude * Acceleration;
-            VerticalVelocity += Math.Sign(VerticalVelocity) * -Deceleration;
+            VerticalVelocity += (float)newHorizontalDirection.Length() * Acceleration;
+            VerticalVelocity += -Deceleration;
 
             ForwardVelocity = Math.Clamp(ForwardVelocity, -MaxSpeed, MaxSpeed);
             VerticalVelocity = Math.Clamp(VerticalVelocity, -MaxSpeed, MaxSpeed);
@@ -68,19 +72,19 @@ namespace ExampleGame.Components
             transformComponent.Position += HorizontalDirection * VerticalVelocity * deltaTime;
 
             sceneCameraTransform.Position = transformComponent.Position + CameraOffset;
-            sceneCameraTransform.RotationEuler = CurrentRotation * RotationSensitivity;
-            transformComponent.RotationEuler = CurrentRotation * RotationSensitivity;
+            sceneCameraTransform.Rotation = QuaternionExtensions.CreateFromEulerAngles(CurrentRotation * RotationSensitivity);
+            transformComponent.Rotation = sceneCameraTransform.Rotation;
         }
 
-        public double EaseLerp(double a, double b, double t)
+        public float EaseLerp(float a, float b, float t)
         {
-            t = Math.Sin(t * (Math.PI / 2));
+            t = MathF.Sin(t * (MathF.PI / 2.0f));
             return (1.0f - t) * a + t * b;
         }
 
-        public Vector3d EaseLerpVector3(Vector3d a, Vector3d b, float t)
+        public Vector3 EaseLerpVector3(Vector3 a, Vector3 b, float t)
         {
-            return new Vector3d(EaseLerp(a.X, b.X, t), EaseLerp(a.Y, b.Y, t), EaseLerp(a.Z, b.Z, t));
+            return new Vector3(EaseLerp(a.X, b.X, t), EaseLerp(a.Y, b.Y, t), EaseLerp(a.Z, b.Z, t));
         }
 
         public override void OnNotify(NotifyType eventType, INotifyArgs notifyArgs)
@@ -127,12 +131,13 @@ namespace ExampleGame.Components
                             return;
 
                         MouseMoveNotifyArgs mouseEventArgs = (MouseMoveNotifyArgs)notifyArgs;
-                        CurrentRotation += new Vector3d(mouseEventArgs.MouseDelta.y * -MouseSensitivityMultiplier,
-                            mouseEventArgs.MouseDelta.x * -MouseSensitivityMultiplier,
+                        CurrentRotation += new Vector3(
+                            mouseEventArgs.MouseDelta.Y * -MouseSensitivityMultiplier,
+                            mouseEventArgs.MouseDelta.X * -MouseSensitivityMultiplier,
                             0);
                         break;
                     }
-                case NotifyType.ContextReady:
+                case NotifyType.SceneReady:
                     transformComponent = GetComponent<TransformComponent>();
                     break;
             }

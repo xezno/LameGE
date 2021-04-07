@@ -3,6 +3,7 @@ using Engine.Utils.MathUtils;
 using OpenGL;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 
 namespace Engine.Renderer.Primitives
 {
@@ -13,35 +14,35 @@ namespace Engine.Renderer.Primitives
             // TODO: Tangent, bi-tangent
             new Vertex()
             {
-                Position = new Vector3f(-1.0f, -1.0f, 0.0f),
-                TexCoords = new Vector2f(0.0f, 0.0f),
-                Normal = new Vector3f(0.0f, 0.0f, 1.0f),
-                Tangent = new Vector3f(0, 0, 0),
-                BiTangent = new Vector3f(0, 0, 0)
+                Position = new Vector3(-1.0f, -1.0f, 0.0f),
+                TexCoords = new Vector2(0.0f, 0.0f),
+                Normal = new Vector3(0.0f, 0.0f, 1.0f),
+                Tangent = new Vector3(0, 0, 0),
+                BiTangent = new Vector3(0, 0, 0)
             },
             new Vertex()
             {
-                Position = new Vector3f(1.0f, -1.0f, 0.0f),
-                TexCoords = new Vector2f(1.0f, 0.0f),
-                Normal = new Vector3f(0.0f, 0.0f, 1.0f),
-                Tangent = new Vector3f(0, 0, 0),
-                BiTangent = new Vector3f(0, 0, 0)
+                Position = new Vector3(1.0f, -1.0f, 0.0f),
+                TexCoords = new Vector2(1.0f, 0.0f),
+                Normal = new Vector3(0.0f, 0.0f, 1.0f),
+                Tangent = new Vector3(0, 0, 0),
+                BiTangent = new Vector3(0, 0, 0)
             },
             new Vertex()
             {
-                Position = new Vector3f(-1.0f, 1.0f, 0.0f),
-                TexCoords = new Vector2f(0.0f, 1.0f),
-                Normal = new Vector3f(0.0f, 0.0f, 1.0f),
-                Tangent = new Vector3f(0, 0, 0),
-                BiTangent = new Vector3f(0, 0, 0)
+                Position = new Vector3(-1.0f, 1.0f, 0.0f),
+                TexCoords = new Vector2(0.0f, 1.0f),
+                Normal = new Vector3(0.0f, 0.0f, 1.0f),
+                Tangent = new Vector3(0, 0, 0),
+                BiTangent = new Vector3(0, 0, 0)
             },
             new Vertex()
             {
-                Position = new Vector3f(1.0f, 1.0f, 0.0f),
-                TexCoords = new Vector2f(1.0f, 1.0f),
-                Normal = new Vector3f(0.0f, 0.0f, 1.0f),
-                Tangent = new Vector3f(0, 0, 0),
-                BiTangent = new Vector3f(0, 0, 0)
+                Position = new Vector3(1.0f, 1.0f, 0.0f),
+                TexCoords = new Vector2(1.0f, 1.0f),
+                Normal = new Vector3(0.0f, 0.0f, 1.0f),
+                Tangent = new Vector3(0, 0, 0),
+                BiTangent = new Vector3(0, 0, 0)
             }
         };
 
@@ -89,8 +90,8 @@ namespace Engine.Renderer.Primitives
                     vertex.BiTangent.Y,
                     vertex.BiTangent.Z,
 
-                    vertex.TexCoords.x,
-                    vertex.TexCoords.y
+                    vertex.TexCoords.X,
+                    vertex.TexCoords.Y
                 });
             }
 

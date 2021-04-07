@@ -5,8 +5,8 @@ using OpenGL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using System.Reflection;
+using System.Numerics;
 
 namespace Engine.Utils.DebugUtils
 {
@@ -65,43 +65,34 @@ namespace Engine.Utils.DebugUtils
 
         public static void DrawImGuiVector3(string name, object reference)
         {
-            Vector3 value = (reference as ReflectionRef<MathUtils.Vector3f>).Value.ConvertToNumerics();
+            Vector3 value = (reference as ReflectionRef<Vector3>).Value;
             ImGui.Text(name);
             ImGui.NextColumn();
             ImGui.DragFloat3($"{name}##hidelabel", ref value, 0.1f);
             ImGui.NextColumn();
-            (reference as ReflectionRef<MathUtils.Vector3f>).Value = MathUtils.Vector3f.ConvertFromNumerics(value);
-        }
-
-        public static void DrawImGuiVector3d(string name, object reference)
-        {
-            Vector3 value = (reference as ReflectionRef<MathUtils.Vector3d>).Value.ConvertToNumerics();
-            ImGui.Text(name);
-            ImGui.NextColumn();
-            ImGui.DragFloat3($"{name}##hidelabel", ref value, 0.1f);
-            ImGui.NextColumn();
-            (reference as ReflectionRef<MathUtils.Vector3d>).Value = MathUtils.Vector3d.ConvertFromNumerics(value);
+            (reference as ReflectionRef<Vector3>).Value = value;
         }
 
         public static void DrawImGuiVector2(string name, object reference)
         {
-            Vector2 value = (reference as ReflectionRef<MathUtils.Vector2f>).Value.ConvertToNumerics();
+            Vector2 value = (reference as ReflectionRef<Vector2>).Value;
             ImGui.Text(name);
             ImGui.NextColumn();
             ImGui.DragFloat2($"{name}##hidelabel", ref value, 0.1f);
             ImGui.NextColumn();
-            if (value != (reference as ReflectionRef<MathUtils.Vector2f>).Value.ConvertToNumerics())
-                (reference as ReflectionRef<MathUtils.Vector2f>).Value = MathUtils.Vector2f.ConvertFromNumerics(value);
+            if (value != (reference as ReflectionRef<Vector2>).Value)
+                (reference as ReflectionRef<Vector2>).Value = value;
         }
 
         public static void DrawImGuiQuaternion(string name, object reference)
         {
-            Vector3 value = (reference as ReflectionRef<MathUtils.Quaternion>).Value.ToEulerAngles().ConvertToNumerics();
+            System.Numerics.Quaternion quatValue = (reference as ReflectionRef<System.Numerics.Quaternion>).Value;
+            var value = new Vector4(quatValue.X, quatValue.Y, quatValue.Z, quatValue.W);
             ImGui.Text(name);
             ImGui.NextColumn();
-            ImGui.DragFloat3($"{name}##hidelabel", ref value, 0.1f);
+            ImGui.DragFloat4($"{name}##hidelabel", ref value, 0.1f);
             ImGui.NextColumn();
-            (reference as ReflectionRef<MathUtils.Quaternion>).Value = MathUtils.Quaternion.FromEulerAngles(MathUtils.Vector3f.ConvertFromNumerics(value));
+            (reference as ReflectionRef<System.Numerics.Quaternion>).Value = new System.Numerics.Quaternion(value.X, value.Y, value.Z, value.W);
         }
 
         public static void DrawImGuiInt(string name, object reference)
@@ -177,7 +168,7 @@ namespace Engine.Utils.DebugUtils
             {
                 DrawImGuiColor(memberInfo.Name, reference);
             }
-            else if (type == typeof(MathUtils.Vector2f))
+            else if (type == typeof(Vector2))
             {
                 DrawImGuiVector2(memberInfo.Name, reference);
             }
@@ -185,19 +176,15 @@ namespace Engine.Utils.DebugUtils
             {
                 DrawImGuiVertex2f(memberInfo.Name, reference);
             }
-            else if (type == typeof(MathUtils.Vector3f))
+            else if (type == typeof(Vector3))
             {
                 DrawImGuiVector3(memberInfo.Name, reference);
-            }
-            else if (type == typeof(MathUtils.Vector3d))
-            {
-                DrawImGuiVector3d(memberInfo.Name, reference);
             }
             else if (type == typeof(Vertex3f))
             {
                 DrawImGuiVertex3f(memberInfo.Name, reference);
             }
-            else if (type == typeof(MathUtils.Quaternion))
+            else if (type == typeof(System.Numerics.Quaternion))
             {
                 DrawImGuiQuaternion(memberInfo.Name, reference);
             }

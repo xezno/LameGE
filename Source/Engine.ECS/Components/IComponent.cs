@@ -9,13 +9,6 @@ namespace Engine.ECS.Components
     public interface IComponent : IHasParent, IObserver
     {
         /// <summary>
-        /// Called when an notification is broadcast.
-        /// </summary>
-        /// <param name="notifyType">The type of the notification broadcast.</param>
-        /// <param name="notifyArgs">Any relevant information about the notification.</param>
-        void OnNotify(NotifyType notifyType, INotifyArgs notifyArgs);
-
-        /// <summary>
         /// Called whenever the engine renders a single frame.
         /// </summary>
         void Render();

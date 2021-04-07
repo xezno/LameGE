@@ -7,13 +7,15 @@ using Engine.Utils.MathUtils;
 using OpenGL;
 using System;
 using System.Collections.Immutable;
+using System.Numerics;
 
 namespace Engine.Renderer.Managers
 {
-    public sealed class SceneManager : Manager<SceneManager> // TODO: we probably want to read scene data from a file later.
+    // TODO: we probably want to read scene data from a file later.
+    public sealed class SceneManager : Manager<SceneManager>
     {
         private ShaderComponent depthShader;
-        private Plane framebufferRenderPlane;
+        private Primitives.Plane framebufferRenderPlane;
         private ShaderComponent framebufferRenderShader;
 
         private DateTime lastUpdate;
@@ -47,7 +49,7 @@ namespace Engine.Renderer.Managers
             depthShader = new ShaderComponent(fs.GetAsset("/Shaders/Depth/depth.frag"), fs.GetAsset("/Shaders/Depth/depth.vert"));
 
             framebufferRenderShader = new ShaderComponent(fs.GetAsset("/Shaders/Framebuffer/framebuffer.frag"), fs.GetAsset("/Shaders/Framebuffer/framebuffer.vert"));
-            framebufferRenderPlane = new Plane();
+            framebufferRenderPlane = new Primitives.Plane();
 
             brdfLut = new Texture()
             {
@@ -74,7 +76,7 @@ namespace Engine.Renderer.Managers
 
             // TODO: make this modifiable at run-time or by the game itself.
             Cameras = ImmutableList.Create(
-                new CameraEntity(new Vector3d(0, 2, 0))
+                new CameraEntity(new Vector3(0, 2, 0))
                 {
                     Name = "Main Camera"
                 }
@@ -92,14 +94,13 @@ namespace Engine.Renderer.Managers
             Update();
 
             RenderSceneToFramebuffer();
-            RenderFramebufferToScreen();
         }
 
         private void RenderSceneToFramebuffer()
         {
             var cameraComponent = MainCamera.GetComponent<CameraComponent>();
             Gl.BindFramebuffer(FramebufferTarget.Framebuffer, cameraComponent.Framebuffer.Fbo);
-            Gl.Viewport(0, 0, (int)cameraComponent.Resolution.x, (int)cameraComponent.Resolution.y);
+            Gl.Viewport(0, 0, (int)cameraComponent.Resolution.X, (int)cameraComponent.Resolution.Y);
             Gl.ClearDepth(0.0f);
             Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             Gl.ClipControl(ClipControlOrigin.LowerLeft, ClipControlDepth.ZeroToOne);
@@ -109,7 +110,6 @@ namespace Engine.Renderer.Managers
             var skyboxComponent = skyboxEntity.GetComponent<SkyboxComponent>();
             skyboxComponent.DrawSkybox(MainCamera);
 
-            // MainCamera, entity.GetComponent<ShaderComponent>(), Lights[0], , brdfLut, holoTexture
             var templateDrawInfo = new Mesh.DrawInfo()
             {
                 Camera = MainCamera,
@@ -138,7 +138,7 @@ namespace Engine.Renderer.Managers
             Gl.ClipControl(ClipControlOrigin.LowerLeft, ClipControlDepth.NegativeOneToOne);
         }
 
-        private void RenderFramebufferToScreen()
+        public void RenderFramebuffer()
         {
             var cameraComponent = MainCamera.GetComponent<CameraComponent>();
             Gl.Viewport(0, 0, GameSettings.GameResolutionX, GameSettings.GameResolutionY);
@@ -155,7 +155,7 @@ namespace Engine.Renderer.Managers
         {
             Gl.Disable(EnableCap.CullFace);
 
-            Gl.Viewport(0, 0, (int)Lights[0].GetComponent<LightComponent>().ShadowMap.Resolution.x, (int)Lights[0].GetComponent<LightComponent>().ShadowMap.Resolution.y);
+            Gl.Viewport(0, 0, (int)Lights[0].GetComponent<LightComponent>().ShadowMap.Resolution.X, (int)Lights[0].GetComponent<LightComponent>().ShadowMap.Resolution.Y);
             Gl.BindFramebuffer(FramebufferTarget.Framebuffer, Lights[0].GetComponent<LightComponent>().ShadowMap.DepthMapFbo);
             Gl.Clear(ClearBufferMask.DepthBufferBit);
 

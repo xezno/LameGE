@@ -14,7 +14,7 @@ namespace Engine.GUI.Managers.ImGuiWindows.Overlays
 
         public override void Draw()
         {
-            var debugText = FontAwesome5.SpaceShuttle + " Space Engine\n" +
+            var debugText = "XLGE\n" +
                             "F1 for editor\n" +
                             "F2 for cursor lock toggle\n" +
                             "F3 for console toggle";

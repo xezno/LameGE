@@ -61,7 +61,6 @@ namespace Engine.Utils.DebugUtils
 
         public static void RegisterAllCommands()
         {
-            // TODO: Optimize?
             var start = DateTime.Now;
             foreach (var method in Assembly.GetExecutingAssembly().GetTypes().SelectMany(t => t.GetMethods()).Where(m => m.GetCustomAttributes(typeof(ConsoleFunction), false).Length > 0))
             {

@@ -1,4 +1,5 @@
 ﻿using Engine.Utils.MathUtils;
+using System.Numerics;
 
 namespace ExampleGame.Assets.BSP.Types
 {
@@ -14,7 +15,7 @@ namespace ExampleGame.Assets.BSP.Types
 
     class DispInfo
     {
-        public Vector3f startPosition;
+        public Vector3 startPosition;
         public int dispVertStrt;
         public int dispTriStart;
         public int power;

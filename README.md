@@ -1,13 +1,9 @@
-| Archive Notice |
-| --- |
-| This repository has been archived. <br> A forked variant of the engine is being used for [OpenTPW](https://github.com/ThemeParkWorld/OpenTPW), but this repository will no longer be updated with any new features. The reasoning for this is simple: this engine is on the verge of becoming completely unmaintainable - the design & architecture here sucks, and the more I try to develop the engine the worse it seems to become - resulting in a sort-of snowball effect. |
-
 <p align="center">
     <h1 align="center">
-        Engine
+        LameGE
     </h1>
     <p align="center">
-        A basic game engine created for personal use, but available for all.
+        A basic game engine.
         <br>
         <a href="https://github.com/xezno/Engine/issues">Issues</a> |
         <a href="https://github.com/xezno/Engine/pulls">Pull Requests</a>
@@ -22,28 +18,13 @@
     </p>
 </p>
 
-## Table of Contents
-
-- [Building](#building)
-  * [Prerequisites](#prerequisites)
-    + [Requirements](#requirements)
-    + [Recommendations](#recommendations)
-  * [Instructions](#instructions)
-- [Platform Support](#platform-support)
-- [Contributing](#contributing)
-- [Code Conventions](#code-conventions)
-- [Support](#support)
-- [Roadmap](#roadmap)
-- [License](#license)
-- [Acknowledgements](#acknowledgements)
-
 ## Building
 
 ### Prerequisites
 
 #### Requirements
 
-- .NET Core 3.1
+- .NET 5.0
 - Visual Studio 2019
 - Windows
 - CMake (for libstbi)
@@ -58,30 +39,14 @@
 #### Building with the example project
 1. First, clone the repository recursively with `git clone --recursive https://github.com/xezno/engine`
 2. Next, run `git submodule update` to ensure that all submodules are up to date.
-3. Once done, create a junction to `(root dir)/Content` in `(root dir)/Source/Example/bin/x64/Debug/netcoreapp3.1`. You will need to provide some of your own content, as some copyrighted material has been omitted from this repository.
+3. Once done, create a junction to `(root dir)/Content` in `(root dir)/Source/ExampleGame/bin/x64/Debug/net5.0-windows7.0`. You will need to provide some of your own content, as some copyrighted material has been omitted from this repository (for legal reasons).
 4. Now, compile stbi; this can be done by executing the following commands in a terminal window:
  - `cd (root-dir)/Other/stbi-sharp/`
  - `mkdir build`
  - `cd build`
  - `cmake ../libstbi`
  - You will then need to build the project located at `(root-dir)/Other/stbi-sharp/build/INSTALL.vcxproj`.
-5. Once complete, open `Source/Ulaid.sln` and build the solution, optionally using `Example/Example` as the startup project. This will fetch / build any dependencies automatically, and then build the engine and example game.
-
-## Platform Support
-
-Currently, platform support is as follows:
-
-|Platform   |Supported? |
-|-----------|-----------|
-|Windows    |Yes        |
-|Linux      |Planned*   |
-|Android    |Planned*   |
-|macOS      |No         |
-|iOS        |No         |
-
-Support for macOS and iOS is not currently planned due to their use of the Metal API versus Engine's use of the OpenGL API.
-
-(* = Untested, may work as-is.)
+5. Once complete, open `Source/Engine.sln` and build the solution, using `ExampleGame` as the startup project. This will fetch / build any NuGet dependencies automatically, and then build the engine and example game.
 
 ## Contributing
 
@@ -103,11 +68,7 @@ The following project-specific naming conventions are used:
 
 ## Support
 
-Since Engine is a personal project that I am developing solely within my free time, I cannot guarantee or provide any maintenance or support right now. In the future, this might change - it all depends on the direction the project takes.
-
-## Roadmap
-
-As previously mentioned, this engine is a free-time project and I have no official step-by-step roadmap.
+Feel free to [open an issue](https://github.com/xezno/Engine/issues/new) if you encounter any bugs or problems, have any feature requests, or have any questions.
 
 ## License
 

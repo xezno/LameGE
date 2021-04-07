@@ -18,10 +18,9 @@ namespace Engine.GUI.Managers.ImGuiWindows.Editor
         public override void Draw()
         {
             var textureList = TextureContainer.Textures;
+            var texturePaths = TextureContainer.TexturePaths;
 
-            // TODO: Fix this entire thing
-            // ImGui.Combo("Texture", ref selectedTexture, textureList, textureList.Count);
-            ImGui.DragInt("Texture Id", ref selectedTexture, 1.0f, 0);
+            ImGui.Combo("Texture", ref selectedTexture, texturePaths.ToArray(), texturePaths.Count);
 
             if (selectedTexture < 0)
                 selectedTexture = 0;
