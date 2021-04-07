@@ -8,6 +8,7 @@ using Engine.Utils.MathUtils;
 using ExampleGame.Entities;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Text;
 
 namespace ExampleGame.Screens
@@ -34,7 +35,7 @@ namespace ExampleGame.Screens
                 };
 
             var mcrnModel =
-                new ModelEntity(fs.GetAsset("/Models/mcrn_tachi/scene.gltf"), new Vector3d(0, 0, 0), Vector3d.one * 0.0125f)
+                new ModelEntity(fs.GetAsset("/Models/mcrn_tachi/scene.gltf"), new Vector3(0, 0, 0), new Vector3(1, 1, 1) * 0.0125f)
                 {
                     Name = "MCRN Tachi"
                 };

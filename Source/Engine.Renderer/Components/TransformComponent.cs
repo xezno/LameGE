@@ -1,8 +1,7 @@
 ﻿using Engine.ECS.Components;
 using Engine.Utils.MathUtils;
-using OpenGL;
 using System;
-using Quaternion = Engine.Utils.MathUtils.Quaternion;
+using System.Numerics;
 
 namespace Engine.Renderer.Components
 {
@@ -11,82 +10,60 @@ namespace Engine.Renderer.Components
     /// </summary>
     public class TransformComponent : Component<TransformComponent>
     {
-        private Vector3d position;
+        public Vector3 Position { get; set; }
+        public Quaternion Rotation { get; set; } = Quaternion.Identity;
+        public Vector3 Scale { get; set; }
 
-        /// <summary>
-        /// The entity's position.
-        /// </summary>
-        public Vector3d Position { get => position; set => position = value; }
-
-        // public Quaternion rotation; // TODO
-        private Vector3d rotationEuler;
-
-        /// <summary>
-        /// The entity's rotation.
-        /// </summary>
-        public Vector3d RotationEuler
-        {
-            get => rotationEuler;
-            set => rotationEuler = value % 360f;
-        }
-
-        private Vector3d scale;
-
-        /// <summary>
-        /// The entity's scale.
-        /// </summary>
-        public Vector3d Scale { get => scale; set => scale = value; }
-
-        public Matrix4x4f Matrix
+        public Matrix4x4 Matrix
         {
             get
             {
-                // TODO: Convert doubles to float relative to camera instead of relative to world origin
-                var temp = Matrix4x4f.Identity;
-                temp.Translate((float)Position.X, (float)Position.Y, (float)Position.Z);
-                temp.RotateX((float)rotationEuler.X);
-                temp.RotateY((float)rotationEuler.Y);
-                temp.RotateZ((float)rotationEuler.Z);
-                temp.Scale((float)Scale.X, (float)Scale.Y, (float)Scale.Z);
-                return temp;
+                var scaleMatrix = Matrix4x4.CreateScale(Scale);
+                var rotationMatrix = Matrix4x4.CreateFromQuaternion(Rotation);
+                var positionMatrix = Matrix4x4.CreateTranslation(Position);
+
+                return scaleMatrix * rotationMatrix * positionMatrix;
             }
         }
 
-        private bool MatrixInvertible => Math.Abs(Matrix.Determinant) > 1e-6f; // accounts for float rounding errors
+        private bool MatrixInvertible => Math.Abs(Matrix.GetDeterminant()) > 1e-6f; // accounts for float rounding errors
 
-        public Vector3f Forward
+        public Vector3 Forward
         {
             get
             {
                 if (!MatrixInvertible)
-                    return Vector3f.forward;
+                    return new Vector3(0, 0, 1);
 
-                var inverseColumn = Matrix.Inverse.Column2;
-                return new Vector3f(inverseColumn.x, inverseColumn.y, inverseColumn.z).Normalized;
+                Matrix4x4.Invert(Matrix, out var inverseMatrix);
+
+                return Vector3.Normalize(new Vector3(inverseMatrix.M13, inverseMatrix.M23, inverseMatrix.M33));
             }
         }
 
-        public Vector3f Up
+        public Vector3 Up
         {
             get
             {
                 if (!MatrixInvertible)
-                    return Vector3f.up;
+                    return new Vector3(0, 1, 0);
 
-                var inverseColumn = Matrix.Inverse.Column1;
-                return new Vector3f(inverseColumn.x, inverseColumn.y, inverseColumn.z).Normalized;
+                Matrix4x4.Invert(Matrix, out var inverseMatrix);
+
+                return Vector3.Normalize(new Vector3(inverseMatrix.M12, inverseMatrix.M22, inverseMatrix.M32));
             }
         }
 
-        public Vector3f Right
+        public Vector3 Right
         {
             get
             {
                 if (!MatrixInvertible)
-                    return Vector3f.right;
+                    return new Vector3(1, 0, 0);
 
-                var inverseColumn = Matrix.Inverse.Column0;
-                return new Vector3f(inverseColumn.x, inverseColumn.y, inverseColumn.z).Normalized;
+                Matrix4x4.Invert(Matrix, out var inverseMatrix);
+
+                return Vector3.Normalize(new Vector3(inverseMatrix.M11, inverseMatrix.M21, inverseMatrix.M31));
             }
         }
 
@@ -101,10 +78,10 @@ namespace Engine.Renderer.Components
         /// <param name="position">The entity's position.</param>
         /// <param name="rotation">The entity's rotation.</param>
         /// <param name="scale">The entity's scale.</param>
-        public TransformComponent(Vector3d position, Quaternion rotation, Vector3d scale)
+        public TransformComponent(Vector3 position, Quaternion rotation, Vector3 scale)
         {
             this.Position = position;
-            rotationEuler = rotation.ToEulerAngles(); // TODO: proper quaternions
+            this.Rotation = rotation;
             this.Scale = scale;
         }
 
@@ -114,10 +91,10 @@ namespace Engine.Renderer.Components
         /// <param name="position">The entity's position.</param>
         /// <param name="rotationEuler">The entity's rotation.</param>
         /// <param name="scale">The entity's scale.</param>
-        public TransformComponent(Vector3d position, Vector3d rotationEuler, Vector3d scale)
+        public TransformComponent(Vector3 position, Vector3 rotationEuler, Vector3 scale)
         {
             this.Position = position;
-            this.rotationEuler = rotationEuler;
+            this.Rotation = QuaternionExtensions.CreateFromEulerAngles(rotationEuler);
             this.Scale = scale;
         }
     }

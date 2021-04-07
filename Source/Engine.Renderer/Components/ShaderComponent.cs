@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Numerics;
 
 namespace Engine.Renderer.Components
 {
@@ -96,15 +97,21 @@ namespace Engine.Renderer.Components
             }
         }
 
-        public void SetMatrix(string name, Matrix4x4f value)
+        public void SetMatrix(string name, Matrix4x4 value)
         {
+            var tmp = new Matrix4x4f(
+                value.M11, value.M12, value.M13, value.M14,
+                value.M21, value.M22, value.M23, value.M24,
+                value.M31, value.M32, value.M33, value.M34,
+                value.M41, value.M42, value.M43, value.M44
+            );
             if (GetUniformLocation(name, out int loc))
             {
-                Gl.ProgramUniformMatrix4f(Id, loc, 1, false, value);
+                Gl.ProgramUniformMatrix4f(Id, loc, 1, false, tmp);
             }
         }
 
-        public void SetVector3f(string name, Vector3f value)
+        public void SetVector3(string name, Vector3 value)
         {
             if (GetUniformLocation(name, out int loc))
             {
@@ -112,19 +119,11 @@ namespace Engine.Renderer.Components
             }
         }
 
-        public void SetVector3d(string name, Vector3d value)
+        public void SetVector2(string name, Vector2 value)
         {
             if (GetUniformLocation(name, out int loc))
             {
-                Gl.ProgramUniform3(Id, loc, (float)value.X, (float)value.Y, (float)value.Z);
-            }
-        }
-
-        public void SetVector2f(string name, Vector2f value)
-        {
-            if (GetUniformLocation(name, out int loc))
-            {
-                Gl.ProgramUniform2(Id, loc, (float)value.x, (float)value.y);
+                Gl.ProgramUniform2(Id, loc, (float)value.X, (float)value.Y);
             }
         }
 

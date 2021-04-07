@@ -5,6 +5,7 @@ using Engine.Utils.Attributes;
 using Engine.Utils.MathUtils;
 using OpenGL;
 using System;
+using System.Numerics;
 
 namespace Engine.Renderer.Components
 {
@@ -17,18 +18,18 @@ namespace Engine.Renderer.Components
         private float farPlane = 2500f;
         private float fieldOfView = 90f;
 
-        private Matrix4x4f viewMatrix;
-        private Matrix4x4f projMatrix;
+        private Matrix4x4 viewMatrix;
+        private Matrix4x4 projMatrix;
 
         [Range(0, 180)] public float FieldOfView { get => fieldOfView; set { fieldOfView = value; CreateProjectionMatrix(); } }
         public float NearPlane { get => nearPlane; set { nearPlane = value; CreateProjectionMatrix(); } }
         public float FarPlane { get => farPlane; set { farPlane = value; CreateProjectionMatrix(); } }
 
 
-        private Vector2f? resolution = null;
-        public Vector2f Resolution
+        private Vector2? resolution = null;
+        public Vector2 Resolution
         {
-            get => resolution ?? new Vector2f(GameSettings.GameResolutionX, GameSettings.GameResolutionY);
+            get => resolution ?? new Vector2(GameSettings.GameResolutionX, GameSettings.GameResolutionY);
             set
             {
                 resolution = value;
@@ -37,10 +38,9 @@ namespace Engine.Renderer.Components
             }
         }
 
+        public Matrix4x4 ViewMatrix { get => viewMatrix; set => viewMatrix = value; }
 
-        public Matrix4x4f ViewMatrix { get => viewMatrix; set => viewMatrix = value; }
-
-        public Matrix4x4f ProjMatrix { get => projMatrix; set => projMatrix = value; }
+        public Matrix4x4 ProjMatrix { get => projMatrix; set => projMatrix = value; }
 
         public CameraComponent()
         {
@@ -51,19 +51,19 @@ namespace Engine.Renderer.Components
         private void CreateProjectionMatrix()
         {
             ProjMatrix = CreateInfReversedZProj(FieldOfView,
-                Resolution.x / Resolution.y,
+                Resolution.X / Resolution.Y,
                 NearPlane);
         }
 
         private void CreateFramebuffer()
         {
-            Framebuffer = new Framebuffer((int)Resolution.x, (int)Resolution.y);
+            Framebuffer = new Framebuffer((int)Resolution.X, (int)Resolution.Y);
         }
 
-        private Matrix4x4f CreateInfReversedZProj(float fov, float aspectRatio, float nearPlane)
+        private Matrix4x4 CreateInfReversedZProj(float fov, float aspectRatio, float nearPlane)
         {
             float f = 1.0f / (float)Math.Tan(Angle.ToRadians(fov) / 2.0f);
-            return new Matrix4x4f(f / aspectRatio, 0f, 0f, 0f,
+            return new Matrix4x4(f / aspectRatio, 0f, 0f, 0f,
                 0f, f, 0f, 0f,
                 0f, 0f, 0f, -1f,
                 0f, 0f, nearPlane, 0f);
@@ -71,16 +71,13 @@ namespace Engine.Renderer.Components
 
         public override void Update(float deltaTime)
         {
-            // TODO: Better double->float conversion
             var transformComponent = GetComponent<TransformComponent>();
-            viewMatrix = Matrix4x4f.Identity;
-            viewMatrix.RotateX((float)transformComponent.RotationEuler.X);
-            viewMatrix.RotateY((float)transformComponent.RotationEuler.Y);
-            viewMatrix.RotateZ((float)transformComponent.RotationEuler.Z);
-            viewMatrix *= (Matrix4x4f.LookAtDirection(
-                new Vertex3f((float)transformComponent.Position.X, (float)transformComponent.Position.Y, (float)transformComponent.Position.Z),
-                new Vertex3f(0f, 0f, -1f),
-                new Vertex3f(0f, 1f, 0f)));
+            viewMatrix = Matrix4x4.Identity;
+            viewMatrix *= (Matrix4x4Extensions.LookAtDirection(
+                transformComponent.Position,
+                new Vector3(0, 0, -1f),
+                new Vector3(0, 1f, 0)));
+            viewMatrix *= Matrix4x4.CreateFromQuaternion(transformComponent.Rotation);
         }
 
         public override void OnNotify(NotifyType notifyType, INotifyArgs notifyArgs)

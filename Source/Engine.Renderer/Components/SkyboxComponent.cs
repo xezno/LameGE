@@ -3,6 +3,7 @@ using Engine.Renderer.Entities;
 using Engine.Renderer.Primitives;
 using Engine.Utils;
 using OpenGL;
+using System.Numerics;
 
 namespace Engine.Renderer.Components
 {
@@ -30,9 +31,9 @@ namespace Engine.Renderer.Components
         public void DrawSkybox(CameraEntity camera)
         {
             Gl.Disable(EnableCap.CullFace);
-            var modelMatrix = Matrix4x4f.Identity;
+            var modelMatrix = Matrix4x4.Identity;
             var scale = 10000.0f;
-            modelMatrix.Scale(scale, scale, scale);
+            modelMatrix *= Matrix4x4.CreateScale(scale);
             skyboxShader.Use();
             skyboxShader.SetMatrix("projMatrix", camera.GetComponent<CameraComponent>().ProjMatrix);
             skyboxShader.SetMatrix("viewMatrix", camera.GetComponent<CameraComponent>().ViewMatrix);

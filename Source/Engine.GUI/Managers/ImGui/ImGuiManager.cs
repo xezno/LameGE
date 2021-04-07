@@ -16,7 +16,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Reflection;
-using Vector4f = Engine.Utils.MathUtils.Vector4f;
 
 namespace Engine.GUI.Managers
 {
@@ -264,7 +263,7 @@ namespace Engine.GUI.Managers
             Gl.Disable(EnableCap.DepthTest);
             Gl.Enable(EnableCap.ScissorTest);
 
-            var projectionMatrix = Matrix4x4f.Ortho2D(0f, io.DisplaySize.X, io.DisplaySize.Y, 0.0f);
+            var projectionMatrix = Matrix4x4.CreateOrthographicOffCenter(0f, io.DisplaySize.X, io.DisplaySize.Y, 0.0f, 0.01f, 10.0f);
 
             shaderComponent.Use();
             shaderComponent.SetInt("albedoTexture", 0);
@@ -296,13 +295,13 @@ namespace Engine.GUI.Managers
                 {
                     var currentCommand = commandList.CmdBuffer[commandIndex];
 
-                    var clipBounds = new Vector4f(
+                    var clipBounds = new Vector4(
                             (currentCommand.ClipRect.X - clipOffset.X) * clipScale.X,
                             (currentCommand.ClipRect.Y - clipOffset.Y) * clipScale.Y,
                             (currentCommand.ClipRect.Z - clipOffset.X) * clipScale.X,
                             (currentCommand.ClipRect.W - clipOffset.Y) * clipScale.Y
                         );
-                    Gl.Scissor((int)clipBounds.x, (int)(windowSize.Y - clipBounds.w), (int)(clipBounds.z - clipBounds.x), (int)(clipBounds.w - clipBounds.y));
+                    Gl.Scissor((int)clipBounds.X, (int)(windowSize.Y - clipBounds.W), (int)(clipBounds.Z - clipBounds.X), (int)(clipBounds.W - clipBounds.Y));
 
                     if ((uint)currentCommand.TextureId == 1)
                         defaultFontTexture.Bind();
@@ -451,7 +450,7 @@ namespace Engine.GUI.Managers
                 case NotifyType.MouseMove:
                     {
                         var mouseMoveEventArgs = (MouseMoveNotifyArgs)notifyArgs;
-                        io.MousePos = new Vector2(mouseMoveEventArgs.MousePosition.x, mouseMoveEventArgs.MousePosition.y);
+                        io.MousePos = new Vector2(mouseMoveEventArgs.MousePosition.X, mouseMoveEventArgs.MousePosition.Y);
                         break;
                     }
                 case NotifyType.MouseButtonDown:
@@ -475,7 +474,7 @@ namespace Engine.GUI.Managers
                 case NotifyType.WindowResized:
                     {
                         var windowResizeEventArgs = (WindowResizeNotifyArgs)notifyArgs;
-                        windowSize = new Vector2(windowResizeEventArgs.WindowSize.x, windowResizeEventArgs.WindowSize.y);
+                        windowSize = new Vector2(windowResizeEventArgs.WindowSize.X, windowResizeEventArgs.WindowSize.Y);
                         io.DisplaySize = new Vector2(windowSize.X, windowSize.Y);
                         break;
                     }

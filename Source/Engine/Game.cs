@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Threading;
+using System.Numerics;
 
 namespace Engine
 {
@@ -30,7 +31,7 @@ namespace Engine
         private GameProperties gameProperties;
 
         protected NativeWindow nativeWindow;
-        private Vector2f lastMousePos;
+        private Vector2 lastMousePos;
         private bool ignoreSingleMouseDelta;
 
         private bool initialized;
@@ -167,7 +168,7 @@ namespace Engine
             var multiThreadedManagers = new List<IManager>
             {
                 UpdateManager.Instance,
-                PhysicsManager.Instance,
+                // PhysicsManager.Instance,
                 SceneManager.Instance,
                 // ScriptManager.Instance,
                 RconManager.Instance,
@@ -215,9 +216,9 @@ namespace Engine
 
         private void Resize(object sender, EventArgs e)
         {
-            var windowSize = new Vector2f(nativeWindow.ClientSize.Width, nativeWindow.ClientSize.Height);
-            GameSettings.GameResolutionX = (int)windowSize.x;
-            GameSettings.GameResolutionY = (int)windowSize.y;
+            var windowSize = new Vector2(nativeWindow.ClientSize.Width, nativeWindow.ClientSize.Height);
+            GameSettings.GameResolutionX = (int)windowSize.X;
+            GameSettings.GameResolutionY = (int)windowSize.Y;
 
             Subject.Notify(NotifyType.WindowResized, new WindowResizeNotifyArgs(windowSize, this));
         }
@@ -229,13 +230,13 @@ namespace Engine
 
         private void MouseMove(object sender, NativeWindowMouseEventArgs e)
         {
-            var mousePos = new Vector2f(e.Location.X, e.Location.Y);
+            var mousePos = new Vector2(e.Location.X, e.Location.Y);
 
             var mouseDelta = lastMousePos - mousePos;
 
             if (ignoreSingleMouseDelta)
             {
-                mouseDelta = new Vector2f(0, 0);
+                mouseDelta = new Vector2(0, 0);
                 ignoreSingleMouseDelta = false;
             }
 

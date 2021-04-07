@@ -1,6 +1,7 @@
 ﻿using Engine.Utils.MathUtils;
 using OpenGL;
 using System;
+using System.Numerics;
 
 namespace Engine.Renderer
 {
@@ -9,11 +10,11 @@ namespace Engine.Renderer
         public uint DepthMapFbo { get; private set; }
         public uint DepthMap { get; private set; }
 
-        public Vector2f Resolution { get; }
+        public Vector2 Resolution { get; }
 
         public ShadowMap(int width, int height)
         {
-            Resolution = new Vector2f(width, height);
+            Resolution = new Vector2(width, height);
 
             DepthMap = Gl.GenTexture();
             DepthMapFbo = Gl.GenFramebuffer();

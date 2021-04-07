@@ -10,6 +10,7 @@ using ImGuiNET;
 using OpenGL;
 using System.Collections.Generic;
 using System.IO;
+using System.Numerics;
 
 namespace Engine.Renderer.Components
 {
@@ -101,7 +102,7 @@ namespace Engine.Renderer.Components
             }
         }
 
-        private Mesh ProcessMesh(Assimp.Mesh mesh, Assimp.Scene scene, Matrix4x4 transform)
+        private Mesh ProcessMesh(Assimp.Mesh mesh, Assimp.Scene scene, Assimp.Matrix4x4 transform)
         {
             List<Vertex> vertices = new List<Vertex>();
             List<uint> indices = new List<uint>();
@@ -111,24 +112,24 @@ namespace Engine.Renderer.Components
             {
                 var vertex = new Vertex()
                 {
-                    Position = new Vector3f(mesh.Vertices[i].X, mesh.Vertices[i].Y, mesh.Vertices[i].Z),
-                    Normal = new Vector3f(mesh.Normals[i].X, mesh.Normals[i].Y, mesh.Normals[i].Z)
+                    Position = new Vector3(mesh.Vertices[i].X, mesh.Vertices[i].Y, mesh.Vertices[i].Z),
+                    Normal = new Vector3(mesh.Normals[i].X, mesh.Normals[i].Y, mesh.Normals[i].Z)
                 };
 
                 if (mesh.HasTextureCoords(0))
                 {
-                    var texCoords = new Vector2f(mesh.TextureCoordinateChannels[0][i].X, mesh.TextureCoordinateChannels[0][i].Y);
+                    var texCoords = new Vector2(mesh.TextureCoordinateChannels[0][i].X, mesh.TextureCoordinateChannels[0][i].Y);
                     vertex.TexCoords = texCoords;
                 }
                 else
                 {
-                    vertex.TexCoords = new Vector2f(0, 0);
+                    vertex.TexCoords = new Vector2(0, 0);
                 }
 
                 if (mesh.HasTangentBasis)
                 {
-                    vertex.Tangent = new Vector3f(mesh.Tangents[i].X, mesh.Tangents[i].Y, mesh.Tangents[i].Z);
-                    vertex.BiTangent = new Vector3f(mesh.BiTangents[i].X, mesh.BiTangents[i].Y, mesh.BiTangents[i].Z);
+                    vertex.Tangent = new Vector3(mesh.Tangents[i].X, mesh.Tangents[i].Y, mesh.Tangents[i].Z);
+                    vertex.BiTangent = new Vector3(mesh.BiTangents[i].X, mesh.BiTangents[i].Y, mesh.BiTangents[i].Z);
                 }
 
                 vertices.Add(vertex);
@@ -195,7 +196,7 @@ namespace Engine.Renderer.Components
                 textures.AddRange(unknownMaps);
             }
 
-            var oglTransform = new Matrix4x4f(
+            var oglTransform = new System.Numerics.Matrix4x4(
                 transform.A1, transform.A2, transform.A3, transform.A4,
                 transform.B1, transform.B2, transform.B3, transform.B4,
                 transform.C1, transform.C2, transform.C3, transform.C4,

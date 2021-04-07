@@ -3,6 +3,7 @@ using Engine.Renderer.Primitives;
 using Engine.Utils;
 using OpenGL;
 using System;
+using System.Numerics;
 
 namespace Engine.Renderer
 {
@@ -75,15 +76,15 @@ namespace Engine.Renderer
             Gl.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
             Gl.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapR, (int)TextureWrapMode.ClampToEdge);
 
-            var projMatrix = Matrix4x4f.Perspective(90f, 1.0f, 0.1f, 10.0f);
-            var viewMatrices = new Matrix4x4f[]
+            var projMatrix = Matrix4x4.CreatePerspectiveFieldOfView(90f * 0.0174533f, 1.0f, 0.1f, 10.0f);
+            var viewMatrices = new Matrix4x4[]
             {
-                Matrix4x4f.LookAt(new Vertex3f(0f, 0f, 0f), new Vertex3f(1f, 0f, 0f), new Vertex3f(0f, -1f, 0f)),
-                Matrix4x4f.LookAt(new Vertex3f(0f, 0f, 0f), new Vertex3f(-1f, 0f, 0f), new Vertex3f(0f, -1f, 0f)),
-                Matrix4x4f.LookAt(new Vertex3f(0f, 0f, 0f), new Vertex3f(0f, 1f, 0f), new Vertex3f(0f, 0f, 1f)),
-                Matrix4x4f.LookAt(new Vertex3f(0f, 0f, 0f), new Vertex3f(0f, -1f, 0f), new Vertex3f(0f, 0f, -1f)),
-                Matrix4x4f.LookAt(new Vertex3f(0f, 0f, 0f), new Vertex3f(0f, 0f, 1f), new Vertex3f(0f, -1f, 0f)),
-                Matrix4x4f.LookAt(new Vertex3f(0f, 0f, 0f), new Vertex3f(0f, 0f, -1f), new Vertex3f(0f, -1f, 0f)),
+                Matrix4x4.CreateLookAt(new Vector3(0f, 0f, 0f), new Vector3(1f, 0f, 0f), new Vector3(0f, -1f, 0f)),
+                Matrix4x4.CreateLookAt(new Vector3(0f, 0f, 0f), new Vector3(-1f, 0f, 0f), new Vector3(0f, -1f, 0f)),
+                Matrix4x4.CreateLookAt(new Vector3(0f, 0f, 0f), new Vector3(0f, 1f, 0f), new Vector3(0f, 0f, 1f)),
+                Matrix4x4.CreateLookAt(new Vector3(0f, 0f, 0f), new Vector3(0f, -1f, 0f), new Vector3(0f, 0f, -1f)),
+                Matrix4x4.CreateLookAt(new Vector3(0f, 0f, 0f), new Vector3(0f, 0f, 1f), new Vector3(0f, -1f, 0f)),
+                Matrix4x4.CreateLookAt(new Vector3(0f, 0f, 0f), new Vector3(0f, 0f, -1f), new Vector3(0f, -1f, 0f)),
             };
 
             shader.Use();
@@ -108,7 +109,7 @@ namespace Engine.Renderer
             var fs = ServiceLocator.FileSystem;
             var shader = new ShaderComponent(fs.GetAsset("/Shaders/BrdfLut/brdfLut.frag"), fs.GetAsset("/Shaders/BrdfLut/brdfLut.vert"));
             var brdfLutTexture = Gl.GenTexture();
-            var plane = new Plane();
+            var plane = new Primitives.Plane();
             Gl.BindTexture(TextureTarget.Texture2d, brdfLutTexture);
             Gl.TexImage2D(TextureTarget.Texture2d, 0, InternalFormat.Rg16f, 512, 512, 0, PixelFormat.Rg, PixelType.Float, IntPtr.Zero);
 
@@ -162,15 +163,15 @@ namespace Engine.Renderer
 
             Gl.GenerateMipmap(TextureTarget.TextureCubeMap);
 
-            var projMatrix = Matrix4x4f.Perspective(90f, 1.0f, 0.1f, 10.0f);
-            var viewMatrices = new Matrix4x4f[]
+            var projMatrix = Matrix4x4.CreatePerspectiveFieldOfView(90f * 0.0174533f, 1.0f, 0.1f, 10.0f);
+            var viewMatrices = new Matrix4x4[]
             {
-                Matrix4x4f.LookAt(new Vertex3f(0f, 0f, 0f), new Vertex3f(1f, 0f, 0f), new Vertex3f(0f, -1f, 0f)),
-                Matrix4x4f.LookAt(new Vertex3f(0f, 0f, 0f), new Vertex3f(-1f, 0f, 0f), new Vertex3f(0f, -1f, 0f)),
-                Matrix4x4f.LookAt(new Vertex3f(0f, 0f, 0f), new Vertex3f(0f, 1f, 0f), new Vertex3f(0f, 0f, 1f)),
-                Matrix4x4f.LookAt(new Vertex3f(0f, 0f, 0f), new Vertex3f(0f, -1f, 0f), new Vertex3f(0f, 0f, -1f)),
-                Matrix4x4f.LookAt(new Vertex3f(0f, 0f, 0f), new Vertex3f(0f, 0f, 1f), new Vertex3f(0f, -1f, 0f)),
-                Matrix4x4f.LookAt(new Vertex3f(0f, 0f, 0f), new Vertex3f(0f, 0f, -1f), new Vertex3f(0f, -1f, 0f)),
+                Matrix4x4.CreateLookAt(new Vector3(0f, 0f, 0f), new Vector3(1f, 0f, 0f), new Vector3(0f, -1f, 0f)),
+                Matrix4x4.CreateLookAt(new Vector3(0f, 0f, 0f), new Vector3(-1f, 0f, 0f), new Vector3(0f, -1f, 0f)),
+                Matrix4x4.CreateLookAt(new Vector3(0f, 0f, 0f), new Vector3(0f, 1f, 0f), new Vector3(0f, 0f, 1f)),
+                Matrix4x4.CreateLookAt(new Vector3(0f, 0f, 0f), new Vector3(0f, -1f, 0f), new Vector3(0f, 0f, -1f)),
+                Matrix4x4.CreateLookAt(new Vector3(0f, 0f, 0f), new Vector3(0f, 0f, 1f), new Vector3(0f, -1f, 0f)),
+                Matrix4x4.CreateLookAt(new Vector3(0f, 0f, 0f), new Vector3(0f, 0f, -1f), new Vector3(0f, -1f, 0f)),
             };
 
             shader.Use();

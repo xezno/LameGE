@@ -5,6 +5,8 @@ using ExampleGame.Assets.BSP.Lumps;
 using ExampleGame.Assets.BSP.Types;
 using System.IO;
 using System.Linq;
+using System.Numerics;
+using Plane = ExampleGame.Assets.BSP.Types.Plane;
 
 namespace ExampleGame.Assets.BSP
 {
@@ -197,10 +199,10 @@ namespace ExampleGame.Assets.BSP
             return planeLump;
         }
 
-        private Lump<Vector3f> ReadVertexesLump(BSPLumpInfo lump, BinaryReader binaryReader)
+        private Lump<Vector3> ReadVertexesLump(BSPLumpInfo lump, BinaryReader binaryReader)
         {
             var vertexCount = lump.length / 12; // Vertices are 12 bytes long (3 float)
-            var vertexLump = new Lump<Vector3f>();
+            var vertexLump = new Lump<Vector3>();
             Logging.Log($"Vertex lump size: {vertexCount}");
 
             for (int i = 0; i < vertexCount; ++i)

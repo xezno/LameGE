@@ -27,7 +27,7 @@ namespace Engine.GUI.Managers.ImGuiWindows.Editor
             var windowHeight = ImGui.GetWindowSize().Y;
             var camera = cameraEntity.GetComponent<CameraComponent>();
 
-            var ratio = camera.Resolution.x / camera.Resolution.y;
+            var ratio = camera.Resolution.X / camera.Resolution.Y;
             var image = camera.Framebuffer.ColorTexture;
             var cameraScale = 1.0f;
 

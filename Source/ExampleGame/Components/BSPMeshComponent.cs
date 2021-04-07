@@ -13,6 +13,8 @@ using ExampleGame.Assets.BSP.Types;
 using OpenGL;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
+using Plane = ExampleGame.Assets.BSP.Types.Plane;
 
 namespace ExampleGame.Components
 {
@@ -29,16 +31,16 @@ namespace ExampleGame.Components
         private void GenerateBSPMesh()
         {
             var modelComponent = new ModelComponent();
-            var vertexLump = (Lump<Vector3f>)bspLoader.Lumps[(int)BspLumpType.LumpVertexes];
+            var vertexLump = (Lump<Vector3>)bspLoader.Lumps[(int)BspLumpType.LumpVertexes];
             var planeLump = (Lump<Plane>)bspLoader.Lumps[(int)BspLumpType.LumpPlanes];
             var edgeLump = (Lump<Edge>)bspLoader.Lumps[(int)BspLumpType.LumpEdges];
             var surfEdgeLump = (Lump<int>)bspLoader.Lumps[(int)BspLumpType.LumpSurfEdges];
             var faceLump = (Lump<Face>)bspLoader.Lumps[(int)BspLumpType.LumpFaces];
             var texInfoLump = (Lump<TexInfo>)bspLoader.Lumps[(int)BspLumpType.LumpTexInfo];
 
-            var meshVertices = new List<Vector3f>();
-            var meshNormals = new List<Vector3f>();
-            var texCoords = new List<Vector2f>();
+            var meshVertices = new List<Vector3>();
+            var meshNormals = new List<Vector3>();
+            var texCoords = new List<Vector2>();
 
             var meshIndices = new List<uint>();
             var meshTextures = new List<Texture>()
@@ -183,8 +185,8 @@ namespace ExampleGame.Components
                 meshIndices.Add((uint)i);
             }
 
-            var matrix = Matrix4x4f.Identity;
-            matrix.Scale(bspScaleFactor, bspScaleFactor, bspScaleFactor);
+            var matrix = Matrix4x4.Identity;
+            matrix *= Matrix4x4.CreateScale(bspScaleFactor);
             var mesh = new Mesh(bakedMeshVertices, meshIndices, meshTextures, matrix);
 
             modelComponent.Meshes = new List<Mesh>() { mesh };
@@ -193,7 +195,7 @@ namespace ExampleGame.Components
             ((IEntity)Parent).AddComponent(modelComponent);
         }
 
-        private Vector2f GetUVCoords(TexInfo texInfo, Vector3f coords)
+        private Vector2 GetUVCoords(TexInfo texInfo, Vector3 coords)
         {
             var uCoord = texInfo.textureVecs[0, 0] * coords.X + texInfo.textureVecs[0, 1] * coords.Y + texInfo.textureVecs[0, 2] * coords.Z +
                              texInfo.textureVecs[0, 3];
@@ -202,7 +204,7 @@ namespace ExampleGame.Components
 
             vCoord = 1.0f - vCoord; // Flipped for opengl
 
-            return new Vector2f(uCoord, vCoord) / 1000.0f;
+            return new Vector2(uCoord, vCoord) / 1000.0f;
         }
 
         public override void OnNotify(NotifyType notifyType, INotifyArgs notifyArgs)

@@ -1,16 +1,17 @@
 ﻿using Engine.Utils.MathUtils;
 using System.Runtime.InteropServices;
+using System.Numerics;
 
 namespace Engine.Renderer
 {
     [StructLayout(LayoutKind.Sequential)]
     public unsafe struct Vertex
     {
-        public Vector3f Position { get; set; }
-        public Vector3f Normal { get; set; }
-        public Vector2f TexCoords { get; set; }
-        public Vector3f Tangent { get; set; }
-        public Vector3f BiTangent { get; set; }
+        public Vector3 Position { get; set; }
+        public Vector3 Normal { get; set; }
+        public Vector2 TexCoords { get; set; }
+        public Vector3 Tangent { get; set; }
+        public Vector3 BiTangent { get; set; }
 
         public static bool operator ==(Vertex a, Vertex b)
         {

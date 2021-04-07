@@ -3,6 +3,7 @@ using Engine.Renderer.Entities;
 using OpenGL;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 
 namespace Engine.Renderer
 {
@@ -15,11 +16,11 @@ namespace Engine.Renderer
             public LightEntity Light { get; set; }
             public (Cubemap, Cubemap, Cubemap) PbrCubemaps { get; set; }
             public Texture BrdfLut { get; set; }
-            public Matrix4x4f ModelMatrix { get; set; }
+            public Matrix4x4 ModelMatrix { get; set; }
             public Texture HoloTexture { get; set; }
 
-            public Matrix4x4f ViewMatrix { get; set; }
-            public Matrix4x4f ProjMatrix { get; set; }
+            public Matrix4x4 ViewMatrix { get; set; }
+            public Matrix4x4 ProjMatrix { get; set; }
 
             public DrawInfo(DrawInfo drawInfo)
             {
@@ -43,11 +44,11 @@ namespace Engine.Renderer
         public int IndexCount { get; private set; }
         public int TextureCount { get; private set; }
 
-        private Matrix4x4f localModelMatrix;
+        private Matrix4x4 localModelMatrix;
 
         private uint vao, vbo, ebo;
 
-        public Mesh(List<Vertex> vertices, List<uint> indices, List<Texture> textures, Matrix4x4f oglTransform)
+        public Mesh(List<Vertex> vertices, List<uint> indices, List<Texture> textures, Matrix4x4 oglTransform)
         {
             Vertices = vertices;
             Indices = indices;
@@ -87,8 +88,8 @@ namespace Engine.Renderer
                     vertex.BiTangent.Y,
                     vertex.BiTangent.Z,
 
-                    vertex.TexCoords.x,
-                    vertex.TexCoords.y
+                    vertex.TexCoords.X,
+                    vertex.TexCoords.Y
                 });
             }
 
@@ -166,10 +167,10 @@ namespace Engine.Renderer
 
             drawInfo.Shader.SetMatrix("projectionMatrix", drawInfo.ProjMatrix);
             drawInfo.Shader.SetMatrix("viewMatrix", drawInfo.ViewMatrix);
-            drawInfo.Shader.SetMatrix("modelMatrix", drawInfo.ModelMatrix * localModelMatrix);
+            drawInfo.Shader.SetMatrix("modelMatrix", localModelMatrix * drawInfo.ModelMatrix);
 
-            drawInfo.Shader.SetVector3d("camPos", drawInfo.Camera.GetComponent<TransformComponent>().Position);
-            drawInfo.Shader.SetVector3d("lightPos", drawInfo.Light.GetComponent<TransformComponent>().Position);
+            drawInfo.Shader.SetVector3("camPos", drawInfo.Camera.GetComponent<TransformComponent>().Position);
+            drawInfo.Shader.SetVector3("lightPos", drawInfo.Light.GetComponent<TransformComponent>().Position);
 
             drawInfo.Shader.SetMatrix("lightProjectionMatrix", lightComponent.ProjMatrix);
             drawInfo.Shader.SetMatrix("lightViewMatrix", lightComponent.ViewMatrix);
@@ -201,7 +202,7 @@ namespace Engine.Renderer
             Gl.BindVertexArray(0);
         }
 
-        public void DrawShadows(LightComponent light, ShaderComponent depthShader, Matrix4x4f modelMatrix)
+        public void DrawShadows(LightComponent light, ShaderComponent depthShader, Matrix4x4 modelMatrix)
         {
             depthShader.Use();
 

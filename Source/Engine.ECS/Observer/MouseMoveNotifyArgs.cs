@@ -1,4 +1,5 @@
 ﻿using Engine.Utils.MathUtils;
+using System.Numerics;
 using System;
 
 namespace Engine.ECS.Observer
@@ -18,12 +19,12 @@ namespace Engine.ECS.Observer
         /// <summary>
         /// The mouse cursor's new position relative to the window.
         /// </summary>
-        public Vector2f MousePosition { get; }
+        public Vector2 MousePosition { get; }
 
         /// <summary>
         /// The mouse cursor's position relative to the last update.
         /// </summary>
-        public Vector2f MouseDelta { get; }
+        public Vector2 MouseDelta { get; }
 
         /// <summary>
         /// Construct a new instance of <see cref="MouseMoveNotifyArgs"/>; the <see cref="TimeSent"/> will be automatically set.
@@ -31,7 +32,7 @@ namespace Engine.ECS.Observer
         /// <param name="mouseDelta">The cursor's delta.</param>
         /// <param name="mousePosition">The cursor's new position relative to the window.</param>
         /// <param name="sender">The object triggering the notification.</param>
-        public MouseMoveNotifyArgs(Vector2f mouseDelta, Vector2f mousePosition, object sender)
+        public MouseMoveNotifyArgs(Vector2 mouseDelta, Vector2 mousePosition, object sender)
         {
             Sender = sender;
             TimeSent = DateTime.Now;
