@@ -46,7 +46,7 @@
  - `cd build`
  - `cmake ../libstbi`
  - You will then need to build the project located at `(root-dir)/Other/stbi-sharp/build/INSTALL.vcxproj`.
-5. Once complete, open `Source/Ulaid.sln` and build the solution, optionally using `Example/Example` as the startup project. This will fetch / build any dependencies automatically, and then build the engine and example game.
+5. Once complete, open `Source/Engine.sln` and build the solution, using `ExampleGame` as the startup project. This will fetch / build any NuGet dependencies automatically, and then build the engine and example game.
 
 ## Contributing
 
